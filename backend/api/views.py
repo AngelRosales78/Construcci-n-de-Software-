@@ -36,7 +36,7 @@ from .serializers import (
     CompanySerializer,
     SearchHistorySerializer,
 )
-from .redis_utils import blacklist_token, blacklist_jwt_token
+from .redis_utils import blacklist_token, blacklist_jwt_token, get_autocomplete_suggestions
 from .models import Company, SearchHistory
 
 User = get_user_model()
@@ -439,3 +439,22 @@ class SearchHistoryView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+# ─── HU03_02: Autocomplete ───────────────────────────────────────────
+
+class CompanyAutocompleteView(generics.GenericAPIView):
+    """
+    GET /api/v1/companies/autocomplete/
+
+    Returns autocomplete suggestions for company search using Redis cache.
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        prefix = request.query_params.get('q', '').strip()
+        if not prefix:
+            return Response({'suggestions': []})
+
+        suggestions = get_autocomplete_suggestions(prefix)
+        return Response({'suggestions': suggestions})

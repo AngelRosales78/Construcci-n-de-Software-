@@ -7,6 +7,7 @@ management (HU01_05).
 """
 import redis
 from django.conf import settings
+from django.db import models
 import json
 import logging
 
@@ -127,3 +128,29 @@ def refresh_token_metadata(old_refresh_token, new_refresh_token):
     except Exception as e:
         logger.error(f"Error refreshing token metadata: {e}")
         return False
+
+
+def get_autocomplete_suggestions(prefix, limit=10):
+    """
+    Get autocomplete suggestions for company search using Redis cache.
+    """
+    try:
+        r = get_redis_connection()
+        cache_key = f"autocomplete:{prefix.lower()}"
+
+        cached = r.get(cache_key)
+        if cached:
+            return json.loads(cached)
+
+        from .models import Company
+        companies = Company.objects.filter(
+            models.Q(name__icontains=prefix) | models.Q(ticker__icontains=prefix)
+        ).order_by('-market_cap')[:limit]
+
+        suggestions = [{'ticker': c.ticker, 'name': c.name} for c in companies]
+
+        r.setex(cache_key, 300, json.dumps(suggestions))
+        return suggestions
+    except Exception as e:
+        logger.error(f"Error getting autocomplete suggestions: {e}")
+        return []

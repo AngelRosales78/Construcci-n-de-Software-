@@ -44,6 +44,9 @@ urlpatterns = [
     # HU03_01: Company Search
     path('companies/search/', views.CompanySearchView.as_view(), name='company-search'),
 
+    # HU03_02: Autocomplete
+    path('companies/autocomplete/', views.CompanyAutocompleteView.as_view(), name='company-autocomplete'),
+
     # HU03_05: Search History
     path('companies/history/', views.SearchHistoryView.as_view(), name='search-history'),
 ]
