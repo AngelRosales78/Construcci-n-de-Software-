@@ -404,23 +404,37 @@ class CompanySearchView(generics.ListAPIView):
     GET /api/v1/companies/search/
 
     Search S&P 500 companies by ticker or name using PostgreSQL Full-Text Search.
+    Supports filtering by sector and ordering by market_cap.
     """
     serializer_class = CompanySerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         query = self.request.query_params.get('q', '').strip()
-        if not query:
-            return Company.objects.none()
+        sector = self.request.query_params.get('sector', '').strip()
+        ordering = self.request.query_params.get('ordering', '').strip()
 
-        from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+        queryset = Company.objects.all()
 
-        search_vector = SearchVector('name', weight='A') + SearchVector('ticker', weight='B')
-        search_query = SearchQuery(query)
+        if query:
+            from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+            search_vector = SearchVector('name', weight='A') + SearchVector('ticker', weight='B')
+            search_query = SearchQuery(query)
+            queryset = queryset.annotate(
+                rank=SearchRank(search_vector, search_query)
+            ).filter(rank__gte=0.1)
 
-        return Company.objects.annotate(
-            rank=SearchRank(search_vector, search_query)
-        ).filter(rank__gte=0.1).order_by('-rank')[:20]
+        if sector:
+            queryset = queryset.filter(sector=sector)
+
+        if ordering == 'market_cap':
+            queryset = queryset.order_by('market_cap')
+        elif ordering == '-market_cap':
+            queryset = queryset.order_by('-market_cap')
+        elif query:
+            queryset = queryset.order_by('-rank')
+
+        return queryset[:50]
 
 
 # ─── HU03_05: Search History ─────────────────────────────────────────
@@ -439,6 +453,21 @@ class SearchHistoryView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+# ─── HU03_03: Sectors List ───────────────────────────────────────────
+
+class CompanySectorsView(generics.GenericAPIView):
+    """
+    GET /api/v1/companies/sectors/
+
+    Returns list of available sectors for filtering.
+    """
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, *args, **kwargs):
+        sectors = [{'value': s[0], 'label': s[1]} for s in Company.SECTOR_CHOICES]
+        return Response({'sectors': sectors})
 
 
 # ─── HU03_02: Autocomplete ───────────────────────────────────────────
