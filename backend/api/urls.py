@@ -52,4 +52,10 @@ urlpatterns = [
 
     # HU03_05: Search History
     path('companies/history/', views.SearchHistoryView.as_view(), name='search-history'),
+
+    # HU04_02/03/04: Company Overview
+    path('companies/<str:ticker>/overview/', views.CompanyOverviewView.as_view(), name='company-overview'),
+
+    # HU04_04: Company History
+    path('companies/<str:ticker>/history/', views.CompanyHistoryView.as_view(), name='company-history'),
 ]

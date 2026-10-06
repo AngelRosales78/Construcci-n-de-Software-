@@ -298,3 +298,151 @@ class TestProfile:
         """Unauthenticated user cannot access profile."""
         response = api_client.get('/api/v1/auth/profile/')
         assert response.status_code == 401
+
+
+# ─── Company Search Tests ────────────────────────────────────────────
+
+class TestCompanySearch:
+    """Tests for company search endpoints."""
+
+    @pytest.fixture
+    def sample_company(self, db):
+        """Create a sample company for testing."""
+        from api.models import Company
+        return Company.objects.create(
+            ticker='TEST',
+            name='Test Company Inc.',
+            sector='technology',
+            market_cap=1000000000,
+            per=15.5,
+            roe=20.0,
+            working_capital=500000000,
+            total_assets=2000000000,
+            retained_earnings=300000000,
+            ebit=150000000,
+            total_liabilities=1000000000,
+            sales=5000000000,
+            equity_value=1000000000,
+        )
+
+    def test_company_search_by_ticker(self, api_client, created_user, sample_company):
+        """Search companies by ticker."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/search/?q=TEST')
+        assert response.status_code == 200
+        assert len(response.data) > 0
+
+    def test_company_search_by_name(self, api_client, created_user, sample_company):
+        """Search companies by name."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/search/?q=Test Company')
+        assert response.status_code == 200
+        assert len(response.data) > 0
+
+    def test_company_search_unauthenticated(self, api_client):
+        """Unauthenticated user cannot search companies."""
+        response = api_client.get('/api/v1/companies/search/?q=TEST')
+        assert response.status_code == 401
+
+    def test_company_sectors_list(self, api_client, created_user):
+        """Get list of available sectors."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/sectors/')
+        assert response.status_code == 200
+        assert 'sectors' in response.data
+        assert len(response.data['sectors']) > 0
+
+
+# ─── Company Overview Tests ──────────────────────────────────────────
+
+class TestCompanyOverview:
+    """Tests for company overview endpoint."""
+
+    @pytest.fixture
+    def sample_company(self, db):
+        """Create a sample company for testing."""
+        from api.models import Company
+        return Company.objects.create(
+            ticker='TEST',
+            name='Test Company Inc.',
+            sector='technology',
+            market_cap=1000000000,
+            per=15.5,
+            roe=20.0,
+            working_capital=500000000,
+            total_assets=2000000000,
+            retained_earnings=300000000,
+            ebit=150000000,
+            total_liabilities=1000000000,
+            sales=5000000000,
+            equity_value=1000000000,
+        )
+
+    def test_company_overview_success(self, api_client, created_user, sample_company):
+        """Get company overview with Altman-Z score."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/TEST/overview/')
+        assert response.status_code == 200
+        assert response.data['ticker'] == 'TEST'
+        assert 'altman_z' in response.data
+        assert 'score' in response.data['altman_z']
+        assert 'zone' in response.data['altman_z']
+
+    def test_company_overview_not_found(self, api_client, created_user):
+        """Returns 404 for non-existent company."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/NONEXISTENT/overview/')
+        assert response.status_code == 404
+
+    def test_company_overview_unauthenticated(self, api_client):
+        """Unauthenticated user cannot access company overview."""
+        response = api_client.get('/api/v1/companies/TEST/overview/')
+        assert response.status_code == 401
+
+
+# ─── Company History Tests ───────────────────────────────────────────
+
+class TestCompanyHistory:
+    """Tests for company history endpoint."""
+
+    @pytest.fixture
+    def sample_company(self, db):
+        """Create a sample company for testing."""
+        from api.models import Company
+        return Company.objects.create(
+            ticker='TEST',
+            name='Test Company Inc.',
+            sector='technology',
+            market_cap=1000000000,
+            per=15.5,
+            roe=20.0,
+            working_capital=500000000,
+            total_assets=2000000000,
+            retained_earnings=300000000,
+            ebit=150000000,
+            total_liabilities=1000000000,
+            sales=5000000000,
+            equity_value=1000000000,
+        )
+
+    def test_company_history_success(self, api_client, created_user, sample_company):
+        """Get company price history."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/TEST/history/')
+        assert response.status_code == 200
+        assert response.data['ticker'] == 'TEST'
+        assert 'history' in response.data
+        assert len(response.data['history']) == 30
+
+    def test_company_history_not_found(self, api_client, created_user):
+        """Returns 404 for non-existent company."""
+        user, _ = created_user
+        api_client.force_authenticate(user=user)
+        response = api_client.get('/api/v1/companies/NONEXISTENT/history/')
+        assert response.status_code == 404
