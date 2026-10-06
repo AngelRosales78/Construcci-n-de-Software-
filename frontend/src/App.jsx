@@ -6,6 +6,7 @@ import ResetPassword from './components/auth/ResetPassword'
 import Dashboard from './components/Dashboard'
 import CompanySearch from './components/search/CompanySearch'
 import CompanyProfile from './components/company/CompanyProfile'
+import CompanyDashboard from './components/company/CompanyDashboard'
 import './App.css'
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/search" element={<CompanySearch />} />
-        <Route path="/company/:ticker" element={<CompanyProfile />} />
+        <Route path="/company/:ticker" element={<CompanyDashboard />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
