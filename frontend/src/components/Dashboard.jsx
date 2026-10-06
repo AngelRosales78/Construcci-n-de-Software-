@@ -6,13 +6,13 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     try {
-      const refreshToken = localStorage.getItem('refresh')
+      const refreshToken = localStorage.getItem('refresh_token')
       await authService.logout(refreshToken)
     } catch (error) {
       console.error('Error during logout:', error)
     } finally {
-      localStorage.removeItem('access')
-      localStorage.removeItem('refresh')
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
       navigate('/login')
     }
   }

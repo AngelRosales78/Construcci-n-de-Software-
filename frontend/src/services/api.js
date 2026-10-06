@@ -11,7 +11,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access');
+    const token = localStorage.getItem('access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -46,7 +46,7 @@ api.interceptors.response.use(
       error.response?.status === 401 &&
       !originalRequest._retry &&
       error.response?.data?.code !== 'token_not_valid' &&
-      localStorage.getItem('refresh')
+      localStorage.getItem('refresh_token')
     ) {
       if (isRefreshing) {
         try {
@@ -63,7 +63,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       isRefreshing = true;
 
-      const refreshToken = localStorage.getItem('refresh');
+      const refreshToken = localStorage.getItem('refresh_token');
 
       try {
         const response = await axios.post(`${API_URL}/token/refresh/`, {
@@ -71,15 +71,15 @@ api.interceptors.response.use(
         });
 
         const { access } = response.data;
-        localStorage.setItem('access', access);
+        localStorage.setItem('access_token', access);
         api.defaults.headers.common.Authorization = `Bearer ${access}`;
         processQueue(null, access);
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        localStorage.removeItem('access');
-        localStorage.removeItem('refresh');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {
