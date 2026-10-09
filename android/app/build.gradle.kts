@@ -51,7 +51,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
 
     packaging {
@@ -96,7 +96,7 @@ dependencies {
     implementation("androidx.security:security-crypto-ktx:$encryptionVersion")
 
     // Biometric Authentication
-    implementation("androidx.biometric:biometric:$biomtricVersion")
+    implementation("androidx.biometric:biometric:1.1.0")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")

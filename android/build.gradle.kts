@@ -1,17 +1,16 @@
 // build.gradle.kts (Project level)
+val composeBom by extra("2024.06.00")
+val kotlinVersion by extra("1.9.22")
+val agpVersion by extra("8.2.2")
+val hiltVersion by extra("2.51.1")
+val navigationVersion by extra("2.7.7")
+val retrofitVersion by extra("2.11.0")
+val okhttpVersion by extra("4.12.0")
+val coroutinesVersion by extra("1.7.3")
+val biometricVersion by extra("1.1.0-alpha05")
+val encryptionVersion by extra("1.1.0-alpha06")
+
 buildscript {
-    ext {
-        composeBom = "2024.06.00"
-        kotlinVersion = "1.9.22"
-        agpVersion = "8.2.2"
-        hiltVersion = "2.51.1"
-        navigationVersion = "2.7.7"
-        retrofitVersion = "2.11.0"
-        okhttpVersion = "4.12.0"
-        coroutinesVersion = "1.7.3"
-        biomtricVersion = "1.1.0-alpha05"
-        encryptionVersion = "1.1.0-alpha06"
-    }
     repositories {
         google()
         mavenCentral()
@@ -27,4 +26,10 @@ plugins {
     id("com.android.application") version "8.2.2" apply false
     id("org.jetbrains.kotlin.android") version "1.9.22" apply false
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
+}
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions.jvmTarget = "17"
+    }
 }
