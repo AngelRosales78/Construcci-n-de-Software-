@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16.4-alpine
+    container_name: sp500_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sp500_platform
+      POSTGRES_USER: sp500_user
+      POSTGRES_PASSWORD: sp500_secure_pass_2024
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sp500_user -d sp500_platform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sp500_network
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: sp500_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/var/lib/redis/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sp500_network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  sp500_network:
+    driver: bridge
