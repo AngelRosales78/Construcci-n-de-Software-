@@ -18,13 +18,19 @@ from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
+from django.db import transaction
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from django.utils import timezone
+from rest_framework.exceptions import ValidationError
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 
 from .serializers import (
     RegisterSerializer,
@@ -172,7 +178,7 @@ class PasswordResetRequestView(generics.GenericAPIView):
                 <h2>Password Reset Request</h2>
                 <p>Click the link below to reset your password:</p>
                 <a href="{reset_url}">Reset Password</a>
-                <p>This link will expire in 1 hour.</p>
+                <p>This link will expire in 15 minutes.</p>
                 <p>If you did not request this, please ignore this email.</p>
             </body>
             </html>
@@ -213,53 +219,53 @@ class PasswordResetConfirmView(generics.GenericAPIView):
         token = serializer.validated_data['token']
         new_password = serializer.validated_data['new_password']
 
-        # Extract UID from URL-safe base64
-        try:
-            # The token should be passed as part of the URL uid/token format
-            parts = token.split(':')
-            if len(parts) == 2:
-                uid, token_value = parts
-                uid = force_str(urlsafe_base64_decode(uid))
-                user = User.objects.get(pk=uid)
-
-                if default_token_generator.check_token(user, token_value):
-                    user.set_password(new_password)
-                    user.save()
-
-                    # Blacklist all existing tokens for this user
-                    tokens = OutstandingToken.objects.filter(user=user)
-                    for t in tokens:
-                        blacklist_jwt_token(t)
-
-                    return Response(
-                        {'message': 'Password has been reset successfully.'},
-                        status=status.HTTP_200_OK
-                    )
-                else:
-                    return Response(
-                        {'error': 'Invalid or expired token.'},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
-            else:
-                # Try the simpler format
-                uid = force_str(urlsafe_base64_decode(token))
-                user = User.objects.get(pk=uid)
-                user.set_password(new_password)
-                user.save()
-
-                tokens = OutstandingToken.objects.filter(user=user)
-                for t in tokens:
-                    blacklist_jwt_token(t)
-
-                return Response(
-                    {'message': 'Password has been reset successfully.'},
-                    status=status.HTTP_200_OK
-                )
-        except (User.DoesNotExist, Exception) as e:
+        # A user identifier alone must never authorize a password reset.
+        if token.count(':') != 1:
             return Response(
                 {'error': 'Invalid or expired token.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        uid_encoded, token_value = token.split(':', 1)
+        try:
+            uid = force_str(urlsafe_base64_decode(uid_encoded))
+            if (not uid.isascii() or not uid.isdigit() or len(uid) > 19
+                    or not 0 < int(uid) <= 2**63 - 1 or not token_value):
+                raise ValueError('Invalid user identifier or token')
+        except (ValueError, TypeError, UnicodeDecodeError, OverflowError):
+            return Response(
+                {'error': 'Invalid or expired token.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Serialize resets for the same user and revoke refresh tokens atomically.
+        try:
+            with transaction.atomic():
+                user = User.objects.select_for_update().get(pk=int(uid), is_active=True)
+                if not default_token_generator.check_token(user, token_value):
+                    raise ValidationError({'error': 'Invalid or expired token.'})
+
+                try:
+                    validate_password(new_password, user=user)
+                except DjangoValidationError as exc:
+                    raise ValidationError({'new_password': exc.messages})
+
+                user.set_password(new_password)
+                user.save(update_fields=['password'])
+                for outstanding in OutstandingToken.objects.filter(
+                    user=user, expires_at__gt=timezone.now()
+                ):
+                    BlacklistedToken.objects.get_or_create(token=outstanding)
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'Invalid or expired token.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        return Response(
+            {'message': 'Password has been reset successfully.'},
+            status=status.HTTP_200_OK
+        )
 
 
 # ─── HU01_04: Logout with Token Blacklist ────────────────────────────
