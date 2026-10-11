@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+db.sqlite3
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.gradle/
+android/build/
+android/app/build/
+android/local.properties
