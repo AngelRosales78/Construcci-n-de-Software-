@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { resetPasswordSchema } from '../utils/validationSchemas'
-import { authService } from '../services/authService'
+import { resetPasswordSchema } from '../../utils/validationSchemas'
+import { authService } from '../../services/authService'
 
 export default function ResetPassword() {
   const navigate = useNavigate()

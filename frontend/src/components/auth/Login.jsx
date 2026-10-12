@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { loginSchema } from '../utils/validationSchemas'
-import { authService } from '../services/authService'
+import { loginSchema } from '../../utils/validationSchemas'
+import { authService } from '../../services/authService'
 
 export default function Login() {
   const navigate = useNavigate()

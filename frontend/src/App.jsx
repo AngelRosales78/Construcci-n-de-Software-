@@ -7,7 +7,6 @@ import Dashboard from './components/Dashboard'
 import CompanySearch from './components/search/CompanySearch'
 import CompanyProfile from './components/company/CompanyProfile'
 import CompanyDashboard from './components/company/CompanyDashboard'
-import './App.css'
 
 function App() {
   return (
