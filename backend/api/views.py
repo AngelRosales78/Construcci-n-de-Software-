@@ -22,6 +22,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db import transaction
+from django.db.models import Q
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
@@ -420,27 +421,29 @@ class CompanySearchView(generics.ListAPIView):
         sector = self.request.query_params.get('sector', '').strip()
         ordering = self.request.query_params.get('ordering', '').strip()
 
-        queryset = Company.objects.all()
+        if sector and sector not in dict(Company.SECTOR_CHOICES):
+            raise ValidationError({'sector': 'El sector no es válido.'})
+        if ordering not in ('', 'market_cap', '-market_cap'):
+            raise ValidationError({'ordering': 'El orden no es válido.'})
+        if len(query) > 200:
+            raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
 
+        queryset = Company.objects.all()
         if query:
             from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
-            search_vector = SearchVector('name', weight='A') + SearchVector('ticker', weight='B')
-            search_query = SearchQuery(query)
-            queryset = queryset.annotate(
-                rank=SearchRank(search_vector, search_query)
-            ).filter(rank__gte=0.1)
-
+            vector = (SearchVector('name', weight='A', config='simple')
+                      + SearchVector('ticker', weight='B', config='simple'))
+            search = SearchQuery(query, config='simple')
+            queryset = queryset.annotate(rank=SearchRank(vector, search)).filter(
+                Q(ticker__iexact=query) | Q(rank__gte=0.1)
+            )
         if sector:
             queryset = queryset.filter(sector=sector)
-
-        if ordering == 'market_cap':
-            queryset = queryset.order_by('market_cap')
-        elif ordering == '-market_cap':
-            queryset = queryset.order_by('-market_cap')
-        elif query:
-            queryset = queryset.order_by('-rank')
-
-        return queryset[:50]
+        if ordering:
+            return queryset.order_by(ordering, 'ticker')
+        if query:
+            return queryset.order_by('-rank', 'ticker')
+        return queryset.order_by('-market_cap', 'ticker')
 
 
 # ─── HU03_05: Search History ─────────────────────────────────────────

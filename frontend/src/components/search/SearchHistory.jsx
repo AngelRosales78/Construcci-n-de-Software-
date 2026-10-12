@@ -1,25 +1,22 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 
-export default function SearchHistory({ onSelectHistory }) {
+export default function SearchHistory({ onSelectHistory, refreshKey = 0 }) {
   const [history, setHistory] = useState([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    fetchHistory()
-  }, [])
-
-  const fetchHistory = async () => {
+    let active = true
     setLoading(true)
-    try {
-      const response = await api.get('/companies/history/')
-      setHistory(response.data || [])
-    } catch (err) {
-      console.error('Error fetching history:', err)
-    } finally {
-      setLoading(false)
-    }
-  }
+    api.get('/companies/history/').then(({ data }) => {
+      if (active) setHistory(data.results || [])
+    }).catch(() => {
+      if (active) setHistory([])
+    }).finally(() => {
+      if (active) setLoading(false)
+    })
+    return () => { active = false }
+  }, [refreshKey])
 
   const handleSelect = (query) => {
     onSelectHistory(query)
@@ -36,10 +33,9 @@ export default function SearchHistory({ onSelectHistory }) {
         {history.map((item) => (
           <li
             key={item.id}
-            onClick={() => handleSelect(item.query)}
             className="search-history-item"
           >
-            {item.query}
+            <button type="button" onClick={() => handleSelect(item.query)}>{item.query}</button>
           </li>
         ))}
       </ul>

@@ -19,8 +19,9 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
   }, [])
 
   useEffect(() => {
-    onFilterChange({ sector: selectedSector, ordering })
-  }, [selectedSector, ordering, onFilterChange])
+    setSelectedSector(initialSector)
+    setOrdering(initialOrdering)
+  }, [initialSector, initialOrdering])
 
   return (
     <div className="company-filters">
@@ -29,7 +30,10 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
         <select
           id="sector-filter"
           value={selectedSector}
-          onChange={(e) => setSelectedSector(e.target.value)}
+          onChange={(e) => {
+            setSelectedSector(e.target.value)
+            onFilterChange({ sector: e.target.value, ordering })
+          }}
         >
           <option value="">Todos los sectores</option>
           {sectors.map((s) => (
@@ -43,7 +47,10 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
         <select
           id="ordering-filter"
           value={ordering}
-          onChange={(e) => setOrdering(e.target.value)}
+          onChange={(e) => {
+            setOrdering(e.target.value)
+            onFilterChange({ sector: selectedSector, ordering: e.target.value })
+          }}
         >
           <option value="-market_cap">Market Cap (mayor a menor)</option>
           <option value="market_cap">Market Cap (menor a mayor)</option>
