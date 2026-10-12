@@ -91,3 +91,9 @@ def test_full_text_and_ticker(client, companies, query, expected):
     response = client.get(URL, {'q': query})
     assert response.status_code == 200
     assert [row['ticker'] for row in response.data['results']] == expected
+
+
+def test_document_sector_label_is_supported(client,companies):
+    response=client.get(URL,{'sector':'Technology'})
+    assert response.status_code==200
+    assert [row['ticker'] for row in response.data['results']]==['AAA','BBB']

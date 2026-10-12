@@ -7,6 +7,10 @@ authentication backend.
 """
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.validators import MinValueValidator
+from decimal import Decimal
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVector
 from django.utils.translation import gettext_lazy as _
 
 
@@ -67,6 +71,8 @@ class Company(models.Model):
         ('communication_services', _('Communication Services')),
     )
 
+    logo_url = models.URLField(blank=True, default='')
+    latest_price = models.ForeignKey('PriceHistory', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     ticker = models.CharField(_('ticker'), max_length=10, unique=True, db_index=True)
     name = models.CharField(_('name'), max_length=200, db_index=True)
     sector = models.CharField(_('sector'), max_length=50, choices=SECTOR_CHOICES, db_index=True)
@@ -89,7 +95,12 @@ class Company(models.Model):
         db_table = 'companies'
         verbose_name = _('company')
         verbose_name_plural = _('companies')
-        ordering = ['-market_cap']
+        ordering = ['-market_cap', 'ticker']
+        indexes = [
+            models.Index(fields=['sector', '-market_cap', 'ticker'], name='company_sector_cap_idx'),
+            GinIndex(SearchVector('name', weight='A', config='simple') +
+                     SearchVector('ticker', weight='B', config='simple'), name='company_search_gin'),
+        ]
 
     def __str__(self):
         return f"{self.ticker} - {self.name}"
@@ -107,7 +118,44 @@ class SearchHistory(models.Model):
         db_table = 'search_history'
         verbose_name = _('search history')
         verbose_name_plural = _('search history')
-        ordering = ['-created_at']
+        ordering = ['-created_at', '-id']
+        indexes = [models.Index(fields=['user', '-created_at', '-id'], name='history_user_date_idx')]
 
     def __str__(self):
         return f"{self.user.username}: {self.query}"
+
+
+class FinancialMetrics(models.Model):
+    company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='financial_metrics')
+    as_of = models.DateField()
+    source = models.CharField(max_length=250)
+    is_demo = models.BooleanField(default=False)
+    market_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
+    per = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    roe = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    beta = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True)
+    dividend_yield = models.DecimalField(max_digits=10, decimal_places=4, null=True, blank=True, validators=[MinValueValidator(0)])
+    working_capital = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    total_assets = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
+    retained_earnings = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    ebit = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    total_liabilities = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
+    sales = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
+    equity_value = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
+    class Meta:
+        db_table = 'financial_metrics'
+
+
+class PriceHistory(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='prices')
+    date = models.DateField()
+    adjusted_close = models.DecimalField(max_digits=18, decimal_places=6, validators=[MinValueValidator(Decimal('0.000001'))])
+    volume = models.BigIntegerField(null=True, blank=True, validators=[MinValueValidator(0)])
+    currency = models.CharField(max_length=3, default='USD')
+    source = models.CharField(max_length=250)
+    is_demo = models.BooleanField(default=False)
+    class Meta:
+        db_table = 'price_history'
+        ordering = ['date']
+        constraints = [models.UniqueConstraint(fields=['company', 'date'], name='price_company_date_unique')]
+        indexes = [models.Index(fields=['company', '-date'], name='price_company_date_idx')]

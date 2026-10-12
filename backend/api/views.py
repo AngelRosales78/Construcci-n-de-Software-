@@ -45,7 +45,7 @@ from .serializers import (
     SearchHistorySerializer,
 )
 from .redis_utils import blacklist_token, blacklist_jwt_token, get_autocomplete_suggestions
-from .models import Company, SearchHistory
+from .models import Company, SearchHistory, FinancialMetrics, PriceHistory
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -417,6 +417,32 @@ class CompanySearchView(generics.ListAPIView):
     serializer_class = CompanySerializer
     permission_classes = (IsAuthenticated,)
 
+    def list(self, request, *args, **kwargs):
+        # Validar antes de usar la caché; nunca devolver un resultado a un usuario sin permisos.
+        self.get_queryset()
+        import hashlib
+        import json
+        from redis.exceptions import RedisError
+        from .redis_utils import get_redis_connection
+        identity = json.dumps([request.user.pk, request.build_absolute_uri('/') ,
+                               sorted(request.query_params.items())], ensure_ascii=False)
+        key = 'sp500:search:' + hashlib.sha256(identity.encode()).hexdigest()
+        connection = None
+        try:
+            connection = get_redis_connection()
+            cached = connection.get(key)
+            if isinstance(cached, (str, bytes)):
+                return Response(json.loads(cached))
+        except (RedisError, ValueError, TypeError):
+            pass
+        response = super().list(request, *args, **kwargs)
+        if connection is not None:
+            try:
+                connection.setex(key, 30, json.dumps(response.data))
+            except (RedisError, TypeError):
+                pass
+        return response
+
     def get_queryset(self):
         query = self.request.query_params.get('q', '').strip()
         sector = self.request.query_params.get('sector', '').strip()
@@ -431,14 +457,14 @@ class CompanySearchView(generics.ListAPIView):
         if len(query) > 200:
             raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
 
-        queryset = Company.objects.all()
+        queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
         if query:
             from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
             vector = (SearchVector('name', weight='A', config='simple')
                       + SearchVector('ticker', weight='B', config='simple'))
             search = SearchQuery(query, config='simple')
-            queryset = queryset.annotate(rank=SearchRank(vector, search)).filter(
-                Q(ticker__iexact=query) | Q(rank__gte=0.1)
+            queryset = queryset.annotate(search_document=vector, rank=SearchRank(vector, search)).filter(
+                Q(ticker=query.upper()) | Q(search_document=search)
             )
         if sector:
             queryset = queryset.filter(sector=sector)
@@ -581,79 +607,81 @@ def calculate_altman_z(company):
 
 # ─── HU04_02/03/04: Company Overview ─────────────────────────────────
 
+def financial_profile(altman_z):
+    zones = {'safe': ('strong', 'Muy sólido', 'green'),
+             'grey': ('moderate', 'Moderado', 'orange'),
+             'distress': ('weak', 'Muy débil', 'red')}
+    category, label, color = zones.get(altman_z['zone'], ('unknown', 'Sin datos suficientes', 'grey'))
+    return {'category': category, 'label': label, 'color': color}
+
+
+def company_identifier(value):
+    if value.isascii() and value.isdigit() and len(value) <= 19 and int(value) <= 2**63-1:
+        return {'pk': int(value)}
+    return {'ticker': value.upper()}
+
+
+def company_financial_data(company):
+    metrics = getattr(company, 'financial_metrics', None)
+    balance = metrics if metrics is not None else company
+    score = calculate_altman_z(balance)
+    result = {
+        'id': company.pk, 'ticker': company.ticker, 'name': company.name,
+        'sector': company.sector, 'sector_display': company.get_sector_display(),
+        'logo_url': company.logo_url, 'altman_z': score, 'profile': financial_profile(score),
+        'as_of': metrics.as_of if metrics else None,
+        'source': metrics.source if metrics else 'Datos heredados sin verificar',
+        'is_demo': metrics.is_demo if metrics else True,
+    }
+    for field in ('market_cap', 'per', 'roe', 'beta', 'dividend_yield'):
+        value = getattr(balance, field, None)
+        result[field] = float(value) if value is not None else None
+    quote = company.latest_price
+    result['quote'] = ({'date': quote.date, 'adjusted_close': float(quote.adjusted_close),
+                        'currency': quote.currency, 'source': quote.source, 'is_demo': quote.is_demo}
+                       if quote else None)
+    return result
+
+
 class CompanyOverviewView(generics.GenericAPIView):
-    """
-    GET /api/v1/companies/<ticker>/overview/
-
-    Returns financial overview including Altman-Z score, PER, ROE, Market Cap.
-    """
     permission_classes = (IsAuthenticated,)
-
     def get(self, request, ticker, *args, **kwargs):
         try:
-            company = Company.objects.get(ticker=ticker.upper())
+            company = Company.objects.select_related('financial_metrics', 'latest_price').get(**company_identifier(ticker))
         except Company.DoesNotExist:
-            return Response(
-                {'error': 'Company not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        altman_z = calculate_altman_z(company)
-
-        data = {
-            'ticker': company.ticker,
-            'name': company.name,
-            'sector': company.sector,
-            'sector_display': company.get_sector_display(),
-            'market_cap': float(company.market_cap),
-            'per': float(company.per) if company.per else None,
-            'roe': float(company.roe) if company.roe else None,
-            'altman_z': altman_z,
-        }
-
-        return Response(data)
+            return Response({'error': 'Empresa no encontrada.'}, status=404)
+        return Response(company_financial_data(company))
 
 
-# ─── HU04_04: Company History ────────────────────────────────────────
+class CompanySummaryView(CompanyOverviewView):
+    """Ficha y cotización se cargan en una sola consulta con JOIN."""
+
 
 class CompanyHistoryView(generics.GenericAPIView):
-    """
-    GET /api/v1/companies/<ticker>/history/
-
-    Returns historical price data for charts.
-    """
     permission_classes = (IsAuthenticated,)
-
     def get(self, request, ticker, *args, **kwargs):
+        import calendar
+        from datetime import date
         try:
-            company = Company.objects.get(ticker=ticker.upper())
+            company = Company.objects.get(**company_identifier(ticker))
         except Company.DoesNotExist:
-            return Response(
-                {'error': 'Company not found'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
-        import random
-        from datetime import datetime, timedelta
-
-        base_price = random.uniform(50, 500)
-        history = []
-        for i in range(30, 0, -1):
-            date = datetime.now() - timedelta(days=i)
-            change = random.uniform(-0.05, 0.05)
-            price = base_price * (1 + change)
-            base_price = price
-            history.append({
-                'date': date.strftime('%Y-%m-%d'),
-                'price': round(price, 2),
-                'volume': random.randint(1000000, 10000000),
-            })
-
-        return Response({
-            'ticker': company.ticker,
-            'name': company.name,
-            'history': history,
-        })
+            return Response({'error': 'Empresa no encontrada.'}, status=404)
+        ranges = {'1M': 1, '6M': 6, '1Y': 12, '5Y': 60}
+        period = request.query_params.get('range', '1M').upper()
+        if period not in ranges:
+            raise ValidationError({'range': 'Se admite 1M, 6M, 1Y o 5Y.'})
+        end = timezone.localdate()
+        month = end.year * 12 + end.month - 1 - ranges[period]
+        year, month_zero = divmod(month, 12)
+        start = date(year, month_zero+1, min(end.day, calendar.monthrange(year, month_zero+1)[1]))
+        rows = list(PriceHistory.objects.filter(company=company, date__gte=start, date__lte=end)
+                    .order_by('date').values('date', 'adjusted_close', 'volume', 'currency', 'source', 'is_demo'))
+        history = [{'date': row['date'], 'price': float(row['adjusted_close']), 'volume': row['volume']} for row in rows]
+        return Response({'ticker': company.ticker, 'name': company.name, 'range': period,
+            'history': history, 'count': len(history), 'price_type': 'adjusted_close',
+            'sources': sorted({row['source'] for row in rows}),
+            'currencies': sorted({row['currency'] for row in rows}),
+            'is_demo': any(row['is_demo'] for row in rows)})
 
 
 # ─── HU03_02: Autocomplete ───────────────────────────────────────────

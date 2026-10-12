@@ -33,7 +33,7 @@ class SPP500User(HttpUser):
         """Test company search endpoint."""
         if not self.access_token:
             return
-        queries = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'Apple', 'Microsoft', 'Google']
+        queries = os.environ.get('LOCUST_SEARCH_QUERIES', 'AAPL,MSFT,GOOGL,AMZN,Apple,Microsoft,Google').split(',')
         query = random.choice(queries)
         with self.client.get('/api/v1/companies/search/', params={'q': query},
                              name='HU03_01 búsqueda', catch_response=True) as response:
@@ -84,3 +84,13 @@ class SPP500User(HttpUser):
         sector = random.choice(sectors)
         ordering = random.choice(['market_cap', '-market_cap'])
         self.client.get(f'/api/v1/companies/search/?sector={sector}&ordering={ordering}')
+
+
+class SearchPerformanceUser(HttpUser):
+    """Escenario aislado HU03_01: todas las peticiones son búsquedas autenticadas."""
+    wait_time = between(0.05, 0.2)
+    on_start = SPP500User.on_start
+
+    @task
+    def search(self):
+        SPP500User.search_companies(self)
