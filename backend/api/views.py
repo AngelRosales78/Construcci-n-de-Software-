@@ -10,6 +10,7 @@ Implements all endpoints for Epica 01 (Web Auth):
 - Token refresh (HU01_05)
 """
 import logging
+from decimal import Decimal, localcontext
 from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -494,42 +495,44 @@ def calculate_altman_z(company):
     X4 = Market Value of Equity / Total Liabilities
     X5 = Sales / Total Assets
     """
+    unknown = {'score': None, 'zone': 'unknown', 'risk_level': 'unknown'}
+    fields = ('working_capital', 'total_assets', 'retained_earnings', 'ebit',
+              'equity_value', 'total_liabilities', 'sales')
     try:
-        if company.total_assets == 0:
-            return {'score': 0, 'zone': 'unknown', 'risk_level': 'unknown'}
-
-        x1 = float(company.working_capital) / float(company.total_assets)
-        x2 = float(company.retained_earnings) / float(company.total_assets)
-        x3 = float(company.ebit) / float(company.total_assets)
-        x4 = float(company.equity_value) / float(company.total_liabilities) if company.total_liabilities > 0 else 0
-        x5 = float(company.sales) / float(company.total_assets)
-
-        z_score = 1.2 * x1 + 1.4 * x2 + 3.3 * x3 + 0.6 * x4 + 1.0 * x5
-
-        if z_score > 2.99:
-            zone = 'safe'
-            risk_level = 'low'
-        elif z_score > 1.81:
-            zone = 'grey'
-            risk_level = 'medium'
-        else:
-            zone = 'distress'
-            risk_level = 'high'
-
-        return {
-            'score': round(z_score, 2),
-            'zone': zone,
-            'risk_level': risk_level,
-            'components': {
-                'x1': round(x1, 4),
-                'x2': round(x2, 4),
-                'x3': round(x3, 4),
-                'x4': round(x4, 4),
-                'x5': round(x5, 4),
+        values = {field: Decimal(str(getattr(company, field))) for field in fields}
+        if not all(value.is_finite() for value in values.values()):
+            return unknown
+        if values['total_assets'] <= 0 or values['total_liabilities'] <= 0:
+            return unknown
+        if values['equity_value'] < 0 or values['sales'] < 0:
+            return unknown
+        with localcontext() as context:
+            context.prec = 50
+            assets = values['total_assets']
+            ratios = (
+                values['working_capital'] / assets,
+                values['retained_earnings'] / assets,
+                values['ebit'] / assets,
+                values['equity_value'] / values['total_liabilities'],
+                values['sales'] / assets,
+            )
+            weights = tuple(map(Decimal, ('1.2', '1.4', '3.3', '0.6', '1.0')))
+            score = sum(weight * ratio for weight, ratio in zip(weights, ratios))
+            if score > Decimal('2.99'):
+                zone, risk = 'safe', 'low'
+            elif score >= Decimal('1.81'):
+                zone, risk = 'grey', 'medium'
+            else:
+                zone, risk = 'distress', 'high'
+            return {
+                'score': float(round(score, 2)),
+                'zone': zone,
+                'risk_level': risk,
+                'components': {f'x{i}': float(round(ratio, 4))
+                               for i, ratio in enumerate(ratios, start=1)},
             }
-        }
-    except Exception:
-        return {'score': 0, 'zone': 'unknown', 'risk_level': 'unknown'}
+    except (ArithmeticError, TypeError, ValueError):
+        return unknown
 
 
 # ─── HU04_02/03/04: Company Overview ─────────────────────────────────

@@ -1,6 +1,11 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
 
 export default function AltmanZGauge({ score, zone }) {
+  if (score == null || !Number.isFinite(score) || zone === 'unknown') {
+    return <div className="altmanz-gauge"><h3>Altman-Z Score</h3>
+      <p>No hay datos suficientes para calcular el indicador.</p></div>
+  }
+  const displayedValue = Math.min(5, Math.max(0, score))
   const getZoneColor = (z) => {
     if (z === 'safe') return '#22c55e'
     if (z === 'grey') return '#eab308'
@@ -11,8 +16,8 @@ export default function AltmanZGauge({ score, zone }) {
   const color = getZoneColor(zone)
 
   const data = [
-    { name: 'Score', value: Math.max(0, score) },
-    { name: 'Rest', value: Math.max(0, 5 - score) },
+    { name: 'Score', value: displayedValue },
+    { name: 'Rest', value: 5 - displayedValue },
   ]
 
   return (
