@@ -25,6 +25,14 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
 
   return (
     <div className="company-filters">
+      <p aria-live="polite">Orden: {ordering.startsWith('-') ? '↓ Mayor a menor' : '↑ Menor a mayor'}</p>
+      {selectedSector && <div className="active-filter">
+        <span>{sectors.find(s => s.value === selectedSector)?.label || selectedSector}</span>
+        <button type="button" onClick={() => {
+          setSelectedSector('')
+          onFilterChange({ sector: '', ordering })
+        }}>Limpiar filtros</button>
+      </div>}
       <div className="filter-group">
         <label htmlFor="sector-filter">Sector:</label>
         <select

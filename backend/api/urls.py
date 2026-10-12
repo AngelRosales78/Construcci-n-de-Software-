@@ -41,6 +41,14 @@ urlpatterns = [
     # User Profile
     path('profile/', views.UserProfileView.as_view(), name='profile'),
 
+    path('search/', views.CompanySearchView.as_view(), name='search'),
+    path('search/autocomplete/', views.CompanyAutocompleteView.as_view(), name='autocomplete'),
+    path('search/history/', views.SearchHistoryView.as_view(), name='history'),
+    path('search/history/clear/', views.SearchHistoryDeleteView.as_view(), name='history-clear'),
+    path('search/history/<int:history_id>/', views.SearchHistoryDeleteView.as_view(), name='history-delete'),
+    path('companies/history/clear/', views.SearchHistoryDeleteView.as_view(), name='company-history-clear'),
+    path('companies/history/<int:history_id>/', views.SearchHistoryDeleteView.as_view(), name='company-history-delete'),
+
     # HU03_01: Company Search
     path('companies/search/', views.CompanySearchView.as_view(), name='company-search'),
 

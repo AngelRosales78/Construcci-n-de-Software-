@@ -6,7 +6,7 @@ import api from '../../services/api'
 import CompanySearch from './CompanySearch'
 import SearchBar from './SearchBar'
 
-vi.mock('../../services/api', () => ({ default: { get: vi.fn(), post: vi.fn() } }))
+vi.mock('../../services/api', () => ({ default: { get: vi.fn(), post: vi.fn(), delete: vi.fn() } }))
 const company = (ticker) => ({ ticker, name: `Empresa ${ticker}`, market_cap: 100, sector_display: 'Technology' })
 const result = (rows = [], next = null, count = rows.length) => ({ data: { results: rows, next, count } })
 let search

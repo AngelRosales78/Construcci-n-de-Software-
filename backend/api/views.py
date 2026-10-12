@@ -422,6 +422,8 @@ class CompanySearchView(generics.ListAPIView):
         sector = self.request.query_params.get('sector', '').strip()
         ordering = self.request.query_params.get('ordering', '').strip()
 
+        sectors = {str(label).casefold(): value for value, label in Company.SECTOR_CHOICES}
+        sector = sectors.get(sector.casefold(), sector.casefold())
         if sector and sector not in dict(Company.SECTOR_CHOICES):
             raise ValidationError({'sector': 'El sector no es válido.'})
         if ordering not in ('', 'market_cap', '-market_cap'):
@@ -459,10 +461,52 @@ class SearchHistoryView(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return SearchHistory.objects.filter(user=self.request.user)[:20]
+        return SearchHistory.objects.filter(user=self.request.user).order_by('-created_at', '-id')[:10]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        from .search_cache import cache_history
+        cache_history(request.user.pk, response.data['results'])
+        return response
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        query = serializer.validated_data['query'].strip()
+        with transaction.atomic():
+            User.objects.select_for_update().get(pk=request.user.pk)
+            SearchHistory.objects.filter(user=request.user, query__iexact=query).delete()
+            item = SearchHistory.objects.create(user=request.user, query=query)
+            retained = list(SearchHistory.objects.filter(user=request.user)
+                            .order_by('-created_at', '-id').values_list('pk', flat=True)[:10])
+            SearchHistory.objects.filter(user=request.user).exclude(pk__in=retained).delete()
+            self._refresh_cache(request.user.pk)
+        return Response(self.get_serializer(item).data, status=status.HTTP_201_CREATED)
+
+    @staticmethod
+    def _refresh_cache(user_id):
+        from .search_cache import cache_history
+        def refresh():
+            rows = SearchHistorySerializer(SearchHistory.objects.filter(user_id=user_id)
+                   .order_by('-created_at', '-id')[:10], many=True).data
+            cache_history(user_id, rows)
+        transaction.on_commit(refresh)
+
+
+class SearchHistoryDeleteView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request, history_id=None, *args, **kwargs):
+        with transaction.atomic():
+            User.objects.select_for_update().get(pk=request.user.pk)
+            rows = SearchHistory.objects.filter(user=request.user)
+            if history_id is not None:
+                rows = rows.filter(pk=history_id)
+                if not rows.exists():
+                    return Response({'error': 'Búsqueda no encontrada.'}, status=404)
+            rows.delete()
+            SearchHistoryView._refresh_cache(request.user.pk)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # ─── HU03_03: Sectors List ───────────────────────────────────────────
@@ -627,5 +671,12 @@ class CompanyAutocompleteView(generics.GenericAPIView):
         if not prefix:
             return Response({'suggestions': []})
 
-        suggestions = get_autocomplete_suggestions(prefix)
+        if len(prefix) > 200:
+            raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
+        from .search_cache import autocomplete
+        from redis.exceptions import RedisError
+        try:
+            suggestions = autocomplete(prefix)
+        except RedisError:
+            return Response({'error': 'El autocompletado no está disponible.'}, status=503)
         return Response({'suggestions': suggestions})
