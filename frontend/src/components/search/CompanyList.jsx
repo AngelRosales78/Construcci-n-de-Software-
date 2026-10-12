@@ -24,8 +24,9 @@ export default function CompanyList({ companies, loading }) {
           onClick={() => handleSelectCompany(company.ticker)}
         >
           <div className="company-card-header">
-            <span className="company-ticker">{company.ticker}</span>
-            <span className="company-sector">{company.sector_display}</span>
+            {company.logo_url && <img src={company.logo_url} alt={`Logo de ${company.name}`} width="40" height="40" loading="lazy" onError={event => { event.currentTarget.style.display = 'none' }} />}
+            <strong className="company-ticker">{company.ticker}</strong>
+            <span className={`company-sector sector-${company.sector}`}>{company.sector_display}</span>
           </div>
           <h3 className="company-name">{company.name}</h3>
           <div className="company-metrics">
@@ -35,11 +36,11 @@ export default function CompanyList({ companies, loading }) {
             </div>
             <div className="metric">
               <span className="metric-label">PER</span>
-              <span className="metric-value">{company.per || 'N/A'}</span>
+              <span className="metric-value">{company.per ?? 'N/A'}</span>
             </div>
             <div className="metric">
               <span className="metric-label">ROE</span>
-              <span className="metric-value">{company.roe ? `${company.roe}%` : 'N/A'}</span>
+              <span className="metric-value">{company.roe != null ? `${company.roe}%` : 'N/A'}</span>
             </div>
           </div>
         </div>

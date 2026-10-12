@@ -5,7 +5,6 @@ import ForgotPassword from './components/auth/ForgotPassword'
 import ResetPassword from './components/auth/ResetPassword'
 import Dashboard from './components/Dashboard'
 import CompanySearch from './components/search/CompanySearch'
-import CompanyProfile from './components/company/CompanyProfile'
 import CompanyDashboard from './components/company/CompanyDashboard'
 
 function App() {

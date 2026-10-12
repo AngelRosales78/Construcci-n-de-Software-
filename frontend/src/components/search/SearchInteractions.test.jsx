@@ -3,6 +3,8 @@ import { it, expect, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import SearchHistory from './SearchHistory'
 import SearchBar from './SearchBar'
+import CompanyList from './CompanyList'
+import { MemoryRouter } from 'react-router-dom'
 import api from '../../services/api'
 vi.mock('../../services/api',()=>({default:{get:vi.fn(),delete:vi.fn()}}))
 afterEach(()=>{cleanup();localStorage.clear();vi.resetAllMocks()})
@@ -39,4 +41,11 @@ it('usa únicamente la copia local de la cuenta activa cuando falla la red',asyn
  render(<SearchHistory onSelectHistory={vi.fn()}/> )
  await screen.findByRole('button',{name:'MIO'})
  expect(screen.queryByText('PRIVADO')).toBeNull()
+})
+
+it('muestra el logo configurado y conserva métricas con valor cero',()=>{
+ render(<MemoryRouter><CompanyList companies={[{ticker:'AAA',name:'Empresa',sector:'technology',sector_display:'Technology',market_cap:0,per:0,roe:0,logo_url:'https://example.test/logo.svg'}]} loading={false}/></MemoryRouter>)
+ expect(screen.getByRole('img',{name:'Logo de Empresa'}).getAttribute('src')).toBe('https://example.test/logo.svg')
+ expect(screen.getByText('AAA').tagName).toBe('STRONG')
+ expect(screen.getByText('0%')).toBeTruthy()
 })

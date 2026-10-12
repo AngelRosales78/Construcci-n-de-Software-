@@ -1,9 +1,12 @@
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts'
 
+function RiskLegend() {
+  return <p className="risk-legend">Zona segura: mayor que 2,99 · Zona gris: de 1,81 a 2,99 · Peligro: menor que 1,81</p>
+}
 export default function AltmanZGauge({ score, zone }) {
   if (score == null || !Number.isFinite(score) || zone === 'unknown') {
     return <div className="altmanz-gauge"><h3>Altman-Z Score</h3>
-      <p>No hay datos suficientes para calcular el indicador.</p></div>
+      <p>No hay datos suficientes para calcular el indicador.</p><RiskLegend /></div>
   }
   const displayedValue = Math.min(5, Math.max(0, score))
   const getZoneColor = (z) => {
@@ -26,6 +29,7 @@ export default function AltmanZGauge({ score, zone }) {
       <div className="gauge-container">
         <ResponsiveContainer width="100%" height={200}>
           <PieChart>
+            <Tooltip formatter={() => [score, "Puntaje Altman-Z"]} />
             <Pie
               data={data}
               cx="50%"
@@ -46,6 +50,7 @@ export default function AltmanZGauge({ score, zone }) {
           <span className="gauge-score" style={{ color }}>{score}</span>
         </div>
       </div>
+      <RiskLegend />
       <div className="gauge-labels">
         <span className="gauge-label">0</span>
         <span className="gauge-label">1.81</span>

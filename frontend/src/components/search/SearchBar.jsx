@@ -66,7 +66,7 @@ export default function SearchBar({ onSearch, onSubmitSearch = onSearch, initial
 
   useEffect(() => {
     let active = true
-    if (query.length < 2) {
+    if (query.length < 1) {
       setSuggestions([])
       setShowSuggestions(false)
       setLoading(false)

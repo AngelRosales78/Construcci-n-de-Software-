@@ -35,3 +35,35 @@ body {
 #root {
   min-height: 100vh;
 }
+
+.company-search, .company-dashboard { max-width: 1200px; margin: auto; padding: 24px; }
+.search-content { display: grid; grid-template-columns: 240px 1fr; gap: 24px; }
+.company-list, .dashboard-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.company-card, .metric-card, .financial-health, .price-chart { border: 1px solid #d1d5db; border-radius: 8px; padding: 16px; margin: 12px 0; }
+.company-card { cursor: pointer; }
+.metric-card { display: flex; flex-direction: column; gap: 12px; }
+.company-sector { display: inline-block; border-radius: 12px; padding: 3px 8px; background: #e0e7ff; color: #312e81; }
+.sector-technology { background: #dbeafe; color: #1e3a8a; }
+.sector-healthcare { background: #dcfce7; color: #14532d; }
+.sector-financials { background: #fef3c7; color: #78350f; }
+.sector-energy { background: #ffedd5; color: #7c2d12; }
+.sector-industrials { background: #e2e8f0; color: #334155; }
+.sector-consumer_discretionary, .sector-consumer_staples { background: #fce7f3; color: #831843; }
+.sector-materials, .sector-utilities { background: #ccfbf1; color: #134e4a; }
+.sector-real_estate, .sector-communication_services { background: #ede9fe; color: #4c1d95; }
+.health-green { background: #dcfce7; color: #14532d; }
+.health-orange { background: #ffedd5; color: #7c2d12; }
+.health-red { background: #fee2e2; color: #7f1d1d; }
+.health-grey { background: #f3f4f6; color: #374151; }
+.search-suggestions [aria-selected="true"] { background: #dbeafe; }
+.search-history li { display: flex; justify-content: space-between; gap: 8px; }
+button { cursor: pointer; margin: 4px; padding: 6px 10px; }
+button:disabled { cursor: default; opacity: 0.5; }
+.risk-legend { margin: 12px 0; }
+@media(max-width: 700px) { .search-content { grid-template-columns: 1fr; } }
+
+.dashboard-charts { display: grid; grid-template-columns: minmax(250px, 1fr) minmax(250px, 1fr); align-items: center; gap: 24px; }
+.gauge-container { position: relative; }
+.gauge-value { position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; font-size: 28px; font-weight: 700; }
+.gauge-labels { display: flex; justify-content: space-between; max-width: 300px; margin: auto; gap: 8px; }
+@media(max-width: 700px) { .dashboard-charts { grid-template-columns: 1fr; } }

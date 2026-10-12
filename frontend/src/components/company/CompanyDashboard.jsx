@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import AltmanZGauge from './AltmanZGauge'
 import PriceChart from './PriceChart'
+import MetricCards from './MetricCards'
 import FinancialHealthIndicator from './FinancialHealthIndicator'
 
 export default function CompanyDashboard() {
@@ -15,8 +16,10 @@ export default function CompanyDashboard() {
   useEffect(() => {
     const fetchCompany = async () => {
       setLoading(true)
+      setError(null)
+      setCompany(null)
       try {
-        const response = await api.get(`/companies/${ticker}/overview/`)
+        const response = await api.get(`/companies/${ticker}/summary/`)
         setCompany(response.data)
       } catch (err) {
         setError(err.response?.data?.error || 'Error al cargar la empresa')
@@ -30,13 +33,6 @@ export default function CompanyDashboard() {
   if (loading) return <div className="dashboard-loading">Cargando dashboard...</div>
   if (error) return <div className="dashboard-error">{error}</div>
   if (!company) return null
-
-  const formatMarketCap = (value) => {
-    if (value >= 1e12) return `$${(value / 1e12).toFixed(2)}T`
-    if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`
-    if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`
-    return `$${value.toFixed(2)}`
-  }
 
   return (
     <div className="company-dashboard">
@@ -52,24 +48,12 @@ export default function CompanyDashboard() {
       </div>
 
       <div className="dashboard-content">
-        <div className="dashboard-metrics">
-          <div className="metric-card">
-            <span className="metric-label">Market Cap</span>
-            <span className="metric-value">{formatMarketCap(company.market_cap)}</span>
-          </div>
-          <div className="metric-card">
-            <span className="metric-label">PER</span>
-            <span className="metric-value">{company.per || 'N/A'}</span>
-          </div>
-          <div className="metric-card">
-            <span className="metric-label">ROE</span>
-            <span className="metric-value">{company.roe ? `${company.roe}%` : 'N/A'}</span>
-          </div>
-        </div>
-
+        <MetricCards company={company} />
+        <p>Fuente: {company.source || 'Sin fuente'} · Fecha: {company.as_of || 'Sin fecha'}</p>
+        {company.is_demo && <p role="status">Datos de demostración o sin verificar.</p>}
         <div className="dashboard-charts">
           <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} />
-          <FinancialHealthIndicator altmanZ={company.altman_z} />
+          <FinancialHealthIndicator altmanZ={company.altman_z} profile={company.profile} />
         </div>
 
         <PriceChart />

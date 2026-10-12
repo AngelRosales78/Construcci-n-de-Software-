@@ -8,6 +8,7 @@ vi.mock('recharts', () => ({
   PieChart: ({ children }) => <div>{children}</div>,
   Pie: ({ children, data }) => <div data-testid="segments" data-values={JSON.stringify(data)}>{children}</div>,
   Cell: () => null,
+  Tooltip: () => null,
 }))
 afterEach(cleanup)
 it.each([null, undefined, NaN, Infinity])('muestra datos insuficientes para %s', score => {
