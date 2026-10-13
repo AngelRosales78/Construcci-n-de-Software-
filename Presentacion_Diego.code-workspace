@@ -1,0 +1,71 @@
+{
+  "folders": [
+    {
+      "name": "Backend",
+      "path": "backend"
+    },
+    {
+      "name": "Web",
+      "path": "frontend"
+    },
+    {
+      "name": "Guion y evidencias",
+      "path": "docs"
+    },
+    {
+      "name": "Tools",
+      "path": "tools"
+    }
+  ],
+  "settings": {
+    "python.defaultInterpreterPath": "C:\\Users\\Magal\\.codex\\.chatgpt-projects\\g-p-6acaed37aab8819194a2ca4d4594528c\\validation_env\\Scripts\\python.exe",
+    "files.exclude": {
+      "**/__pycache__": true,
+      "**/node_modules": true
+    }
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Iniciar demostracion de Diego",
+        "type": "shell",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Tools}/Start-Presentation.ps1"
+        ],
+        "problemMatcher": []
+      },
+      {
+        "label": "Detener demostracion",
+        "type": "shell",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Tools}/Stop-Presentation.ps1"
+        ],
+        "problemMatcher": []
+      },
+      {
+        "label": "Mostrar evidencia en vivo de las tareas",
+        "type": "shell",
+        "command": "powershell.exe",
+        "args": [
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "${workspaceFolder:Tools}/Show-Task-Evidence.ps1"
+        ],
+        "problemMatcher": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,18 @@
+# Prompt para continuar y cerrar las tareas de Diego
+
+Actúa como ingeniero de software senior y continúa en la rama Magallanes. La entrega es el martes 13 de octubre de 2026. Diego es responsable de las épicas 3 y 4 (45 tareas: búsqueda y análisis financiero, backend y sus pantallas web). Rosales es responsable de las épicas 1 y 2 (autenticación web y Android). No presupongas que todo Android funciona solo porque existe código.
+
+Lee Tareas_Tecnicas_Sprint_1.docx, docs/Matriz_epicas_3_y_4_12_octubre_2026.md y las evidencias. Reaudita las 42 tareas verificadas localmente: si falta un criterio literal o una prueba necesaria, cambia su estado a parcial. La matriz no prueba por sí sola que las 42 estén cerradas para entrega. No repitas trabajo existente.
+
+1. Completa HU03_01 Backend y Testing: investiga las respuestas mayores a 200 ms con trazas, distingue caché fría/caliente y conexiones, repite carga representativa y conserva todas las mediciones. No cambies el umbral a P95 sin autorización del profesor ni ocultes respuestas lentas.
+2. Completa HU03_01 UI/UX: añade logos verificables al catálogo, prueba imágenes ausentes o fallidas y conserva procedencia. No declares logos completos usando solo una URL ficticia de un test.
+3. Prepara datos reales de balances y cierres ajustados con fuente, fecha, moneda y precisión; importa únicamente en una base de entrega autorizada. Mantén los fixtures en sprint_validation, etiquetados como prueba. No fabriques cifras ni mezcles cierre ordinario con ajustado.
+4. Inspecciona la rama Rosales actual y prepara la integración de contratos: /auth/, refresh, claves de almacenamiento, configuración Android y API compartida. Reutiliza el trabajo del compañero. No ejecutes merge/rebase ni publiques en Rosales/main sin aprobación explícita; prepara primero una propuesta revisable. Solo están autorizados commits y push de tu trabajo a origin/Magallanes.
+5. Verifica las 45 tareas contra sus requisitos literales, pruebas funcionales PostgreSQL/Redis reales y un recorrido integral web y Android cuando exista una rama integrada aprobada. Las partes Android que no puedas ejecutar quedarán pendientes y a cargo de Rosales. No presentes la sesión JWT preparada de la demo como una prueba de login.
+6. Ensaya el guion docs/Plan_presentacion_Diego_y_Rosales.md: Diego demuestra búsqueda, filtros, historial, métricas, Altman-Z y precios; Rosales demuestra registro, login y funciones móviles verificadas. No expliques IA, predicciones o portafolios como implementados si son texto de bienvenida.
+7. Conserva .env, db.sqlite3, node_modules, cachés, configuración Android y migraciones locales sin seguimiento del checkout original. No edites sources/. Trabaja en el worktree Magallanes con autor DiegoMagallanes11 <magallaneslda@gmail.com>. Usa commits por HU, en español, impersonales, en pasado, sin prefijos ni emojis, con horas reales. Nunca publiques tokens o credenciales.
+8. Entrega matriz actualizada, cambios, commits/push, pruebas reproducibles, pendientes concretos y veredicto de preparación para el martes. No prometas cierre total si algún criterio sigue sin evidencia.
+
+Empieza mostrando estado, diferencias pendientes y un plan concreto. Avanza con el trabajo autorizado y consulta únicamente las decisiones que requieran aprobación o información imprescindible.
+
+Requisito adicional del usuario: preparar una evidencia en vivo por cada una de las 45 tareas de Diego. Mantener Lista_45_tareas_demostracion_en_vivo.md sincronizada con codigo, lineas y estado. Mostrar la lista al profesor y acreditar cada fila mediante interfaz, API, base de datos o pruebas. No ocultar las tres tareas parciales.
