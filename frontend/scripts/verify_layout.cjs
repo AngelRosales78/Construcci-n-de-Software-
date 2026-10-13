@@ -11,10 +11,23 @@ const { chromium } = require('playwright')
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
     const errors = [], checks = []
     page.on('pageerror', error => errors.push(error.message))
+    for (const [device, width, height] of [['escritorio', 1440, 1000], ['movil', 390, 844]]) {
+      await page.setViewportSize({ width, height })
+      for (const route of ['login', 'register']) {
+        await page.goto(`http://127.0.0.1:55173/${route}`)
+        await page.locator('.auth-tabs').waitFor()
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)
+        assert.equal(overflow, false, `${device}: ${route} tiene desbordamiento horizontal`)
+        const file = `interfaz_${device}_${route}.png`
+        await page.screenshot({ path: path.join(output, file), fullPage: true })
+        checks.push({ device, width, route, horizontal_overflow: overflow, screenshot: file })
+      }
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 })
     await page.goto('http://127.0.0.1:55173/login')
     await page.locator('#username').fill(credentials.username)
     await page.locator('#password').fill(credentials.password)
-    await page.getByRole('button', { name: 'Sign In', exact: true }).click()
+    await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
     await page.waitForURL('**/dashboard')
     for (const [device, width, height] of [['escritorio', 1440, 1000], ['movil', 390, 844]]) {
       await page.setViewportSize({ width, height })
@@ -24,7 +37,11 @@ const { chromium } = require('playwright')
         if (route === 'search') {
           await page.getByRole('region', { name: 'Búsquedas recientes' }).waitFor()
           await page.getByRole('img', { name: 'Logo de Microsoft', exact: true }).waitFor()
-          await page.waitForFunction(() => [...document.querySelectorAll('.company-card img')].slice(0, 6).every(image => image.complete))
+          for (const image of await page.locator('.company-card img').all()) {
+            await image.scrollIntoViewIfNeeded()
+          }
+          await page.waitForFunction(() => [...document.querySelectorAll('.company-card img')].every(image => image.complete && image.naturalWidth > 0))
+          await page.evaluate(() => window.scrollTo(0, 0))
         }
         if (route.startsWith('company/')) await page.locator('.recharts-pie .recharts-sector').first().waitFor({ state: 'visible' })
         await page.evaluate(() => document.fonts.ready)

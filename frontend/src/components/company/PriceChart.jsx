@@ -8,13 +8,13 @@ export default function PriceChart() {
   const { ticker, period, setPeriod, data, loading, error } = usePriceChartViewModel()
   const options = useMemo(() => ({
     chart: { animation: false, zooming: { type: 'x' }, height: 380, backgroundColor: 'transparent', style: { fontFamily: 'Segoe UI, sans-serif' }, spacing: [24, 8, 8, 8] },
-    title: { text: `${ticker} · Cierre ajustado`, align: 'left', style: { fontSize: '14px', fontWeight: '600', color: '#5d6c74' } },
+    title: { text: `${ticker} · Cierre ajustado`, align: 'left', style: { fontSize: '14px', fontWeight: '600', color: '#bacbb9' } },
     rangeSelector: { enabled: false },
-    navigator: { enabled: true, maskFill: 'rgba(20,121,95,0.08)', series: { color: '#76b698', lineWidth: 1 }, handles: { backgroundColor: '#fff', borderColor: '#b6c9bf' } }, scrollbar: { enabled: true },
-    xAxis: { crosshair: true, lineColor: '#dce5e0', tickColor: '#dce5e0' }, yAxis: { title: { text: data?.currencies?.[0] || 'Precio' }, gridLineColor: '#edf1ee' },
-    tooltip: { split: false, valueDecimals: 2, xDateFormat: '%d/%m/%Y' },
+    navigator: { enabled: true, maskFill: 'rgba(20,121,95,0.08)', series: { color: '#75ff9e', lineWidth: 1 }, handles: { backgroundColor: '#262a31', borderColor: '#536158' } }, scrollbar: { enabled: true },
+    xAxis: { labels: { style: { color: '#bacbb9' } }, crosshair: true, lineColor: '#343e39', tickColor: '#343e39' }, yAxis: { labels: { style: { color: '#bacbb9' } }, title: { style: { color: '#bacbb9' }, text: data?.currencies?.[0] || 'Precio' }, gridLineColor: '#262a31' },
+    tooltip: { backgroundColor: '#262a31', borderColor: '#536158', style: { color: '#dfe2eb' }, split: false, valueDecimals: 2, xDateFormat: '%d/%m/%Y' },
     plotOptions: { series: { animation: false, dataGrouping: { enabled: false } } },
-    series: [{ name: 'Cierre ajustado', type: 'area', threshold: null, color: '#13866a', lineWidth: 2, fillColor: { linearGradient: [0, 0, 0, 350], stops: [[0, 'rgba(19,134,106,0.16)'], [1, 'rgba(19,134,106,0.01)']] }, turboThreshold: 10000,
+    series: [{ name: 'Cierre ajustado', type: 'area', threshold: null, color: '#00e676', lineWidth: 2, fillColor: { linearGradient: [0, 0, 0, 350], stops: [[0, 'rgba(0,230,118,0.22)'], [1, 'rgba(0,230,118,0.01)']] }, turboThreshold: 10000,
       data: (data?.history || []).map(point => [Date.parse(`${point.date}T00:00:00Z`), point.price]) }],
     accessibility: { enabled: false },
   }), [ticker, data])

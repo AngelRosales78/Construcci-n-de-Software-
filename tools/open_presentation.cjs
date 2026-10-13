@@ -11,7 +11,7 @@ const { chromium } = require(require.resolve('playwright', { paths: [path.join(r
  await page.goto('http://127.0.0.1:55173/login')
  await page.locator('#username').fill(data.username)
  await page.locator('#password').fill(data.password)
- await page.getByRole('button', {name:'Sign In', exact:true}).click()
+ await page.getByRole('button', {name:'Iniciar sesión', exact:true}).click()
  await page.waitForURL('**/dashboard')
  await page.getByRole('button', {name:'Buscar empresas y consultar fichas'}).click()
  await page.getByText('Microsoft', { exact: true }).waitFor()

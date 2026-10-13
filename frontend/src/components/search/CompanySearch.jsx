@@ -11,10 +11,14 @@ export default function CompanySearch() {
   return (
     <WorkspaceLayout><div className="company-search">
       <div className="search-header">
-        <p className="section-eyebrow">EXPLORADOR DE EMPRESAS</p>
+        <p className="section-eyebrow">EXPLORACIÓN DE MERCADOS</p>
         <h1>Buscar Empresas S&P 500</h1>
         <p className="section-description">Encuentra una empresa y entiende sus indicadores, su perfil financiero y su historia en el mercado.</p>
         <SearchBar onSearch={handleSearch} onSubmitSearch={saveHistory} initialValue={params.q} />
+      </div>
+      <div className="terminal-overview">
+        <section><span className="section-eyebrow">CATÁLOGO DE REFERENCIA</span><h2>Del mercado a cada empresa</h2><p>Busca por nombre o símbolo y consulta su ficha financiera.</p><span className="terminal-tag">S&amp;P 500 · Sectores y empresas</span></section>
+        <section><span className="section-eyebrow">COBERTURA DE ESTA DEMOSTRACIÓN</span><h2>Microsoft · MSFT</h2><p>Balance anual 2024 y precios históricos importados. Las demás fichas indican cuándo falta información.</p><span className="terminal-tag">Fuentes: SEC y Yahoo Finance</span></section>
       </div>
       <div className="search-content">
         <aside className="search-sidebar">

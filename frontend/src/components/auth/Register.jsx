@@ -1,5 +1,6 @@
 import { useRegisterViewModel } from '../../viewmodels/useRegisterViewModel'
 import { Link } from 'react-router-dom'
+import AuthHeader from './AuthHeader'
 
 
 export default function Register() {
@@ -7,17 +8,14 @@ export default function Register() {
   return (
     <div className="auth-container">
       <div className="auth-card auth-card--large">
-        <div className="auth-header">
-          <h1>Create Account</h1>
-          <p>Join the S&amp;P 500 Financial Analysis Platform</p>
-        </div>
+        <AuthHeader mode="register" />
 
         {error && <div className="auth-error">{error}</div>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="firstName">First Name</label>
+              <label htmlFor="firstName">Nombre</label>
               <input
                 id="firstName"
                 type="text"
@@ -30,7 +28,7 @@ export default function Register() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="lastName">Last Name</label>
+              <label htmlFor="lastName">Apellido</label>
               <input
                 id="lastName"
                 type="text"
@@ -44,13 +42,13 @@ export default function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Usuario</label>
             <input
               id="username"
               type="text"
               autoComplete="username"
               {...register('username')}
-              placeholder="Choose a username"
+              placeholder="Elige un nombre de usuario"
             />
             {errors.username && (
               <span className="error-text">{errors.username.message}</span>
@@ -58,13 +56,13 @@ export default function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">Correo electrónico</label>
             <input
               id="email"
               type="email"
               autoComplete="email"
               {...register('email')}
-              placeholder="your@email.com"
+              placeholder="tu@correo.com"
             />
             {errors.email && (
               <span className="error-text">{errors.email.message}</span>
@@ -72,21 +70,21 @@ export default function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="userType">Account Type</label>
+            <label htmlFor="userType">Tipo de cuenta</label>
             <select id="userType" {...register('userType')}>
-              <option value="retail">Retail Investor</option>
-              <option value="institutional">Institutional Investor</option>
+              <option value="retail">Inversor individual</option>
+              <option value="institutional">Inversor institucional</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Contraseña</label>
             <input
               id="password"
               type="password"
               autoComplete="new-password"
               {...register('password')}
-              placeholder="Min. 8 chars with uppercase, lowercase, number &amp; symbol"
+              placeholder="8 caracteres: mayúscula, minúscula, número y símbolo"
             />
             {errors.password && (
               <span className="error-text">{errors.password.message}</span>
@@ -94,13 +92,13 @@ export default function Register() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="passwordConfirm">Confirm Password</label>
+            <label htmlFor="passwordConfirm">Confirmar contraseña</label>
             <input
               id="passwordConfirm"
               type="password"
               autoComplete="new-password"
               {...register('passwordConfirm')}
-              placeholder="Re-enter your password"
+              placeholder="Repite tu contraseña"
             />
             {errors.passwordConfirm && (
               <span className="error-text">{errors.passwordConfirm.message}</span>
@@ -108,13 +106,13 @@ export default function Register() {
           </div>
 
           <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </button>
         </form>
 
         <div className="auth-footer">
-          <span>Already have an account? </span>
-          <Link to="/login">Sign in</Link>
+          <span>¿Ya tienes una cuenta? </span>
+          <Link to="/login">Iniciar sesión</Link>
         </div>
       </div>
     </div>
