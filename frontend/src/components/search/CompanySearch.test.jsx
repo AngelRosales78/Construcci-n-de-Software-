@@ -78,7 +78,7 @@ it('ignora una respuesta antigua que llega después de cambiar el filtro', async
   let resolveOld
   search.mockImplementationOnce(() => new Promise(resolve => { resolveOld = resolve }))
   mount()
-  await screen.findByRole('option', { name: 'Technology' })
+  await screen.findByRole('option', { name: 'Tecnología' })
   fireEvent.change(screen.getByLabelText('Sector:'), { target: { value: 'technology' } })
   await screen.findByText('Empresa AAA')
   await act(async () => resolveOld(result([company('OLD')])))

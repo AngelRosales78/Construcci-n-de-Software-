@@ -1,4 +1,5 @@
 import { useCompanyFiltersViewModel } from '../../viewmodels/useCompanyFiltersViewModel'
+import { sectorLabel } from '../../utils/financialPresentation'
 
 
 export default function CompanyFilters({ onFilterChange, initialSector = '', initialOrdering = '-market_cap' }) {
@@ -7,7 +8,7 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
     <div className="company-filters">
       <p aria-live="polite">Orden: {ordering.startsWith('-') ? '↓ Mayor a menor' : '↑ Menor a mayor'}</p>
       {selectedSector && <div className="active-filter">
-        <span>{sectors.find(s => s.value === selectedSector)?.label || selectedSector}</span>
+        <span>{sectorLabel(selectedSector, sectors.find(s => s.value === selectedSector)?.label)}</span>
         <button type="button" onClick={clearFilters}>Limpiar filtros</button>
       </div>}
       <div className="filter-group">
@@ -19,7 +20,7 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
         >
           <option value="">Todos los sectores</option>
           {sectors.map((s) => (
-            <option key={s.value} value={s.value}>{s.label}</option>
+            <option key={s.value} value={s.value}>{sectorLabel(s.value, s.label)}</option>
           ))}
         </select>
       </div>
@@ -31,8 +32,8 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
           value={ordering}
           onChange={e => selectOrdering(e.target.value)}
         >
-          <option value="-market_cap">Market Cap (mayor a menor)</option>
-          <option value="market_cap">Market Cap (menor a mayor)</option>
+          <option value="-market_cap">Capitalización: mayor a menor</option>
+          <option value="market_cap">Capitalización: menor a mayor</option>
         </select>
       </div>
     </div>

@@ -30,7 +30,7 @@ it('cambia el rango y entrega más de mil puntos a Highcharts con zoom y crossha
  expect(screen.getByTestId('chart').getAttribute('data-points')).toBe('1200')
  expect(screen.getByTestId('chart').getAttribute('data-crosshair')).toBe('true')
  expect(screen.getByTestId('chart').getAttribute('data-zoom')).toBe('x')
- fireEvent.click(screen.getByRole('button',{name:'5Y'}))
+ fireEvent.click(screen.getByRole('button',{name:'5 años'}))
  await waitFor(()=>expect(api.get).toHaveBeenLastCalledWith('/companies/DATA/history/?range=5Y'))
 })
 it('explica la falta de precios en vez de generar una serie',async()=>{

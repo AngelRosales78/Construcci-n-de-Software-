@@ -13,10 +13,10 @@ const { chromium } = require('playwright')
     const errors = []
     page.on('pageerror', error => errors.push(error.message))
     await page.goto(`${process.env.BENCHMARK_FRONTEND_URL || 'http://127.0.0.1:55173'}/company/T000`)
-    await page.getByRole('button', { name: '5Y', exact: true }).waitFor()
+    await page.getByRole('button', { name: '5 años', exact: true }).waitFor()
     const start = performance.now()
     const responsePromise = page.waitForResponse(response => response.url().includes('/history/?range=5Y'))
-    await page.getByRole('button', { name: '5Y', exact: true }).click()
+    await page.getByRole('button', { name: '5 años', exact: true }).click()
     const response = await responsePromise
     if (!response.ok()) throw new Error(`API: ${response.status()}`)
     const data = await response.json()

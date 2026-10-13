@@ -20,11 +20,13 @@ export default function PriceChart() {
   }), [ticker, data])
   return <section className="price-chart" aria-label="Historial de precios">
     <div className="chart-heading"><div><p className="section-eyebrow">EVOLUCIÓN EN EL MERCADO</p><h3>Historial de precios</h3></div>
-    <div role="group" aria-label="Rango de precios">{['1M', '6M', '1Y', '5Y'].map(value =>
-      <button key={value} aria-pressed={period === value} onClick={() => setPeriod(value)}>{value}</button>)}</div></div>
-    {loading ? <p>Cargando historial...</p> : error ? <p role="alert">{error}</p> : !data?.history?.length
+    <div role="group" aria-label="Rango de precios">{Object.entries({ '1M': '1 mes', '6M': '6 meses', '1Y': '1 año', '5Y': '5 años' }).map(([value, label]) =>
+      <button key={value} data-range={value} aria-pressed={period === value} onClick={() => setPeriod(value)}>{label}</button>)}</div></div>
+    <details className="financial-help chart-help"><summary>¿Qué muestra este gráfico?</summary><div className="help-content"><p>El cierre ajustado es un precio histórico que el proveedor corrige por dividendos y divisiones de acciones, para facilitar comparaciones entre fechas.</p><p>Los botones cambian el periodo consultado y mantienen puntos diarios. Se muestran sesiones bursátiles disponibles; no se inventan precios para fechas sin cotización.</p><p>El eje horizontal muestra fechas y el vertical, precios en la moneda indicada. Arrastra sobre el gráfico para ampliar un intervalo.</p></div></details>
+    {loading ? <p role="status">Cargando historial...</p> : error ? <p role="alert">{error}</p> : !data?.history?.length
       ? <p>No hay precios importados para este rango.</p>
       : <>
+        <p className="chart-date-range">Periodo disponible: {data.history[0].date} → {data.history[data.history.length - 1].date} · {data.history.length} sesiones</p>
         <HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={options} />
         <div className="chart-caption"><p>Arrastra para ampliar; usa el navegador inferior para cambiar el intervalo.</p><p>Fuente: {data.sources.join(', ')} · {data.is_demo ? 'Datos de demostración' : 'Datos importados'}</p></div>
       </>}

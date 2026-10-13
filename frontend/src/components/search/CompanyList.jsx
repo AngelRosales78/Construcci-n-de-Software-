@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 import { useState } from 'react'
 import verifiedLogos from '../../data/verifiedLogos.json'
 import lightLogos from '../../data/lightLogos.json'
@@ -43,21 +44,22 @@ export default function CompanyList({ companies, loading }) {
             <strong className="company-ticker">{company.ticker}</strong>
           </div>
           <h3 className="company-name">{company.name}</h3>
-          <span className={`company-sector sector-${company.sector}`}>{company.sector_display}</span>
-          <div className="company-metrics">
+          <span className={`company-sector sector-${company.sector}`}>{sectorLabel(company.sector, company.sector_display)}</span>
+          <span className={`coverage-label ${hasIndicators(company) ? 'coverage-available' : ''}`}>{hasIndicators(company) ? 'Indicadores disponibles' : 'Información financiera pendiente'}</span>
+          {hasIndicators(company) ? <div className="company-metrics">
             <div className="metric">
-              <span className="metric-label">Market Cap</span>
+              <span className="metric-label">Capitalización</span>
               <span className="metric-value">{company.market_cap == null ? 'Sin datos' : Number(company.market_cap) >= 1e12 ? `$${(company.market_cap / 1e12).toFixed(2)}T` : `$${(company.market_cap / 1e9).toFixed(2)}B`}</span>
             </div>
             <div className="metric">
               <span className="metric-label">PER</span>
-              <span className="metric-value">{company.per ?? 'N/A'}</span>
+              <span className="metric-value">{company.per ?? 'Sin datos'}</span>
             </div>
             <div className="metric">
               <span className="metric-label">ROE</span>
-              <span className="metric-value">{company.roe != null ? `${company.roe}%` : 'N/A'}</span>
+              <span className="metric-value">{company.roe != null ? `${company.roe}%` : 'Sin datos'}</span>
             </div>
-          </div>
+          </div> : <div className="company-empty-data"><strong>Sin datos</strong><p>Empresa incluida en el catálogo. Sus indicadores están pendientes de carga.</p></div>}
           <span className="company-card-action">Consultar ficha <span aria-hidden="true">↗</span></span>
         </button>
       ))}

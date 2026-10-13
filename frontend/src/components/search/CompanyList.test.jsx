@@ -12,6 +12,7 @@ test('usa el logo verificado local y mantiene el cero financiero', () => {
   show({ market_cap: 0 })
   expect(screen.getByRole('img').getAttribute('src')).toBe('/company-logos/MSFT.png')
   expect(screen.getByText('$0.00B')).toBeTruthy()
+  expect(screen.getByText('Indicadores disponibles')).toBeTruthy()
 })
 
 test('muestra ticker y dato ausente cuando falta el logo o la capitalización', () => {
@@ -19,6 +20,7 @@ test('muestra ticker y dato ausente cuando falta el logo o la capitalización', 
   expect(screen.queryByRole('img')).toBeNull()
   expect(screen.getByLabelText('Logo no disponible para Vivmark Residential')).toBeTruthy()
   expect(screen.getByText('Sin datos')).toBeTruthy()
+  expect(screen.getByText('Información financiera pendiente')).toBeTruthy()
 })
 
 test('reemplaza una imagen fallida por el ticker visible', () => {

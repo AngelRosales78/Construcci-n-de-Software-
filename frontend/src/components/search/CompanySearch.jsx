@@ -4,6 +4,7 @@ import CompanyFilters from './CompanyFilters'
 import SearchHistory from './SearchHistory'
 import CompanyList from './CompanyList'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
+import { Link } from 'react-router-dom'
 
 
 export default function CompanySearch() {
@@ -18,7 +19,7 @@ export default function CompanySearch() {
       </div>
       <div className="terminal-overview">
         <section><span className="section-eyebrow">CATÁLOGO DE REFERENCIA</span><h2>Del mercado a cada empresa</h2><p>Busca por nombre o símbolo y consulta su ficha financiera.</p><span className="terminal-tag">S&amp;P 500 · Sectores y empresas</span></section>
-        <section><span className="section-eyebrow">COBERTURA DE ESTA DEMOSTRACIÓN</span><h2>Microsoft · MSFT</h2><p>Balance anual 2024 y precios históricos importados. Las demás fichas indican cuándo falta información.</p><span className="terminal-tag">Fuentes: SEC y Yahoo Finance</span></section>
+        <section><span className="section-eyebrow">FICHA DE REFERENCIA</span><h2>Microsoft · MSFT</h2><p>Explora el balance anual 2024 y sus precios históricos. La cobertura financiera de esta demostración corresponde a Microsoft.</p><Link className="reference-link" to="/company/MSFT">Ver ficha de Microsoft <span aria-hidden="true">→</span></Link></section>
       </div>
       <div className="search-content">
         <aside className="search-sidebar">

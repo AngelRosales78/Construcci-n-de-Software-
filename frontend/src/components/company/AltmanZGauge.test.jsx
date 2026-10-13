@@ -19,7 +19,8 @@ it.each([null, undefined, NaN, Infinity])('muestra datos insuficientes para %s',
 it.each([-5.9, 0, 1.81, 2.99, 8])('conserva el puntaje %s y limita la escala visual', score => {
   render(<AltmanZGauge score={score} zone="distress" />)
   const data = JSON.parse(screen.getByTestId('segments').getAttribute('data-values'))
-  expect(data[0].value + data[1].value).toBe(5)
+  expect(data.reduce((total, row) => total + row.value, 0)).toBeCloseTo(5)
+  expect(data.map(row => row.name)).toEqual(['Peligro', 'Zona gris', 'Zona segura'])
   expect(data.every(row => row.value >= 0)).toBe(true)
   expect(screen.getAllByText(String(score)).length).toBeGreaterThan(0)
 })
