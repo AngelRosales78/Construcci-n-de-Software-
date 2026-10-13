@@ -1,4 +1,16 @@
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import verifiedLogos from '../../data/verifiedLogos.json'
+
+function CompanyLogo({ company }) {
+  const [failed, setFailed] = useState(false)
+  const local = verifiedLogos.includes(company.ticker)
+    ? `/company-logos/${company.ticker.replaceAll('.', '-')}.png` : ''
+  const source = local || company.logo_url
+  return source && !failed
+    ? <img src={source} alt={`Logo de ${company.name}`} width="40" height="40" loading="lazy" onError={() => setFailed(true)} />
+    : <span className="company-logo-fallback" aria-label={`Logo no disponible para ${company.name}`}>{company.ticker}</span>
+}
 
 export default function CompanyList({ companies, loading }) {
   const navigate = useNavigate()
@@ -24,7 +36,7 @@ export default function CompanyList({ companies, loading }) {
           onClick={() => handleSelectCompany(company.ticker)}
         >
           <div className="company-card-header">
-            {company.logo_url && <img src={company.logo_url} alt={`Logo de ${company.name}`} width="40" height="40" loading="lazy" onError={event => { event.currentTarget.style.display = 'none' }} />}
+            <CompanyLogo company={company} />
             <strong className="company-ticker">{company.ticker}</strong>
             <span className={`company-sector sector-${company.sector}`}>{company.sector_display}</span>
           </div>
@@ -32,7 +44,7 @@ export default function CompanyList({ companies, loading }) {
           <div className="company-metrics">
             <div className="metric">
               <span className="metric-label">Market Cap</span>
-              <span className="metric-value">${(company.market_cap / 1e9).toFixed(2)}B</span>
+              <span className="metric-value">{company.market_cap == null ? 'Sin datos' : `$${(company.market_cap / 1e9).toFixed(2)}B`}</span>
             </div>
             <div className="metric">
               <span className="metric-label">PER</span>

@@ -10,7 +10,8 @@ from django.test import TestCase
 @pytest.fixture(autouse=True)
 def enable_db_access_for_all_tests(db):
     """Enable database access for all tests by default."""
-    pass
+    from django.core.cache import caches
+    caches['search_results'].clear()
 
 
 @pytest.fixture

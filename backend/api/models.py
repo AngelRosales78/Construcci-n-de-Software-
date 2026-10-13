@@ -76,7 +76,7 @@ class Company(models.Model):
     ticker = models.CharField(_('ticker'), max_length=10, unique=True, db_index=True)
     name = models.CharField(_('name'), max_length=200, db_index=True)
     sector = models.CharField(_('sector'), max_length=50, choices=SECTOR_CHOICES, db_index=True)
-    market_cap = models.DecimalField(_('market cap'), max_digits=20, decimal_places=2, default=0)
+    market_cap = models.DecimalField(_('market cap'), max_digits=20, decimal_places=2, null=True, blank=True)
     per = models.DecimalField(_('PER'), max_digits=10, decimal_places=2, null=True, blank=True)
     roe = models.DecimalField(_('ROE'), max_digits=10, decimal_places=2, null=True, blank=True)
 

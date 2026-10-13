@@ -118,3 +118,9 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+
+CACHES = {
+    'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
+    'search_results': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'sp500-search-results', 'OPTIONS': {'MAX_ENTRIES': 500}},
+}

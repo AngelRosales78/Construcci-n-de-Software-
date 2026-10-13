@@ -67,3 +67,5 @@ button:disabled { cursor: default; opacity: 0.5; }
 .gauge-value { position: absolute; bottom: 30px; left: 0; right: 0; text-align: center; font-size: 28px; font-weight: 700; }
 .gauge-labels { display: flex; justify-content: space-between; max-width: 300px; margin: auto; gap: 8px; }
 @media(max-width: 700px) { .dashboard-charts { grid-template-columns: 1fr; } }
+
+.company-logo-fallback { display: inline-flex; align-items: center; justify-content: center; min-width: 40px; height: 40px; padding: 0 4px; border-radius: 8px; background: #e2e8f0; color: #334155; font-size: 11px; font-weight: 700; }

@@ -23,7 +23,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, F
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
@@ -31,6 +31,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
 
@@ -122,7 +123,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # Try to find user by username or email
         try:
             user = User.objects.get(
-                models.Q(username=username_or_email) | models.Q(email=username_or_email)
+                Q(username=username_or_email) | Q(email=username_or_email)
             )
         except User.DoesNotExist:
             return Response(
@@ -427,12 +428,19 @@ class CompanySearchView(generics.ListAPIView):
         identity = json.dumps([request.user.pk, request.build_absolute_uri('/') ,
                                sorted(request.query_params.items())], ensure_ascii=False)
         key = 'sp500:search:' + hashlib.sha256(identity.encode()).hexdigest()
+        from django.core.cache import caches
+        local = caches['search_results']
+        hit = local.get(key)
+        if hit is not None:
+            return Response(hit)
         connection = None
         try:
             connection = get_redis_connection()
             cached = connection.get(key)
             if isinstance(cached, (str, bytes)):
-                return Response(json.loads(cached))
+                data = json.loads(cached)
+                local.set(key, data, timeout=5)
+                return Response(data)
         except (RedisError, ValueError, TypeError):
             pass
         response = super().list(request, *args, **kwargs)
@@ -441,6 +449,7 @@ class CompanySearchView(generics.ListAPIView):
                 connection.setex(key, 30, json.dumps(response.data))
             except (RedisError, TypeError):
                 pass
+        local.set(key, response.data, timeout=5)
         return response
 
     def get_queryset(self):
@@ -469,10 +478,11 @@ class CompanySearchView(generics.ListAPIView):
         if sector:
             queryset = queryset.filter(sector=sector)
         if ordering:
-            return queryset.order_by(ordering, 'ticker')
+            cap_order = F('market_cap').desc(nulls_last=True) if ordering.startswith('-') else F('market_cap').asc(nulls_last=True)
+            return queryset.order_by(cap_order, 'ticker')
         if query:
             return queryset.order_by('-rank', 'ticker')
-        return queryset.order_by('-market_cap', 'ticker')
+        return queryset.order_by(F('market_cap').desc(nulls_last=True), 'ticker')
 
 
 # ─── HU03_05: Search History ─────────────────────────────────────────

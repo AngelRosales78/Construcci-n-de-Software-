@@ -45,7 +45,7 @@ api.interceptors.response.use(
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
-      error.response?.data?.code !== 'token_not_valid' &&
+      error.response?.data?.code !== 'token_blacklisted' &&
       localStorage.getItem('refresh_token')
     ) {
       if (isRefreshing) {
@@ -66,13 +66,13 @@ api.interceptors.response.use(
       const refreshToken = localStorage.getItem('refresh_token');
 
       try {
-        const response = await axios.post(`${API_URL}/token/refresh/`, {
+        const response = await axios.post(`${API_URL}/auth/refresh/`, {
           refresh: refreshToken,
         });
 
         const { access } = response.data;
         localStorage.setItem('access_token', access);
-        api.defaults.headers.common.Authorization = `Bearer ${access}`;
+        if (response.data.refresh) localStorage.setItem('refresh_token', response.data.refresh);
         processQueue(null, access);
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);

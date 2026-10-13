@@ -2,10 +2,32 @@
 Locust load testing for S&P 500 Platform API.
 Tests search, autocomplete, overview, and history endpoints.
 """
-from locust import HttpUser, task, between
+from locust import HttpUser, task, between, events
 import random
 import os
 from locust.exception import StopUser
+
+
+@events.quitting.add_listener
+def save_final_performance(environment, **kwargs):
+    """Guardar los totales finales, sin depender del último intervalo del CSV."""
+    target = os.environ.get('LOCUST_FINAL_REPORT')
+    if not target:
+        return
+    import json
+    from pathlib import Path
+    from datetime import datetime, timezone
+    stats = environment.stats.total
+    result = {
+        'recorded_at': datetime.now(timezone.utc).isoformat(),
+        'requests': stats.num_requests, 'failures': stats.num_failures,
+        'max_ms': stats.max_response_time, 'average_ms': stats.avg_response_time,
+        'p95_ms': stats.get_response_time_percentile(.95),
+        'threshold_ms': 200, 'users': environment.parsed_options.num_users,
+        'passed': stats.num_requests > 0 and stats.num_failures == 0 and stats.max_response_time < 200,
+        'errors': [str(error) for error in environment.stats.errors.values()],
+    }
+    Path(target).write_text(json.dumps(result, indent=2), encoding='utf-8')
 
 
 class SPP500User(HttpUser):

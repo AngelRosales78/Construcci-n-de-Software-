@@ -19,6 +19,15 @@ from . import views
 app_name = 'auth'
 
 urlpatterns = [
+    # Contrato de Rosales reutilizado; se conservan las rutas anteriores de Magallanes.
+    path('auth/register/', views.RegisterView.as_view(), name='web-register'),
+    path('auth/token/', views.CustomTokenObtainPairView.as_view(), name='web-token'),
+    path('auth/refresh/', views.CustomTokenRefreshView.as_view(), name='web-refresh'),
+    path('auth/logout/', views.LogoutView.as_view(), name='web-logout'),
+    path('auth/password/reset/', views.PasswordResetRequestView.as_view(), name='web-password-reset'),
+    path('auth/password/reset/confirm/', views.PasswordResetConfirmView.as_view(), name='web-reset-confirm'),
+    path('auth/profile/', views.UserProfileView.as_view(), name='web-profile'),
+    path('auth/change-password/', views.ChangePasswordView.as_view(), name='web-change-password'),
     # HU01_01: Registration
     path('register/', views.RegisterView.as_view(), name='register'),
 

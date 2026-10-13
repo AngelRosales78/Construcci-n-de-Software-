@@ -27,6 +27,7 @@ export default function Dashboard() {
       </header>
 
       <main className="dashboard-content">
+        <button onClick={() => navigate('/search')}>Buscar empresas y consultar fichas</button>
         <section className="welcome-section">
           <h2>Bienvenido a la Plataforma de Análisis Financiero</h2>
           <p>Próximamente: Análisis de datos del S&amp;P 500 con Inteligencia Artificial</p>
