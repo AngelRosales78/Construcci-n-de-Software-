@@ -37,6 +37,12 @@ data class ForgotPasswordRequest(
     val email: String
 )
 
+data class ChangePasswordRequest(
+    val old_password: String,
+    val new_password: String,
+    val new_password_confirm: String
+)
+
 data class UserProfile(
     val id: Int,
     val username: String,
