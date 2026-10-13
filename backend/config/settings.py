@@ -36,16 +36,26 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'config.urls'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
-        'USER': config('DB_USER', default='sp500_user'),
-        'PASSWORD': config('DB_PASSWORD', default='sp500_secure_pass_2024'),
-        'NAME': config('DB_NAME', default='sp500_platform'),
+USE_POSTGRES = config('USE_POSTGRES', default='False').lower() == 'true'
+
+if USE_POSTGRES:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('DB_NAME', default='sp500_db'),
+            'USER': config('DB_USER', default='postgres'),
+            'PASSWORD': config('DB_PASSWORD', default='postgres'),
+            'HOST': config('DB_HOST', default='localhost'),
+            'PORT': config('DB_PORT', default='5432'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 REDIS_URL = config('REDIS_URL', default='redis://localhost:6379/0')
 
