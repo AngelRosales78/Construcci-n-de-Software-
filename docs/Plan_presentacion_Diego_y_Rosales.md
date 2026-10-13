@@ -18,7 +18,7 @@ Rosales: épicas 1 y 2, autenticación web y aplicación Android con Kotlin/Comp
 | 6:00–7:00 | Diego | Confirmar dos búsquedas, seleccionar historial, borrar una y limpiar | Historial privado por usuario, máximo diez y copia local por cuenta. |
 | 7:00–9:00 | Diego | Abrir MSFT y mostrar PER, ROE, capitalización, beta y dividendo | Diferencia entre cero y dato ausente; fuente/fecha visibles. Explicar el perfil y la leyenda de Altman-Z. |
 | 9:00–10:00 | Diego | Cambiar el gráfico a 5Y y usar el navegador inferior/zoom | Los precios salen de la base, no se generan aleatoriamente en cada consulta. La demo usa 1254 cierres ajustados importados con fuente y fecha. |
-| 10:00–11:00 | Diego | Mostrar views.py, models.py y pruebas/evidencias en VS Code | Una solicitud pasa por API, consulta/caché y respuesta a React. Mostrar 138 pruebas backend y 28 frontend aprobadas, sin ejecutar toda la carga durante la exposición. |
+| 10:00–11:00 | Diego | Mostrar CompanyDashboard, su ViewModel y companyRepository; luego views.py y models.py | Seguir View → ViewModel → Model → API → base de datos. Mostrar 138 pruebas backend del cierre del lunes y 33 frontend aprobadas el martes, sin ejecutar toda la carga durante la exposición. |
 | 11:00–12:00 | Ambos | Historial de commits y estado final | Identificar trabajo y fechas reales. Mostrar la carga aprobada y los 500 logos verificados; aclarar cobertura de datos y estado de integración Android. |
 
 ## Qué decir durante tu parte
@@ -43,10 +43,14 @@ Abrir estos archivos durante la explicación:
 - `backend/api/models.py`: empresas, estados financieros e historial de precios.
 - `backend/api/search_cache.py`: ZSET y lista de historial Redis.
 - `backend/api/test_financial_data.py`: datos cero/nulo, JOIN y rangos.
-- `frontend/src/components/search/CompanySearch.jsx`: consumo de API.
+- `frontend/src/components/search/CompanySearch.jsx`: vista de búsqueda y enlace de eventos.
+- `frontend/src/viewmodels/useCompanySearchViewModel.js`: estado, filtros, paginación y acciones de búsqueda.
+- `frontend/src/models/companyRepository.js`: acceso a empresas, ficha y precios a través de la API.
+- `frontend/src/viewmodels/useCompanyDashboardViewModel.js`: carga de la ficha y tratamiento de errores.
 - `frontend/src/components/company/CompanyDashboard.jsx`: ficha y perfil.
 - `frontend/src/components/company/PriceChart.jsx`: rangos, crosshair y zoom.
 - `docs/Matriz_epicas_3_y_4_12_octubre_2026.md`: trazabilidad.
+- `docs/Arquitectura_MVVM_web.md`: mapa de las tres capas de la web y explicación con código.
 
 Usar la tarea **Detener demostracion** al terminar. Rosales debe abrir su carpeta `android` en Android Studio y usar su rama aprobada, conservando tu trabajo en Magallanes. El emulador normalmente accede a la PC por 10.0.2.2: verificar la URL y el puerto efectivos antes del ensayo conjunto.
 
@@ -61,3 +65,7 @@ Abrir primero Lista_45_tareas_demostracion_en_vivo.md. Cada fila tiene requisito
 ## Estado al cierre del lunes 12
 
 45/45 tareas de Diego verificadas localmente. La demo ya usa login real, catálogo de 503 símbolos, 500 logos locales con alternativa para tres faltantes y ficha MSFT del balance anual 2024. La carga de búsqueda pasó con 2011 respuestas y máximo 142,446 ms. El recorrido web completo pasó; Android y el ensayo conjunto con Rosales siguen pendientes. No anunciar cobertura financiera de los 503 símbolos: únicamente MSFT tiene balance y precios importados. Consultar `Cierre_epicas_3_y_4_12_octubre_2026.md` antes de exponer.
+
+## Actualización del martes 13: MVVM web
+
+La web separa once ViewModels, tres repositorios Model y sus componentes View. Para demostrarlo, abrir CompanyDashboard.jsx, useCompanyDashboardViewModel.js y companyRepository.js en ese orden. Decir: «La vista dibuja; el ViewModel mantiene estado y acciones; el Model consulta los datos. React vuelve a dibujar cuando cambia el estado». La fórmula financiera se calcula en Django. Pasaron 33 pruebas frontend, la compilación y el recorrido real del navegador registrado en evidencias/integracion_mvvm_13_oct.json. La reorganización conserva los contratos existentes de autenticación; Rosales debe acreditar por separado sus funciones Android.

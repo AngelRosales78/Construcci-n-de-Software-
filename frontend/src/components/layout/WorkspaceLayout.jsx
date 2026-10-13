@@ -1,20 +1,9 @@
-import { useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { authService } from '../../services/authService'
+import { Link, useLocation } from 'react-router-dom'
+import { useSessionViewModel } from '../../viewmodels/useSessionViewModel'
 
 export default function WorkspaceLayout({ children }) {
   const { pathname } = useLocation()
-  const navigate = useNavigate()
-  const [leaving, setLeaving] = useState(false)
-  let user = {}
-  try { user = authService.getCurrentUser() || {} } catch { /* Sesión local inválida. */ }
-  const name = user.first_name || user.username || 'Mi cuenta'
-  const logout = async () => {
-    setLeaving(true)
-    try { await authService.logout(authService.getRefreshToken()) }
-    catch { /* El servicio también elimina la sesión local cuando falla la red. */ }
-    finally { navigate('/login') }
-  }
+  const { name, leaving, logout } = useSessionViewModel()
   return <div className="workspace-shell">
     <a className="skip-link" href="#workspace-content">Ir al contenido</a>
     <header className="workspace-header">

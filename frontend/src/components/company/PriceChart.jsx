@@ -1,26 +1,11 @@
-import { useState, useEffect, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { useMemo } from 'react'
+import { usePriceChartViewModel } from '../../viewmodels/usePriceChartViewModel'
 import Highcharts from 'highcharts/highstock'
 import HighchartsReact from 'highcharts-react-official'
-import api from '../../services/api'
+
 
 export default function PriceChart() {
-  const { ticker } = useParams()
-  const [period, setPeriod] = useState('1M')
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  useEffect(() => {
-    let active = true
-    setLoading(true)
-    setError('')
-    setData(null)
-    api.get(`/companies/${encodeURIComponent(ticker)}/history/?range=${period}`)
-      .then(response => { if (active) setData(response.data) })
-      .catch(() => { if (active) setError('No se pudo cargar el historial de precios.') })
-      .finally(() => { if (active) setLoading(false) })
-    return () => { active = false }
-  }, [ticker, period])
+  const { ticker, period, setPeriod, data, loading, error } = usePriceChartViewModel()
   const options = useMemo(() => ({
     chart: { animation: false, zooming: { type: 'x' }, height: 380, backgroundColor: 'transparent', style: { fontFamily: 'Segoe UI, sans-serif' }, spacing: [24, 8, 8, 8] },
     title: { text: `${ticker} · Cierre ajustado`, align: 'left', style: { fontSize: '14px', fontWeight: '600', color: '#5d6c74' } },

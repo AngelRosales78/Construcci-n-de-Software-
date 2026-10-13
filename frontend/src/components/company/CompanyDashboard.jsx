@@ -1,36 +1,13 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import api from '../../services/api'
+import { useCompanyDashboardViewModel } from '../../viewmodels/useCompanyDashboardViewModel'
 import AltmanZGauge from './AltmanZGauge'
 import PriceChart from './PriceChart'
 import MetricCards from './MetricCards'
 import FinancialHealthIndicator from './FinancialHealthIndicator'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 
+
 export default function CompanyDashboard() {
-  const { ticker } = useParams()
-  const navigate = useNavigate()
-  const [company, setCompany] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    const fetchCompany = async () => {
-      setLoading(true)
-      setError(null)
-      setCompany(null)
-      try {
-        const response = await api.get(`/companies/${ticker}/summary/`)
-        setCompany(response.data)
-      } catch (err) {
-        setError(err.response?.data?.error || 'Error al cargar la empresa')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchCompany()
-  }, [ticker])
-
+  const { company, loading, error, navigate } = useCompanyDashboardViewModel()
   if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
   if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert">{error}<button onClick={() => navigate('/search')}>Volver al explorador</button></div></WorkspaceLayout>
   if (!company) return null

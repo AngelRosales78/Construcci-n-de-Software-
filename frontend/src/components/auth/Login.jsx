@@ -1,39 +1,9 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { loginSchema } from '../../utils/validationSchemas'
-import { authService } from '../../services/authService'
+import { useLoginViewModel } from '../../viewmodels/useLoginViewModel'
+import { Link } from 'react-router-dom'
+
 
 export default function Login() {
-  const navigate = useNavigate()
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(loginSchema),
-    defaultValues: { username: '', password: '' },
-  })
-
-  const onSubmit = async (data) => {
-    setError('')
-    setLoading(true)
-    try {
-      await authService.login(data)
-      navigate('/dashboard')
-    } catch (err) {
-      setError(
-        err.response?.data?.error || 'Invalid credentials. Please try again.'
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  const { register, handleSubmit, errors, isSubmitting, error, loading, onSubmit } = useLoginViewModel()
   return (
     <div className="auth-container">
       <div className="auth-card">
