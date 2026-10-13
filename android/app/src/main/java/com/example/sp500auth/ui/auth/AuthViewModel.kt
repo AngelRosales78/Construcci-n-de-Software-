@@ -1,6 +1,8 @@
 package com.example.sp500auth.ui.auth
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sp500auth.data.repository.AuthRepository
@@ -17,10 +19,27 @@ class AuthViewModel @Inject constructor(
     var loginState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
 
+    var registerState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
     fun login(username: String, password: String) {
         viewModelScope.launch {
             loginState = Resource.Loading()
             loginState = authRepository.login(username, password)
+        }
+    }
+
+    fun register(
+        username: String,
+        email: String,
+        password: String,
+        passwordConfirm: String,
+        firstName: String,
+        lastName: String
+    ) {
+        viewModelScope.launch {
+            registerState = Resource.Loading()
+            registerState = authRepository.register(username, email, password, passwordConfirm, firstName, lastName)
         }
     }
 

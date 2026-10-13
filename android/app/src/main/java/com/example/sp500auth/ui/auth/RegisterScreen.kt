@@ -31,6 +31,16 @@ fun RegisterScreen(
     var lastName by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    val registerState by viewModel.registerState
+
+    LaunchedEffect(registerState) {
+        if (registerState is Resource.Success) {
+            navController.navigate(NavRoutes.Login.route) {
+                popUpTo(NavRoutes.Register.route) { inclusive = true }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -120,10 +130,29 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         Button(
-            onClick = {},
+            onClick = {
+                if (password != passwordConfirm) {
+                    viewModel.registerState = Resource.Error("Las contraseñas no coinciden")
+                } else {
+                    viewModel.register(username, email, password, passwordConfirm, firstName, lastName)
+                }
+            },
+            enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && registerState !is Resource.Loading,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Registrarse")
+            if (registerState is Resource.Loading) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            } else {
+                Text("Registrarse")
+            }
+        }
+
+        if (registerState is Resource.Error) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = registerState.message ?: "Error desconocido",
+                color = MaterialTheme.colorScheme.error
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
