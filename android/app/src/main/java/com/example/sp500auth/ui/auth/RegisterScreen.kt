@@ -31,11 +31,11 @@ fun RegisterScreen(
     var lastName by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val registerState by viewModel.registerState
+    val registerState = viewModel.registerState
 
     LaunchedEffect(registerState) {
         if (registerState is Resource.Success) {
-            navController.navigate(NavRoutes.Login.route) {
+            navController.navigate(NavRoutes.Dashboard.route) {
                 popUpTo(NavRoutes.Register.route) { inclusive = true }
             }
         }
@@ -131,11 +131,7 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                if (password != passwordConfirm) {
-                    viewModel.registerState = Resource.Error("Las contraseñas no coinciden")
-                } else {
-                    viewModel.register(username, email, password, passwordConfirm, firstName, lastName)
-                }
+                viewModel.register(username, email, password, passwordConfirm, firstName, lastName)
             },
             enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && registerState !is Resource.Loading,
             modifier = Modifier.fillMaxWidth()

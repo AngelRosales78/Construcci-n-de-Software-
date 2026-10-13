@@ -2,7 +2,7 @@ package com.example.sp500auth.data.local
 
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,13 +10,15 @@ import javax.inject.Singleton
 class SecureStorageManager @Inject constructor(
     private val context: Context
 ) {
-    private val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+    private val masterKey = MasterKey.Builder(context)
+        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+        .build()
 
     private val sharedPreferences by lazy {
         EncryptedSharedPreferences.create(
             context,
             "secure_prefs",
-            masterKeyAlias,
+            masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )

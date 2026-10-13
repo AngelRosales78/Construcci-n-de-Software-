@@ -37,6 +37,10 @@ class AuthViewModel @Inject constructor(
         firstName: String,
         lastName: String
     ) {
+        if (password != passwordConfirm) {
+            registerState = Resource.Error("Las contraseñas no coinciden")
+            return
+        }
         viewModelScope.launch {
             registerState = Resource.Loading()
             registerState = authRepository.register(username, email, password, passwordConfirm, firstName, lastName)
@@ -51,4 +55,6 @@ class AuthViewModel @Inject constructor(
             loginState = Resource.Error("No se encontraron credenciales biométricas")
         }
     }
+
+    fun isLoggedIn(): Boolean = authRepository.isLoggedIn()
 }

@@ -1,8 +1,8 @@
 package com.example.sp500auth.util
 
-sealed class Resource<T>(val data: T? = null, val message: String? = null) {
-    class Empty<T> : Resource<T>()
-    class Loading<T> : Resource<T>()
-    class Success<T>(data: T) : Resource<T>(data = data)
-    class Error<T>(message: String, data: T? = null) : Resource<T>(data = data, message = message)
+sealed class Resource<out T>(val data: T? = null, val message: String? = null) {
+    class Empty : Resource<Nothing>()
+    class Loading : Resource<Nothing>()
+    data class Success<T>(val successData: T) : Resource<T>(data = successData)
+    data class Error<T>(val errorMessage: String, val errorData: T? = null) : Resource<T>(data = errorData, message = errorMessage)
 }
