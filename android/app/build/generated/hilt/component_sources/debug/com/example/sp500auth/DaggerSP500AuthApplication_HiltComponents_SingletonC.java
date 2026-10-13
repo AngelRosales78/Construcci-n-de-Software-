@@ -581,7 +581,7 @@ public final class DaggerSP500AuthApplication_HiltComponents_SingletonC {
     }
 
     @Override
-    public void injectSP500AuthApplication(SP500AuthApplication arg0) {
+    public void injectSP500AuthApplication(SP500AuthApplication sP500AuthApplication) {
     }
 
     @Override

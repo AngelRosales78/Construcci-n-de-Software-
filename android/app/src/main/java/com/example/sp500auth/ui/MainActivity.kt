@@ -1,7 +1,6 @@
 package com.example.sp500auth.ui
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,20 +11,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.fragment.app.FragmentActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sp500auth.ui.auth.LoginScreen
-import com.example.sp500auth.ui.auth.RegisterScreen
+import com.example.sp500auth.ui.auth.AssetDetailScreen
+import com.example.sp500auth.ui.auth.AuthViewModel
 import com.example.sp500auth.ui.auth.DashboardScreen
+import com.example.sp500auth.ui.auth.ForgotPasswordScreen
+import com.example.sp500auth.ui.auth.LoginScreen
+import com.example.sp500auth.ui.auth.ProfileScreen
+import com.example.sp500auth.ui.auth.RegisterScreen
 import com.example.sp500auth.ui.navigation.NavRoutes
 import com.example.sp500auth.ui.theme.SP500AuthTheme
-import com.example.sp500auth.ui.auth.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -60,6 +63,15 @@ fun AppNavigation() {
         }
         composable(NavRoutes.Dashboard.route) {
             DashboardScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavRoutes.ForgotPassword.route) {
+            ForgotPasswordScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavRoutes.Profile.route) {
+            ProfileScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable(NavRoutes.AssetDetail.route) {
+            AssetDetailScreen(navController = navController)
         }
     }
 }

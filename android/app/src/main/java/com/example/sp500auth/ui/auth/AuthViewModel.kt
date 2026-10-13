@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sp500auth.data.api.models.UserProfile
 import com.example.sp500auth.data.repository.AuthRepository
 import com.example.sp500auth.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,15 @@ class AuthViewModel @Inject constructor(
         private set
 
     var registerState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
+    var forgotPasswordState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
+    var logoutState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
+    var userProfileState by mutableStateOf<Resource<UserProfile>>(Resource.Empty())
         private set
 
     fun login(username: String, password: String) {
@@ -47,12 +57,33 @@ class AuthViewModel @Inject constructor(
         }
     }
 
+    fun forgotPassword(email: String) {
+        viewModelScope.launch {
+            forgotPasswordState = Resource.Loading()
+            forgotPasswordState = authRepository.forgotPassword(email)
+        }
+    }
+
     fun loginWithBiometrics() {
-        val savedUsername = authRepository.getAccessToken()
-        if (savedUsername != null) {
-            login("biometric_user", "biometric_token")
+        val accessToken = authRepository.getAccessToken()
+        if (accessToken != null) {
+            loginState = Resource.Success(Unit)
         } else {
             loginState = Resource.Error("No se encontraron credenciales biométricas")
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            logoutState = Resource.Loading()
+            logoutState = authRepository.logout()
+        }
+    }
+
+    fun fetchUserProfile() {
+        viewModelScope.launch {
+            userProfileState = Resource.Loading()
+            userProfileState = authRepository.getUserProfile()
         }
     }
 

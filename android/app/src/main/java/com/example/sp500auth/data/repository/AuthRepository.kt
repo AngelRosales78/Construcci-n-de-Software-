@@ -56,6 +56,32 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    suspend fun forgotPassword(email: String): Resource<Unit> {
+        return try {
+            val response = authApiService.forgotPassword(ForgotPasswordRequest(email))
+            if (response.isSuccessful) {
+                Resource.Success(Unit)
+            } else {
+                Resource.Error("Error al enviar el enlace de recuperación")
+            }
+        } catch (e: Exception) {
+            Resource.Error("Error de conexión: ${e.message}")
+        }
+    }
+
+    suspend fun getUserProfile(): Resource<UserProfile> {
+        return try {
+            val response = authApiService.getUserProfile()
+            if (response.isSuccessful && response.body() != null) {
+                Resource.Success(response.body()!!)
+            } else {
+                Resource.Error("Error al cargar el perfil")
+            }
+        } catch (e: Exception) {
+            Resource.Error("Error de conexión: ${e.message}")
+        }
+    }
+
     suspend fun logout(): Resource<Unit> {
         return try {
             val refreshToken = tokenManager.getRefreshToken()
