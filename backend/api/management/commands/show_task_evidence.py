@@ -8,7 +8,8 @@ class Command(BaseCommand):
         self.stdout.write(f'Motor: {connection.vendor}; base: {connection.settings_dict["NAME"]}')
         for model in (Company, FinancialMetrics, PriceHistory):
             self.stdout.write(f'{model._meta.db_table}: {model.objects.count()} filas')
-        self.stdout.write(f'Precios T000: {PriceHistory.objects.filter(company__ticker="T000").count()}')
+        for ticker in ('MSFT', 'T000'):
+            self.stdout.write(f'Precios {ticker}: {PriceHistory.objects.filter(company__ticker=ticker).count()}')
         if connection.vendor == 'postgresql':
             with connection.cursor() as cursor:
                 cursor.execute("SELECT indexname,indexdef FROM pg_indexes WHERE tablename IN ('companies','price_history','search_history') ORDER BY tablename,indexname")
