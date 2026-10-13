@@ -39,6 +39,7 @@ export default function AltmanZGauge({ score, zone }) {
               innerRadius={60}
               outerRadius={80}
               paddingAngle={5}
+              isAnimationActive={false}
               dataKey="value"
             >
               <Cell fill={color} />
@@ -57,6 +58,7 @@ export default function AltmanZGauge({ score, zone }) {
         <span className="gauge-label">2.99</span>
         <span className="gauge-label">5</span>
       </div>
+      {(score > 5 || score < 0) && <p className="gauge-note">La escala visual va de 0 a 5; el puntaje calculado es {score}.</p>}
     </div>
   )
 }

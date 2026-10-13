@@ -4,6 +4,7 @@ import SearchBar from './SearchBar'
 import CompanyFilters from './CompanyFilters'
 import SearchHistory from './SearchHistory'
 import CompanyList from './CompanyList'
+import WorkspaceLayout from '../layout/WorkspaceLayout'
 
 export default function CompanySearch() {
   const [companies, setCompanies] = useState([])
@@ -61,16 +62,20 @@ export default function CompanySearch() {
   }, [])
 
   return (
-    <div className="company-search">
+    <WorkspaceLayout><div className="company-search">
       <div className="search-header">
+        <p className="section-eyebrow">EXPLORADOR DE EMPRESAS</p>
         <h1>Buscar Empresas S&P 500</h1>
+        <p className="section-description">Encuentra una empresa y entiende sus indicadores, su perfil financiero y su historia en el mercado.</p>
         <SearchBar onSearch={handleSearch} onSubmitSearch={saveHistory} initialValue={params.q} />
       </div>
       <div className="search-content">
         <aside className="search-sidebar">
           <SearchHistory onSelectHistory={saveHistory} refreshKey={historyVersion} />
+          <section className="search-guide"><span className="guide-label">TU PRÓXIMO PASO</span><h3>Del símbolo a los datos</h3><p>Busca por nombre o ticker. Abre una ficha para ver las métricas, la fecha del balance y los precios históricos.</p><p className="guide-note">Los indicadores conservan su fuente y fecha. Si falta información, verás «Sin datos».</p></section>
         </aside>
-        <main className="search-main">
+        <section className="search-main" aria-label="Resultados de búsqueda">
+          <div className="results-heading"><h2>{params.q ? `Resultados para “${params.q}”` : 'Empresas del índice'}</h2><span>{loading ? 'Consultando…' : `${count} resultados`}</span></div>
           <CompanyFilters onFilterChange={handleFilterChange}
             initialSector={params.sector} initialOrdering={params.ordering} />
           {error && <p role="alert">{error}</p>}
@@ -82,8 +87,8 @@ export default function CompanySearch() {
             <button disabled={loading || !hasNext}
               onClick={() => setParams(previous => ({ ...previous, page: previous.page + 1 }))}>Siguiente</button>
           </nav>}
-        </main>
+        </section>
       </div>
-    </div>
+    </div></WorkspaceLayout>
   )
 }

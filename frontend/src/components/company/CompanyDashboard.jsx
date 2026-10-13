@@ -5,6 +5,7 @@ import AltmanZGauge from './AltmanZGauge'
 import PriceChart from './PriceChart'
 import MetricCards from './MetricCards'
 import FinancialHealthIndicator from './FinancialHealthIndicator'
+import WorkspaceLayout from '../layout/WorkspaceLayout'
 
 export default function CompanyDashboard() {
   const { ticker } = useParams()
@@ -30,27 +31,29 @@ export default function CompanyDashboard() {
     fetchCompany()
   }, [ticker])
 
-  if (loading) return <div className="dashboard-loading">Cargando dashboard...</div>
-  if (error) return <div className="dashboard-error">{error}</div>
+  if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
+  if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert">{error}<button onClick={() => navigate('/search')}>Volver al explorador</button></div></WorkspaceLayout>
   if (!company) return null
 
   return (
-    <div className="company-dashboard">
+    <WorkspaceLayout><div className="company-dashboard">
       <div className="dashboard-header">
         <button onClick={() => navigate('/search')} className="back-button">
           ← Volver
         </button>
         <div className="dashboard-title">
-          <h1>{company.ticker}</h1>
-          <h2>{company.name}</h2>
+          <p className="section-eyebrow">FICHA FINANCIERA · {company.ticker}</p>
+          <h1>{company.name}</h1>
           <span className="dashboard-sector">{company.sector_display}</span>
+          <p className="section-description">Una lectura del balance, sus indicadores y la evolución del precio.</p>
         </div>
       </div>
 
       <div className="dashboard-content">
+        <div className="data-provenance"><span><small>Balance de referencia</small><strong>Fecha: {company.as_of || 'Sin fecha'}</strong></span><p>Fuente: {company.source || 'Sin fuente'}</p>{company.quote && <span><small>Último cierre importado</small><strong>{company.quote.date} · {company.quote.currency}</strong></span>}</div>
+        {company.is_demo && <p role="status" className="data-notice">Datos de demostración o sin verificar.</p>}
+        <div className="section-title"><h2>Indicadores clave</h2><span>Consulta la explicación de cada métrica</span></div>
         <MetricCards company={company} />
-        <p>Fuente: {company.source || 'Sin fuente'} · Fecha: {company.as_of || 'Sin fecha'}</p>
-        {company.is_demo && <p role="status">Datos de demostración o sin verificar.</p>}
         <div className="dashboard-charts">
           <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} />
           <FinancialHealthIndicator altmanZ={company.altman_z} profile={company.profile} />
@@ -58,6 +61,6 @@ export default function CompanyDashboard() {
 
         <PriceChart />
       </div>
-    </div>
+    </div></WorkspaceLayout>
   )
 }
