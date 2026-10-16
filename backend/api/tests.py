@@ -438,7 +438,8 @@ class TestCompanyHistory:
         assert response.status_code == 200
         assert response.data['ticker'] == 'TEST'
         assert 'history' in response.data
-        assert len(response.data['history']) == 30
+        # No price records were imported by this fixture; never synthesize prices.
+        assert response.data['history'] == []
 
     def test_company_history_not_found(self, api_client, created_user):
         """Returns 404 for non-existent company."""
