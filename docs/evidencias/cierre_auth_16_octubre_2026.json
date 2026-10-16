@@ -1,0 +1,21 @@
+{
+  "fecha_revision": "2026-10-16",
+  "backend_pruebas_aprobadas": 182,
+  "web_pruebas_aprobadas": 48,
+  "compilacion_web": "aprobada",
+  "navegador": {
+    "passed": true,
+    "steps": [
+      "Registro web crea cuenta y abre una sesión válida",
+      "Logout en una pestaña cierra la otra; Atrás y acceso directo no abren pantallas privadas; tokens revocados",
+      "Formulario solicita correo; SMTP entrega enlace; enlace abre el formulario y cambia la clave",
+      "La contraseña anterior falla; la nueva permite entrar por correo y conservar la sesión al recargar",
+      "El enlace recibido por SMTP no se puede reutilizar",
+      "Una renovación pendiente en otra pestaña no revive la sesión; el servidor rechaza también sus tokens rotados"
+    ],
+    "consoleErrors": [],
+    "scope": "SMTP local; no se certifica entrega de proveedor externo ni se envían correos externos"
+  },
+  "android": "Sin cambios en este cierre; se conserva validación anterior.",
+  "huella": "El usuario informa que funcionaba; no se probó un sensor físico en esta revisión."
+}
