@@ -144,6 +144,8 @@ fun AssetDetailScreen(
                 }
             }
 
+            item { Text("Maqueta con datos ilustrativos. Los datos importados se consultan en la versión web.", color = TextMuted, fontSize = 12.sp) }
+
             // 2. Precio Principal
             item {
                 Column {
