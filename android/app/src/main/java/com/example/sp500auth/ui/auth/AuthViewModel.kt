@@ -34,11 +34,11 @@ class AuthViewModel @Inject constructor(
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
+            logoutState = Resource.Empty()
             loginState = Resource.Loading()
             loginState = repository.login(username, password)
         }
     }
-
     fun register(
         username: String,
         email: String,

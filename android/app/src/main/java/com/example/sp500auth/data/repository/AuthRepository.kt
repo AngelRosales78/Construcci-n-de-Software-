@@ -13,20 +13,16 @@ class AuthRepository @Inject constructor(
     private val api: AuthApiService,
     private val tokens: TokenManager
 ) {
-    suspend fun login(username: String, password: String): Resource<Unit> {
-        return try {
-            val response = api.login(LoginRequest(username, password))
-            if (response.isSuccessful && response.body() != null) {
-                val tokenResponse = response.body()!!
-                tokens.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
-                Resource.Success(Unit)
-            } else {
-                Resource.Error("Error al iniciar sesión")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Error de conexión: ${e.message}")
-        }
-    }
+    suspend fun login(username: String, password: String): Resource<Unit> = try {
+        val response = api.login(LoginRequest(username, password))
+        val body = response.body()
+        if (response.isSuccessful && body != null && body.accessToken.isNotBlank() && body.refreshToken.isNotBlank()) {
+            tokens.clearTokens()
+            tokens.saveTokens(body.accessToken, body.refreshToken)
+            Resource.Success(Unit)
+        } else Resource.Error("Usuario, correo o contraseña incorrectos.")
+    } catch (e: CancellationException) { throw e
+    } catch (_: Exception) { Resource.Error("No se pudo conectar. Inténtalo de nuevo.") }
 
     suspend fun register(
         username: String,
