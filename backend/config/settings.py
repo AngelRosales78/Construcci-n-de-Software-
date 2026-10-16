@@ -69,6 +69,9 @@ SPECTACULAR_SETTINGS = {
 }
 
 AUTH_USER_MODEL = 'api.User'
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'api.password_validation.StrongPasswordValidator'},
+]
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
