@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { resetPasswordSchema } from '../utils/validationSchemas'
@@ -7,13 +7,10 @@ import { authRepository } from '../models/authRepository'
 
 export function useResetPasswordViewModel() {
   const navigate = useNavigate()
-  const [searchParams] = useSearchParams()
+  const { uid, token } = useParams()
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
-
-  const token = searchParams.get('token')
-  const uid = searchParams.get('uid')
 
   const {
     register,
@@ -29,12 +26,7 @@ export function useResetPasswordViewModel() {
     setSuccess(false)
     setLoading(true)
     try {
-      await authRepository.resetPassword({
-        uid,
-        token,
-        password: data.password,
-        password_confirm: data.passwordConfirm,
-      })
+      await authRepository.resetPassword(uid, token, data.password)
       setSuccess(true)
       setTimeout(() => navigate('/login'), 3000)
     } catch (err) {
