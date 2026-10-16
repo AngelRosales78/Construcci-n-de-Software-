@@ -1,4 +1,5 @@
 import api from './api'
+import { clearSession, hasSession, saveSession, subscribeSession } from './sessionStore'
 
 export const authService = {
   /**
@@ -7,9 +8,7 @@ export const authService = {
   async register(data) {
     const response = await api.post('/auth/register/', data)
     if (response.data.access) {
-      localStorage.setItem('access_token', response.data.access)
-      localStorage.setItem('refresh_token', response.data.refresh)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
+      saveSession(response.data)
     }
     return response.data
   },
@@ -20,9 +19,7 @@ export const authService = {
   async login(data) {
     const response = await api.post('/auth/token/', data)
     if (response.data.access) {
-      localStorage.setItem('access_token', response.data.access)
-      localStorage.setItem('refresh_token', response.data.refresh)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
+      saveSession(response.data)
     }
     return response.data
   },
@@ -34,9 +31,7 @@ export const authService = {
     try {
       await api.post('/auth/logout/', { refresh_token: refreshToken })
     } finally {
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('user')
+      clearSession()
     }
   },
 
@@ -82,7 +77,13 @@ export const authService = {
    * Check if user is authenticated
    */
   isAuthenticated() {
-    return !!localStorage.getItem('access_token')
+    return hasSession()
+  },
+
+  subscribeSession,
+
+  getSessionIdentity() {
+    return hasSession() ? (localStorage.getItem('user') || 'authenticated') : ''
   },
 
   /**

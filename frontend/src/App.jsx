@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard'
 import CompanySearch from './components/search/CompanySearch'
 import CompanyDashboard from './components/company/CompanyDashboard'
 import AdminDashboard from './components/AdminDashboard'
+import ProtectedRoute from './components/auth/ProtectedRoute'
 
 function App() {
   return (
@@ -16,10 +17,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin-panel" element={<AdminDashboard />} />
-        <Route path="/search" element={<CompanySearch />} />
-        <Route path="/company/:ticker" element={<CompanyDashboard />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin-panel" element={<AdminDashboard />} />
+          <Route path="/search" element={<CompanySearch />} />
+          <Route path="/company/:ticker" element={<CompanyDashboard />} />
+        </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
