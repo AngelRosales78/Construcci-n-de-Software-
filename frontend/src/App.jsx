@@ -6,6 +6,7 @@ import ResetPassword from './components/auth/ResetPassword'
 import Dashboard from './components/Dashboard'
 import CompanySearch from './components/search/CompanySearch'
 import CompanyDashboard from './components/company/CompanyDashboard'
+import AdminDashboard from './components/AdminDashboard'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin-panel" element={<AdminDashboard />} />
         <Route path="/search" element={<CompanySearch />} />
         <Route path="/company/:ticker" element={<CompanyDashboard />} />
         <Route path="*" element={<Navigate to="/login" replace />} />
