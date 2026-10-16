@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val repository: AuthRepository
 ) : ViewModel() {
 
     var loginState by mutableStateOf<Resource<Unit>>(Resource.Empty())
@@ -35,7 +35,7 @@ class AuthViewModel @Inject constructor(
     fun login(username: String, password: String) {
         viewModelScope.launch {
             loginState = Resource.Loading()
-            loginState = authRepository.login(username, password)
+            loginState = repository.login(username, password)
         }
     }
 
@@ -53,19 +53,19 @@ class AuthViewModel @Inject constructor(
         }
         viewModelScope.launch {
             registerState = Resource.Loading()
-            registerState = authRepository.register(username, email, password, passwordConfirm, firstName, lastName)
+            registerState = repository.register(username, email, password, passwordConfirm, firstName, lastName)
         }
     }
 
     fun forgotPassword(email: String) {
         viewModelScope.launch {
             forgotPasswordState = Resource.Loading()
-            forgotPasswordState = authRepository.forgotPassword(email)
+            forgotPasswordState = repository.forgotPassword(email)
         }
     }
 
     fun loginWithBiometrics() {
-        val accessToken = authRepository.getAccessToken()
+        val accessToken = repository.getAccessToken()
         if (accessToken != null) {
             loginState = Resource.Success(Unit)
         } else {
@@ -76,16 +76,16 @@ class AuthViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             logoutState = Resource.Loading()
-            logoutState = authRepository.logout()
+            logoutState = repository.logout()
         }
     }
 
     fun fetchUserProfile() {
         viewModelScope.launch {
             userProfileState = Resource.Loading()
-            userProfileState = authRepository.getUserProfile()
+            userProfileState = repository.getUserProfile()
         }
     }
 
-    fun isLoggedIn(): Boolean = authRepository.isLoggedIn()
+    fun isLoggedIn(): Boolean = repository.isLoggedIn()
 }

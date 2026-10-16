@@ -50,7 +50,7 @@ class TokenManager @Inject constructor(
     }
 
     fun isUserLoggedIn(): Boolean {
-        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
+        return !getAccessToken().isNullOrBlank() && !getRefreshToken().isNullOrBlank()
     }
 
     fun clearTokens() {
