@@ -50,5 +50,7 @@ data class UserProfile(
     val first_name: String,
     val last_name: String,
     val user_type: String,
-    val date_joined: String
+    @SerializedName(value = "created_at", alternate = ["date_joined"])
+    val date_joined: String = "",
+    val role: String = "user"
 )
