@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { clearSession } from './sessionStore';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
@@ -41,13 +42,21 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    if (!originalRequest) return Promise.reject(error);
+    if (error.response?.status === 401 && error.response?.data?.code === 'token_blacklisted') {
+      const sentAuthorization = originalRequest.headers?.get?.('Authorization') || originalRequest.headers?.Authorization;
+      if (sentAuthorization === `Bearer ${localStorage.getItem('access_token')}`) clearSession();
+      return Promise.reject(error);
+    }
 
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
+      !/\/(?:auth\/)?(?:token|register|refresh|password\/reset)(?:\/|$)/.test(originalRequest.url) &&
       error.response?.data?.code !== 'token_blacklisted' &&
       localStorage.getItem('refresh_token')
     ) {
+      originalRequest._retry = true;
       if (isRefreshing) {
         try {
           const token = await new Promise((resolve, reject) => {
@@ -60,7 +69,6 @@ api.interceptors.response.use(
         }
       }
 
-      originalRequest._retry = true;
       isRefreshing = true;
 
       const refreshToken = localStorage.getItem('refresh_token');
@@ -70,6 +78,10 @@ api.interceptors.response.use(
           refresh: refreshToken,
         });
 
+        // A late refresh must not resurrect a session closed in another tab.
+        if (localStorage.getItem('refresh_token') !== refreshToken) {
+          throw new Error('La sesión cambió durante la renovación.');
+        }
         const { access } = response.data;
         localStorage.setItem('access_token', access);
         if (response.data.refresh) localStorage.setItem('refresh_token', response.data.refresh);
@@ -78,9 +90,7 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError, null);
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        window.location.href = '/login';
+        if (localStorage.getItem('refresh_token') === refreshToken) clearSession();
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

@@ -53,3 +53,59 @@ test('cambiar de cuenta reinicia el estado privado de la pantalla anterior', asy
   expect(await screen.findByText('Formulario de other')).toBeTruthy()
   expect(screen.queryByText('Formulario de user')).toBeNull()
 })
+test('un refresh tardío no restaura tokens después de cerrar la sesión', async () => {
+  saveSession(session)
+  api.defaults.adapter = rejectExpiredAccess
+  let completeRefresh
+  vi.spyOn(axios, 'post').mockImplementation(() => new Promise(resolve => { completeRefresh = resolve }))
+  const request = api.get('/companies/MSFT/summary/').catch(error => error)
+  await vi.waitFor(() => expect(completeRefresh).toBeTypeOf('function'))
+  clearSession()
+  completeRefresh({ data: { access: 'late-access', refresh: 'late-refresh' } })
+  expect(await request).toBeInstanceOf(Error)
+  expect(localStorage.getItem('access_token')).toBeNull()
+  expect(localStorage.getItem('refresh_token')).toBeNull()
+})
+test('un refresh de una sesión anterior no borra la nueva cuenta', async () => {
+  saveSession(session)
+  api.defaults.adapter = rejectExpiredAccess
+  let completeRefresh
+  vi.spyOn(axios, 'post').mockImplementation(() => new Promise(resolve => { completeRefresh = resolve }))
+  const request = api.get('/companies/MSFT/summary/').catch(error => error)
+  await vi.waitFor(() => expect(completeRefresh).toBeTypeOf('function'))
+  saveSession({ access: 'other-access', refresh: 'other-refresh', user: { username: 'other' } })
+  completeRefresh({ data: { access: 'late-access', refresh: 'late-refresh' } })
+  await request
+  expect(localStorage.getItem('access_token')).toBe('other-access')
+  expect(localStorage.getItem('refresh_token')).toBe('other-refresh')
+})
+test('un refresh rechazado borra también el perfil privado guardado', async () => {
+  saveSession(session)
+  api.defaults.adapter = rejectExpiredAccess
+  vi.spyOn(axios, 'post').mockRejectedValue(new Error('refresh revoked'))
+  await expect(api.get('/companies/MSFT/summary/')).rejects.toThrow('refresh revoked')
+  expect(localStorage.getItem('user')).toBeNull()
+  expect(localStorage.getItem('access_token')).toBeNull()
+})
+test('un login rechazado no intenta renovar una sesión anterior', async () => {
+  saveSession(session)
+  api.defaults.adapter = rejectExpiredAccess
+  const post = vi.spyOn(axios, 'post')
+  await expect(api.post('/auth/token/', { username: 'wrong' })).rejects.toThrow('expired')
+  expect(post).not.toHaveBeenCalled()
+})
+
+test('una respuesta revocada de una cuenta anterior no cierra la cuenta nueva', async () => {
+  saveSession(session)
+  let rejectOldRequest
+  api.defaults.adapter = config => new Promise((_, reject) => {
+    rejectOldRequest = () => reject(new AxiosError('revoked', 'ERR_BAD_REQUEST', config, null,
+      { status: 401, data: { code: 'token_blacklisted' }, headers: {}, config }))
+  })
+  const pending = api.get('/auth/profile/').catch(error => error)
+  await vi.waitFor(() => expect(rejectOldRequest).toBeTypeOf('function'))
+  saveSession({ access: 'other-access', refresh: 'other-refresh', user: { username: 'other' } })
+  rejectOldRequest()
+  await pending
+  expect(localStorage.getItem('access_token')).toBe('other-access')
+})
