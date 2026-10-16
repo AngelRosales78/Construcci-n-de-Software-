@@ -32,11 +32,15 @@ class AuthViewModel @Inject constructor(
     var userProfileState by mutableStateOf<Resource<UserProfile>>(Resource.Empty())
         private set
 
+    var biometricEnabled by mutableStateOf(repository.isBiometricEnabled())
+        private set
+
     fun login(username: String, password: String) {
         viewModelScope.launch {
             logoutState = Resource.Empty()
             loginState = Resource.Loading()
             loginState = repository.login(username, password)
+            if (loginState is Resource.Success) biometricEnabled = false
         }
     }
     fun register(username: String, email: String, password: String, passwordConfirm: String, firstName: String, lastName: String) {
@@ -45,6 +49,7 @@ class AuthViewModel @Inject constructor(
             logoutState = Resource.Empty()
             registerState = Resource.Loading()
             registerState = repository.register(username, email, password, passwordConfirm, firstName, lastName)
+            if (registerState is Resource.Success) biometricEnabled = false
         }
     }
     fun forgotPassword(email: String) {
@@ -55,14 +60,20 @@ class AuthViewModel @Inject constructor(
     }
 
     fun loginWithBiometrics() {
-        val accessToken = repository.getAccessToken()
-        if (accessToken != null) {
-            loginState = Resource.Success(Unit)
-        } else {
-            loginState = Resource.Error("No se encontraron credenciales biométricas")
+        if (!repository.isBiometricEnabled()) { loginState = Resource.Error("Activa la huella después de iniciar sesión."); return }
+        viewModelScope.launch {
+            loginState = Resource.Loading()
+            val profile = repository.getUserProfile()
+            userProfileState = profile
+            loginState = if (profile is Resource.Success) Resource.Success(Unit)
+                else Resource.Error(profile.message ?: "La sesión venció. Usa tu contraseña.")
         }
     }
-
+    fun updateBiometricPreference(enabled: Boolean) {
+        repository.setBiometricEnabled(enabled)
+        biometricEnabled = repository.isBiometricEnabled()
+    }
+    fun biometricError(message: String) { loginState = Resource.Error(message) }
     fun logout() {
         viewModelScope.launch {
             logoutState = Resource.Loading()

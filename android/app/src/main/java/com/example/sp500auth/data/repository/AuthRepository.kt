@@ -93,20 +93,6 @@ class AuthRepository @Inject constructor(
 
     fun isLoggedIn(): Boolean = tokens.isUserLoggedIn()
 
-    fun getAccessToken(): String? = tokens.getAccessToken()
-
-    suspend fun verifyCredentialsWithBiometrics(username: String, password: String): Resource<Unit> {
-        return try {
-            val response = api.login(LoginRequest(username, password))
-            if (response.isSuccessful && response.body() != null) {
-                val tokenResponse = response.body()!!
-                tokens.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
-                Resource.Success(Unit)
-            } else {
-                Resource.Error("Credenciales biométricas inválidas")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Error al verificar credenciales biométricas: ${e.message}")
-        }
-    }
+    fun isBiometricEnabled(): Boolean = tokens.isBiometricEnabled() && isLoggedIn()
+    fun setBiometricEnabled(enabled: Boolean) { tokens.setBiometricEnabled(enabled && isLoggedIn()) }
 }

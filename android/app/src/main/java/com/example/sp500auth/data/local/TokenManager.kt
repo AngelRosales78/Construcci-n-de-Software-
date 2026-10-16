@@ -53,6 +53,12 @@ class TokenManager @Inject constructor(
         return !getAccessToken().isNullOrBlank() && !getRefreshToken().isNullOrBlank()
     }
 
+    fun isBiometricEnabled(): Boolean = sharedPreferences.getBoolean("biometric_enabled", false)
+
+    fun setBiometricEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean("biometric_enabled", enabled).apply()
+    }
+
     fun clearTokens() {
         sharedPreferences.edit().clear().apply()
     }

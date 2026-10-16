@@ -70,43 +70,14 @@ fun LoginScreen(
         }
     }
     fun launchBiometricPrompt() {
-        val activity = context as? FragmentActivity
-        if (activity != null) {
-            val executor = ContextCompat.getMainExecutor(context)
-            val biometricPrompt = BiometricPrompt(
-                activity,
-                executor,
-                object : BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        super.onAuthenticationSucceeded(result)
-                        onLoginSuccess()
-                        navController?.navigate(NavRoutes.Dashboard.route) {
-                            popUpTo(NavRoutes.Login.route) { inclusive = true }
-                        }
-                    }
-
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                        super.onAuthenticationError(errorCode, errString)
-                        // Para la demo, si falla o el emulador no tiene huella guardada, igual redirige al Dashboard
-                        navController?.navigate(NavRoutes.Dashboard.route) {
-                            popUpTo(NavRoutes.Login.route) { inclusive = true }
-                        }
-                    }
-                }
-            )
-
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Autenticación Biométrica")
-                .setSubtitle("Escanea tu huella dactilar para acceder a S&P 500 Finance")
-                .setNegativeButtonText("Cancelar")
-                .build()
-
-            biometricPrompt.authenticate(promptInfo)
-        } else {
-            navController?.navigate(NavRoutes.Dashboard.route) {
-                popUpTo(NavRoutes.Login.route) { inclusive = true }
-            }
+        if (viewModel?.biometricEnabled != true) {
+            viewModel?.biometricError("Inicia sesión y activa la huella desde tu perfil.")
+            return
         }
+        BiometricAuthManager().authenticate(context,
+            onSuccess = { viewModel.loginWithBiometrics() },
+            onError = { viewModel.biometricError(it) },
+            onFailed = { viewModel.biometricError("Huella no reconocida. Inténtalo de nuevo.") })
     }
 
     Box(
