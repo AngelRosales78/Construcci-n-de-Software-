@@ -13,7 +13,7 @@ import logging
 from decimal import Decimal, localcontext
 from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -92,6 +92,7 @@ class RegisterView(generics.CreateAPIView):
                 'last_name': user.last_name,
                 'user_type': user.user_type,
                 'is_verified': user.is_verified,
+                'role': 'admin' if user.is_staff or user.is_superuser else 'user',
             },
             'refresh': str(refresh),
             'access': str(refresh.access_token),
@@ -403,6 +404,13 @@ class ChangePasswordView(generics.GenericAPIView):
 
 
 # ─── User Profile ────────────────────────────────────────────────────
+
+class AdminSummaryView(generics.GenericAPIView):
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+        return Response({'users': User.objects.count(), 'companies': Company.objects.count()})
+
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     """

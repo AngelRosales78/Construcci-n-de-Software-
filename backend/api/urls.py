@@ -19,6 +19,7 @@ from . import views
 app_name = 'auth'
 
 urlpatterns = [
+    path('auth/admin/summary/', views.AdminSummaryView.as_view(), name='admin-summary'),
     # Contrato de Rosales reutilizado; se conservan las rutas anteriores de Magallanes.
     path('auth/register/', views.RegisterView.as_view(), name='web-register'),
     path('auth/token/', views.CustomTokenObtainPairView.as_view(), name='web-token'),

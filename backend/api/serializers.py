@@ -84,6 +84,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'last_name': self.user.last_name,
             'user_type': self.user.user_type,
             'is_verified': self.user.is_verified,
+            'role': 'admin' if self.user.is_staff or self.user.is_superuser else 'user',
         }
         data['message'] = _('Login successful.')
         return data
@@ -139,10 +140,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     """
     Serializer for user profile retrieval and update.
     """
+    role = serializers.SerializerMethodField()
+
+    def get_role(self, user):
+        return 'admin' if user.is_staff or user.is_superuser else 'user'
+
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name',
-                  'phone_number', 'user_type', 'is_verified', 'created_at']
+                  'phone_number', 'user_type', 'is_verified', 'created_at', 'role']
         read_only_fields = ['id', 'is_verified', 'created_at']
 
 
