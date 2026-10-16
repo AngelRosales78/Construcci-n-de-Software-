@@ -137,7 +137,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             user.last_login_ip = client_ip.split(',')[0].strip()
             user.save(update_fields=['last_login_ip'])
 
-        return super().post(request, *args, **kwargs)
+        # SimpleJWT authenticates with USERNAME_FIELD, even when an email was supplied.
+        credentials = request.data.copy()
+        credentials['username'] = user.username
+        serializer = self.get_serializer(data=credentials)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 # ─── HU01_03: Password Reset Request ─────────────────────────────────
