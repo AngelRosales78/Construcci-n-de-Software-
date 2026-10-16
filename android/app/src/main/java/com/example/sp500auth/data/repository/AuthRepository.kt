@@ -5,6 +5,8 @@ import com.example.sp500auth.data.api.models.*
 import com.example.sp500auth.data.local.TokenManager
 import com.example.sp500auth.util.Resource
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,6 +15,8 @@ class AuthRepository @Inject constructor(
     private val api: AuthApiService,
     private val tokens: TokenManager
 ) {
+    private val refreshMutex = Mutex()
+
     suspend fun login(username: String, password: String): Resource<Unit> = try {
         val response = api.login(LoginRequest(username, password))
         val body = response.body()
@@ -49,17 +53,28 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun getUserProfile(): Resource<UserProfile> {
-        return try {
-            val response = api.getUserProfile()
-            if (response.isSuccessful && response.body() != null) {
-                Resource.Success(response.body()!!)
-            } else {
-                Resource.Error("Error al cargar el perfil")
+    suspend fun getUserProfile(): Resource<UserProfile> = refreshMutex.withLock {
+        if (!isLoggedIn()) return@withLock Resource.Empty()
+        try {
+            var response = api.getUserProfile()
+            if (response.code() == 401) {
+                val refresh = tokens.getRefreshToken() ?: return@withLock Resource.Empty()
+                val renewed = api.refreshAccessToken(RefreshRequest(refresh))
+                val body = renewed.body()
+                if (!renewed.isSuccessful || body == null || body.accessToken.isBlank() || body.refreshToken.isBlank()) {
+                    if (renewed.code() == 401 || renewed.code() == 403) tokens.clearTokens()
+                    return@withLock Resource.Error("La sesión no pudo renovarse. Vuelve a iniciar sesión.")
+                }
+                tokens.saveTokens(body.accessToken, body.refreshToken)
+                response = api.getUserProfile()
             }
-        } catch (e: Exception) {
-            Resource.Error("Error de conexión: ${e.message}")
-        }
+            if (response.isSuccessful && response.body() != null) Resource.Success(response.body()!!)
+            else {
+                if (response.code() == 401 || response.code() == 403) tokens.clearTokens()
+                Resource.Error("No se pudo verificar la sesión. Inicia sesión o vuelve a intentarlo.")
+            }
+        } catch (e: CancellationException) { throw e
+        } catch (_: Exception) { Resource.Error("No hay conexión para verificar la sesión. Vuelve a intentarlo.") }
     }
 
     suspend fun logout(): Resource<Unit> {
