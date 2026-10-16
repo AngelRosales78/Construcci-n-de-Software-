@@ -31,6 +31,16 @@ fun RegisterScreen(
     var lastName by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
+    val registerState = viewModel.registerState
+
+    LaunchedEffect(registerState) {
+        if (registerState is Resource.Success) {
+            navController.navigate(NavRoutes.Dashboard.route) {
+                popUpTo(NavRoutes.Register.route) { inclusive = true }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,18 +131,24 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                viewModel.register(
-                    username = username,
-                    email = email,
-                    password = password,
-                    passwordConfirm = passwordConfirm,
-                    firstName = firstName,
-                    lastName = lastName
-                )
+                viewModel.register(username, email, password, passwordConfirm, firstName, lastName)
             },
+            enabled = username.isNotBlank() && email.isNotBlank() && password.isNotBlank() && registerState !is Resource.Loading,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Registrarse")
+            if (registerState is Resource.Loading) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+            } else {
+                Text("Registrarse")
+            }
+        }
+
+        if (registerState is Resource.Error) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = registerState.message ?: "Error desconocido",
+                color = MaterialTheme.colorScheme.error
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

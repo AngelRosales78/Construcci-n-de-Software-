@@ -1,4 +1,14 @@
 // app/build.gradle.kts
+
+val composeBom = rootProject.extra["composeBom"] as String
+val navigationVersion = rootProject.extra["navigationVersion"] as String
+val hiltVersion = rootProject.extra["hiltVersion"] as String
+val retrofitVersion = rootProject.extra["retrofitVersion"] as String
+val okhttpVersion = rootProject.extra["okhttpVersion"] as String
+val coroutinesVersion = rootProject.extra["coroutinesVersion"] as String
+val biometricVersion = rootProject.extra["biometricVersion"] as String
+val encryptionVersion = rootProject.extra["encryptionVersion"] as String
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -51,7 +61,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
 
     packaging {
@@ -96,7 +106,7 @@ dependencies {
     implementation("androidx.security:security-crypto-ktx:$encryptionVersion")
 
     // Biometric Authentication
-    implementation("androidx.biometric:biometric:$biomtricVersion")
+    implementation("androidx.biometric:biometric:1.1.0")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
@@ -104,6 +114,8 @@ dependencies {
 
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("androidx.biometric:biometric:1.1.0")
 
     // Testing
     testImplementation("junit:junit:4.13.2")

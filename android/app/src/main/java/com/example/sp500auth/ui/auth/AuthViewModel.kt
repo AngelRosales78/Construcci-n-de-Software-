@@ -1,26 +1,16 @@
 package com.example.sp500auth.ui.auth
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
+import com.example.sp500auth.data.api.models.UserProfile
+import com.example.sp500auth.data.repository.AuthRepository
+import com.example.sp500auth.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.sp500auth.data.repository.AuthRepository
-import com.example.sp500auth.util.Resource
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -30,10 +20,72 @@ class AuthViewModel @Inject constructor(
     var loginState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
 
+    var registerState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
+    var forgotPasswordState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
+    var logoutState by mutableStateOf<Resource<Unit>>(Resource.Empty())
+        private set
+
+    var userProfileState by mutableStateOf<Resource<UserProfile>>(Resource.Empty())
+        private set
+
     fun login(username: String, password: String) {
         viewModelScope.launch {
             loginState = Resource.Loading()
             loginState = authRepository.login(username, password)
         }
     }
+
+    fun register(
+        username: String,
+        email: String,
+        password: String,
+        passwordConfirm: String,
+        firstName: String,
+        lastName: String
+    ) {
+        if (password != passwordConfirm) {
+            registerState = Resource.Error("Las contraseñas no coinciden")
+            return
+        }
+        viewModelScope.launch {
+            registerState = Resource.Loading()
+            registerState = authRepository.register(username, email, password, passwordConfirm, firstName, lastName)
+        }
+    }
+
+    fun forgotPassword(email: String) {
+        viewModelScope.launch {
+            forgotPasswordState = Resource.Loading()
+            forgotPasswordState = authRepository.forgotPassword(email)
+        }
+    }
+
+    fun loginWithBiometrics() {
+        val accessToken = authRepository.getAccessToken()
+        if (accessToken != null) {
+            loginState = Resource.Success(Unit)
+        } else {
+            loginState = Resource.Error("No se encontraron credenciales biométricas")
+        }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            logoutState = Resource.Loading()
+            logoutState = authRepository.logout()
+        }
+    }
+
+    fun fetchUserProfile() {
+        viewModelScope.launch {
+            userProfileState = Resource.Loading()
+            userProfileState = authRepository.getUserProfile()
+        }
+    }
+
+    fun isLoggedIn(): Boolean = authRepository.isLoggedIn()
 }
