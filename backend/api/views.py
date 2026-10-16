@@ -80,7 +80,7 @@ class RegisterView(generics.CreateAPIView):
         user = serializer.save()
 
         # Generate tokens for immediate login after registration
-        refresh = RefreshToken.for_user(user)
+        refresh = CustomTokenObtainPairSerializer.get_token(user)
 
         return Response({
             'message': _('Registration successful. Welcome to S&P 500 Platform!'),
@@ -287,27 +287,33 @@ class LogoutView(generics.GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            refresh_token = request.data.get('refresh_token')
+            refresh_token = request.data.get('refresh_token') or request.data.get('refresh')
             if not refresh_token:
                 return Response(
                     {'error': 'Refresh token is required.'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Blacklist the refresh token in Redis
-            blacklist_token(refresh_token)
-
-            # Also blacklist via SimpleJWT token blacklist
             try:
                 token = RefreshToken(refresh_token)
+                if str(token['user_id']) != str(request.user.pk):
+                    return Response({'error': 'Invalid session.'}, status=400)
+                token.blacklist()
+                blacklist_token(refresh_token)
                 blacklist_jwt_token(token)
+                from .redis_utils import blacklist_session
+                blacklist_session(token)
             except (InvalidToken, TokenError):
-                pass
+                return Response({'error': 'Invalid or expired session.'}, status=400)
+
+            bearer = request.META.get('HTTP_AUTHORIZATION', '')
+            if bearer.startswith('Bearer '):
+                blacklist_token(bearer.split(' ', 1)[1])
 
             logger.info(f"User {request.user.username} logged out successfully.")
 
             return Response(
-                {'message': 'Logout successful. All tokens have been invalidated.'},
+                {'message': 'Logout successful. Session has been invalidated.'},
                 status=status.HTTP_200_OK
             )
         except Exception as e:

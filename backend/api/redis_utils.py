@@ -54,7 +54,8 @@ def blacklist_token(token):
         try:
             payload = jwt_decode(token, options={"verify_signature": False})
             exp = payload.get('exp', 0)
-            ttl = max(int(exp - datetime.datetime.fromtimestamp(exp).timestamp()), 0) + 60
+            import time
+            ttl = max(int(exp - time.time()), 0) + 60
         except Exception:
             ttl = 86400  # Default 24 hours
 
@@ -105,6 +106,16 @@ def blacklist_jwt_token(token):
     except Exception as e:
         logger.error(f"Error blacklisting JWT token by JTI: {e}")
         return False
+
+
+def blacklist_session(token):
+    """Revoke access tokens issued before and after refresh rotation in this session."""
+    import time
+    sid = token.get('sid')
+    if sid:
+        get_redis_connection().setex(
+            f'blacklist:session:{sid}', max(int(token['exp'] - time.time()), 1) + 60, '1'
+        )
 
 
 def refresh_token_metadata(old_refresh_token, new_refresh_token):

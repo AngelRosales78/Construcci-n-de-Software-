@@ -68,6 +68,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Extends TokenObtainPairSerializer to include user data in login response (HU01_02).
     """
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['sid'] = token['jti']
+        return token
+
     def validate(self, attrs):
         data = super().validate(attrs)
         data['user'] = {
