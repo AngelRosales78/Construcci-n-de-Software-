@@ -29,6 +29,8 @@ class AuthViewModel @Inject constructor(
     var logoutState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
 
+    var sessionState by mutableStateOf<Resource<Unit>>(Resource.Loading())
+        private set
     var userProfileState by mutableStateOf<Resource<UserProfile>>(Resource.Empty())
         private set
 
@@ -88,5 +90,18 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun isLoggedIn(): Boolean = repository.isLoggedIn()
+    fun restoreSession() {
+        viewModelScope.launch {
+            sessionState = Resource.Loading()
+            if (!repository.isLoggedIn() || repository.isBiometricEnabled()) sessionState = Resource.Empty()
+            else {
+                val profile = repository.getUserProfile()
+                userProfileState = profile
+                sessionState = if (profile is Resource.Success) Resource.Success(Unit)
+                    else if (!repository.isLoggedIn()) Resource.Empty()
+                    else Resource.Error(profile.message ?: "No se pudo verificar la sesión.")
+            }
+        }
+    }
+    // Only the successful system biometric callback calls this; server validation is still required.
 }
