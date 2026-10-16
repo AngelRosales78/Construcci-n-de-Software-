@@ -24,34 +24,17 @@ class AuthRepository @Inject constructor(
     } catch (e: CancellationException) { throw e
     } catch (_: Exception) { Resource.Error("No se pudo conectar. Inténtalo de nuevo.") }
 
-    suspend fun register(
-        username: String,
-        email: String,
-        password: String,
-        passwordConfirm: String,
-        firstName: String = "",
-        lastName: String = ""
-    ): Resource<Unit> {
-        return try {
-            val request = RegisterRequest(
-                username = username,
-                email = email,
-                password = password,
-                password_confirm = passwordConfirm,
-                first_name = firstName,
-                last_name = lastName,
-                user_type = "retail"
-            )
-            val response = api.register(request)
-            if (response.isSuccessful) {
-                Resource.Success(Unit)
-            } else {
-                Resource.Error("Error al registrar usuario")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Error de conexión: ${e.message}")
-        }
-    }
+    suspend fun register(username: String, email: String, password: String, passwordConfirm: String,
+                         firstName: String = "", lastName: String = ""): Resource<Unit> = try {
+        val response = api.register(RegisterRequest(username, email, password, passwordConfirm, firstName, lastName))
+        val body = response.body()
+        if (response.isSuccessful && body != null && body.accessToken.isNotBlank() && body.refreshToken.isNotBlank()) {
+            tokens.clearTokens()
+            tokens.saveTokens(body.accessToken, body.refreshToken)
+            Resource.Success(Unit)
+        } else Resource.Error("Revisa los datos, la contraseña y si la cuenta ya existe.")
+    } catch (e: CancellationException) { throw e
+    } catch (_: Exception) { Resource.Error("No se pudo completar el registro. Inténtalo de nuevo.") }
 
     suspend fun forgotPassword(email: String): Resource<Unit> {
         return try {
