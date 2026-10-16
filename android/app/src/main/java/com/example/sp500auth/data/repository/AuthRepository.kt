@@ -11,10 +11,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthRepository @Inject constructor(
-    private val api: AuthApiService,
-    private val tokens: TokenManager
-) {
+class AuthRepository @Inject constructor(private val api: AuthApiService, private val tokens: TokenManager) {
     private val refreshMutex = Mutex()
 
     suspend fun login(username: String, password: String): Resource<Unit> = try {
@@ -40,12 +37,6 @@ class AuthRepository @Inject constructor(
     } catch (e: CancellationException) { throw e
     } catch (_: Exception) { Resource.Error("No se pudo completar el registro. Inténtalo de nuevo.") }
 
-    suspend fun forgotPassword(email: String): Resource<Unit> = try {
-        if (api.forgotPassword(ForgotPasswordRequest(email)).isSuccessful) Resource.Success(Unit)
-        else Resource.Error("No se pudo enviar la solicitud. Revisa el correo.")
-    } catch (e: CancellationException) { throw e
-    } catch (_: Exception) { Resource.Error("No se pudo conectar para solicitar el enlace.") }
-
     suspend fun getUserProfile(): Resource<UserProfile> = refreshMutex.withLock {
         if (!isLoggedIn()) return@withLock Resource.Empty()
         try {
@@ -70,6 +61,12 @@ class AuthRepository @Inject constructor(
         } catch (_: Exception) { Resource.Error("No hay conexión para verificar la sesión. Vuelve a intentarlo.") }
     }
 
+    suspend fun forgotPassword(email: String): Resource<Unit> = try {
+        if (api.forgotPassword(ForgotPasswordRequest(email)).isSuccessful) Resource.Success(Unit)
+        else Resource.Error("No se pudo enviar la solicitud. Revisa el correo.")
+    } catch (e: CancellationException) { throw e
+    } catch (_: Exception) { Resource.Error("No se pudo conectar para solicitar el enlace.") }
+
     suspend fun logout(): Resource<Unit> {
         var confirmed = false
         try {
@@ -87,7 +84,6 @@ class AuthRepository @Inject constructor(
     }
 
     fun isLoggedIn(): Boolean = tokens.isUserLoggedIn()
-
     fun isBiometricEnabled(): Boolean = tokens.isBiometricEnabled() && isLoggedIn()
     fun setBiometricEnabled(enabled: Boolean) { tokens.setBiometricEnabled(enabled && isLoggedIn()) }
 }

@@ -13,27 +13,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
-    private val repository: AuthRepository
-) : ViewModel() {
-
+class AuthViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
     var loginState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
-
     var registerState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
-
     var forgotPasswordState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
-
     var logoutState by mutableStateOf<Resource<Unit>>(Resource.Empty())
         private set
-
     var sessionState by mutableStateOf<Resource<Unit>>(Resource.Loading())
         private set
     var userProfileState by mutableStateOf<Resource<UserProfile>>(Resource.Empty())
         private set
-
     var biometricEnabled by mutableStateOf(repository.isBiometricEnabled())
         private set
 
@@ -54,9 +46,20 @@ class AuthViewModel @Inject constructor(
             if (registerState is Resource.Success) biometricEnabled = false
         }
     }
-    fun forgotPassword(email: String) {
-        viewModelScope.launch { forgotPasswordState = Resource.Loading(); forgotPasswordState = repository.forgotPassword(email) }
+    fun restoreSession() {
+        viewModelScope.launch {
+            sessionState = Resource.Loading()
+            if (!repository.isLoggedIn() || repository.isBiometricEnabled()) sessionState = Resource.Empty()
+            else {
+                val profile = repository.getUserProfile()
+                userProfileState = profile
+                sessionState = if (profile is Resource.Success) Resource.Success(Unit)
+                    else if (!repository.isLoggedIn()) Resource.Empty()
+                    else Resource.Error(profile.message ?: "No se pudo verificar la sesión.")
+            }
+        }
     }
+    // Only the successful system biometric callback calls this; server validation is still required.
     fun loginWithBiometrics() {
         if (!repository.isBiometricEnabled()) { loginState = Resource.Error("Activa la huella después de iniciar sesión."); return }
         viewModelScope.launch {
@@ -81,25 +84,10 @@ class AuthViewModel @Inject constructor(
             sessionState = Resource.Empty(); logoutState = result
         }
     }
+    fun forgotPassword(email: String) {
+        viewModelScope.launch { forgotPasswordState = Resource.Loading(); forgotPasswordState = repository.forgotPassword(email) }
+    }
     fun fetchUserProfile() {
-        viewModelScope.launch {
-            userProfileState = Resource.Loading()
-            userProfileState = repository.getUserProfile()
-        }
+        viewModelScope.launch { userProfileState = Resource.Loading(); userProfileState = repository.getUserProfile() }
     }
-
-    fun restoreSession() {
-        viewModelScope.launch {
-            sessionState = Resource.Loading()
-            if (!repository.isLoggedIn() || repository.isBiometricEnabled()) sessionState = Resource.Empty()
-            else {
-                val profile = repository.getUserProfile()
-                userProfileState = profile
-                sessionState = if (profile is Resource.Success) Resource.Success(Unit)
-                    else if (!repository.isLoggedIn()) Resource.Empty()
-                    else Resource.Error(profile.message ?: "No se pudo verificar la sesión.")
-            }
-        }
-    }
-    // Only the successful system biometric callback calls this; server validation is still required.
 }
