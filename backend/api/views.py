@@ -58,8 +58,7 @@ class RegisterView(generics.CreateAPIView):
     """
     POST /api/v1/auth/register/
 
-    Creates a new user with bcrypt password hashing (via Django's
-    create_user which uses PBKDF2 with SHA256).
+    Creates a user using the configured BCrypt-SHA256 password hasher.
 
     Request body:
     {

@@ -113,7 +113,7 @@ class TestRegistration:
         """Password is stored as hash, not plaintext."""
         user = created_user[0]
         assert not user.password == 'Str0ng!Pass#2024'
-        assert user.password.startswith('pbkdf2_sha256$')
+        assert user.password.startswith('bcrypt_sha256$')
 
 
 # ─── HU01_02: Login JWT Tests ────────────────────────────────────────
