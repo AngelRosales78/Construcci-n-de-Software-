@@ -55,12 +55,8 @@ class AuthViewModel @Inject constructor(
         }
     }
     fun forgotPassword(email: String) {
-        viewModelScope.launch {
-            forgotPasswordState = Resource.Loading()
-            forgotPasswordState = repository.forgotPassword(email)
-        }
+        viewModelScope.launch { forgotPasswordState = Resource.Loading(); forgotPasswordState = repository.forgotPassword(email) }
     }
-
     fun loginWithBiometrics() {
         if (!repository.isBiometricEnabled()) { loginState = Resource.Error("Activa la huella después de iniciar sesión."); return }
         viewModelScope.launch {

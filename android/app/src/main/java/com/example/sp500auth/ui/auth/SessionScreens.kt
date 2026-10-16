@@ -11,6 +11,21 @@ import com.example.sp500auth.util.Resource
 import com.example.sp500auth.util.biometric.BiometricAuthManager
 
 @Composable
+fun ForgotPasswordScreen(navController: NavController, viewModel: AuthViewModel) {
+    var email by remember { mutableStateOf("") }
+    val state = viewModel.forgotPasswordState
+    Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center) {
+        Text("Recuperar acceso", style = MaterialTheme.typography.headlineMedium)
+        OutlinedTextField(email, { email = it }, label = { Text("Correo registrado") }, modifier = Modifier.fillMaxWidth())
+        Button(onClick = { viewModel.forgotPassword(email.trim()) }, enabled = email.contains('@') && state !is Resource.Loading) { Text("Solicitar enlace") }
+        if (state is Resource.Loading) CircularProgressIndicator()
+        if (state is Resource.Success) Text("Si el correo está registrado, recibirás un enlace para restablecer tu contraseña.")
+        if (state is Resource.Error) Text(state.message ?: "No se pudo enviar", color = MaterialTheme.colorScheme.error)
+        TextButton(onClick = { navController.popBackStack() }) { Text("Volver al acceso") }
+    }
+}
+
+@Composable
 fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
     val context = LocalContext.current
     var biometricError by remember { mutableStateOf("") }

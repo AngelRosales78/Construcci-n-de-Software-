@@ -40,18 +40,11 @@ class AuthRepository @Inject constructor(
     } catch (e: CancellationException) { throw e
     } catch (_: Exception) { Resource.Error("No se pudo completar el registro. Inténtalo de nuevo.") }
 
-    suspend fun forgotPassword(email: String): Resource<Unit> {
-        return try {
-            val response = api.forgotPassword(ForgotPasswordRequest(email))
-            if (response.isSuccessful) {
-                Resource.Success(Unit)
-            } else {
-                Resource.Error("Error al enviar el enlace de recuperación")
-            }
-        } catch (e: Exception) {
-            Resource.Error("Error de conexión: ${e.message}")
-        }
-    }
+    suspend fun forgotPassword(email: String): Resource<Unit> = try {
+        if (api.forgotPassword(ForgotPasswordRequest(email)).isSuccessful) Resource.Success(Unit)
+        else Resource.Error("No se pudo enviar la solicitud. Revisa el correo.")
+    } catch (e: CancellationException) { throw e
+    } catch (_: Exception) { Resource.Error("No se pudo conectar para solicitar el enlace.") }
 
     suspend fun getUserProfile(): Resource<UserProfile> = refreshMutex.withLock {
         if (!isLoggedIn()) return@withLock Resource.Empty()
