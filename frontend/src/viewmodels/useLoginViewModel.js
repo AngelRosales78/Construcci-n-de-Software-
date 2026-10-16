@@ -23,8 +23,8 @@ export function useLoginViewModel() {
     setError('')
     setLoading(true)
     try {
-      await authRepository.login(data)
-      navigate('/dashboard')
+      const result = await authRepository.login(data)
+      navigate(result?.user?.role === 'admin' ? '/admin-panel' : '/dashboard')
     } catch (err) {
       setError(
         err.response?.data?.error || 'Invalid credentials. Please try again.'
