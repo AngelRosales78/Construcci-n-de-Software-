@@ -15,7 +15,7 @@ from rest_framework import status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken
+from rest_framework_simplejwt.tokens import RefreshToken, OutstandingToken, UntypedToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.contrib.auth import get_user_model
@@ -296,7 +296,12 @@ class LogoutView(generics.GenericAPIView):
                 )
 
             try:
-                token = RefreshToken(refresh_token)
+                # A different tab may already have rotated this signed refresh.
+                # Check signature, expiry and type before allowing it to close its session.
+                verified = UntypedToken(refresh_token)
+                if verified.get('token_type') != 'refresh':
+                    return Response({'error': 'Invalid session.'}, status=400)
+                token = RefreshToken(refresh_token, verify=False)
                 if str(token['user_id']) != str(request.user.pk):
                     return Response({'error': 'Invalid session.'}, status=400)
                 token.blacklist()
@@ -343,6 +348,10 @@ class CustomTokenRefreshView(TokenRefreshView):
             )
 
         try:
+            from .redis_utils import get_redis_connection
+            token = RefreshToken(refresh_token)
+            if token.get('sid') and get_redis_connection().exists(f"blacklist:session:{token['sid']}"):
+                return Response({'error': 'Session has been invalidated.'}, status=401)
             # Blacklist old refresh token
             blacklist_token(refresh_token)
 

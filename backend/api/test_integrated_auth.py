@@ -89,3 +89,23 @@ def test_existing_pbkdf2_password_remains_usable():
     assert response.status_code == 200
     user.refresh_from_db()
     assert user.password.startswith('bcrypt_sha256$')
+
+
+def test_logout_with_earlier_refresh_revokes_the_rotated_session():
+    client = APIClient()
+    initial = register(client)
+    rotated = client.post('/api/v1/auth/refresh/', {'refresh': initial['refresh']}, format='json').data
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {initial['access']}")
+    assert client.post('/api/v1/auth/logout/', {'refresh_token': initial['refresh']}, format='json').status_code == 200
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {rotated['access']}")
+    assert client.get('/api/v1/auth/profile/').status_code == 401
+    client.credentials()
+    assert client.post('/api/v1/auth/refresh/', {'refresh': rotated['refresh']}, format='json').status_code == 401
+
+
+def test_logout_does_not_accept_an_access_token_as_refresh():
+    client = APIClient()
+    initial = register(client)
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {initial['access']}")
+    assert client.post('/api/v1/auth/logout/', {'refresh_token': initial['access']}, format='json').status_code == 400
+    assert client.get('/api/v1/auth/profile/').status_code == 200

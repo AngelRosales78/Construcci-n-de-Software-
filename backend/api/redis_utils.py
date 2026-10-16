@@ -113,8 +113,11 @@ def blacklist_session(token):
     import time
     sid = token.get('sid')
     if sid:
+        from rest_framework_simplejwt.settings import api_settings
+        # Rotation extends expiry; an earlier refresh must revoke later tokens too.
+        lifetime = int(api_settings.REFRESH_TOKEN_LIFETIME.total_seconds())
         get_redis_connection().setex(
-            f'blacklist:session:{sid}', max(int(token['exp'] - time.time()), 1) + 60, '1'
+            f'blacklist:session:{sid}', max(int(token['exp'] - time.time()), lifetime, 1) + 60, '1'
         )
 
 
