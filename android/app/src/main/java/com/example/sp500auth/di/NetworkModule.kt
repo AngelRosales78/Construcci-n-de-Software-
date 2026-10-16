@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
+import com.example.sp500auth.data.local.TokenManager
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,14 +24,26 @@ object NetworkModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.BASIC
+            redactHeader("Authorization")
         }
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenManager: TokenManager): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val publicPaths = listOf("auth/token/", "auth/register/", "auth/refresh/", "auth/password/reset/", "auth/password/reset/confirm/")
+                val builder = request.newBuilder()
+                tokenManager.getAccessToken()?.let { token ->
+                    if (publicPaths.none { request.url.encodedPath.endsWith(it) }) {
+                        builder.header("Authorization", "Bearer $token")
+                    }
+                }
+                chain.proceed(builder.build())
+            }
             .addInterceptor(loggingInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

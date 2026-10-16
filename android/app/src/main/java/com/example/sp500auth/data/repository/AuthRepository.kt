@@ -4,20 +4,21 @@ import com.example.sp500auth.data.api.AuthApiService
 import com.example.sp500auth.data.api.models.*
 import com.example.sp500auth.data.local.TokenManager
 import com.example.sp500auth.util.Resource
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AuthRepository @Inject constructor(
-    private val authApiService: AuthApiService,
-    private val tokenManager: TokenManager
+    private val api: AuthApiService,
+    private val tokens: TokenManager
 ) {
     suspend fun login(username: String, password: String): Resource<Unit> {
         return try {
-            val response = authApiService.login(LoginRequest(username, password))
+            val response = api.login(LoginRequest(username, password))
             if (response.isSuccessful && response.body() != null) {
                 val tokenResponse = response.body()!!
-                tokenManager.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
+                tokens.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
                 Resource.Success(Unit)
             } else {
                 Resource.Error("Error al iniciar sesión")
@@ -45,7 +46,7 @@ class AuthRepository @Inject constructor(
                 last_name = lastName,
                 user_type = "retail"
             )
-            val response = authApiService.register(request)
+            val response = api.register(request)
             if (response.isSuccessful) {
                 Resource.Success(Unit)
             } else {
@@ -58,7 +59,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun forgotPassword(email: String): Resource<Unit> {
         return try {
-            val response = authApiService.forgotPassword(ForgotPasswordRequest(email))
+            val response = api.forgotPassword(ForgotPasswordRequest(email))
             if (response.isSuccessful) {
                 Resource.Success(Unit)
             } else {
@@ -71,7 +72,7 @@ class AuthRepository @Inject constructor(
 
     suspend fun getUserProfile(): Resource<UserProfile> {
         return try {
-            val response = authApiService.getUserProfile()
+            val response = api.getUserProfile()
             if (response.isSuccessful && response.body() != null) {
                 Resource.Success(response.body()!!)
             } else {
@@ -84,28 +85,28 @@ class AuthRepository @Inject constructor(
 
     suspend fun logout(): Resource<Unit> {
         return try {
-            val refreshToken = tokenManager.getRefreshToken()
+            val refreshToken = tokens.getRefreshToken()
             if (refreshToken != null) {
-                authApiService.logout(RefreshRequest(refreshToken))
+                api.logout(RefreshRequest(refreshToken))
             }
-            tokenManager.clearTokens()
+            tokens.clearTokens()
             Resource.Success(Unit)
         } catch (e: Exception) {
-            tokenManager.clearTokens()
+            tokens.clearTokens()
             Resource.Success(Unit)
         }
     }
 
-    fun isLoggedIn(): Boolean = tokenManager.isUserLoggedIn()
+    fun isLoggedIn(): Boolean = tokens.isUserLoggedIn()
 
-    fun getAccessToken(): String? = tokenManager.getAccessToken()
+    fun getAccessToken(): String? = tokens.getAccessToken()
 
     suspend fun verifyCredentialsWithBiometrics(username: String, password: String): Resource<Unit> {
         return try {
-            val response = authApiService.login(LoginRequest(username, password))
+            val response = api.login(LoginRequest(username, password))
             if (response.isSuccessful && response.body() != null) {
                 val tokenResponse = response.body()!!
-                tokenManager.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
+                tokens.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
                 Resource.Success(Unit)
             } else {
                 Resource.Error("Credenciales biométricas inválidas")
