@@ -1,5 +1,7 @@
 # Integración del sprint 1
 
+Actualización posterior: [Cierre funcional del sprint 1](Cierre_funcional_sprint1.md) documenta la corrección del enlace y formulario de recuperación, SMTP local, cierre entre pestañas y renovación tardía. Sus resultados actuales son 182 pruebas backend y 48 web aprobadas; los números de abajo describen la validación inicial.
+
 Esta rama reúne la web financiera de Magallanes (`99fd9b1`) y el Android reciente de Rosales (`fe85825`). Las ramas originales se conservaron. Al provenir de historiales independientes, la unión conserva ambos padres y selecciona explícitamente las fuentes; no incorpora bases de datos, cachés o archivos generados de compilación.
 
 ## Correcciones
