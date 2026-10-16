@@ -109,7 +109,7 @@ fun DashboardScreen(
                     ) {
                         Icon(Icons.Default.Key, contentDescription = null, tint = TextMuted, modifier = Modifier.size(20.dp))
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text("Acceso", color = TextMuted, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                        Text("Salir", color = TextMuted, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                     }
                 }
             }
@@ -131,7 +131,7 @@ fun DashboardScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Explorar",
+                        text = "Explorar · ejemplo",
                         color = TextWhite,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold
@@ -161,7 +161,8 @@ fun DashboardScreen(
                             modifier = Modifier
                                 .size(38.dp)
                                 .clip(CircleShape)
-                                .background(PrimaryGreen),
+                                .background(PrimaryGreen)
+                                .clickable { navController?.navigate(NavRoutes.Profile.route) },
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
@@ -229,8 +230,8 @@ fun DashboardScreen(
                             }
                             Spacer(modifier = Modifier.width(12.dp))
                             Column {
-                                Text("Índice S&P 500", color = TextWhite, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-                                Text("5,649.76 USD • NYSE Activo", color = TextMuted, fontSize = 11.sp)
+                                Text("Datos de demostración", color = TextWhite, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                                Text("Valores ilustrativos · consulta web para datos importados", color = TextMuted, fontSize = 11.sp)
                             }
                         }
 

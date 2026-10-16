@@ -16,7 +16,7 @@ interface AuthApiService {
     suspend fun refreshAccessToken(@Body request: RefreshRequest): Response<TokenResponse>
 
     @POST("auth/logout/")
-    suspend fun logout(@Body request: RefreshRequest): Response<Unit>
+    suspend fun logout(@Body request: LogoutRequest): Response<Unit>
 
     @POST("auth/password/reset/")
     suspend fun forgotPassword(@Body request: ForgotPasswordRequest): Response<Unit>

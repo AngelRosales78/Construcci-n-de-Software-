@@ -78,17 +78,19 @@ class AuthRepository @Inject constructor(
     }
 
     suspend fun logout(): Resource<Unit> {
-        return try {
-            val refreshToken = tokens.getRefreshToken()
-            if (refreshToken != null) {
-                api.logout(RefreshRequest(refreshToken))
-            }
-            tokens.clearTokens()
-            Resource.Success(Unit)
-        } catch (e: Exception) {
-            tokens.clearTokens()
-            Resource.Success(Unit)
-        }
+        var confirmed = false
+        try {
+            if (tokens.getRefreshToken() != null) {
+                getUserProfile()
+                val refresh = tokens.getRefreshToken()
+                if (refresh != null) confirmed = api.logout(LogoutRequest(refresh)).isSuccessful
+                else confirmed = true
+            } else confirmed = true
+        } catch (e: CancellationException) { throw e
+        } catch (_: Exception) { confirmed = false
+        } finally { tokens.clearTokens() }
+        return if (confirmed) Resource.Success(Unit)
+        else Resource.Error("Sesión cerrada aquí. No se confirmó el cierre remoto por falta de conexión.")
     }
 
     fun isLoggedIn(): Boolean = tokens.isUserLoggedIn()

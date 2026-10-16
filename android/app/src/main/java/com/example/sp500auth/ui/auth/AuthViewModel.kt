@@ -79,10 +79,12 @@ class AuthViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             logoutState = Resource.Loading()
-            logoutState = repository.logout()
+            val result = repository.logout()
+            loginState = Resource.Empty(); registerState = Resource.Empty()
+            userProfileState = Resource.Empty(); biometricEnabled = false
+            sessionState = Resource.Empty(); logoutState = result
         }
     }
-
     fun fetchUserProfile() {
         viewModelScope.launch {
             userProfileState = Resource.Loading()

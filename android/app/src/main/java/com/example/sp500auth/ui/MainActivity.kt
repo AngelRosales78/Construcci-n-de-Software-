@@ -56,7 +56,11 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
     LaunchedEffect(Unit) { authViewModel.restoreSession() }
-
+    LaunchedEffect(authViewModel.logoutState) {
+        if (authViewModel.logoutState is Resource.Success || authViewModel.logoutState is Resource.Error) {
+            navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
+        }
+    }
 
     NavHost(
         navController = navController,
