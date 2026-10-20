@@ -1,3 +1,5 @@
+Actualización de tareas: consultar [Tareas detalladas del sprint 2](Sprint_2_tareas_detalladas.md). El desglose vigente contiene 69 tareas y sustituye las estimaciones agrupadas anteriores. Las horas por tarea siguen pendientes de validación del equipo; el calendario de ocho días es una propuesta.
+
 # Plan del sprint 2
 
 Diego Magallanes y Angel Rosales | Proyecto S&P 500 | Duración propuesta de 8 días
