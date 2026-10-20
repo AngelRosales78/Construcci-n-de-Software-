@@ -1,5 +1,7 @@
 # Hoja de ruta revisada de las 75 historias
 
+Actualización del 19 de octubre de 2026: la propuesta inmediata de trabajo se simplificó a HU10_01, HU10_02 y HU10_03 en [Plan sencillo del sprint 2](Sprint_2_planificacion.md). El reparto de 19 historias del sprint 2 que figura abajo se conserva como referencia de una propuesta anterior, pendiente de revisar; no es el alcance comprometido del plan sencillo. La meta de completar las 75 en cuatro entregas sigue necesitando revisión de alcance y capacidad con el equipo y el profesor.
+
 Reparto candidato de 19, 19, 19 y 18 historias. Solo el sprint 2 tiene capacidad declarada: 60 h. Su selección completa excede esa capacidad según la estimación preliminar; no se presenta ningún sprint futuro como comprometido o realizado.
 
 | HU | Historia | Sprint candidato | Dependencia |
