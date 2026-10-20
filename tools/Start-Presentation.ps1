@@ -37,6 +37,8 @@ try {
   if($LASTEXITCODE -ne 0){throw 'Fallo el catalogo'}
   & $python -B manage.py import_market_data --metrics ..\docs\datos\MSFT_balance_2024.csv --source 'SEC, balance anual FY2024; Yahoo Finance, metricas derivadas'
   if($LASTEXITCODE -ne 0){throw 'Fallo el balance'}
+  & $python -B manage.py import_annual_financials ..\docs\datos\sprint2_disponibilidad_MSFT.json
+  if($LASTEXITCODE -ne 0){throw 'Fallo la importacion de componentes anuales para los pilares'}
   & $python -B manage.py import_market_data --prices ..\docs\datos\MSFT_cierres_5y.csv --source 'Yahoo Finance; cierres ajustados MSFT, snapshot 12-10-2026'
   if($LASTEXITCODE -ne 0){throw 'Fallaron los precios'}
   & $python -B manage.py preload_search
