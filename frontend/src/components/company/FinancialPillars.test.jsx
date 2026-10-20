@@ -74,3 +74,19 @@ test('presenta rentabilidad negativa y ausencia de referencia sectorial con expl
   expect(screen.getByText(/Referencia sectorial no disponible/)).toBeTruthy()
   expect(screen.getByText(/Beneficio neto \/ Patrimonio promedio/)).toBeTruthy()
 })
+
+test('identifica solvencia por separado de Altman y muestra umbrales explicados', async () => {
+  const data = response()
+  data.pillars.push({ id: 'solvency', label: 'Solvencia', metrics: [{
+    id: 'interest_coverage', label: 'Cobertura de intereses', status: 'available', display_value: '4,00',
+    unit: 'times', components: [], period: data.period, formula: '(EBIT) / Intereses',
+    thresholds: { lower: '1', upper: '3', direction: 'higher', version: 'academic-thresholds-v1',
+      band: 'high', explanation: 'Reglas académicas sin óptimo universal.' },
+  }] })
+  api.get.mockResolvedValue({ data })
+  mount()
+  await screen.findByText('4,00')
+  expect(screen.getByText(/distintos del indicador Altman Z/)).toBeTruthy()
+  expect(screen.getByText(/Umbrales academic-thresholds-v1/)).toBeTruthy()
+  expect(screen.getByText('Alto según regla académica')).toBeTruthy()
+})
