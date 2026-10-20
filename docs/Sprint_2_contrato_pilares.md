@@ -1,6 +1,6 @@
 # Contrato propuesto para web y Android
 
-Preparación de T65. Un contrato es el acuerdo sobre qué solicita una pantalla y cómo responde el servidor. Este documento prepara la conexión; los endpoints nuevos todavía no existen y Angel no ha confirmado el acuerdo.
+Actualización del 20 de octubre de 2026. Un contrato es el acuerdo sobre qué solicita una pantalla y cómo responde el servidor. La ruta de pilares ya está implementada para Liquidez, Rentabilidad y Solvencia; Angel aún no ha confirmado el acuerdo ni su integración Android. La implementación sigue la propuesta de T65, con las precisiones que se indican a continuación.
 
 ## Conservar las rutas existentes
 
@@ -13,16 +13,18 @@ Preparación de T65. Un contrato es el acuerdo sobre qué solicita una pantalla 
 
 Requieren el token de acceso mediante `Authorization: Bearer …`. La web ya usa estas rutas desde `frontend/src/models/companyRepository.js`. Android puede conectarlas para su trabajo de hoy; no necesita esperar a que existan los nuevos pilares.
 
-## Nueva consulta propuesta
+## Consulta implementada
 
 `GET /api/v1/companies/MSFT/pillars/?fiscal_year=2024`
 
-El servidor devolvería los cinco pilares, sus indicadores y el puntaje general. Un año es un ejercicio fiscal, no necesariamente de enero a diciembre. La cobertura por año debe ser explícita; no cambiar silenciosamente a otro periodo si se solicita uno sin datos.
+El servidor devuelve los cinco identificadores de pilares. Liquidez, Rentabilidad y Solvencia incluyen siete indicadores calculables. Eficiencia y Crecimiento siguen con `metrics: []` y `reason: not_implemented`; sus historias son del siguiente avance. Las notas y el puntaje general están no disponibles porque la normalización aún no está configurada. Un año es un ejercicio fiscal, no necesariamente de enero a diciembre. Un año solicitado sin datos no se cambia por otro.
+
+Sin `fiscal_year` se usa el último ejercicio importado; `available_years` enumera los disponibles. Si no existe ninguno, el año y fechas son nulos. No es una cotización en tiempo real. El modelo de componentes se identifica como `annual-ratios-v1` y su estado indica que falta revisión del equipo. Ejemplo completo real: [MSFT FY2024](evidencias/sprint2_MSFT_pillars_2024.json).
 
 | Campo | Contenido |
 |---|---|
 | `schema_version` | Versión de la estructura, inicialmente `pillars-v1`. |
-| `methodology_version` | Versión de fórmulas y reglas aprobadas. La propuesta actual aún no está aprobada. |
+| `methodology_version` | Versión implementada de fórmulas. `methodology_status` distingue la implementación de la aprobación pendiente del equipo. |
 | `ticker`, `fiscal_year`, `period` | Empresa y fechas exactas del ejercicio. |
 | `pillars` | Cinco elementos con identificadores `liquidity`, `profitability`, `solvency`, `efficiency`, `growth`. |
 | `metrics` de cada pilar | Identificador, valor, unidad, fórmula, componentes, periodo y fuentes. |
@@ -30,6 +32,8 @@ El servidor devolvería los cinco pilares, sus indicadores y el puntaje general.
 | `overall_score` | Puntaje general calculado con las cinco notas o valor nulo con motivo. |
 | `source` de cada componente | URL, etiqueta SEC, unidad, filing y fecha de publicación del dato. |
 | `history` cuando corresponda | Hasta tres ejercicios calculables de eficiencia, cada uno con sus fechas. |
+
+El estado del pilar puede ser `available`, `partial` o `unavailable`, según la cobertura de sus métricas. El estado de cada métrica sigue la tabla siguiente. La referencia sectorial de Rentabilidad declara `insufficient_sector_sample`; no se inventa una media con una sola empresa.
 
 ## Estados que las pantallas deben distinguir
 
@@ -60,7 +64,7 @@ Los errores de conexión y la espera de la pantalla se manejan aparte de esos es
 
 Este ejemplo describe una empresa sin componentes importados. No afirma que esos campos falten en el archivo SEC original de Microsoft. Cuando estén disponibles, `value` se entregará como texto decimal sin redondear, por ejemplo `"2"`, y `display_value` como `"2,00"`. La unidad se mostrará por separado. Los clientes no calcularán fórmulas ni convertirán `null` a cero.
 
-Otros motivos previstos: `zero_denominator`, `nonpositive_equity`, `insufficient_history`, `unconfigured_scoring`. Los nombres definitivos se fijarán al implementar y se verificarán con pruebas del contrato.
+Otros motivos implementados: `zero_denominator`, `invalid_denominator`, `nonpositive_equity`, `insufficient_history`, `invalid_components`, `unconfigured_scoring`. `explanation` ofrece el mensaje legible; `formula_display` y el `label` de cada componente permiten explicarlo en español. `value` conserva el resultado decimal con precisión de cálculo y `display_value` aplica dos decimales HALF_UP con coma. Los colores usan `thresholds`, con versión, límites, dirección y explicación. No son notas de 0 a 100.
 
 ## Errores y conservación de compatibilidad
 
@@ -72,4 +76,4 @@ Otros motivos previstos: `zero_denominator`, `nonpositive_equity`, `insufficient
 
 ## Pendientes del acuerdo con Angel
 
-Confirmar nombres de campos, estados, formato decimal y comportamiento del año sin datos. Implementar la ruta y su documentación después de ese acuerdo. Hoy queda preparada la propuesta; no se publica una ruta ficticia como funcional.
+Revisar nombres de campos, estados y formato decimal implementados; conectar Android y comparar sus siete indicadores con la respuesta real de MSFT. Esta implementación fue autorizada como avance por criterio de Diego; no se registra una aceptación de Angel. Las notas y ponderaciones siguen pendientes.

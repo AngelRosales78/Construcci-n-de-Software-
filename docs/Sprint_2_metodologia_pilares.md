@@ -2,6 +2,14 @@
 
 Preparación de T65. Versión `pilares-propuesta-v1`. Son decisiones de implementación propuestas para revisar con Angel antes de cerrar el contrato; no se afirma aprobación ni implementación.
 
+Actualización del 20 de octubre: las fórmulas de Liquidez, Rentabilidad y Solvencia se implementaron como `annual-ratios-v1`, siguiendo esta propuesta y el encargo de continuar por criterio de Diego. El acuerdo de Angel sigue pendiente. Eficiencia, Crecimiento y notas del radar aún no están implementados.
+
+## Umbrales de visualización implementados
+
+`academic-thresholds-v1` define reglas académicas configuradas en `backend/api/pillars.py`. Para liquidez corriente, los cortes son 1 y 2; para prueba ácida, 0,5 y 1; para cobertura de intereses, 1 y 3. En esos indicadores, el tramo de atención queda por debajo del primer límite, el intermedio por debajo del segundo y el favorable desde el segundo.
+
+En pasivos sobre patrimonio, hasta 1 es favorable, mayor que 1 y hasta 2 intermedio, y mayor que 2 atención. Son convenciones de visualización de esta versión; no describen un óptimo universal ni una comparación sectorial. No generan notas de pilares ni el puntaje general. El contrato entrega los límites y la explicación para que ambas plataformas los muestren igual. Cualquier cambio debe versionarse y revisarse con pruebas de límites.
+
 ## Reglas comunes
 
 - Usar balances anuales completos de una empresa, misma moneda y unidad. No mezclar valores trimestrales con resultados anuales.
