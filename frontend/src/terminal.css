@@ -16,6 +16,26 @@ body { background: var(--terminal-bg); color: var(--terminal-text); font-size: 1
 button, input, select { font: inherit; }
 a { color: var(--primary); }
 :focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+.financial-pillars { margin: 24px 0; padding: 24px; border: 1px solid var(--terminal-line); border-radius: 14px; background: var(--terminal-panel); }
+.pillar-muted { color: var(--terminal-muted); margin: 10px 0; line-height: 1.55; }
+.pillar-year { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
+.pillar-year select { width: auto; max-width: 100%; padding: 8px 12px; background: var(--terminal-raised); color: var(--terminal-text); border: 1px solid var(--terminal-line); border-radius: 8px; }
+.pillar-section { margin-top: 24px; }
+.pillar-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 16px; }
+.pillar-metric { min-width: 0; padding: 20px; border: 1px solid var(--terminal-line); border-radius: 12px; background: var(--terminal-bg); }
+.pillar-value { font-size: 28px; font-weight: 650; margin: 14px 0; }
+.pillar-value small { font-size: 15px; font-weight: 400; color: var(--terminal-muted); }
+.pillar-band { font-size: 13px; margin: 10px 0; }
+.pillar-band-low { color: #ffb4ab; }
+.pillar-band-middle { color: #f5d689; }
+.pillar-band-high { color: #75ff9e; }
+.pillar-details { border-top: 1px solid var(--terminal-line); margin-top: 14px; padding-top: 12px; font-size: 13px; line-height: 1.6; overflow-wrap: anywhere; }
+.pillar-details summary { cursor: pointer; color: var(--primary); }
+.pillar-details p, .pillar-details ul { margin-top: 12px; }
+.pillar-details ul { padding-left: 18px; }
+.pillar-details li { margin: 12px 0; }
+.pillar-details a { display: block; }
+@media (max-width: 600px) { .financial-pillars { padding: 16px; } .pillar-year { align-items: flex-start; flex-direction: column; } }
 .workspace-shell {
   --ink: var(--terminal-text);
   --muted: var(--terminal-muted);

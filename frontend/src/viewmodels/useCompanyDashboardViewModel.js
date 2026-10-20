@@ -30,3 +30,30 @@ export function useCompanyDashboardViewModel() {
 
   return { company, loading, error, navigate }
 }
+
+export function useFinancialPillarsViewModel() {
+  const { ticker } = useParams()
+  const [data, setData] = useState(null)
+  const [year, setYear] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [attempt, setAttempt] = useState(0)
+
+  useEffect(() => { setYear('') }, [ticker])
+  useEffect(() => {
+    let active = true
+    setLoading(true)
+    setData(null)
+    setError(null)
+    companyRepository.pillars(ticker, year).then(result => {
+      if (active) setData(result)
+    }).catch(() => {
+      if (active) setError('No se pudieron cargar los pilares financieros. Puedes reintentar.')
+    }).finally(() => {
+      if (active) setLoading(false)
+    })
+    return () => { active = false }
+  }, [ticker, year, attempt])
+
+  return { data, year, setYear, loading, error, retry: () => setAttempt(value => value + 1) }
+}

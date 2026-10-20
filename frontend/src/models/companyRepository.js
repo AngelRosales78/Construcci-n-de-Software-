@@ -7,4 +7,5 @@ export const companyRepository = {
   sectors: () => data(api.get('/companies/sectors/')),
   summary: ticker => data(api.get(`/companies/${encodeURIComponent(ticker)}/summary/`)),
   prices: (ticker, period) => data(api.get(`/companies/${encodeURIComponent(ticker)}/history/?range=${period}`)),
+  pillars: (ticker, year = '') => data(api.get(`/companies/${encodeURIComponent(ticker)}/pillars/${year ? `?fiscal_year=${encodeURIComponent(year)}` : ''}`)),
 }

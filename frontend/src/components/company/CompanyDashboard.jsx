@@ -5,6 +5,7 @@ import MetricCards from './MetricCards'
 import FinancialHealthIndicator from './FinancialHealthIndicator'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import DataSources from './DataSources'
+import FinancialPillars from './FinancialPillars'
 import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 
 
@@ -34,6 +35,7 @@ export default function CompanyDashboard() {
         <DataSources company={company} />
         {!hasIndicators(company) && <section className="empty-financial-notice"><h2>Información financiera pendiente de carga</h2><p>Esta empresa está incluida en el catálogo. Puedes consultar su identificación y sector; sus indicadores financieros todavía no están disponibles.</p><button onClick={() => navigate('/company/MSFT')}>Explorar la ficha de referencia de Microsoft</button></section>}
         {company.is_demo && <p role="status" className="data-notice">Datos de demostración o sin verificar.</p>}
+        <FinancialPillars />
         <div className="terminal-financial-grid">
           <PriceChart />
           <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span>{company.as_of ? `Balance: ${company.as_of}` : 'Balance pendiente'}</span></div><p className="metrics-period-note">Cambiar el rango del gráfico no modifica estos indicadores.</p><MetricCards company={company} /></section>
