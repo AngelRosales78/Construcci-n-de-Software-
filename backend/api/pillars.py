@@ -19,7 +19,26 @@ REASONS = {
     'invalid_components': 'Hay componentes no válidos para el cálculo.',
     'unconfigured_scoring': 'Las notas y ponderaciones del puntaje aún no están configuradas.',
     'not_implemented': 'Este pilar corresponde al siguiente avance del sprint.',
+    'insufficient_sector_sample': 'No hay una muestra sectorial comparable suficiente con fecha y metodología comunes.',
 }
+LABELS = {'current_assets': 'Activos corrientes', 'current_liabilities': 'Pasivos corrientes',
+          'cash': 'Efectivo', 'short_term_investments': 'Inversiones a corto plazo',
+          'receivables': 'Cuentas por cobrar', 'net_income': 'Beneficio neto',
+          'book_equity': 'Patrimonio contable', 'total_assets': 'Activos totales',
+          'revenue': 'Ingresos anuales', 'total_liabilities': 'Pasivos totales',
+          'income_before_tax': 'Beneficio antes de impuestos', 'interest_expense': 'Gasto por intereses'}
+
+
+def field_label(name):
+    field = name.removeprefix('previous.')
+    return LABELS.get(field, field) + (' del cierre anterior' if name.startswith('previous.') else '')
+
+
+def formula_label(formula):
+    for name in sorted(LABELS, key=len, reverse=True):
+        formula = formula.replace('previous.' + name, field_label('previous.' + name))
+        formula = formula.replace(name, field_label(name))
+    return formula
 
 
 def source(statement, tag):
@@ -39,7 +58,7 @@ def unavailable(reason):
 
 def metric(current, previous, ident, label, unit, formula, fields, calculate, denominator,
            equity_check=False):
-    result = {'id': ident, 'label': label, 'unit': unit, 'formula': formula,
+    result = {'id': ident, 'label': label, 'unit': unit, 'formula': formula, 'formula_display': formula_label(formula),
               'period': period(current), 'components': [], 'missing_fields': [], 'thresholds': None}
     values = {}
     invalid = False
@@ -59,7 +78,7 @@ def metric(current, previous, ident, label, unit, formula, fields, calculate, de
         except (InvalidOperation, ValueError, TypeError):
             invalid = True
             continue
-        result['components'].append({'id': name, 'value': str(decimal),
+        result['components'].append({'id': name, 'label': field_label(name), 'value': str(decimal),
                                      'period': period(statement), 'source': source(statement, item.get('tag'))})
     if invalid:
         return result | unavailable('invalid_components')
@@ -101,11 +120,29 @@ def liquidity(current, previous):
     ]
 
 
+def profitability(current, previous):
+    return [
+        metric(current, previous, 'roe', 'ROE', 'percent',
+               'net_income / ((book_equity + previous.book_equity) / 2) * 100',
+               ['net_income', 'book_equity', 'previous.book_equity'],
+               lambda v: v['net_income'] * 100,
+               lambda v: (v['book_equity'] + v['previous.book_equity']) / 2, equity_check=True),
+        metric(current, previous, 'roa', 'ROA', 'percent',
+               'net_income / ((total_assets + previous.total_assets) / 2) * 100',
+               ['net_income', 'total_assets', 'previous.total_assets'],
+               lambda v: v['net_income'] * 100,
+               lambda v: (v['total_assets'] + v['previous.total_assets']) / 2),
+        metric(current, previous, 'net_margin', 'Margen neto', 'percent',
+               'net_income / revenue * 100', ['net_income', 'revenue'],
+               lambda v: v['net_income'] * 100, lambda v: v['revenue']),
+    ]
+
+
 def build_pillars(company, current, previous, fiscal_year, available_years):
     if previous and (not current or previous.currency != current.currency
                      or previous.period_end + timedelta(days=1) != current.period_start):
         previous = None
-    implementations = {'liquidity': liquidity}
+    implementations = {'liquidity': liquidity, 'profitability': profitability}
     pillars = []
     for ident, label in [('liquidity', 'Liquidez'), ('profitability', 'Rentabilidad'),
                          ('solvency', 'Solvencia'), ('efficiency', 'Eficiencia'), ('growth', 'Crecimiento')]:
@@ -116,6 +153,8 @@ def build_pillars(company, current, previous, fiscal_year, available_years):
             m['status'] == 'available' for m in metrics) else 'unavailable',
             'reason': None if calculate else 'not_implemented', 'metrics': metrics,
             'score': unavailable('unconfigured_scoring')})
+        if ident == 'profitability':
+            pillars[-1]['sector_reference'] = unavailable('insufficient_sector_sample')
     return {'schema_version': 'pillars-v1', 'methodology_version': METHODOLOGY_VERSION,
             'methodology_status': 'implementation_pending_team_review',
             'ticker': company.ticker, 'fiscal_year': fiscal_year, 'period': period(current),
