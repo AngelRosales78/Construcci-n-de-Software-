@@ -1,7 +1,7 @@
 import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboardViewModel'
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
-const BANDS = { low: 'Bajo', middle: 'Intermedio', high: 'Alto' }
+const BANDS = { low: 'Tramo de atención', middle: 'Tramo intermedio', high: 'Tramo favorable' }
 const VISIBLE_PILLARS = ['liquidity', 'profitability', 'solvency']
 const CONCEPTS = {
   liquidity: 'Capacidad de cubrir obligaciones de corto plazo con los recursos disponibles.',
@@ -30,7 +30,7 @@ export function PillarMetric({ metric }) {
         {component.source.is_demo && <strong> · Datos de prueba</strong>}
         <a href={component.source.url} target="_blank" rel="noreferrer">Consultar fuente</a>
       </li>)}</ul>
-      {policy && <p>Umbrales {policy.version}: {policy.lower} y {policy.upper} {UNITS[metric.unit]}. {policy.direction === 'higher' ? 'Bajo por debajo del primer límite; intermedio hasta el segundo; alto desde el segundo.' : 'Alto hasta el primer límite; intermedio hasta el segundo; bajo por encima del segundo.'} {policy.explanation}</p>}
+      {policy && <p>Umbrales {policy.version}: {policy.lower} y {policy.upper} {UNITS[metric.unit]}. {policy.direction === 'higher' ? 'Atención por debajo del primer límite; intermedio hasta el segundo; favorable desde el segundo.' : 'Favorable hasta el primer límite; intermedio hasta el segundo; atención por encima del segundo.'} {policy.explanation}</p>}
     </details>
   </article>
 }
