@@ -61,3 +61,16 @@ test('cambiar ejercicio pide al servidor ese año y retira las cifras anteriores
   finish({ data })
   await screen.findByText('2,20')
 })
+
+test('presenta rentabilidad negativa y ausencia de referencia sectorial con explicación', async () => {
+  const data = response()
+  data.pillars.push({ id: 'profitability', label: 'Rentabilidad',
+    sector_reference: { status: 'unavailable', explanation: 'No hay muestra comparable suficiente.' },
+    metrics: [{ id: 'roe', label: 'ROE', status: 'available', display_value: '-25,00', unit: 'percent',
+      components: [], formula_display: 'Beneficio neto / Patrimonio promedio × 100', period: data.period }] })
+  api.get.mockResolvedValue({ data })
+  mount()
+  await screen.findByText('-25,00')
+  expect(screen.getByText(/Referencia sectorial no disponible/)).toBeTruthy()
+  expect(screen.getByText(/Beneficio neto \/ Patrimonio promedio/)).toBeTruthy()
+})
