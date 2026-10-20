@@ -2,10 +2,11 @@ import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboa
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
 const BANDS = { low: 'Bajo', middle: 'Intermedio', high: 'Alto' }
-const VISIBLE_PILLARS = ['liquidity', 'profitability']
+const VISIBLE_PILLARS = ['liquidity', 'profitability', 'solvency']
 const CONCEPTS = {
   liquidity: 'Capacidad de cubrir obligaciones de corto plazo con los recursos disponibles.',
   profitability: 'ROE relaciona la ganancia con el patrimonio; ROA, con los activos. El margen indica qué parte de los ingresos queda como beneficio.',
+  solvency: 'Relaciona los pasivos con el patrimonio contable y el beneficio antes de intereses e impuestos con los intereses anuales. Estos ratios son distintos del indicador Altman Z.',
 }
 
 export function PillarMetric({ metric }) {
