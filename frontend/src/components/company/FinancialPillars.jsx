@@ -2,9 +2,10 @@ import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboa
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
 const BANDS = { low: 'Bajo', middle: 'Intermedio', high: 'Alto' }
-const VISIBLE_PILLARS = ['liquidity']
+const VISIBLE_PILLARS = ['liquidity', 'profitability']
 const CONCEPTS = {
   liquidity: 'Capacidad de cubrir obligaciones de corto plazo con los recursos disponibles.',
+  profitability: 'ROE relaciona la ganancia con el patrimonio; ROA, con los activos. El margen indica qué parte de los ingresos queda como beneficio.',
 }
 
 export function PillarMetric({ metric }) {
@@ -19,9 +20,9 @@ export function PillarMetric({ metric }) {
     <details className="pillar-details">
       <summary>Ver fórmula, componentes y fuente</summary>
       <p>Periodo: {metric.period?.start || 'Sin datos'} a {metric.period?.end || 'Sin datos'}</p>
-      <p>Fórmula: <code>{metric.formula}</code></p>
+      <p>Fórmula: <code>{metric.formula_display || metric.formula}</code></p>
       <ul>{metric.components?.map(component => <li key={component.id}>
-        <strong>{component.id}:</strong> {component.value} {component.source.currency}
+        <strong>{component.label || component.id}:</strong> {component.value} {component.source.currency}
         <span> · Cierre: {component.period.end}</span>
         <span> · Etiqueta SEC: {component.source.tag}</span>
         <span> · Publicado: {component.source.filed} · Informe: {component.source.accession}</span>
@@ -53,6 +54,7 @@ export default function FinancialPillars() {
       {!years.length && <p>No hay balances anuales importados para esta empresa.</p>}
       {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
         <h3>{pillar.label}</h3><p className="pillar-muted">{CONCEPTS[pillar.id]}</p>
+        {pillar.sector_reference?.status === 'unavailable' && <p className="pillar-muted">Referencia sectorial no disponible: {pillar.sector_reference.explanation}</p>}
         <div className="pillar-metrics">{pillar.metrics.map(metric => <PillarMetric key={metric.id} metric={metric} />)}</div>
       </section>)}
     </>}
