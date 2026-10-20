@@ -115,6 +115,11 @@ fun AssetDetailScreen(
         ) {
             item { Spacer(modifier = Modifier.height(4.dp)) }
 
+            item {
+                OutlinedButton(onClick = { navController?.navigate("pillars/liquidity") }) {
+                    Text("Consultar pilar de liquidez")
+                }
+            }
             // 1. TopBar
             item {
                 Row(

@@ -70,6 +70,9 @@ fun AppNavigation() {
         composable(NavRoutes.Profile.route) {
             ProfileScreen(navController = navController, viewModel = authViewModel)
         }
+        composable("pillars/liquidity") {
+            com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity")
+        }
         composable(NavRoutes.AssetDetail.route) {
             AssetDetailScreen(navController = navController)
         }
