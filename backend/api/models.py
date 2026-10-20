@@ -159,3 +159,27 @@ class PriceHistory(models.Model):
         ordering = ['date']
         constraints = [models.UniqueConstraint(fields=['company', 'date'], name='price_company_date_unique')]
         indexes = [models.Index(fields=['company', '-date'], name='price_company_date_idx')]
+
+
+class AnnualFinancialStatement(models.Model):
+    """Componentes anuales separados de la ficha heredada de una sola fecha."""
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='annual_statements')
+    fiscal_year = models.PositiveSmallIntegerField()
+    period_start = models.DateField()
+    period_end = models.DateField()
+    currency = models.CharField(max_length=3, default='USD')
+    source_url = models.URLField(max_length=500)
+    accession = models.CharField(max_length=40)
+    filed = models.DateField()
+    is_demo = models.BooleanField(default=False)
+    snapshot_sha256 = models.CharField(max_length=64)
+    components = models.JSONField(default=dict)
+
+    class Meta:
+        db_table = 'annual_financial_statements'
+        ordering = ['-fiscal_year']
+        constraints = [models.UniqueConstraint(fields=['company', 'fiscal_year'], name='annual_company_year_unique')]
+
+    def clean(self):
+        from .annual_financials import validate_statement
+        validate_statement(self)
