@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-20",
+  "branch": "diego/sprint2-dia2-pilares",
+  "scope": "Servidor y web de Diego; Android sin cambios ni verificación nueva",
+  "remote_review": {
+    "origin/Rosales": "fe85825",
+    "last_commit_date": "2026-10-13",
+    "observation": "Sin commits remotos nuevos al iniciar la revisión; no se conoce su trabajo local"
+  },
+  "backend": {
+    "full_run_passed": 226,
+    "full_run_skipped": 1,
+    "explicit_live_redis_passed": 1,
+    "unique_tests_passed": 227,
+    "new_pillar_tests": 45,
+    "database": "PostgreSQL aislado; nuevas pruebas también aprobadas con SQLite temporal"
+  },
+  "web": {
+    "passed": 54,
+    "new_pillar_tests": 6,
+    "build": "passed",
+    "warning": "Aviso previo de tamaño del paquete"
+  },
+  "browser": {
+    "result": "passed",
+    "steps": [
+      "MSFT FY2024 muestra siete indicadores iguales al cÃ¡lculo independiente y a la API real",
+      "FÃ³rmula, componentes, publicaciÃ³n y enlace SEC visibles en la web",
+      "Cambiar a FY2020 conserva los faltantes y no reutiliza cifras del ejercicio anterior",
+      "Vista web a 1440 y 390 pÃ­xeles sin desbordamiento horizontal",
+      "Empresa sin balances muestra siete indicadores no disponibles, sin cifras de Microsoft",
+      "Fallo de red deliberado y reintento recuperan los indicadores reales"
+    ],
+    "javascriptErrors": [],
+    "metricsFY2024": {
+      "current_ratio": "1,27",
+      "quick_ratio": "1,06",
+      "roe": "37,13",
+      "roa": "19,07",
+      "net_margin": "35,96",
+      "liabilities_to_equity": "0,91",
+      "interest_coverage": "37,72"
+    },
+    "scope": "Web y servidor local; no acredita integraciÃ³n Android"
+  },
+  "api_example_sha256": "d8846e9b3d2c68c79a965e5d68990234fc30f05b62be213627d1662ce8d807f3",
+  "migrations_check": "No changes detected",
+  "pending": [
+    "Integración Android HU05_02 T03 HU05_03 T07 HU05_04 T11",
+    "Comparación conjunta de ambas plataformas",
+    "Revisión de metodología y contrato por Angel",
+    "Eficiencia Crecimiento notas y puntaje general",
+    "Proveedor e historias IA"
+  ]
+}
