@@ -1,0 +1,38 @@
+{
+  "task": "T65 parte de Diego",
+  "date": "2026-10-19",
+  "scope": "Revisión de código, pruebas existentes y snapshot local; sin recorrido manual nuevo de navegador ni cambios de aplicación",
+  "backend": {
+    "passed": 87,
+    "skipped": 4,
+    "database": "SQLite temporal",
+    "areas": [
+      "búsqueda",
+      "ficha financiera",
+      "Altman Z"
+    ]
+  },
+  "web": {
+    "passed": 48,
+    "files": 10,
+    "kind": "pruebas existentes de componentes y estado con servicios simulados"
+  },
+  "data_inventory": {
+    "annual_records": 5,
+    "complete_selected_fields_years": [
+      2022,
+      2023,
+      2024
+    ],
+    "catalog_symbols": 503,
+    "price_rows": 1254,
+    "output_sha256": "366aee34c1af216c72a16a336cd07d41114164d43d015fc340639979df7361b8"
+  },
+  "pending": [
+    "Conexión Android por Angel",
+    "Acuerdo del equipo sobre normalización y contrato",
+    "Planning Poker T66",
+    "Proveedor IA T67",
+    "Importación anual e implementación de pilares"
+  ]
+}
