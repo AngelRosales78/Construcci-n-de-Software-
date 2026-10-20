@@ -7,6 +7,8 @@ THRESHOLD_VERSION = 'academic-thresholds-v1'
 THRESHOLDS = {
     'current_ratio': {'lower': '1', 'upper': '2', 'direction': 'higher'},
     'quick_ratio': {'lower': '0.5', 'upper': '1', 'direction': 'higher'},
+    'liabilities_to_equity': {'lower': '1', 'upper': '2', 'direction': 'lower'},
+    'interest_coverage': {'lower': '1', 'upper': '3', 'direction': 'higher'},
 }
 THRESHOLD_EXPLANATION = ('Reglas de visualización académica de esta versión; no son un óptimo '
                          'universal ni una referencia sectorial. Consulte los límites y la fórmula.')
@@ -138,11 +140,23 @@ def profitability(current, previous):
     ]
 
 
+def solvency(current, previous):
+    return [
+        metric(current, previous, 'liabilities_to_equity', 'Pasivos sobre patrimonio', 'times',
+               'total_liabilities / book_equity', ['total_liabilities', 'book_equity'],
+               lambda v: v['total_liabilities'], lambda v: v['book_equity']),
+        metric(current, previous, 'interest_coverage', 'Cobertura de intereses', 'times',
+               '(income_before_tax + interest_expense) / interest_expense',
+               ['income_before_tax', 'interest_expense'],
+               lambda v: v['income_before_tax'] + v['interest_expense'], lambda v: v['interest_expense']),
+    ]
+
+
 def build_pillars(company, current, previous, fiscal_year, available_years):
     if previous and (not current or previous.currency != current.currency
                      or previous.period_end + timedelta(days=1) != current.period_start):
         previous = None
-    implementations = {'liquidity': liquidity, 'profitability': profitability}
+    implementations = {'liquidity': liquidity, 'profitability': profitability, 'solvency': solvency}
     pillars = []
     for ident, label in [('liquidity', 'Liquidez'), ('profitability', 'Rentabilidad'),
                          ('solvency', 'Solvencia'), ('efficiency', 'Eficiencia'), ('growth', 'Crecimiento')]:
