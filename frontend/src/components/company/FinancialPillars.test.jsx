@@ -88,5 +88,5 @@ test('identifica solvencia por separado de Altman y muestra umbrales explicados'
   await screen.findByText('4,00')
   expect(screen.getByText(/distintos del indicador Altman Z/)).toBeTruthy()
   expect(screen.getByText(/Umbrales academic-thresholds-v1/)).toBeTruthy()
-  expect(screen.getByText('Alto según regla académica')).toBeTruthy()
+  expect(screen.getByText('Tramo favorable según regla académica')).toBeTruthy()
 })
