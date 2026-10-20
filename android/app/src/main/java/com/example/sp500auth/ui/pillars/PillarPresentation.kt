@@ -1,6 +1,7 @@
 package com.example.sp500auth.ui.pillars
 
 import com.example.sp500auth.data.api.models.PillarMetric
+import com.example.sp500auth.data.api.models.SectorReference
 
 /** Display server rounding verbatim: the Android client never calculates financial ratios. */
 fun metricValue(metric: PillarMetric?): String {
@@ -25,3 +26,10 @@ fun reasonLabel(reason: String?): String = when (reason) {
     null, "" -> "El servidor no proporcionó un motivo."
     else -> reason
 }
+
+fun hasComparableSector(reference: SectorReference?): Boolean = reference != null &&
+    reference.status == "available" && reference.value?.toBigDecimalOrNull() != null &&
+    !reference.display_value.isNullOrBlank() && reference.unit == "percent" &&
+    (reference.sample_size ?: 0) > 0 && !reference.universe.isNullOrBlank() &&
+    !reference.as_of.isNullOrBlank() && !reference.period?.start.isNullOrBlank() &&
+    !reference.period?.end.isNullOrBlank() && !reference.source?.url.isNullOrBlank()

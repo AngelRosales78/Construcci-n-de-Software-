@@ -119,6 +119,9 @@ fun AssetDetailScreen(
                 OutlinedButton(onClick = { navController?.navigate("pillars/liquidity") }) {
                     Text("Consultar pilar de liquidez")
                 }
+                OutlinedButton(onClick = { navController?.navigate("pillars/profitability") }) {
+                    Text("Consultar pilar de rentabilidad")
+                }
             }
             // 1. TopBar
             item {

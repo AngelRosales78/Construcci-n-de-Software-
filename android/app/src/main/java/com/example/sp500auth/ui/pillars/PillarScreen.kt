@@ -21,7 +21,8 @@ fun PillarScreen(navController: NavController, pillarId: String, viewModel: Pill
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)) {
         TextButton(onClick = { navController.popBackStack() }) { Text("Volver al detalle") }
-        Text("Pilar de Liquidez", style = MaterialTheme.typography.headlineSmall)
+        Text(if (pillarId == "profitability") "Pilar de Rentabilidad" else "Pilar de Liquidez",
+            style = MaterialTheme.typography.headlineSmall)
         OutlinedTextField(value = ticker, onValueChange = { ticker = it.trim().uppercase(Locale.ROOT) },
             label = { Text("Símbolo de la empresa") }, singleLine = true, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(value = year, onValueChange = { year = it }, label = { Text("Ejercicio fiscal") },
@@ -39,17 +40,20 @@ fun PillarScreen(navController: NavController, pillarId: String, viewModel: Pill
                 Text("Periodo: ${data.period?.start ?: "Sin fecha"} — ${data.period?.end ?: "Sin fecha"}")
                 Text("Metodología: ${data.methodology_version ?: "No informada"}")
                 val pillar = data.pillars?.firstOrNull { it.id == pillarId }
-                val metrics = listOf("current_ratio" to "Liquidez corriente", "quick_ratio" to "Prueba ácida")
+                val metrics = if (pillarId == "profitability")
+                    listOf("roe" to "ROE", "roa" to "ROA", "net_margin" to "Margen neto")
+                else listOf("current_ratio" to "Liquidez corriente", "quick_ratio" to "Prueba ácida")
                 metrics.forEach { (id, label) ->
-                    MetricDetails(label, pillar?.metrics?.firstOrNull { it.id == id })
+                    MetricDetails(label, pillar?.metrics?.firstOrNull { it.id == id }, pillarId == "profitability")
                 }
             }
+
         }
     }
 }
 
 @Composable
-fun MetricDetails(label: String, metric: PillarMetric?) {
+fun MetricDetails(label: String, metric: PillarMetric?, showSector: Boolean = false) {
     Card(Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(label, style = MaterialTheme.typography.titleMedium)
@@ -75,6 +79,20 @@ fun MetricDetails(label: String, metric: PillarMetric?) {
                         it.filing?.let { filing -> Text("Informe: $filing") }
                         it.published_at?.let { date -> Text("Publicación: $date") }
                     }
+                }
+            }
+            if (showSector) {
+                val reference = metric?.sector_reference
+                Text("Referencia sectorial", style = MaterialTheme.typography.titleSmall)
+                if (hasComparableSector(reference)) {
+                    Text("${reference?.display_value} %")
+                    Text("Universo: ${reference?.universe} · Muestra: ${reference?.sample_size}")
+                    Text("Fecha de referencia: ${reference?.as_of}")
+                    Text("Periodo: ${reference?.period?.start} — ${reference?.period?.end}")
+                    Text("Fuente: ${reference?.source?.label ?: "Sin etiqueta"}")
+                    Text(reference?.source?.url.orEmpty())
+                } else {
+                    Text("No disponible: ${if (reference?.reason != null) reasonLabel(reference.reason) else "El servidor no proporcionó una muestra comparable con procedencia completa."}")
                 }
             }
         }
