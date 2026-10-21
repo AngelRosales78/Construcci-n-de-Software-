@@ -35,6 +35,11 @@ a { color: var(--primary); }
 .pillar-details ul { padding-left: 18px; }
 .pillar-details li { margin: 12px 0; }
 .pillar-details a { display: block; }
+.pillar-history { margin-top: 16px; overflow-x: auto; }
+.pillar-history table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.pillar-history caption { text-align: left; margin: 10px 0; font-weight: 600; }
+.pillar-history th, .pillar-history td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--terminal-line); }
+.pillar-history small { display: block; color: var(--terminal-muted); font-weight: 400; }
 @media (max-width: 600px) { .financial-pillars { padding: 16px; } .pillar-year { align-items: flex-start; flex-direction: column; } }
 .workspace-shell {
   --ink: var(--terminal-text);
