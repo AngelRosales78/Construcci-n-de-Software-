@@ -22,13 +22,15 @@ REASONS = {
     'unconfigured_scoring': 'Las notas y ponderaciones del puntaje aún no están configuradas.',
     'not_implemented': 'Este pilar corresponde al siguiente avance del sprint.',
     'insufficient_sector_sample': 'No hay una muestra sectorial comparable suficiente con fecha y metodología comunes.',
+    'inventory_not_applicable': 'El inventario no aplica a este negocio según el motivo documentado.',
 }
 LABELS = {'current_assets': 'Activos corrientes', 'current_liabilities': 'Pasivos corrientes',
           'cash': 'Efectivo', 'short_term_investments': 'Inversiones a corto plazo',
           'receivables': 'Cuentas por cobrar', 'net_income': 'Beneficio neto',
           'book_equity': 'Patrimonio contable', 'total_assets': 'Activos totales',
           'revenue': 'Ingresos anuales', 'total_liabilities': 'Pasivos totales',
-          'income_before_tax': 'Beneficio antes de impuestos', 'interest_expense': 'Gasto por intereses'}
+          'income_before_tax': 'Beneficio antes de impuestos', 'interest_expense': 'Gasto por intereses',
+          'inventory': 'Inventario', 'cost_of_sales': 'Costo de ventas anual'}
 
 
 def field_label(name):
@@ -152,23 +154,57 @@ def solvency(current, previous):
     ]
 
 
-def build_pillars(company, current, previous, fiscal_year, available_years):
-    if previous and (not current or previous.currency != current.currency
-                     or previous.period_end + timedelta(days=1) != current.period_start):
-        previous = None
-    implementations = {'liquidity': liquidity, 'profitability': profitability, 'solvency': solvency}
+def efficiency(current, previous):
+    turnover = metric(current, previous, 'asset_turnover', 'Rotación de activos', 'times',
+                      'revenue / ((total_assets + previous.total_assets) / 2)',
+                      ['revenue', 'total_assets', 'previous.total_assets'],
+                      lambda v: v['revenue'], lambda v: (v['total_assets'] + v['previous.total_assets']) / 2)
+    if current and current.inventory_applicable is False:
+        inventory = {'id': 'inventory_days', 'label': 'Días de inventario', 'unit': 'days',
+                     'period': period(current), 'components': [], 'thresholds': None, 'missing_fields': [],
+                     'formula': '((inventory + previous.inventory) / 2) / cost_of_sales * 365',
+                     'formula_display': 'Inventario promedio / Costo de ventas anual × 365',
+                     'status': 'not_applicable', 'value': None, 'display_value': 'No aplica',
+                     'reason': 'inventory_not_applicable',
+                     'explanation': current.inventory_applicability_note,
+                     'applicability_source': source(current, None)}
+    else:
+        inventory = metric(current, previous, 'inventory_days', 'Días de inventario', 'days',
+                           '((inventory + previous.inventory) / 2) / cost_of_sales * 365',
+                           ['inventory', 'previous.inventory', 'cost_of_sales'],
+                           lambda v: (v['inventory'] + v['previous.inventory']) / 2 * 365,
+                           lambda v: v['cost_of_sales'])
+    return [turnover, inventory]
+
+
+def comparable_previous(current, candidate):
+    return candidate if current and candidate and current.currency == candidate.currency and (
+        candidate.period_end + timedelta(days=1) == current.period_start) else None
+
+
+def build_pillars(company, current, previous, fiscal_year, available_years, statements=None):
+    previous = comparable_previous(current, previous)
+    statements = statements or ({current.fiscal_year: current} if current else {})
+    implementations = {'liquidity': liquidity, 'profitability': profitability, 'solvency': solvency,
+                       'efficiency': efficiency}
     pillars = []
     for ident, label in [('liquidity', 'Liquidez'), ('profitability', 'Rentabilidad'),
                          ('solvency', 'Solvencia'), ('efficiency', 'Eficiencia'), ('growth', 'Crecimiento')]:
         calculate = implementations.get(ident)
         metrics = calculate(current, previous) if calculate else []
         pillars.append({'id': ident, 'label': label, 'status': 'available' if metrics and all(
-            m['status'] == 'available' for m in metrics) else 'partial' if any(
+            m['status'] in ('available', 'not_applicable') for m in metrics) else 'partial' if any(
             m['status'] == 'available' for m in metrics) else 'unavailable',
             'reason': None if calculate else 'not_implemented', 'metrics': metrics,
             'score': unavailable('unconfigured_scoring')})
         if ident == 'profitability':
             pillars[-1]['sector_reference'] = unavailable('insufficient_sector_sample')
+        if ident == 'efficiency':
+            years = sorted((y for y in statements if current and y <= current.fiscal_year), reverse=True)[:3]
+            pillars[-1]['history'] = [
+                {'fiscal_year': y, 'period': period(statements[y]),
+                 'metrics': efficiency(statements[y], comparable_previous(statements[y], statements.get(y-1)))}
+                for y in years]
     return {'schema_version': 'pillars-v1', 'methodology_version': METHODOLOGY_VERSION,
             'methodology_status': 'implementation_pending_team_review',
             'ticker': company.ticker, 'fiscal_year': fiscal_year, 'period': period(current),

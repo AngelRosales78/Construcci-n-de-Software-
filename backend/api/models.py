@@ -174,6 +174,8 @@ class AnnualFinancialStatement(models.Model):
     is_demo = models.BooleanField(default=False)
     snapshot_sha256 = models.CharField(max_length=64)
     components = models.JSONField(default=dict)
+    inventory_applicable = models.BooleanField(null=True, blank=True, default=None)
+    inventory_applicability_note = models.CharField(max_length=250, blank=True, default='')
 
     class Meta:
         db_table = 'annual_financial_statements'

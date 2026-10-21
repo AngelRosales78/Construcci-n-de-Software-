@@ -45,12 +45,16 @@ class Command(BaseCommand):
                                         'tag': field['tag']}
                 if row['unit'] != 'USD':
                     raise ValueError('Unidad monetaria no admitida.')
+                if row.get('inventory_applicable') is not None and type(row['inventory_applicable']) is not bool:
+                    raise ValueError('La aplicabilidad del inventario debe ser booleana o nula.')
                 statement = AnnualFinancialStatement(
                     company=company, fiscal_year=year,
                     period_start=date.fromisoformat(row['start']), period_end=date.fromisoformat(row['end']),
                     currency=row['unit'], source_url=source, accession=row['accession'],
                     filed=date.fromisoformat(row['filed']), is_demo=options['demo'],
-                    snapshot_sha256=payload['snapshot_sha256'], components=components)
+                    snapshot_sha256=payload['snapshot_sha256'], components=components,
+                    inventory_applicable=row.get('inventory_applicable'),
+                    inventory_applicability_note=row.get('inventory_applicability_note', ''))
                 statement.full_clean(validate_unique=False, validate_constraints=False)
                 prepared.append(statement)
         except (OSError, KeyError, TypeError, ValueError, ArithmeticError, ValidationError,

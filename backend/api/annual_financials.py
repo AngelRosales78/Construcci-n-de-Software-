@@ -13,6 +13,8 @@ SIGNED = {'net_income', 'book_equity', 'income_before_tax'}
 
 
 def validate_statement(statement):
+    if statement.inventory_applicable is False and not statement.inventory_applicability_note.strip():
+        raise ValidationError('Indique el motivo documentado por el que el inventario no aplica.')
     if not 1900 <= statement.fiscal_year <= timezone.localdate().year:
         raise ValidationError('Ejercicio fiscal fuera del rango admitido.')
     days = (statement.period_end - statement.period_start).days + 1

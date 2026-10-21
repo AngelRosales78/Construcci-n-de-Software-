@@ -25,4 +25,4 @@ class CompanyPillarsView(generics.GenericAPIView):
             year = available[0] if available else None
         current = statements.get(year)
         previous = statements.get(year - 1) if year is not None else None
-        return Response(build_pillars(company, current, previous, year, available))
+        return Response(build_pillars(company, current, previous, year, available, statements=statements))
