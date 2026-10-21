@@ -1,8 +1,9 @@
 """Cálculos anuales para web y Android, separados de Altman-Z y de sus notas."""
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP, localcontext
+from .pillar_scoring import score_pillar, policy
 
-METHODOLOGY_VERSION = 'annual-ratios-v1'
+METHODOLOGY_VERSION = 'annual-ratios-v2'
 THRESHOLD_VERSION = 'academic-thresholds-v1'
 THRESHOLDS = {
     'current_ratio': {'lower': '1', 'upper': '2', 'direction': 'higher'},
@@ -14,7 +15,7 @@ THRESHOLD_EXPLANATION = ('Reglas de visualización académica de esta versión; 
                          'universal ni una referencia sectorial. Consulte los límites y la fórmula.')
 REASONS = {
     'missing_components': 'Faltan componentes del balance anual.',
-    'insufficient_history': 'Falta el cierre anterior comparable para calcular el promedio.',
+    'insufficient_history': 'Faltan ejercicios consecutivos comparables para calcular este indicador.',
     'zero_denominator': 'El divisor es cero; no se puede calcular el indicador.',
     'invalid_denominator': 'El divisor debe ser positivo.',
     'nonpositive_equity': 'El patrimonio contable no es positivo en ambos cierres.',
@@ -34,13 +35,18 @@ LABELS = {'current_assets': 'Activos corrientes', 'current_liabilities': 'Pasivo
 
 
 def field_label(name):
-    field = name.removeprefix('previous.')
-    return LABELS.get(field, field) + (' del cierre anterior' if name.startswith('previous.') else '')
+    prefix, separator, field = name.partition('.')
+    if not separator:
+        return LABELS.get(name, name)
+    suffix = {'previous': ' del cierre anterior', 'year2': ' de hace dos ejercicios',
+              'year3': ' de hace tres ejercicios'}
+    return LABELS.get(field, field) + suffix.get(prefix, '')
 
 
 def formula_label(formula):
     for name in sorted(LABELS, key=len, reverse=True):
-        formula = formula.replace('previous.' + name, field_label('previous.' + name))
+        for prefix in ('previous.', 'year2.', 'year3.'):
+            formula = formula.replace(prefix + name, field_label(prefix + name))
         formula = formula.replace(name, field_label(name))
     return formula
 
@@ -61,14 +67,15 @@ def unavailable(reason):
 
 
 def metric(current, previous, ident, label, unit, formula, fields, calculate, denominator,
-           equity_check=False):
+           equity_check=False, history=None, postprocess=None):
     result = {'id': ident, 'label': label, 'unit': unit, 'formula': formula, 'formula_display': formula_label(formula),
               'period': period(current), 'components': [], 'missing_fields': [], 'thresholds': None}
     values = {}
     invalid = False
     for name in fields:
-        statement = previous if name.startswith('previous.') else current
-        field = name.removeprefix('previous.')
+        prefix, separator, field = name.partition('.')
+        statement = ({'previous': previous} | (history or {})).get(prefix) if separator else current
+        field = field if separator else name
         item = statement.components.get(field, {}) if statement else {}
         value = item.get('value')
         if value is None:
@@ -87,7 +94,7 @@ def metric(current, previous, ident, label, unit, formula, fields, calculate, de
     if invalid:
         return result | unavailable('invalid_components')
     if result['missing_fields']:
-        reason = 'insufficient_history' if any(n.startswith('previous.') for n in result['missing_fields']) else 'missing_components'
+        reason = 'insufficient_history' if any('.' in n for n in result['missing_fields']) else 'missing_components'
         return result | unavailable(reason)
     with localcontext() as context:
         context.prec = 40
@@ -96,8 +103,13 @@ def metric(current, previous, ident, label, unit, formula, fields, calculate, de
         divisor = denominator(values)
         if divisor <= 0:
             return result | unavailable('zero_denominator' if divisor == 0 else 'invalid_denominator')
-        value = calculate(values) / divisor
-        display = format(value.quantize(Decimal('.01'), rounding=ROUND_HALF_UP), '.2f').replace('.', ',')
+        try:
+            value = calculate(values) / divisor
+            if postprocess:
+                value = postprocess(value)
+            display = format(value.quantize(Decimal('.01'), rounding=ROUND_HALF_UP), '.2f').replace('.', ',')
+        except ArithmeticError:
+            return result | unavailable('invalid_components')
         result.update(status='available', value=str(value), display_value=display, reason=None)
     policy = THRESHOLDS.get(ident)
     if policy:
@@ -182,11 +194,28 @@ def comparable_previous(current, candidate):
         candidate.period_end + timedelta(days=1) == current.period_start) else None
 
 
+def growth(current, previous, statements):
+    year2 = comparable_previous(previous, statements.get(current.fiscal_year-2)) if current else None
+    year3 = comparable_previous(year2, statements.get(current.fiscal_year-3)) if current else None
+    return [
+        metric(current, previous, 'revenue_growth', 'Variación anual de ingresos', 'percent',
+               '(revenue / previous.revenue - 1) * 100', ['revenue', 'previous.revenue'],
+               lambda v: v['revenue'], lambda v: v['previous.revenue'],
+               postprocess=lambda ratio: (ratio - 1) * 100),
+        metric(current, previous, 'revenue_cagr_3y', 'Crecimiento compuesto a tres años', 'percent',
+               '((revenue / year3.revenue) ^ (1 / 3) - 1) * 100',
+               ['revenue', 'previous.revenue', 'year2.revenue', 'year3.revenue'],
+               lambda v: v['revenue'], lambda v: v['year3.revenue'],
+               history={'year2': year2, 'year3': year3},
+               postprocess=lambda ratio: (ratio ** (Decimal(1) / 3) - 1) * 100),
+    ]
+
+
 def build_pillars(company, current, previous, fiscal_year, available_years, statements=None):
     previous = comparable_previous(current, previous)
     statements = statements or ({current.fiscal_year: current} if current else {})
     implementations = {'liquidity': liquidity, 'profitability': profitability, 'solvency': solvency,
-                       'efficiency': efficiency}
+                       'efficiency': efficiency, 'growth': lambda c, p: growth(c, p, statements)}
     pillars = []
     for ident, label in [('liquidity', 'Liquidez'), ('profitability', 'Rentabilidad'),
                          ('solvency', 'Solvencia'), ('efficiency', 'Eficiencia'), ('growth', 'Crecimiento')]:
@@ -205,8 +234,10 @@ def build_pillars(company, current, previous, fiscal_year, available_years, stat
                 {'fiscal_year': y, 'period': period(statements[y]),
                  'metrics': efficiency(statements[y], comparable_previous(statements[y], statements.get(y-1)))}
                 for y in years]
+        pillars[-1]['score'] = score_pillar(pillars[-1])
     return {'schema_version': 'pillars-v1', 'methodology_version': METHODOLOGY_VERSION,
             'methodology_status': 'implementation_pending_team_review',
             'ticker': company.ticker, 'fiscal_year': fiscal_year, 'period': period(current),
             'currency': current.currency if current else None, 'available_years': available_years,
-            'pillars': pillars, 'overall_score': unavailable('unconfigured_scoring')}
+            'pillars': pillars, 'scoring_policy': policy(),
+            'overall_score': unavailable('unconfigured_scoring')}
