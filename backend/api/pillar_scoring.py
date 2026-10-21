@@ -25,6 +25,7 @@ METRICS = {
     'efficiency': ['asset_turnover', 'inventory_days'],
     'growth': ['revenue_growth', 'revenue_cagr_3y'],
 }
+WEIGHTS = {ident: '0.20' for ident in METRICS}
 
 
 def display(value):
@@ -84,4 +85,38 @@ def policy():
     return {'version': VERSION, 'status': 'academic_convention_pending_team_review',
             'explanation': EXPLANATION, 'rounding': 'HALF_UP a dos decimales solo al presentar.',
             'anchors': {ident: [{'input': x, 'score': y} for x, y in points] for ident, points in POINTS.items()},
-            'pillar_aggregation': 'Media aritmética de indicadores requeridos. Solo se excluye inventario no aplicable con motivo documentado.'}
+            'pillar_aggregation': 'Media aritmética de indicadores requeridos. Solo se excluye inventario no aplicable con motivo documentado.',
+            'overall_weights': WEIGHTS}
+
+
+def overall_score(pillars):
+    """Exigir cinco notas compatibles; nunca reponderar las que sí existen."""
+    counts = {ident: sum(p['id'] == ident for p in pillars) for ident in WEIGHTS}
+    missing, contributions = [], []
+    for ident, weight in WEIGHTS.items():
+        p = next((p for p in pillars if p['id'] == ident), None)
+        note = p.get('score', {}) if p else {}
+        value = None
+        if counts[ident] == 1 and note.get('status') == 'available' and note.get('version') == VERSION:
+            try:
+                candidate = Decimal(str(note['value']))
+                if candidate.is_finite() and 0 <= candidate <= 100:
+                    value = candidate
+            except (ArithmeticError, ValueError, TypeError, KeyError):
+                pass
+        if value is None:
+            missing.append(ident)
+        contributions.append({'id': ident, 'label': p['label'] if p else ident, 'weight': weight,
+                              'weight_display': '20 %', 'value': str(value) if value is not None else None,
+                              'display_value': display(value) if value is not None else 'No disponible'})
+    result = {'version': VERSION, 'contributions': contributions, 'missing_pillars': missing,
+              'formula': '0.20 * (liquidity + profitability + solvency + efficiency + growth)',
+              'aggregation': 'Cada pilar aporta un 20 %. Se utilizan las notas sin redondear y se redondea solo el resultado presentado.'}
+    if missing:
+        return result | {'status': 'unavailable', 'value': None, 'display_value': 'No disponible',
+                         'reason': 'incomplete_pillars',
+                         'explanation': 'Faltan cinco notas válidas de la misma versión; no se calcula un promedio parcial.'}
+    with localcontext() as context:
+        context.prec = 40
+        value = sum(Decimal(row['value']) * Decimal(row['weight']) for row in contributions)
+        return result | {'status': 'available', 'value': str(value), 'display_value': display(value), 'reason': None}

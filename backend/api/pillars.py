@@ -1,7 +1,7 @@
 """Cálculos anuales para web y Android, separados de Altman-Z y de sus notas."""
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP, localcontext
-from .pillar_scoring import score_pillar, policy
+from .pillar_scoring import score_pillar, policy, overall_score
 
 METHODOLOGY_VERSION = 'annual-ratios-v2'
 THRESHOLD_VERSION = 'academic-thresholds-v1'
@@ -235,9 +235,10 @@ def build_pillars(company, current, previous, fiscal_year, available_years, stat
                  'metrics': efficiency(statements[y], comparable_previous(statements[y], statements.get(y-1)))}
                 for y in years]
         pillars[-1]['score'] = score_pillar(pillars[-1])
+        pillars[-1]['score']['period'] = period(current)
     return {'schema_version': 'pillars-v1', 'methodology_version': METHODOLOGY_VERSION,
             'methodology_status': 'implementation_pending_team_review',
             'ticker': company.ticker, 'fiscal_year': fiscal_year, 'period': period(current),
             'currency': current.currency if current else None, 'available_years': available_years,
             'pillars': pillars, 'scoring_policy': policy(),
-            'overall_score': unavailable('unconfigured_scoring')}
+            'overall_score': overall_score(pillars) | {'period': period(current)}}
