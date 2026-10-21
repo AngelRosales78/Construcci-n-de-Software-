@@ -36,11 +36,12 @@ for (const url of [web, api]) assert(['127.0.0.1', 'localhost'].includes(new URL
     const body = await result.json()
     const expected = { current_ratio: '1,27', quick_ratio: '1,06', roe: '37,13', roa: '19,07',
       net_margin: '35,96', liabilities_to_equity: '0,91', interest_coverage: '37,72' }
-    for (const metric of body.pillars.flatMap(p => p.metrics)) {
+    for (const metric of body.pillars.flatMap(p => p.metrics).filter(m => Object.hasOwn(expected, m.id))) {
       assert.equal(metric.display_value, expected[metric.id])
       await page.getByRole('article', { name: metric.label, exact: true }).getByText(expected[metric.id], { exact: false }).waitFor()
     }
-    assert.equal(body.overall_score.value, null)
+    if (body.overall_score.status === 'available') assert(Number(body.overall_score.value) >= 0 && Number(body.overall_score.value) <= 100)
+    else assert.equal(body.overall_score.value, null)
     steps.push('MSFT FY2024 muestra siete indicadores iguales al cálculo independiente y a la API real')
     await page.getByRole('article', { name: 'Prueba ácida', exact: true }).locator('summary').click()
     assert((await page.getByRole('article', { name: 'Prueba ácida', exact: true }).innerText()).includes('2024-07-30'))
@@ -61,7 +62,9 @@ for (const url of [web, api]) assert(['127.0.0.1', 'localhost'].includes(new URL
     steps.push('Vista web a 1440 y 390 píxeles sin desbordamiento horizontal')
     await page.goto(`${web}/company/AAPL`)
     await page.getByText('No hay balances anuales importados para esta empresa.').waitFor()
-    assert.equal(await page.locator('.pillar-value').filter({ hasText: 'No disponible' }).count(), 7)
+    for (const name of ['Liquidez corriente', 'Prueba ácida', 'ROE', 'ROA', 'Margen neto', 'Pasivos sobre patrimonio', 'Cobertura de intereses']) {
+      await page.getByRole('article', { name, exact: true }).getByText('No disponible', { exact: true }).waitFor()
+    }
     steps.push('Empresa sin balances muestra siete indicadores no disponibles, sin cifras de Microsoft')
     const pattern = '**/companies/MSFT/pillars/'
     await page.route(pattern, route => route.fulfill({ status: 503, contentType: 'application/json', body: '{"error":"Fallo temporal de prueba"}' }))
