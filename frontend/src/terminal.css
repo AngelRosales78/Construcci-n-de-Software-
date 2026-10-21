@@ -40,6 +40,16 @@ a { color: var(--primary); }
 .pillar-history caption { text-align: left; margin: 10px 0; font-weight: 600; }
 .pillar-history th, .pillar-history td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--terminal-line); }
 .pillar-history small { display: block; color: var(--terminal-muted); font-weight: 400; }
+.pillar-radar-section { margin: 24px 0; padding: 20px 0; border-block: 1px solid var(--terminal-line); }
+.pillar-radar-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, .8fr); gap: 24px; align-items: center; }
+.pillar-radar-figure { min-width: 0; margin: 0; }
+.pillar-radar-figure figcaption { color: var(--terminal-muted); font-size: 13px; line-height: 1.5; }
+.pillar-radar-notes table { border-collapse: collapse; width: 100%; }
+.pillar-radar-notes th, .pillar-radar-notes td { padding: 12px 8px; border-bottom: 1px solid var(--terminal-line); text-align: left; }
+.pillar-radar-notes td { font-variant-numeric: tabular-nums; }
+.pillar-radar-notes caption { margin-bottom: 12px; text-align: left; font-size: 13px; color: var(--terminal-muted); }
+.pillar-note { margin: 12px 0; font-weight: 600; }
+@media (max-width: 760px) { .pillar-radar-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
 @media (max-width: 600px) { .financial-pillars { padding: 16px; } .pillar-year { align-items: flex-start; flex-direction: column; } }
 .workspace-shell {
   --ink: var(--terminal-text);

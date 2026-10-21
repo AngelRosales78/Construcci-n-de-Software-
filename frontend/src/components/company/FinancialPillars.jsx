@@ -1,13 +1,15 @@
 import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboardViewModel'
+import PillarRadar from './PillarRadar'
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
 const BANDS = { low: 'Tramo de atención', middle: 'Tramo intermedio', high: 'Tramo favorable' }
-const VISIBLE_PILLARS = ['liquidity', 'profitability', 'solvency', 'efficiency']
+const VISIBLE_PILLARS = ['liquidity', 'profitability', 'solvency', 'efficiency', 'growth']
 const CONCEPTS = {
   liquidity: 'Capacidad de cubrir obligaciones de corto plazo con los recursos disponibles.',
   profitability: 'ROE relaciona la ganancia con el patrimonio; ROA, con los activos. El margen indica qué parte de los ingresos queda como beneficio.',
   solvency: 'Relaciona los pasivos con el patrimonio contable y el beneficio antes de intereses e impuestos con los intereses anuales. Estos ratios son distintos del indicador Altman Z.',
   efficiency: 'La rotación relaciona los ingresos con los activos utilizados. Los días de inventario estiman cuánto tarda en venderse el inventario promedio; usan una convención anual de 365 días.',
+  growth: 'La variación anual compara ingresos de dos ejercicios. La tasa compuesta resume tres años entre cuatro cierres consecutivos; no es el retorno de la acción.',
 }
 
 export function PillarMetric({ metric }) {
@@ -55,8 +57,10 @@ export default function FinancialPillars() {
       </label>
       <p className="pillar-muted">Ejercicio: {data.fiscal_year || 'Sin datos'} · {data.period.start || 'Sin fecha inicial'} a {data.period.end || 'Sin fecha final'}</p>
       {!years.length && <p>No hay balances anuales importados para esta empresa.</p>}
-      {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
+      {data.pillars.length === 5 && <PillarRadar data={data} />}
+      {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" id={`pillar-${pillar.id}`} tabIndex={-1} key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
         <h3>{pillar.label}</h3><p className="pillar-muted">{CONCEPTS[pillar.id]}</p>
+        {pillar.score && <p className="pillar-note">Nota académica: {pillar.score.status === 'available' ? `${pillar.score.display_value} / 100` : 'No disponible'}</p>}
         {pillar.sector_reference?.status === 'unavailable' && <p className="pillar-muted">Referencia sectorial no disponible: {pillar.sector_reference.explanation}</p>}
         <div className="pillar-metrics">{pillar.metrics.map(metric => <PillarMetric key={metric.id} metric={metric} />)}</div>
         {!!pillar.history?.length && <div className="pillar-history"><table>
