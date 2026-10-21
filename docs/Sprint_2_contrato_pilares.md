@@ -1,6 +1,6 @@
-# Contrato propuesto para web y Android
+# Contrato implementado para web y Android
 
-Actualización del 20 de octubre de 2026. Un contrato es el acuerdo sobre qué solicita una pantalla y cómo responde el servidor. La ruta de pilares ya está implementada para Liquidez, Rentabilidad y Solvencia; Angel aún no ha confirmado el acuerdo ni su integración Android. La implementación sigue la propuesta de T65, con las precisiones que se indican a continuación.
+Actualización del 21 de octubre de 2026. La ruta de pilares entrega los cinco pilares, once indicadores, sus notas y el puntaje general cuando existe cobertura suficiente. Angel aún no ha confirmado el acuerdo ni su integración Android. La estructura sigue la propuesta de T65 y añade los campos descritos aquí.
 
 ## Conservar las rutas existentes
 
@@ -17,9 +17,9 @@ Requieren el token de acceso mediante `Authorization: Bearer …`. La web ya usa
 
 `GET /api/v1/companies/MSFT/pillars/?fiscal_year=2024`
 
-El servidor devuelve los cinco identificadores de pilares. Liquidez, Rentabilidad y Solvencia incluyen siete indicadores calculables. Eficiencia y Crecimiento siguen con `metrics: []` y `reason: not_implemented`; sus historias son del siguiente avance. Las notas y el puntaje general están no disponibles porque la normalización aún no está configurada. Un año es un ejercicio fiscal, no necesariamente de enero a diciembre. Un año solicitado sin datos no se cambia por otro.
+El servidor devuelve cinco pilares y once indicadores. Eficiencia incorpora rotación de activos y días de inventario; Crecimiento incorpora variación anual y tasa compuesta a tres años. Las notas usan `academic-pillar-scores-v1`, con las [reglas de conversión documentadas](Sprint_2_reglas_puntuacion.md). Sin cinco notas válidas de la misma versión, el puntaje es No disponible; no se publica un promedio parcial. Un año solicitado sin datos no se cambia por otro.
 
-Sin `fiscal_year` se usa el último ejercicio importado; `available_years` enumera los disponibles. Si no existe ninguno, el año y fechas son nulos. No es una cotización en tiempo real. El modelo de componentes se identifica como `annual-ratios-v1` y su estado indica que falta revisión del equipo. Ejemplo completo real: [MSFT FY2024](evidencias/sprint2_MSFT_pillars_2024.json).
+Sin `fiscal_year` se usa el último ejercicio importado; `available_years` enumera los disponibles. Si no existe ninguno, el año y fechas son nulos. No es una cotización en tiempo real. Las fórmulas se identifican como `annual-ratios-v2` y la metodología indica su revisión pendiente del equipo. Ejemplo completo vigente: [MSFT FY2024 día 3](evidencias/sprint2_MSFT_pillars_2024_dia3.json). Se conserva la respuesta del día 2 como evidencia histórica.
 
 | Campo | Contenido |
 |---|---|
@@ -32,6 +32,13 @@ Sin `fiscal_year` se usa el último ejercicio importado; `available_years` enume
 | `overall_score` | Puntaje general calculado con las cinco notas o valor nulo con motivo. |
 | `source` de cada componente | URL, etiqueta SEC, unidad, filing y fecha de publicación del dato. |
 | `history` cuando corresponda | Hasta tres ejercicios calculables de eficiencia, cada uno con sus fechas. |
+| `scoring_policy` | Versión académica, anclajes de conversión, reglas de agregación y pesos del puntaje. |
+
+Cada nota de pilar contiene `status`, `value`, `display_value`, `version`, `period`, `parts`, `missing_metrics` y `excluded_metrics`. Las partes muestran el valor original, sus anclajes y la nota derivada. El puntaje contiene `contributions`, con los cinco pesos del 20 %, y `missing_pillars` si falta cobertura. Los clientes usan `display_value` y no recalculan el resultado. Para dibujar el radar pueden convertir `value` a número, únicamente cuando la nota está disponible.
+
+El historial de Eficiencia está ordenado de más reciente a más antiguo, con hasta tres ejercicios existentes no posteriores al solicitado. Un año sin cierre previo puede mostrar métricas no disponibles en su fila; no se inventa el año ni se toman cifras posteriores. La tasa compuesta exige los cuatro cierres consecutivos, su misma moneda e ingresos disponibles en los cuatro.
+
+En la importación anual, `inventory_applicable` es opcional y admite nulo si se desconoce. Si vale `false`, se requiere `inventory_applicability_note` para documentar por qué no aplica. No se deduce ausencia de inventario a partir de un valor cero.
 
 El estado del pilar puede ser `available`, `partial` o `unavailable`, según la cobertura de sus métricas. El estado de cada métrica sigue la tabla siguiente. La referencia sectorial de Rentabilidad declara `insufficient_sector_sample`; no se inventa una media con una sola empresa.
 
@@ -64,7 +71,7 @@ Los errores de conexión y la espera de la pantalla se manejan aparte de esos es
 
 Este ejemplo describe una empresa sin componentes importados. No afirma que esos campos falten en el archivo SEC original de Microsoft. Cuando estén disponibles, `value` se entregará como texto decimal sin redondear, por ejemplo `"2"`, y `display_value` como `"2,00"`. La unidad se mostrará por separado. Los clientes no calcularán fórmulas ni convertirán `null` a cero.
 
-Otros motivos implementados: `zero_denominator`, `invalid_denominator`, `nonpositive_equity`, `insufficient_history`, `invalid_components`, `unconfigured_scoring`. `explanation` ofrece el mensaje legible; `formula_display` y el `label` de cada componente permiten explicarlo en español. `value` conserva el resultado decimal con precisión de cálculo y `display_value` aplica dos decimales HALF_UP con coma. Los colores usan `thresholds`, con versión, límites, dirección y explicación. No son notas de 0 a 100.
+Motivos implementados para indicadores: `zero_denominator`, `invalid_denominator`, `nonpositive_equity`, `insufficient_history`, `invalid_components`, `missing_components` e `inventory_not_applicable`. Para notas: `missing_metrics`; para puntaje: `incomplete_pillars`. `explanation` ofrece el mensaje legible; `formula_display` y el `label` de cada componente permiten explicarlo en español. `value` conserva el resultado decimal con precisión de cálculo y `display_value` aplica dos decimales HALF_UP con coma. Los colores de ratios usan `thresholds`; sus tramos son distintos de las notas numéricas del radar.
 
 ## Errores y conservación de compatibilidad
 
@@ -76,4 +83,4 @@ Otros motivos implementados: `zero_denominator`, `invalid_denominator`, `nonposi
 
 ## Pendientes del acuerdo con Angel
 
-Revisar nombres de campos, estados y formato decimal implementados; conectar Android y comparar sus siete indicadores con la respuesta real de MSFT. Esta implementación fue autorizada como avance por criterio de Diego; no se registra una aceptación de Angel. Las notas y ponderaciones siguen pendientes.
+Revisar nombres de campos y convención de puntuación; conectar Android y comparar sus once indicadores, cinco notas y puntaje con la respuesta real de MSFT. La implementación se realizó con autorización de Diego para continuar por criterio; no se registra una aceptación de Angel. Las tareas móviles del día 3 son T15, T19 y T23.
