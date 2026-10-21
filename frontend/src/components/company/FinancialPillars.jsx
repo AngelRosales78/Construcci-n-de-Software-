@@ -1,5 +1,6 @@
 import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboardViewModel'
 import PillarRadar from './PillarRadar'
+import OverallScore from './OverallScore'
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
 const BANDS = { low: 'Tramo de atención', middle: 'Tramo intermedio', high: 'Tramo favorable' }
@@ -57,6 +58,7 @@ export default function FinancialPillars() {
       </label>
       <p className="pillar-muted">Ejercicio: {data.fiscal_year || 'Sin datos'} · {data.period.start || 'Sin fecha inicial'} a {data.period.end || 'Sin fecha final'}</p>
       {!years.length && <p>No hay balances anuales importados para esta empresa.</p>}
+      {data.overall_score && <OverallScore score={data.overall_score} fiscalYear={data.fiscal_year} />}
       {data.pillars.length === 5 && <PillarRadar data={data} />}
       {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" id={`pillar-${pillar.id}`} tabIndex={-1} key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
         <h3>{pillar.label}</h3><p className="pillar-muted">{CONCEPTS[pillar.id]}</p>
