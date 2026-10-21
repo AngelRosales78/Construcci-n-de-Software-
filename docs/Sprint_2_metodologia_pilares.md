@@ -1,8 +1,8 @@
 # Fórmulas propuestas para los cinco pilares
 
-Preparación de T65. Versión `pilares-propuesta-v1`. Son decisiones de implementación propuestas para revisar con Angel antes de cerrar el contrato; no se afirma aprobación ni implementación.
+Actualizada el 21 de octubre de 2026. Las fórmulas de los cinco pilares están implementadas como `annual-ratios-v2`. La versión anterior `annual-ratios-v1` cubría los tres primeros pilares y se conserva en el historial. El avance sigue el encargo de continuar por criterio de Diego; la revisión de Angel y la aceptación académica no se dan por realizadas.
 
-Actualización del 20 de octubre: las fórmulas de Liquidez, Rentabilidad y Solvencia se implementaron como `annual-ratios-v1`, siguiendo esta propuesta y el encargo de continuar por criterio de Diego. El acuerdo de Angel sigue pendiente. Eficiencia, Crecimiento y notas del radar aún no están implementados.
+Las notas y el puntaje ya están implementados con la convención explícita [academic-pillar-scores-v1](Sprint_2_reglas_puntuacion.md). No se atribuyen sus puntos de conversión a una fuente externa ni a un acuerdo previo del equipo.
 
 ## Umbrales de visualización implementados
 
@@ -65,13 +65,11 @@ Se adopta una convención anual de 365 días, también en años bisiestos, y se 
 | Variación anual de ingresos | (Ingresos del año / ingresos del año anterior − 1) × 100 | Dos ejercicios consecutivos; ingresos anteriores positivos. |
 | Crecimiento compuesto a tres años | ((Ingresos finales / ingresos de tres años antes) elevado a 1/3 − 1) × 100 | Cuatro cierres anuales consecutivos; ingreso inicial positivo y final no negativo. |
 
-Las fórmulas de crecimiento son la convención propuesta del proyecto. No confundir crecimiento de ingresos con rentabilidad de una acción. El inventario local confirma ingresos FY2021, FY2022, FY2023 y FY2024; falta llevarlos a almacenamiento anual.
+Las fórmulas de crecimiento son la convención implementada del proyecto. No confundir crecimiento de ingresos con rentabilidad de una acción. Los componentes FY2020 a FY2024 ya se pueden importar al almacenamiento anual. La tasa compuesta de FY2024 requiere FY2021, FY2022, FY2023 y FY2024, con fechas consecutivas y moneda compatible; no basta con disponer solo del primer y último dato.
 
 ## Notas del radar y puntaje general HU04_05
 
-Las fórmulas anteriores producen ratios; no producen automáticamente una nota de 0 a 100. Antes de implementar el puntaje se debe registrar una tabla versionada de conversión para cada indicador y cómo se combinan en cada pilar.
-
-Propuesta inicial para discutir: cinco pilares con igual peso del 20 %; puntaje = suma de nota de cada pilar × 0,20. Esto queda condicionado a acordar las reglas de normalización y los umbrales, que todavía están pendientes. No se adoptarán umbrales universales sin explicar su alcance.
+Las fórmulas anteriores producen ratios. La tabla de conversión, las medias por pilar y sus límites están documentados en [Reglas de puntuación](Sprint_2_reglas_puntuacion.md). Cada pilar tiene peso del 20 % en el puntaje general. La convención está implementada y versionada, pendiente de revisión del equipo; no se presenta como un modelo validado o un óptimo universal.
 
 Sin las cinco notas válidas, mostrar No disponible con el pilar o regla que falta. Nunca reemplazar este puntaje con Altman Z ni pintar un valor faltante como cero en el radar.
 
