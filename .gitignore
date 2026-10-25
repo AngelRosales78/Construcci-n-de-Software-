@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+.gradle/
+.idea/
+**/build/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+frontend/dist/
+android/local.properties
+*.sqlite3
+*.log

@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sp500auth.ui.navigation.NavRoutes
 
+// Paleta de Colores
 private val DarkBg = Color(0xFF0D1117)
 private val CardBg = Color(0xFF161B22)
 private val InnerBg = Color(0xFF21262D)
@@ -46,8 +48,11 @@ data class StockAsset(
     val name: String,
     val category: String,
     val marketCap: String,
+    val marketCapValue: Double, // Valor numérico para ordenar por Capitalización
     val price: String,
+    val priceValue: Double,     // Valor numérico para ordenar por Precio
     val change: String,
+    val changeValue: Double,    // Valor numérico para ordenar por % de cambio
     val isPositive: Boolean,
     val weighting: String,
     val sparklinePoints: List<Float>
@@ -60,14 +65,99 @@ fun DashboardScreen(
     viewModel: AuthViewModel? = null
 ) {
     var selectedCategory by remember { mutableStateOf("Todos") }
+    var sortOption by remember { mutableStateOf("Cap.") }
+    var isSortMenuExpanded by remember { mutableStateOf(false) }
 
-    val stockList = listOf(
-        StockAsset("AAPL", "Apple Inc.", "Tecnología", "$2.92T", "$189.45", "+1.85%", true, "7.12%", listOf(10f, 15f, 12f, 18f, 25f, 20f, 28f)),
-        StockAsset("MSFT", "Microsoft Corporation", "Tecnología", "$3.14T", "$422.18", "+0.92%", true, "6.85%", listOf(15f, 14f, 16f, 12f, 10f, 14f, 18f)),
-        StockAsset("NVDA", "NVIDIA Corporation", "Semiconductores", "$2.15T", "$875.28", "+3.42%", true, "5.04%", listOf(5f, 10f, 15f, 20f, 22f, 28f, 32f)),
-        StockAsset("JPM", "JPMorgan Chase & Co.", "Finanzas", "$570B", "$198.50", "-0.45%", false, "1.28%", listOf(25f, 22f, 18f, 15f, 20f, 16f, 14f)),
-        StockAsset("JNJ", "Johnson & Johnson", "Salud", "$375B", "$156.28", "+0.25%", true, "0.94%", listOf(12f, 13f, 12f, 14f, 13f, 15f, 15f))
-    )
+    val masterStockList = remember {
+        listOf(
+            StockAsset(
+                symbol = "AAPL",
+                name = "Apple Inc.",
+                category = "Tecnología",
+                marketCap = "$2.92T",
+                marketCapValue = 2920.0,
+                price = "$189.45",
+                priceValue = 189.45,
+                change = "+1.85%",
+                changeValue = 1.85,
+                isPositive = true,
+                weighting = "7.12%",
+                sparklinePoints = listOf(10f, 15f, 12f, 18f, 25f, 20f, 28f)
+            ),
+            StockAsset(
+                symbol = "MSFT",
+                name = "Microsoft Corporation",
+                category = "Tecnología",
+                marketCap = "$3.14T",
+                marketCapValue = 3140.0,
+                price = "$422.18",
+                priceValue = 422.18,
+                change = "+0.92%",
+                changeValue = 0.92,
+                isPositive = true,
+                weighting = "6.85%",
+                sparklinePoints = listOf(15f, 14f, 16f, 12f, 10f, 14f, 18f)
+            ),
+            StockAsset(
+                symbol = "NVDA",
+                name = "NVIDIA Corporation",
+                category = "Semiconductores",
+                marketCap = "$2.15T",
+                marketCapValue = 2150.0,
+                price = "$875.28",
+                priceValue = 875.28,
+                change = "+3.42%",
+                changeValue = 3.42,
+                isPositive = true,
+                weighting = "5.04%",
+                sparklinePoints = listOf(5f, 10f, 15f, 20f, 22f, 28f, 32f)
+            ),
+            StockAsset(
+                symbol = "JPM",
+                name = "JPMorgan Chase & Co.",
+                category = "Finanzas",
+                marketCap = "$570B",
+                marketCapValue = 570.0,
+                price = "$198.50",
+                priceValue = 198.50,
+                change = "-0.45%",
+                changeValue = -0.45,
+                isPositive = false,
+                weighting = "1.28%",
+                sparklinePoints = listOf(25f, 22f, 18f, 15f, 20f, 16f, 14f)
+            ),
+            StockAsset(
+                symbol = "JNJ",
+                name = "Johnson & Johnson",
+                category = "Salud",
+                marketCap = "$375B",
+                marketCapValue = 375.0,
+                price = "$156.28",
+                priceValue = 156.28,
+                change = "+0.25%",
+                changeValue = 0.25,
+                isPositive = true,
+                weighting = "0.94%",
+                sparklinePoints = listOf(12f, 13f, 12f, 14f, 13f, 15f, 15f)
+            )
+        )
+    }
+
+    // Filtrado y Ordenamiento Dinámico
+    val displayedStockList = remember(selectedCategory, sortOption) {
+        val filtered = if (selectedCategory == "Todos") {
+            masterStockList
+        } else {
+            masterStockList.filter { it.category.equals(selectedCategory, ignoreCase = true) }
+        }
+
+        when (sortOption) {
+            "Precio" -> filtered.sortedByDescending { it.priceValue }
+            "Variación" -> filtered.sortedByDescending { it.changeValue }
+            "Nombre" -> filtered.sortedBy { it.name }
+            else -> filtered.sortedByDescending { it.marketCapValue } // "Cap." por defecto
+        }
+    }
 
     Scaffold(
         containerColor = DarkBg,
@@ -124,6 +214,7 @@ fun DashboardScreen(
         ) {
             item { Spacer(modifier = Modifier.height(8.dp)) }
 
+            // Encabezado
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -175,9 +266,11 @@ fun DashboardScreen(
                 }
             }
 
+            // Chips de Categorías
             item {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    listOf("Todos", "Tecnología", "Salud").forEach { category ->
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    val categories = listOf("Todos", "Tecnología", "Salud", "Semiconductores", "Finanzas")
+                    items(categories) { category ->
                         val isSelected = category == selectedCategory
                         Box(
                             modifier = Modifier
@@ -198,6 +291,7 @@ fun DashboardScreen(
                 }
             }
 
+            // Banner S&P 500
             item {
                 Box(
                     modifier = Modifier
@@ -242,6 +336,7 @@ fun DashboardScreen(
                 }
             }
 
+            // Subtítulo y Menú Desplegable de Ordenamiento
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -266,14 +361,52 @@ fun DashboardScreen(
                                 .background(InnerBg)
                                 .padding(horizontal = 10.dp, vertical = 6.dp)
                         ) {
-                            Text("5 activos", color = TextMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            Text("${displayedStockList.size} activos", color = TextMuted, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                         }
-                        Text("Orden: Cap. ▾", color = PrimaryGreen, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+
+                        Box {
+                            Row(
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .background(InnerBg)
+                                    .clickable { isSortMenuExpanded = true }
+                                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text("Orden: $sortOption ▾", color = PrimaryGreen, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                            }
+
+                            DropdownMenu(
+                                expanded = isSortMenuExpanded,
+                                onDismissRequest = { isSortMenuExpanded = false },
+                                modifier = Modifier
+                                    .background(CardBg)
+                                    .border(1.dp, BorderDark, RoundedCornerShape(8.dp))
+                            ) {
+                                listOf("Cap.", "Precio", "Variación", "Nombre").forEach { option ->
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = option,
+                                                color = if (sortOption == option) PrimaryGreen else TextWhite,
+                                                fontWeight = if (sortOption == option) FontWeight.Bold else FontWeight.Normal,
+                                                fontSize = 12.sp
+                                            )
+                                        },
+                                        onClick = {
+                                            sortOption = option
+                                            isSortMenuExpanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            items(stockList) { stock ->
+            // Lista Filtrada
+            items(displayedStockList) { stock ->
                 StockCard(stock = stock, navController = navController)
             }
 
