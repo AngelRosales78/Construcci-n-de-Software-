@@ -1,0 +1,156 @@
+{
+  "balance_as_of": "2024-06-30",
+  "price_dates": [
+    "2021-10-13",
+    "2026-10-12"
+  ],
+  "price_count": 1254,
+  "beta_observations": 500,
+  "sec_facts_used": {
+    "CommonStockSharesOutstanding@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 7434000000,
+      "accn": "0001193125-26-323660",
+      "fy": 2026,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "frame": "CY2024Q2I"
+    },
+    "Assets@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 512163000000,
+      "accn": "0000950170-25-100235",
+      "fy": 2025,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2025-07-30",
+      "frame": "CY2024Q2I"
+    },
+    "StockholdersEquity@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 268477000000,
+      "accn": "0001193125-26-323660",
+      "fy": 2026,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "frame": "CY2024Q2I"
+    },
+    "StockholdersEquity@2023-06-30": {
+      "end": "2023-06-30",
+      "val": 206223000000,
+      "accn": "0000950170-25-100235",
+      "fy": 2025,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2025-07-30",
+      "frame": "CY2023Q2I"
+    },
+    "EarningsPerShareDiluted@2024-06-30": {
+      "start": "2023-07-01",
+      "end": "2024-06-30",
+      "val": 11.8,
+      "accn": "0001193125-26-323660",
+      "fy": 2026,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "frame": "CY2024"
+    },
+    "NetIncomeLoss@2024-06-30": {
+      "start": "2023-07-01",
+      "end": "2024-06-30",
+      "val": 88136000000,
+      "accn": "0001193125-26-323660",
+      "fy": 2026,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "frame": "CY2024"
+    },
+    "AssetsCurrent@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 159734000000,
+      "accn": "0000950170-25-100235",
+      "fy": 2025,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2025-07-30",
+      "frame": "CY2024Q2I"
+    },
+    "LiabilitiesCurrent@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 125286000000,
+      "accn": "0000950170-25-100235",
+      "fy": 2025,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2025-07-30",
+      "frame": "CY2024Q2I"
+    },
+    "RetainedEarningsAccumulatedDeficit@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 173144000000,
+      "accn": "0000950170-25-100235",
+      "fy": 2025,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2025-07-30",
+      "frame": "CY2024Q2I"
+    },
+    "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest@2024-06-30": {
+      "start": "2023-07-01",
+      "end": "2024-06-30",
+      "val": 107787000000,
+      "accn": "0001193125-26-323660",
+      "fy": 2026,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "frame": "CY2024"
+    },
+    "InterestExpense@2024-06-30": {
+      "start": "2023-07-01",
+      "end": "2024-06-30",
+      "val": 2935000000,
+      "accn": "0000950170-24-087843",
+      "fy": 2024,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2024-07-30"
+    },
+    "Liabilities@2024-06-30": {
+      "end": "2024-06-30",
+      "val": 243686000000,
+      "accn": "0000950170-25-100235",
+      "fy": 2025,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2025-07-30",
+      "frame": "CY2024Q2I"
+    },
+    "RevenueFromContractWithCustomerExcludingAssessedTax@2024-06-30": {
+      "start": "2023-07-01",
+      "end": "2024-06-30",
+      "val": 245122000000,
+      "accn": "0001193125-26-323660",
+      "fy": 2026,
+      "fp": "FY",
+      "form": "10-K",
+      "filed": "2026-07-29",
+      "frame": "CY2024"
+    }
+  },
+  "sources": {
+    "facts": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+    "prices": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=5y&interval=1d&events=div%2Csplits",
+    "benchmark": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5y&interval=1d&events=div%2Csplits"
+  },
+  "raw_sha256": {
+    "MSFT_sec.json": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+    "MSFT_precios.json": "dea26dc8cdcc55c157ad7ee4e2f89244f350560823d86e30751ff134eb60e71b",
+    "SPY_precios.json": "14478cd1111d94175213a452d60bc5c4e49fc09c0d975cee56b9cbe5846710ce"
+  },
+  "methodology": "Balance anual FY2024. EBIT = beneficio antes de impuestos + InterestExpense. Capitalización = acciones al cierre fiscal * cierre no ajustado anterior al 30/06. PER = cierre/EPS diluido. ROE = beneficio/equidad media de 2023 y 2024. Beta = covarianza de retornos diarios ajustados MSFT/SPY dividida por varianza SPY en los dos años previos al balance. Dividend Yield = dividendos de los 365 días previos/cierre. No son indicadores actuales ni una cobertura financiera de todo el índice."
+}

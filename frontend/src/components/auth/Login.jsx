@@ -1,58 +1,26 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { loginSchema } from '../utils/validationSchemas'
-import { authService } from '../services/authService'
+import { useLoginViewModel } from '../../viewmodels/useLoginViewModel'
+import { Link } from 'react-router-dom'
+import AuthHeader from './AuthHeader'
+
 
 export default function Login() {
-  const navigate = useNavigate()
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(false)
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(loginSchema),
-    defaultValues: { username: '', password: '' },
-  })
-
-  const onSubmit = async (data) => {
-    setError('')
-    setLoading(true)
-    try {
-      await authService.login(data)
-      navigate('/dashboard')
-    } catch (err) {
-      setError(
-        err.response?.data?.error || 'Invalid credentials. Please try again.'
-      )
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  const { register, handleSubmit, errors, isSubmitting, error, loading, onSubmit } = useLoginViewModel()
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-header">
-          <h1>S&amp;P 500 Platform</h1>
-          <p>Financial Analysis &amp; AI Simulation</p>
-        </div>
+        <AuthHeader mode="login" />
 
         {error && <div className="auth-error">{error}</div>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
-            <label htmlFor="username">Username or Email</label>
+            <label htmlFor="username">Usuario</label>
             <input
               id="username"
               type="text"
               autoComplete="username"
               {...register('username')}
-              placeholder="Enter username or email"
+              placeholder="Tu nombre de usuario"
             />
             {errors.username && (
               <span className="error-text">{errors.username.message}</span>
@@ -60,13 +28,13 @@ export default function Login() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Contraseña</label>
             <input
               id="password"
               type="password"
               autoComplete="current-password"
               {...register('password')}
-              placeholder="Enter your password"
+              placeholder="Tu contraseña"
             />
             {errors.password && (
               <span className="error-text">{errors.password.message}</span>
@@ -74,14 +42,14 @@ export default function Login() {
           </div>
 
           <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
         </form>
 
         <div className="auth-footer">
-          <Link to="/forgot-password">Forgot password?</Link>
+          <Link to="/forgot-password">¿Olvidaste tu contraseña?</Link>
           <span> | </span>
-          <Link to="/register">Create an account</Link>
+          <Link to="/register">Crear cuenta</Link>
         </div>
       </div>
     </div>

@@ -1,0 +1,49 @@
+{
+  "recorded_at": "2026-10-13T03:50:36.822Z",
+  "passed": true,
+  "checks": [
+    {
+      "device": "escritorio",
+      "width": 1440,
+      "route": "search",
+      "horizontal_overflow": false,
+      "screenshot": "interfaz_escritorio_search.png"
+    },
+    {
+      "device": "escritorio",
+      "width": 1440,
+      "route": "company/MSFT",
+      "horizontal_overflow": false,
+      "screenshot": "interfaz_escritorio_company_MSFT.png"
+    },
+    {
+      "device": "escritorio",
+      "width": 1440,
+      "route": "dashboard",
+      "horizontal_overflow": false,
+      "screenshot": "interfaz_escritorio_dashboard.png"
+    },
+    {
+      "device": "movil",
+      "width": 390,
+      "route": "search",
+      "horizontal_overflow": false,
+      "screenshot": "interfaz_movil_search.png"
+    },
+    {
+      "device": "movil",
+      "width": 390,
+      "route": "company/MSFT",
+      "horizontal_overflow": false,
+      "screenshot": "interfaz_movil_company_MSFT.png"
+    },
+    {
+      "device": "movil",
+      "width": 390,
+      "route": "dashboard",
+      "horizontal_overflow": false,
+      "screenshot": "interfaz_movil_dashboard.png"
+    }
+  ],
+  "page_errors": []
+}

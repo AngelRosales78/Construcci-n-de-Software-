@@ -9,7 +9,7 @@ from django.utils.deprecation import MiddlewareMixin
 from django.http import JsonResponse
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
-from .redis_utils import is_token_blacklisted
+from .redis_utils import is_token_blacklisted, get_redis_connection
 
 
 class RedisTokenBlacklistMiddleware(MiddlewareMixin):
@@ -47,7 +47,15 @@ class RedisTokenBlacklistMiddleware(MiddlewareMixin):
                 return None
 
         try:
-            if is_token_blacklisted(token_string):
+            session_revoked = False
+            try:
+                token = AccessToken(token_string)
+                if token.get('sid'):
+                    session_revoked = bool(get_redis_connection().exists(
+                        f"blacklist:session:{token['sid']}"))
+            except (TokenError, InvalidToken):
+                pass
+            if is_token_blacklisted(token_string) or session_revoked:
                 return JsonResponse(
                     {'error': 'Token has been blacklisted. Please login again.',
                      'code': 'token_blacklisted'},

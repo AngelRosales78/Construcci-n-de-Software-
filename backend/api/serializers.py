@@ -7,8 +7,8 @@ schema validation in Python) for all auth endpoints.
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
-from django.utils.translation import gettext as _
-from .models import User
+from django.utils.translation import gettext_lazy as _
+from .models import User, Company, SearchHistory
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -67,55 +67,34 @@ class RegisterSerializer(serializers.ModelSerializer):
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Extends TokenObtainPairSerializer to include user data in login response (HU01_02).
-    Allows login with either username or email.
     """
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
+        token['sid'] = token['jti']
         return token
 
     def validate(self, attrs):
-        username = attrs.get('username', '')
-        password = attrs.get('password', '')
-
-        # Try to find user by username or email
-        try:
-            if '@' in username:
-                user = User.objects.get(email=username)
-            else:
-                user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise serializers.ValidationError(
-                {'non_field_errors': _('Invalid credentials.')},
-                code='authorization',
-            )
-
-        # Set the user and validate password
-        if not user.check_password(password):
-            raise serializers.ValidationError(
-                {'non_field_errors': _('Invalid credentials.')},
-                code='authorization',
-            )
-
-        # Generate tokens using the parent serializer's token generation
-        refresh = self.get_token(user)
-
-        data = {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name': user.last_name,
-                'user_type': user.user_type,
-                'is_verified': user.is_verified,
-            },
-            'message': _('Login successful.')
+        data = super().validate(attrs)
+        data['user'] = {
+            'id': self.user.id,
+            'username': self.user.username,
+            'email': self.user.email,
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name,
+            'user_type': self.user.user_type,
+            'is_verified': self.user.is_verified,
+            'role': 'admin' if self.user.is_staff or self.user.is_superuser else 'user',
         }
-
+        data['message'] = _('Login successful.')
         return data
+
+    def validate_username(self, value):
+        if len(value) < 3:
+            raise serializers.ValidationError(
+                _('Username must be at least 3 characters.')
+            )
+        return value
 
 
 class ChangePasswordSerializer(serializers.Serializer):
@@ -161,8 +140,36 @@ class UserProfileSerializer(serializers.ModelSerializer):
     """
     Serializer for user profile retrieval and update.
     """
+    role = serializers.SerializerMethodField()
+
+    def get_role(self, user):
+        return 'admin' if user.is_staff or user.is_superuser else 'user'
+
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name',
-                  'phone_number', 'user_type', 'is_verified', 'created_at']
+                  'phone_number', 'user_type', 'is_verified', 'created_at', 'role']
         read_only_fields = ['id', 'is_verified', 'created_at']
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    """
+    Serializer for S&P 500 company data.
+    """
+    sector_display = serializers.CharField(source='get_sector_display', read_only=True)
+
+    class Meta:
+        model = Company
+        fields = [
+            'id', 'ticker', 'name', 'sector', 'sector_display', 'logo_url',
+            'market_cap', 'per', 'roe',
+        ]
+
+
+class SearchHistorySerializer(serializers.ModelSerializer):
+    """
+    Serializer for user search history.
+    """
+    class Meta:
+        model = SearchHistory
+        fields = ['id', 'query', 'created_at']

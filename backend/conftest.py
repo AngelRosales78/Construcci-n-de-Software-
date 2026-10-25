@@ -1,12 +1,21 @@
+"""
+Pytest configuration for the S&P 500 platform.
+"""
 import os
 
 import pytest
-
-# No import Django at module level
+from django.test import TestCase
 
 
 @pytest.fixture(autouse=True)
-def enable_db_access_for_all_tests(django_db_setup, django_db_blocker):
+def enable_db_access_for_all_tests(db):
     """Enable database access for all tests by default."""
-    with django_db_blocker.unblock():
-        pass
+    from django.core.cache import caches
+    caches['search_results'].clear()
+
+
+@pytest.fixture
+def settings():
+    """Allow overriding Django settings in tests."""
+    from django.conf import settings
+    return settings

@@ -7,6 +7,7 @@ management (HU01_05).
 """
 import redis
 from django.conf import settings
+from django.db import models
 import json
 import logging
 
@@ -53,7 +54,8 @@ def blacklist_token(token):
         try:
             payload = jwt_decode(token, options={"verify_signature": False})
             exp = payload.get('exp', 0)
-            ttl = max(int(exp - datetime.datetime.fromtimestamp(exp).timestamp()), 0) + 60
+            import time
+            ttl = max(int(exp - time.time()), 0) + 60
         except Exception:
             ttl = 86400  # Default 24 hours
 
@@ -106,6 +108,19 @@ def blacklist_jwt_token(token):
         return False
 
 
+def blacklist_session(token):
+    """Revoke access tokens issued before and after refresh rotation in this session."""
+    import time
+    sid = token.get('sid')
+    if sid:
+        from rest_framework_simplejwt.settings import api_settings
+        # Rotation extends expiry; an earlier refresh must revoke later tokens too.
+        lifetime = int(api_settings.REFRESH_TOKEN_LIFETIME.total_seconds())
+        get_redis_connection().setex(
+            f'blacklist:session:{sid}', max(int(token['exp'] - time.time()), lifetime, 1) + 60, '1'
+        )
+
+
 def refresh_token_metadata(old_refresh_token, new_refresh_token):
     """
     Transfers metadata when rotating refresh tokens.
@@ -127,3 +142,29 @@ def refresh_token_metadata(old_refresh_token, new_refresh_token):
     except Exception as e:
         logger.error(f"Error refreshing token metadata: {e}")
         return False
+
+
+def get_autocomplete_suggestions(prefix, limit=10):
+    """
+    Get autocomplete suggestions for company search using Redis cache.
+    """
+    try:
+        r = get_redis_connection()
+        cache_key = f"autocomplete:{prefix.lower()}"
+
+        cached = r.get(cache_key)
+        if cached:
+            return json.loads(cached)
+
+        from .models import Company
+        companies = Company.objects.filter(
+            models.Q(name__icontains=prefix) | models.Q(ticker__icontains=prefix)
+        ).order_by('-market_cap')[:limit]
+
+        suggestions = [{'ticker': c.ticker, 'name': c.name} for c in companies]
+
+        r.setex(cache_key, 300, json.dumps(suggestions))
+        return suggestions
+    except Exception as e:
+        logger.error(f"Error getting autocomplete suggestions: {e}")
+        return []

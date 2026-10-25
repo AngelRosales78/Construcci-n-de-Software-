@@ -1,0 +1,68 @@
+{
+  "date": "2026-10-21",
+  "branch": "diego/sprint2-dia3-radar-puntaje",
+  "scope": "Servidor y web de Diego; no acredita Android ni aceptación académica del puntaje",
+  "remote_review": {
+    "origin/Rosales": "fe85825",
+    "last_commit_date": "2026-10-13",
+    "observation": "Sin commits remotos nuevos al comenzar; trabajo local de Angel desconocido"
+  },
+  "backend": {
+    "passed": 274,
+    "skipped": 0,
+    "new_day3_tests": 47,
+    "database": "PostgreSQL aislado y Redis real; nuevas pruebas también comprobadas con SQLite temporal"
+  },
+  "web": {
+    "passed": 61,
+    "new_day3_tests": 7,
+    "build": "passed",
+    "warning": "Aviso previo sobre tamaño del paquete"
+  },
+  "browser": {
+    "result": "passed",
+    "steps": [
+      "Eficiencia, Crecimiento, cinco notas y puntaje FY2024 coinciden con el cÃ¡lculo independiente y la API",
+      "Serie de tres ejercicios y cuatro fuentes anuales del crecimiento compuesto visibles",
+      "Radar real con polÃ­gono de cinco ejes y enlace desde el eje al detalle del pilar",
+      "FY2022 sin cuatro cierres no publica puntaje ni polÃ­gono; identifica Crecimiento pendiente",
+      "Web a 1440 y 390 pÃ­xeles conserva radar, tablas y puntaje sin desbordamiento horizontal",
+      "Empresa sin datos muestra once indicadores y puntaje no disponibles, sin cifras heredadas de MSFT",
+      "Fallo temporal y reintento recuperan el resultado; consulta sin sesiÃ³n rechazada"
+    ],
+    "javascriptErrors": [],
+    "expectedMetrics": {
+      "asset_turnover": "0,53",
+      "inventory_days": "9,22",
+      "revenue_growth": "15,67",
+      "revenue_cagr_3y": "13,40"
+    },
+    "expectedNotes": {
+      "liquidity": "81,87",
+      "profitability": "100,00",
+      "solvency": "88,65",
+      "efficiency": "73,96",
+      "growth": "81,78"
+    },
+    "expectedOverall": "85,25",
+    "scope": "Servidor y web locales; no acredita Android ni aceptaciÃ³n de metodologÃ­a por el profesor"
+  },
+  "previous_day_browser": {
+    "passed_scenarios": 6,
+    "javascript_errors": 0
+  },
+  "api_example_sha256": "dfb2ad0d94cffe8e33de8d7621bff4adbd80bf6e776bb4baa41532699bc3e526",
+  "migrations_check": "No changes detected",
+  "methodology": {
+    "ratios_version": "annual-ratios-v2",
+    "scoring_version": "academic-pillar-scores-v1",
+    "status": "Convención académica implementada, pendiente de revisión del equipo",
+    "overall_weights": "20 % por pilar, cinco notas requeridas"
+  },
+  "pending": [
+    "Android T15 T19 T23 y comparación conjunta",
+    "Revisión por Angel de metodología y contrato",
+    "Simulaciones épica 6",
+    "Proveedor e historias IA épica 7"
+  ]
+}

@@ -1,0 +1,20 @@
+const path = require('node:path')
+const fs = require('node:fs')
+const repo = path.resolve(__dirname, '..')
+const { chromium } = require(require.resolve('playwright', { paths: [path.join(repo, 'frontend')] }))
+;(async () => {
+ const data = JSON.parse(fs.readFileSync(process.env.PRESENTATION_ACCESS_FILE, 'utf8'))
+ const context = await chromium.launchPersistentContext(process.env.PRESENTATION_PROFILE, {
+   executablePath: 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe', headless: false,
+ })
+ const page = context.pages()[0] || await context.newPage()
+ await page.goto('http://127.0.0.1:55173/login')
+ await page.locator('#username').fill(data.username)
+ await page.locator('#password').fill(data.password)
+ await page.getByRole('button', {name:'Iniciar sesión', exact:true}).click()
+ await page.waitForURL('**/dashboard')
+ await page.getByRole('button', {name:'Buscar empresas y consultar fichas'}).click()
+ await page.getByText('Microsoft', { exact: true }).waitFor()
+ console.log('Demo abierta con inicio de sesion real y datos importados.')
+ await context.waitForEvent('close', { timeout: 0 })
+})().catch(error => { console.error(error.message); process.exitCode = 1 })

@@ -1,0 +1,593 @@
+{
+  "schema_version": "pillars-v1",
+  "methodology_version": "annual-ratios-v1",
+  "methodology_status": "implementation_pending_team_review",
+  "ticker": "MSFT",
+  "fiscal_year": 2024,
+  "period": {
+    "start": "2023-07-01",
+    "end": "2024-06-30"
+  },
+  "currency": "USD",
+  "available_years": [
+    2024,
+    2023,
+    2022,
+    2021,
+    2020
+  ],
+  "pillars": [
+    {
+      "id": "liquidity",
+      "label": "Liquidez",
+      "status": "available",
+      "reason": null,
+      "metrics": [
+        {
+          "id": "current_ratio",
+          "label": "Liquidez corriente",
+          "unit": "times",
+          "formula": "current_assets / current_liabilities",
+          "formula_display": "Activos corrientes / Pasivos corrientes",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "current_assets",
+              "label": "Activos corrientes",
+              "value": "159734000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "AssetsCurrent",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "current_liabilities",
+              "label": "Pasivos corrientes",
+              "value": "125286000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "LiabilitiesCurrent",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": {
+            "lower": "1",
+            "upper": "2",
+            "direction": "higher",
+            "version": "academic-thresholds-v1",
+            "band": "middle",
+            "explanation": "Reglas de visualización académica de esta versión; no son un óptimo universal ni una referencia sectorial. Consulte los límites y la fórmula."
+          },
+          "status": "available",
+          "value": "1.274954903181520680682598215283431508708",
+          "display_value": "1,27",
+          "reason": null
+        },
+        {
+          "id": "quick_ratio",
+          "label": "Prueba ácida",
+          "unit": "times",
+          "formula": "(cash + short_term_investments + receivables) / current_liabilities",
+          "formula_display": "(Efectivo + Inversiones a corto plazo + Cuentas por cobrar) / Pasivos corrientes",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "cash",
+              "label": "Efectivo",
+              "value": "18315000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "CashAndCashEquivalentsAtCarryingValue",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "short_term_investments",
+              "label": "Inversiones a corto plazo",
+              "value": "57228000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "ShortTermInvestments",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "receivables",
+              "label": "Cuentas por cobrar",
+              "value": "56924000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "AccountsReceivableNetCurrent",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "current_liabilities",
+              "label": "Pasivos corrientes",
+              "value": "125286000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "LiabilitiesCurrent",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": {
+            "lower": "0.5",
+            "upper": "1",
+            "direction": "higher",
+            "version": "academic-thresholds-v1",
+            "band": "high",
+            "explanation": "Reglas de visualización académica de esta versión; no son un óptimo universal ni una referencia sectorial. Consulte los límites y la fórmula."
+          },
+          "status": "available",
+          "value": "1.057316859026547259869418769854572737576",
+          "display_value": "1,06",
+          "reason": null
+        }
+      ],
+      "score": {
+        "status": "unavailable",
+        "value": null,
+        "display_value": "No disponible",
+        "reason": "unconfigured_scoring",
+        "explanation": "Las notas y ponderaciones del puntaje aún no están configuradas."
+      }
+    },
+    {
+      "id": "profitability",
+      "label": "Rentabilidad",
+      "status": "available",
+      "reason": null,
+      "metrics": [
+        {
+          "id": "roe",
+          "label": "ROE",
+          "unit": "percent",
+          "formula": "net_income / ((book_equity + previous.book_equity) / 2) * 100",
+          "formula_display": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "net_income",
+              "label": "Beneficio neto",
+              "value": "88136000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "NetIncomeLoss",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "book_equity",
+              "label": "Patrimonio contable",
+              "value": "268477000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "StockholdersEquity",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "previous.book_equity",
+              "label": "Patrimonio contable del cierre anterior",
+              "value": "206223000000",
+              "period": {
+                "start": "2022-07-01",
+                "end": "2023-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "StockholdersEquity",
+                "accession": "0000950170-23-035122",
+                "filed": "2023-07-27",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": null,
+          "status": "available",
+          "value": "37.13334737729092058141984411207078154624",
+          "display_value": "37,13",
+          "reason": null
+        },
+        {
+          "id": "roa",
+          "label": "ROA",
+          "unit": "percent",
+          "formula": "net_income / ((total_assets + previous.total_assets) / 2) * 100",
+          "formula_display": "Beneficio neto / ((Activos totales + Activos totales del cierre anterior) / 2) * 100",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "net_income",
+              "label": "Beneficio neto",
+              "value": "88136000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "NetIncomeLoss",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "total_assets",
+              "label": "Activos totales",
+              "value": "512163000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "Assets",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "previous.total_assets",
+              "label": "Activos totales del cierre anterior",
+              "value": "411976000000",
+              "period": {
+                "start": "2022-07-01",
+                "end": "2023-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "Assets",
+                "accession": "0000950170-23-035122",
+                "filed": "2023-07-27",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": null,
+          "status": "available",
+          "value": "19.07418689179874456115367926253518139587",
+          "display_value": "19,07",
+          "reason": null
+        },
+        {
+          "id": "net_margin",
+          "label": "Margen neto",
+          "unit": "percent",
+          "formula": "net_income / revenue * 100",
+          "formula_display": "Beneficio neto / Ingresos anuales * 100",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "net_income",
+              "label": "Beneficio neto",
+              "value": "88136000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "NetIncomeLoss",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "revenue",
+              "label": "Ingresos anuales",
+              "value": "245122000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": null,
+          "status": "available",
+          "value": "35.95597294408498625174402950367572066155",
+          "display_value": "35,96",
+          "reason": null
+        }
+      ],
+      "score": {
+        "status": "unavailable",
+        "value": null,
+        "display_value": "No disponible",
+        "reason": "unconfigured_scoring",
+        "explanation": "Las notas y ponderaciones del puntaje aún no están configuradas."
+      },
+      "sector_reference": {
+        "status": "unavailable",
+        "value": null,
+        "display_value": "No disponible",
+        "reason": "insufficient_sector_sample",
+        "explanation": "No hay una muestra sectorial comparable suficiente con fecha y metodología comunes."
+      }
+    },
+    {
+      "id": "solvency",
+      "label": "Solvencia",
+      "status": "available",
+      "reason": null,
+      "metrics": [
+        {
+          "id": "liabilities_to_equity",
+          "label": "Pasivos sobre patrimonio",
+          "unit": "times",
+          "formula": "total_liabilities / book_equity",
+          "formula_display": "Pasivos totales / Patrimonio contable",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "total_liabilities",
+              "label": "Pasivos totales",
+              "value": "243686000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "Liabilities",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "book_equity",
+              "label": "Patrimonio contable",
+              "value": "268477000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "StockholdersEquity",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": {
+            "lower": "1",
+            "upper": "2",
+            "direction": "lower",
+            "version": "academic-thresholds-v1",
+            "band": "high",
+            "explanation": "Reglas de visualización académica de esta versión; no son un óptimo universal ni una referencia sectorial. Consulte los límites y la fórmula."
+          },
+          "status": "available",
+          "value": "0.9076606189729474033157402682538913947936",
+          "display_value": "0,91",
+          "reason": null
+        },
+        {
+          "id": "interest_coverage",
+          "label": "Cobertura de intereses",
+          "unit": "times",
+          "formula": "(income_before_tax + interest_expense) / interest_expense",
+          "formula_display": "(Beneficio antes de impuestos + Gasto por intereses) / Gasto por intereses",
+          "period": {
+            "start": "2023-07-01",
+            "end": "2024-06-30"
+          },
+          "components": [
+            {
+              "id": "income_before_tax",
+              "label": "Beneficio antes de impuestos",
+              "value": "107787000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            },
+            {
+              "id": "interest_expense",
+              "label": "Gasto por intereses",
+              "value": "2935000000",
+              "period": {
+                "start": "2023-07-01",
+                "end": "2024-06-30"
+              },
+              "source": {
+                "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+                "tag": "InterestExpense",
+                "accession": "0000950170-24-087843",
+                "filed": "2024-07-30",
+                "currency": "USD",
+                "snapshot_sha256": "2d0ede621e10977a5aa7398bdde14b1a2d2b82fac46066a4bcceb0a26b67c0c5",
+                "is_demo": false
+              }
+            }
+          ],
+          "missing_fields": [],
+          "thresholds": {
+            "lower": "1",
+            "upper": "3",
+            "direction": "higher",
+            "version": "academic-thresholds-v1",
+            "band": "high",
+            "explanation": "Reglas de visualización académica de esta versión; no son un óptimo universal ni una referencia sectorial. Consulte los límites y la fórmula."
+          },
+          "status": "available",
+          "value": "37.72470187393526405451448040885860306644",
+          "display_value": "37,72",
+          "reason": null
+        }
+      ],
+      "score": {
+        "status": "unavailable",
+        "value": null,
+        "display_value": "No disponible",
+        "reason": "unconfigured_scoring",
+        "explanation": "Las notas y ponderaciones del puntaje aún no están configuradas."
+      }
+    },
+    {
+      "id": "efficiency",
+      "label": "Eficiencia",
+      "status": "unavailable",
+      "reason": "not_implemented",
+      "metrics": [],
+      "score": {
+        "status": "unavailable",
+        "value": null,
+        "display_value": "No disponible",
+        "reason": "unconfigured_scoring",
+        "explanation": "Las notas y ponderaciones del puntaje aún no están configuradas."
+      }
+    },
+    {
+      "id": "growth",
+      "label": "Crecimiento",
+      "status": "unavailable",
+      "reason": "not_implemented",
+      "metrics": [],
+      "score": {
+        "status": "unavailable",
+        "value": null,
+        "display_value": "No disponible",
+        "reason": "unconfigured_scoring",
+        "explanation": "Las notas y ponderaciones del puntaje aún no están configuradas."
+      }
+    }
+  ],
+  "overall_score": {
+    "status": "unavailable",
+    "value": null,
+    "display_value": "No disponible",
+    "reason": "unconfigured_scoring",
+    "explanation": "Las notas y ponderaciones del puntaje aún no están configuradas."
+  }
+}

@@ -1,64 +1,29 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { forgotPasswordSchema } from '../utils/validationSchemas'
-import { authService } from '../services/authService'
+import { useForgotPasswordViewModel } from '../../viewmodels/useForgotPasswordViewModel'
+
 
 export default function ForgotPassword() {
-  const navigate = useNavigate()
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [loading, setLoading] = useState(false)
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: yupResolver(forgotPasswordSchema),
-    defaultValues: { email: '' },
-  })
-
-  const onSubmit = async (data) => {
-    setError('')
-    setSuccess(false)
-    setLoading(true)
-    try {
-      await authService.forgotPassword(data.email)
-      setSuccess(true)
-    } catch (err) {
-      if (err.response?.data?.detail) {
-        setError(err.response.data.detail)
-      } else {
-        setError('Failed to send reset email. Please try again.')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  const { register, handleSubmit, errors, isSubmitting, error, success, loading, onSubmit, navigate } = useForgotPasswordViewModel()
   return (
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1>Reset Password</h1>
-          <p>Enter your email and we'll send you a link to reset your password</p>
+          <h1>Restablecer contraseña</h1>
+          <p>Ingresa el correo asociado a tu cuenta para solicitar un enlace</p>
         </div>
 
         {error && <div className="auth-error">{error}</div>}
-        {success && <div className="auth-success">Check your email for the reset link</div>}
+        {success && <div className="auth-success">Solicitud recibida. Si la cuenta existe, se generará un enlace de recuperación.</div>}
 
         {!success && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Correo electrónico</label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
                 {...register('email')}
-                placeholder="your@email.com"
+                placeholder="tu@correo.com"
               />
               {errors.email && (
                 <span className="error-text">{errors.email.message}</span>
@@ -66,14 +31,14 @@ export default function ForgotPassword() {
             </div>
 
             <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
-              {loading ? 'Sending...' : 'Send Reset Link'}
+              {loading ? 'Enviando...' : 'Solicitar enlace'}
             </button>
           </form>
         )}
 
         <div className="auth-footer">
-          <span>Remember your password? </span>
-          <a href="/login">Sign in</a>
+          <span>¿Recuerdas tu contraseña? </span>
+          <a href="/login">Iniciar sesión</a>
         </div>
       </div>
     </div>
