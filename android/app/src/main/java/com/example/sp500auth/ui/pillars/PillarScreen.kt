@@ -112,7 +112,7 @@ fun MetricDetails(label: String, metric: PillarMetric?, showSector: Boolean = fa
                         Text("${c.label ?: c.id}: ${c.value ?: "No disponible"} ${c.unit ?: c.source?.currency.orEmpty()}")
                         Text("${c.period?.start ?: "—"} — ${c.period?.end ?: "—"}")
                         val src=c.source
-                        Text("Fuente: ${src?.url ?: "No informada"}")
+                        com.example.sp500auth.ui.common.SourceLink(src?.url)
                         Text("Etiqueta: ${src?.tag ?: "—"} · Informe ${src?.accession ?: src?.filing ?: "—"}")
                         Text("Publicación: ${src?.filed ?: src?.published_at ?: "—"}")
                         src?.snapshot_sha256?.let{Text("Snapshot SHA-256: $it")}
