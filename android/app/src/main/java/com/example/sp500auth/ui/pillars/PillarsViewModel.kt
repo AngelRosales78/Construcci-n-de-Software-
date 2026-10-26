@@ -30,8 +30,8 @@ class PillarsViewModel internal constructor(private val repository: PillarsDataS
     fun load(ticker: String, yearText: String) {
         request?.cancel()
         val year = yearText.toIntOrNull()
-        if (!ticker.matches(Regex("[A-Z0-9][A-Z0-9.\\-]{0,14}")) || year == null || year !in 1900..2100) {
-            state = PillarsState.Error("Ingresa un símbolo válido y un ejercicio fiscal entre 1900 y 2100.")
+        if (!ticker.matches(Regex("[A-Z0-9][A-Z0-9.\\-]{0,14}")) || year == null || year !in 1900..java.time.Year.now().value) {
+            state = PillarsState.Error("Ingresa un símbolo válido y un ejercicio fiscal desde 1900 hasta el año actual.")
             return
         }
         state = PillarsState.Loading
