@@ -15,3 +15,7 @@ Las pruebas JVM no necesitan un dispositivo. Una ejecución visual solo se regis
 La entrada principal consulta catálogo, ficha e histórico reales del servidor. Permite paginar y abrir un símbolo explícito. HU05_02 y HU05_03 usan ahora el contrato implementado annual-ratios-v2: componentes accession/filed/currency, umbrales y referencia sectorial a nivel de pilar. No se recalculan ratios ni redondeos en Android. El ejercicio solicitado no cambia silenciosamente.
 
 Se conservó en test/resources una respuesta publicada de MSFT FY2024 para detectar diferencias de contrato. Esta respuesta se usa únicamente en pruebas, nunca para rellenar la aplicación. Compilación Kotlin y pruebas JVM correctas; 92 pruebas existentes del servidor aprobadas sobre SQLite aislado. El entorno tiene Django 6.1.1 instalado; las dependencias declaradas del proyecto siguen fijadas por Diego, por lo que esa ejecución no certifica su entorno PostgreSQL de producción.
+
+## Cierre de verificación
+
+La verificación final se repitió con Django 5.0.7, DRF 3.15.2 y SimpleJWT 5.3.1 en dependencias aisladas, sin cambiar la instalación global. Resultado: 56 pruebas Android aprobadas (tres contra Django real), 110 pruebas seleccionadas del servidor aprobadas y tres exclusivas de PostgreSQL omitidas. Dos pruebas de interfaz compilaron, sin dispositivo para ejecutarlas. Ver MATRIZ.md y evidence/.
