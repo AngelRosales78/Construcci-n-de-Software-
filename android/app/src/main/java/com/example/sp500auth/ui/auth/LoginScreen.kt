@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
+import com.example.sp500auth.util.Resource
+import com.example.sp500auth.util.biometric.BiometricAuthManager
 import com.example.sp500auth.ui.navigation.NavRoutes
 
 private val DarkBg = Color(0xFF0D1117)
@@ -52,50 +54,30 @@ fun LoginScreen(
     onForgotPassword: () -> Unit = {},
     onBiometricAuth: () -> Unit = {}
 ) {
-    var usernameOrEmail by remember { mutableStateOf("inversor@sp500.com") }
-    var password by remember { mutableStateOf("123456789") }
+    var usernameOrEmail by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
 
-    fun launchBiometricPrompt() {
-        val activity = context as? FragmentActivity
-        if (activity != null) {
-            val executor = ContextCompat.getMainExecutor(context)
-            val biometricPrompt = BiometricPrompt(
-                activity,
-                executor,
-                object : BiometricPrompt.AuthenticationCallback() {
-                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                        super.onAuthenticationSucceeded(result)
-                        onLoginSuccess()
-                        navController?.navigate(NavRoutes.Dashboard.route) {
-                            popUpTo(NavRoutes.Login.route) { inclusive = true }
-                        }
-                    }
-
-                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                        super.onAuthenticationError(errorCode, errString)
-                        // Para la demo, si falla o el emulador no tiene huella guardada, igual redirige al Dashboard
-                        navController?.navigate(NavRoutes.Dashboard.route) {
-                            popUpTo(NavRoutes.Login.route) { inclusive = true }
-                        }
-                    }
-                }
-            )
-
-            val promptInfo = BiometricPrompt.PromptInfo.Builder()
-                .setTitle("Autenticación Biométrica")
-                .setSubtitle("Escanea tu huella dactilar para acceder a S&P 500 Finance")
-                .setNegativeButtonText("Cancelar")
-                .build()
-
-            biometricPrompt.authenticate(promptInfo)
-        } else {
+    val loginState = viewModel?.loginState
+    LaunchedEffect(loginState) {
+        if (loginState is Resource.Success) {
+            onLoginSuccess()
             navController?.navigate(NavRoutes.Dashboard.route) {
                 popUpTo(NavRoutes.Login.route) { inclusive = true }
             }
         }
+    }
+    fun launchBiometricPrompt() {
+        if (viewModel?.biometricEnabled != true) {
+            viewModel?.biometricError("Inicia sesión y activa la huella desde tu perfil.")
+            return
+        }
+        BiometricAuthManager().authenticate(context,
+            onSuccess = { viewModel.loginWithBiometrics() },
+            onError = { viewModel.biometricError(it) },
+            onFailed = { viewModel.biometricError("Huella no reconocida. Inténtalo de nuevo.") })
     }
 
     Box(
@@ -326,7 +308,9 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            // Botón de Huella Dactilar
+            if (loginState is Resource.Error) Text(loginState.message ?: "No se pudo acceder", color = MaterialTheme.colorScheme.error)
+            if (viewModel?.logoutState is Resource.Error) Text(viewModel.logoutState.message ?: "Cierre local realizado")
+            // Biometric login never navigates on cancellation or failure.
             OutlinedButton(
                 onClick = {
                     onBiometricAuth()
@@ -361,10 +345,7 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    onLoginSuccess()
-                    navController?.navigate(NavRoutes.Dashboard.route) {
-                        popUpTo(NavRoutes.Login.route) { inclusive = true }
-                    }
+                    viewModel?.login(usernameOrEmail.trim(), password)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -376,7 +357,7 @@ fun LoginScreen(
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(
-                    text = "Sign In",
+                    text = if (loginState is Resource.Loading) "Validando…" else "Iniciar sesión",
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -418,7 +399,7 @@ fun LoginScreen(
                     .padding(horizontal = 12.dp, vertical = 6.dp)
             ) {
                 Text(
-                    text = "NYSE & NASDAQ 256-BIT ENCRYPTION",
+                    text = "Tu sesión se valida con el servidor",
                     color = TextMuted,
                     fontSize = 9.sp,
                     fontWeight = FontWeight.Bold,

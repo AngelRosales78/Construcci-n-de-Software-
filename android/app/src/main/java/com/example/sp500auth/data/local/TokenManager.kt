@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class TokenManager @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+) : SessionTokenStore {
     private val masterKey = MasterKey.Builder(context)
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
@@ -32,7 +32,7 @@ class TokenManager @Inject constructor(
         private const val KEY_IS_LOGGED_IN = "is_logged_in"
     }
 
-    fun saveTokens(accessToken: String, refreshToken: String) {
+    override fun saveTokens(accessToken: String, refreshToken: String) {
         sharedPreferences.edit().apply {
             putString(KEY_ACCESS_TOKEN, accessToken)
             putString(KEY_REFRESH_TOKEN, refreshToken)
@@ -41,19 +41,25 @@ class TokenManager @Inject constructor(
         }
     }
 
-    fun getAccessToken(): String? {
+    override fun getAccessToken(): String? {
         return sharedPreferences.getString(KEY_ACCESS_TOKEN, null)
     }
 
-    fun getRefreshToken(): String? {
+    override fun getRefreshToken(): String? {
         return sharedPreferences.getString(KEY_REFRESH_TOKEN, null)
     }
 
     fun isUserLoggedIn(): Boolean {
-        return sharedPreferences.getBoolean(KEY_IS_LOGGED_IN, false)
+        return !getAccessToken().isNullOrBlank() && !getRefreshToken().isNullOrBlank()
     }
 
-    fun clearTokens() {
+    fun isBiometricEnabled(): Boolean = sharedPreferences.getBoolean("biometric_enabled", false)
+
+    fun setBiometricEnabled(enabled: Boolean) {
+        sharedPreferences.edit().putBoolean("biometric_enabled", enabled).apply()
+    }
+
+    override fun clearTokens() {
         sharedPreferences.edit().clear().apply()
     }
 }

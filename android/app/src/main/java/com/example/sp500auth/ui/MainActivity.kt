@@ -7,6 +7,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.Column
+import com.example.sp500auth.util.Resource
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,12 +55,35 @@ class MainActivity : FragmentActivity() {
 fun AppNavigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
-    val isLoggedIn by remember { mutableStateOf(authViewModel.isLoggedIn()) }
+    LaunchedEffect(Unit) { authViewModel.restoreSession() }
+    LaunchedEffect(authViewModel.logoutState) {
+        if (authViewModel.logoutState is Resource.Success || authViewModel.logoutState is Resource.Error) {
+            navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
+        }
+    }
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) NavRoutes.Dashboard.route else NavRoutes.Login.route
+        startDestination = NavRoutes.Splash.route
     ) {
+        composable(NavRoutes.Splash.route) {
+            val state = authViewModel.sessionState
+            LaunchedEffect(state) {
+                when (state) {
+                    is Resource.Success -> navController.navigate(NavRoutes.Dashboard.route) { popUpTo(NavRoutes.Splash.route) { inclusive = true } }
+                    is Resource.Empty -> navController.navigate(NavRoutes.Login.route) { popUpTo(NavRoutes.Splash.route) { inclusive = true } }
+                    else -> Unit
+                }
+            }
+            Column {
+                if (state is Resource.Loading) CircularProgressIndicator()
+                if (state is Resource.Error) {
+                    Text(state.message ?: "No se pudo verificar la sesión")
+                    Button(onClick = { authViewModel.restoreSession() }) { Text("Reintentar") }
+                    Button(onClick = { authViewModel.logout() }) { Text("Volver al acceso") }
+                }
+            }
+        }
         composable(NavRoutes.Login.route) {
             LoginScreen(navController = navController, viewModel = authViewModel)
         }
@@ -70,12 +99,8 @@ fun AppNavigation() {
         composable(NavRoutes.Profile.route) {
             ProfileScreen(navController = navController, viewModel = authViewModel)
         }
-        composable("pillars/profitability") {
-            com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability")
-        }
-        composable("pillars/liquidity") {
-            com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity")
-        }
+        composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
+        composable("pillars/profitability") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability") }
         composable(NavRoutes.AssetDetail.route) {
             AssetDetailScreen(navController = navController)
         }
