@@ -22,7 +22,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
-from django.db import transaction
+from django.db import transaction, connection
 from django.db.models import Q, F
 from django.utils.html import strip_tags
 from django.conf import settings
@@ -494,7 +494,7 @@ class CompanySearchView(generics.ListAPIView):
             raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
 
         queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
-        if query:
+        if query and connection.vendor == 'postgresql':
             from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
             vector = (SearchVector('name', weight='A', config='simple')
                       + SearchVector('ticker', weight='B', config='simple'))
@@ -502,12 +502,14 @@ class CompanySearchView(generics.ListAPIView):
             queryset = queryset.annotate(search_document=vector, rank=SearchRank(vector, search)).filter(
                 Q(ticker=query.upper()) | Q(search_document=search)
             )
+        elif query:
+            queryset = queryset.filter(Q(ticker__icontains=query) | Q(name__icontains=query))
         if sector:
             queryset = queryset.filter(sector=sector)
         if ordering:
             cap_order = F('market_cap').desc(nulls_last=True) if ordering.startswith('-') else F('market_cap').asc(nulls_last=True)
             return queryset.order_by(cap_order, 'ticker')
-        if query:
+        if query and connection.vendor == 'postgresql':
             return queryset.order_by('-rank', 'ticker')
         return queryset.order_by(F('market_cap').desc(nulls_last=True), 'ticker')
 
