@@ -1,0 +1,45 @@
+"""HU07_04 T48: contexto insuficiente, estructura y cifras falsas."""
+import copy
+import pytest
+from .analysis_validation import context_from_pillars, validate_analysis
+from .test_pillars_liquidity import case
+
+URL = '/api/v1/companies/MSFT/analysis/?fiscal_year=2024'
+
+
+def valid(context):
+    available = [key for key, metric in context['metrics'].items() if metric['status'] == 'available']
+    return {'summary': {'text': 'La liquidez debe interpretarse junto a las obligaciones.', 'metric_ids': available[:1]},
+        'pillars': {key: {'text': 'La liquidez permite examinar las obligaciones corrientes.' if key == 'liquidity' else 'No disponible por falta de datos comparables.',
+            'metric_ids': [m for m in available if context['metrics'][m]['pillar'] == key][:1]} for key in context['pillars']},
+        'strengths': [], 'risks': []}
+
+
+@pytest.fixture
+def analysis_case(case, monkeypatch):
+    monkeypatch.setattr('api.analysis_views.AnalysisThrottle.allow_request', lambda *a: True)
+    pillars = case[0].get('/api/v1/companies/MSFT/pillars/?fiscal_year=2024').data
+    context = context_from_pillars(pillars)
+    monkeypatch.setattr('api.analysis_views.generate', lambda *args: valid(context))
+    return case[0], context
+
+
+def test_fake_number_is_rejected_before_publication(analysis_case, monkeypatch):
+    client, context = analysis_case
+    answer = valid(context); answer['summary']['text'] = 'La liquidez es de 999999 veces.'
+    monkeypatch.setattr('api.analysis_views.generate', lambda *a: answer)
+    response = client.get(URL)
+    assert response.status_code == 503 and response.data['reason'] == 'unsupported_number'
+    assert 'analysis' not in response.data
+
+
+def test_missing_context_does_not_call_provider(case, monkeypatch):
+    monkeypatch.setattr('api.analysis_views.AnalysisThrottle.allow_request', lambda *a: True)
+    case[1].delete()
+    monkeypatch.setattr('api.analysis_views.generate', lambda *a: (_ for _ in ()).throw(AssertionError('No llamar')))
+    assert case[0].get(URL).data['reason'] == 'insufficient_context'
+
+
+@pytest.mark.parametrize('bad', [None, {}, {'summary': 'texto'}])
+def test_invalid_structure_is_rejected(analysis_case, bad):
+    with pytest.raises(ValueError): validate_analysis(bad, analysis_case[1])
