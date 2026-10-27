@@ -19,3 +19,13 @@ def test_validated_input_is_recorded_without_credentials(analysis_case):
     record = AnalysisRecord.objects.get(validated=True)
     assert record.context['ticker'] == 'MSFT'
     assert 'password' not in str(record.context).lower()
+
+
+def test_provenance_change_invalidates_cache_even_with_same_metrics(analysis_case):
+    from .models import AnnualFinancialStatement
+    client = analysis_case[0]
+    first = client.get(URL).data
+    AnnualFinancialStatement.objects.update(source_url='https://data.sec.gov/updated-source')
+    second = client.get(URL).data
+    assert not second['cache_hit']
+    assert second['context_hash'] != first['context_hash']
