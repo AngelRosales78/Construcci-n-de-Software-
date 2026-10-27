@@ -1,0 +1,148 @@
+{
+  "checked_at": "2026-10-27T16:54:42.584119+00:00",
+  "companies": [
+    {
+      "ticker": "MSFT",
+      "annual_years": [
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1254,
+      "scenario_start": "2026-10-12",
+      "scenario_end": "2027-10-12",
+      "available_metrics": 11
+    },
+    {
+      "ticker": "AAPL",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 10
+    },
+    {
+      "ticker": "NVDA",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 11
+    },
+    {
+      "ticker": "JPM",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 7
+    },
+    {
+      "ticker": "JNJ",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 4
+    },
+    {
+      "ticker": "GOOGL",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 9
+    },
+    {
+      "ticker": "AMZN",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 9
+    },
+    {
+      "ticker": "META",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 9
+    },
+    {
+      "ticker": "TSLA",
+      "annual_years": [
+        2025,
+        2024,
+        2023,
+        2022,
+        2021,
+        2020
+      ],
+      "price_count": 1255,
+      "scenario_start": "2026-10-27",
+      "scenario_end": "2027-10-27",
+      "available_metrics": 10
+    }
+  ],
+  "ready_count": 9,
+  "catalog_count": 503,
+  "analysis": {
+    "ticker": "AAPL",
+    "fiscal_year": 2024,
+    "level": "simple",
+    "generation_mode": "ai",
+    "provider": "ollama-local:qwen2.5:1.5b",
+    "generation_notice": "Explicaciones conceptuales generadas con IA local. Los indicadores numéricos se adjuntan desde el servidor. La comprobación automática de estructura y cifras no certifica la interpretación; requiere revisión humana."
+  }
+}

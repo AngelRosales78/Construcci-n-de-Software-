@@ -1,3 +1,7 @@
+# Actualización del 27/10/2026
+
+Se implementaron las rutas de escenarios e informe, con integración opcional a Ollama local. Véase SERVICIOS_EMPRESAS.md y la evidencia de ejecución. El texto siguiente conserva la propuesta original del 25/10; sus pendientes de servidor ya no describen el estado actual. La revisión del equipo y la validación semántica de la IA no se consideran cerradas.
+
 # Contratos Android pendientes de servidor
 
 Estado revisado el 25/10/2026. Las ramas disponibles implementan catálogo, ficha, histórico y pilares. No implementan simulaciones ni explicaciones de IA. Las siguientes rutas son propuestas del cliente Android, **no endpoints publicados por Diego**. La app muestra el error del servicio y permite reintentar; no usa respuestas ficticias. Los ejemplos automáticos se limitan a pruebas JVM.

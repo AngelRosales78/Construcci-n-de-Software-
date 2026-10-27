@@ -1,4 +1,5 @@
 """Run Android JVM tests against isolated Django; no credentials are saved."""
+from datetime import datetime, timezone
 import argparse
 import io
 import json
@@ -73,11 +74,11 @@ def main():
             return result.returncode
         with urllib.request.urlopen(urllib.request.Request(base+'companies/MSFT/pillars/?fiscal_year=2024', headers={'Authorization':'Bearer '+token}),timeout=30) as response:
             data = json.load(response)
-        report = {'verified_on':'2026-10-25','mode':'real Django HTTP + Android Retrofit JVM',
+        report = {'verified_on':datetime.now(timezone.utc).isoformat(),'mode':'real Django HTTP + Android Retrofit JVM',
             'django_version':django.get_version(),'ticker':data['ticker'],'fiscal_year':data['fiscal_year'],
             'methodology_version':data['methodology_version'],'overall_score':data['overall_score']['display_value'],
             'pillar_count':len(data['pillars']),'metric_count':sum(len(p['metrics']) for p in data['pillars']),
-            'visual_device_test':False,'simulations_server':'not implemented','analysis_server':'not implemented'}
+            'visual_device_test':False,'simulations_server':'implemented; see company_services.json for dedicated HTTP verification','analysis_server':'local Ollama integration; see company_services.json'}
         target=root/'docs/android/evidence/live_server.json'
         target.parent.mkdir(parents=True,exist_ok=True)
         target.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')

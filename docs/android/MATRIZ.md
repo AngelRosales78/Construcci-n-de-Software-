@@ -23,3 +23,8 @@
 | T69 evidencia | Reportes JSON, pruebas y commits | Sin capturas ni horas/burndown inventados |
 
 No se registra Planning Poker ni aprobación de metodología por el equipo. La implementación del servidor financiero se identifica por su rama y versión, conservando su estado pendiente de revisión colectiva.
+
+
+## Ampliación del 27/10/2026
+
+Se añadieron datos reales de ocho empresas adicionales, escenarios GBM, informe de métricas e integración con IA local Ollama. El alcance técnico y sus límites se detallan en SERVICIOS_EMPRESAS.md. La evidencia HTTP está en evidence/company_services.json. Esto no implica aprobación metodológica ni cierre formal del sprint por el equipo.

@@ -19,3 +19,8 @@ Se conservó en test/resources una respuesta publicada de MSFT FY2024 para detec
 ## Cierre de verificación
 
 La verificación final se repitió con Django 5.0.7, DRF 3.15.2 y SimpleJWT 5.3.1 en dependencias aisladas, sin cambiar la instalación global. Resultado: 56 pruebas Android aprobadas (tres contra Django real), 110 pruebas seleccionadas del servidor aprobadas y tres exclusivas de PostgreSQL omitidas. Dos pruebas de interfaz compilaron, sin dispositivo para ejecutarlas. Ver MATRIZ.md y evidence/.
+
+
+## Ampliación del 27/10/2026
+
+Se añadieron datos reales de ocho empresas adicionales, escenarios GBM, informe de métricas e integración con IA local Ollama. El alcance técnico y sus límites se detallan en SERVICIOS_EMPRESAS.md. La evidencia HTTP está en evidence/company_services.json. Esto no implica aprobación metodológica ni cierre formal del sprint por el equipo.

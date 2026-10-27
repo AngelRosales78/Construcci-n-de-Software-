@@ -8,7 +8,7 @@ Proyecto completo creado a partir de Script 1 en una carpeta independiente, cons
 2. En Settings > Build, Execution, Deployment > Build Tools > Gradle seleccionar **JDK 17** y sincronizar. Se incluye Gradle Wrapper 8.4.
 3. Preparar e iniciar el servidor como se indica abajo. Crear una cuenta desde la pantalla de registro de Android.
 4. Elegir un emulador y ejecutar la configuración **app**. No hay un APK de entrega.
-5. Buscar **MSFT**, abrir la ficha y elegir **Cinco pilares y puntaje**. Consultar **2024** para reproducir los datos anuales importados. El catálogo tiene 503 símbolos; la cobertura financiera anual disponible está limitada a MSFT.
+5. Buscar **MSFT**, abrir la ficha y elegir **Cinco pilares y puntaje**. Consultar **2024** para reproducir los datos anuales importados. El catálogo tiene 503 símbolos; la cobertura financiera cargada comprende nueve empresas; consulta docs/android/SERVICIOS_EMPRESAS.md.
 
 ## Servidor de desarrollo separado
 
@@ -34,10 +34,10 @@ La app usa http://10.0.2.2:8000/api/v1/ para el emulador. Para un teléfono fís
 - Sesión real y restauración verificada, biometría después de autenticarse, tokens cifrados y renovación sincronizada.
 - Catálogo paginado, búsqueda, ficha e histórico del servidor.
 - Liquidez, rentabilidad, solvencia, eficiencia con serie anual y crecimiento; radar y puntaje con componentes, fuentes, versiones y estados ausentes.
-- Pantallas de escenarios a doce meses, tres percentiles, controles y restablecimiento: cliente implementado, **servidor de simulaciones pendiente**.
-- Pantallas de resumen de IA, cinco explicaciones, fortalezas/riesgos, fuentes y selector sencillo/técnico: cliente implementado, **servicio validado y proveedor de IA pendientes**.
+- Pantallas de escenarios a doce meses, tres percentiles, controles y restablecimiento: cliente y servidor implementados con histórico real, GBM y semilla reproducible.
+- Pantallas de resumen de IA, cinco explicaciones, fortalezas/riesgos, fuentes y selector sencillo/técnico: informe de métricas reales e integración con Ollama local; requiere el modelo en ejecución.
 
-Los contratos pendientes están en docs/android/CONTRATOS_PENDIENTES.md. No se presentan respuestas de ejemplo en la aplicación. Una pantalla preparada sin su servidor no se declara historia integral terminada.
+Los servicios, datos y arranque de IA local están en docs/android/SERVICIOS_EMPRESAS.md. El contrato original se conserva en docs/android/CONTRATOS_PENDIENTES.md. No se presentan respuestas de ejemplo en la aplicación. Una pantalla preparada sin su servidor no se declara historia integral terminada.
 
 ## Verificación
 
@@ -63,3 +63,6 @@ Inicio y detalle usan tarjetas oscuras, acentos verdes, navegación inferior y g
 La ficha mantiene accesos a los cinco pilares/radar/puntaje, escenarios e IA. Beta y dividendos se indican como no disponibles porque la API actual no los entrega. No se muestran cotizaciones, variaciones, imágenes corporativas ni valores de índice ficticios. Los escenarios y la IA siguen sujetos a los servicios pendientes descritos arriba.
 
 Después de registrarse se regresa al login y no se guardan los tokens recibidos del registro. El usuario debe iniciar sesión para entrar al catálogo.
+
+
+Para activar la IA local, ejecutar tools/Start-LocalAI.ps1 en otra ventana antes de abrir el informe. Ver docs/android/SERVICIOS_EMPRESAS.md para cobertura y verificación.
