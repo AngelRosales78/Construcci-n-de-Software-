@@ -26,6 +26,7 @@ test('la leyenda oculta curvas sin solicitar otra simulación y conserva la tabl
 
 test('los controles envían porcentajes como tasas y restablecer recupera los parámetros históricos', async () => {
   simulationRepository.create.mockResolvedValue(result); mount()
+  fireEvent.click(screen.getByText('Ajustar supuestos'))
   fireEvent.change(screen.getByLabelText('Tasa anual del modelo'), { target: { value: '15' } })
   fireEvent.change(screen.getByLabelText('Volatilidad anual'), { target: { value: '0' } })
   fireEvent.click(screen.getByRole('button', { name: 'Generar escenarios' }))
