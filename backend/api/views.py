@@ -499,7 +499,7 @@ class CompanySearchView(generics.ListAPIView):
             raise ValidationError({'ready': 'Indique true o false.'})
         if ready == 'true':
             annual = AnnualFinancialStatement.objects.filter(company_id=OuterRef('pk'), is_demo=False)
-            prices = PriceHistory.objects.filter(company_id=OuterRef('pk'), is_demo=False).values('company_id').annotate(n=Count('id')).filter(n__gte=60)
+            prices = PriceHistory.objects.filter(company_id=OuterRef('pk'), is_demo=False).values('company_id').annotate(n=Count('id')).filter(n__gte=10)
             queryset = queryset.annotate(has_annual=Exists(annual), has_prices=Exists(prices)).filter(has_annual=True, has_prices=True)
 
         if query and connection.vendor == 'postgresql':
@@ -679,6 +679,8 @@ def company_financial_data(company):
         'as_of': metrics.as_of if metrics else None,
         'source': metrics.source if metrics else 'Datos heredados sin verificar',
         'is_demo': metrics.is_demo if metrics else True,
+        'field_sources': metrics.field_sources if metrics else {},
+        'reporting_note': metrics.field_sources.get('reporting_entity', {}).get('reason') if metrics else None,
     }
     for field in ('market_cap', 'per', 'roe', 'beta', 'dividend_yield'):
         value = getattr(balance, field, None)

@@ -45,3 +45,10 @@ class SimulationTests(TestCase):
     def test_month_end_matches_twelve_month_contract(self):
         self.assertEqual(month_after(date(2024,2,29),12),date(2025,2,28))
         self.assertEqual(month_after(date(2024,1,31),1),date(2024,2,29))
+
+    def test_new_listing_uses_actual_short_history_and_warns(self):
+        self.company.prices.filter(date__gt=date(2024,1,19)).delete()
+        result=self.client.get('/api/v1/companies/TEST/simulations/defaults/')
+        self.assertEqual(result.status_code,200)
+        self.assertEqual(result.data['observations'],19)
+        self.assertIn('Historia limitada',result.data['history_warning'])

@@ -126,6 +126,7 @@ class SearchHistory(models.Model):
 
 
 class FinancialMetrics(models.Model):
+    field_sources = models.JSONField(default=dict, blank=True)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='financial_metrics')
     as_of = models.DateField()
     source = models.CharField(max_length=250)
@@ -162,6 +163,7 @@ class PriceHistory(models.Model):
 
 
 class AnnualFinancialStatement(models.Model):
+    reporting_note = models.TextField(blank=True, null=True, default=None)
     """Componentes anuales separados de la ficha heredada de una sola fecha."""
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='annual_statements')
     fiscal_year = models.PositiveSmallIntegerField()

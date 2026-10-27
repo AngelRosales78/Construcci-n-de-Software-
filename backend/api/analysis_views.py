@@ -56,7 +56,7 @@ def company_report(company, year, level):
             'snapshot_sha256': current.snapshot_sha256, 'metrics_version': data['methodology_version'], 'data_as_of': current.period_end.isoformat(),
             'generated_at': now, 'period': data['period'], 'validation': {'status': 'passed', 'checked_at': now},
             'summary': [f"{company.name} ({company.ticker}), ejercicio fiscal {year}, en {current.currency}. El análisis usa los componentes del informe anual indicado en las fuentes.",
-                        'Las notas son una escala académica del proyecto. No representan una clasificación sectorial ni una recomendación de inversión.'],
+                        'Las notas son una escala académica del proyecto. No representan una clasificación sectorial ni una recomendación de inversión.'] + ([current.reporting_note] if current.reporting_note else []),
             'pillars': sections, 'strengths': strengths[:5], 'risks': risks[:5],
             'sources': [{'label': f'Informe anual {year} · SEC', 'url': current.source_url}]}
 

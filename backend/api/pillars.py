@@ -240,5 +240,6 @@ def build_pillars(company, current, previous, fiscal_year, available_years, stat
             'methodology_status': 'implementation_pending_team_review',
             'ticker': company.ticker, 'fiscal_year': fiscal_year, 'period': period(current),
             'currency': current.currency if current else None, 'available_years': available_years,
+            'reporting_note': getattr(current, 'reporting_note', None),
             'pillars': pillars, 'scoring_policy': policy(),
             'overall_score': overall_score(pillars) | {'period': period(current)}}

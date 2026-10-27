@@ -26,8 +26,8 @@ class SimulationInput(serializers.Serializer):
 
 def price_inputs(company):
     rows = list(company.prices.filter(is_demo=False).order_by('-date')[:756])[::-1]
-    if len(rows) < 60:
-        raise ValidationError({'detail': 'Se requieren al menos 60 cierres ajustados reales. Carga el histórico de esta empresa.'})
+    if len(rows) < 10:
+        raise ValidationError({'detail': 'Se requieren al menos 10 cierres ajustados reales. Carga el histórico de esta empresa.'})
     if len({r.currency for r in rows}) != 1 or any(r.adjusted_close <= 0 for r in rows):
         raise ValidationError({'detail': 'La serie de precios debe ser positiva y usar una sola moneda.'})
     logs = [math.log(float(b.adjusted_close / a.adjusted_close)) for a, b in zip(rows, rows[1:])]
@@ -77,7 +77,7 @@ class SimulationDefaultsView(generics.GenericAPIView):
                          'annual_volatility': round(min(2, sigma), 8),
                          'min_return': -.8, 'max_return': 1.5, 'min_volatility': 0, 'max_volatility': 2,
                          'seed': 42, 'paths': 2000, 'data_as_of': rows[-1].date.isoformat(),
-                         'observations': len(rows), 'defaults_method': 'daily-log-returns-252-v1'})
+                         'observations': len(rows), 'history_warning': 'Historia limitada: se usan solo ' + str(len(rows)) + ' cierres. Los supuestos son especialmente sensibles a este período corto.' if len(rows) < 60 else None, 'defaults_method': 'daily-log-returns-252-v2'})
 
 class SimulationView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)

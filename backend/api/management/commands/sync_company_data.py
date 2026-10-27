@@ -32,7 +32,7 @@ def annual_inventory(payload, ticker, cik, raw):
             if row.get('form') != '10-K' or row.get('fp') != 'FY' or not row.get('start'):
                 continue
             start, end = date.fromisoformat(row['start']), date.fromisoformat(row['end'])
-            if 2020 <= end.year <= 2025 and row.get('fy') == end.year and 350 <= (end-start).days+1 <= 380:
+            if 2020 <= end.year <= date.today().year and row.get('fy') == end.year and 350 <= (end-start).days+1 <= 380 and end <= date.today() and date.fromisoformat(row['filed']) <= date.today():
                 anchors.append(row)
     years = {}
     for row in sorted(anchors, key=lambda r: (r['filed'], r['accn'])):

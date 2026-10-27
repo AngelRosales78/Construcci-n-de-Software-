@@ -23,7 +23,7 @@ class Command(BaseCommand):
             company = Company.objects.get(ticker=payload['ticker'])
             # El inventario conserva la URL oficial; no consulta servicios externos.
             source = payload['source']
-            if not re.fullmatch(r'https://data\.sec\.gov/api/xbrl/companyfacts/CIK\d{10}\.json', source):
+            if not (re.fullmatch(r'https://data\.sec\.gov/api/xbrl/companyfacts/CIK\d{10}\.json', source) or re.fullmatch(r'https://www\.sec\.gov/Archives/edgar/data/\d+/\d{18}/[A-Za-z0-9_.-]+\.htm', source)):
                 raise ValueError('Se esperaba una URL de procedencia SEC companyfacts.')
             rows = payload['annual_records']
             if not isinstance(rows, list) or not rows:
@@ -54,7 +54,8 @@ class Command(BaseCommand):
                     filed=date.fromisoformat(row['filed']), is_demo=options['demo'],
                     snapshot_sha256=payload['snapshot_sha256'], components=components,
                     inventory_applicable=row.get('inventory_applicable'),
-                    inventory_applicability_note=row.get('inventory_applicability_note', ''))
+                    inventory_applicability_note=row.get('inventory_applicability_note', ''),
+                    reporting_note=payload.get('reporting_note'))
                 statement.full_clean(validate_unique=False, validate_constraints=False)
                 prepared.append(statement)
         except (OSError, KeyError, TypeError, ValueError, ArithmeticError, ValidationError,
