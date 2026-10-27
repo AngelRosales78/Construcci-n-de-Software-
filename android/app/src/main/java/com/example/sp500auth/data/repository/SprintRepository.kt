@@ -10,7 +10,7 @@ suspend fun <T : Any> remoteCall(block: suspend () -> Response<T>): Resource<T> 
     val response=block(); val body=response.body()
     if(response.isSuccessful && body!=null) Resource.Success(body)
     else Resource.Error(when(response.code()) {
-        400 -> "Revisa los parámetros de la consulta."
+        400 -> runCatching { com.google.gson.JsonParser.parseString(response.errorBody()?.string()).asJsonObject.get("detail").asString.take(500) }.getOrDefault("Revisa los parámetros de la consulta.")
         401,403 -> "La sesión no permite consultar estos datos. Vuelve a iniciar sesión."
         404,501 -> "La empresa o este servicio todavía no están disponibles en el servidor."
         503 -> "El proveedor no está disponible. Inténtalo nuevamente."
@@ -21,7 +21,7 @@ suspend fun <T : Any> remoteCall(block: suspend () -> Response<T>): Resource<T> 
 
 class SprintRepository @Inject constructor(retrofit: Retrofit) {
     private val api=retrofit.create(SprintApiService::class.java)
-    suspend fun search(query: String,page: Int,sector: String="",ordering: String="")=remoteCall{api.search(query,page,sector,ordering)}
+    suspend fun search(query: String,page: Int,sector: String="",ordering: String="",ready: Boolean=false)=remoteCall{api.search(query,page,sector,ordering,ready)}
     suspend fun summary(ticker: String)=remoteCall{api.summary(ticker)}
     suspend fun history(ticker: String,range: String)=remoteCall{api.history(ticker,range)}
 }

@@ -11,4 +11,5 @@ data class AnalysisResponse(val schema_version: String? = null,val ticker: Strin
     val data_as_of: String? = null,val generated_at: String? = null,val period: FiscalPeriod? = null,
     val validation: AnalysisValidation? = null,val summary: List<String>? = null,
     val pillars: List<AnalysisSection>? = null,val strengths: List<AnalysisPoint>? = null,
-    val risks: List<AnalysisPoint>? = null,val sources: List<AnalysisSource>? = null)
+    val risks: List<AnalysisPoint>? = null,val sources: List<AnalysisSource>? = null, val generation_mode: String? = null,
+    val generation_notice: String? = null, val provider: String? = null)

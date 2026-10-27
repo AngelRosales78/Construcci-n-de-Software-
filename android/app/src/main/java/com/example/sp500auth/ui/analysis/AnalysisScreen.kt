@@ -1,5 +1,9 @@
 package com.example.sp500auth.ui.analysis
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -15,25 +19,33 @@ import com.example.sp500auth.ui.pillars.pillarLabels
 @Composable
 fun AnalysisScreen(nav: NavController,ticker: String,year: Int,vm: AnalysisViewModel=hiltViewModel()) {
     LaunchedEffect(ticker,year){vm.load(ticker,year)}
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.fillMaxSize().background(Color(0xFF101416)).statusBarsPadding().navigationBarsPadding().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
         TextButton(onClick={nav.popBackStack()}){Text("Volver")}
-        Text("$ticker · Explicación de IA FY$year",style=MaterialTheme.typography.headlineSmall)
+        Text("$ticker · Informe FY$year",style=MaterialTheme.typography.headlineSmall)
         Row{listOf("simple" to "Sencillo","technical" to "Técnico").forEach{(level,label)->
             TextButton(onClick={vm.load(ticker,year,level)},enabled=vm.state !is Resource.Loading){Text(if(vm.requestedLevel==level)"✓ $label" else label)}
         }}
-        if(vm.state is Resource.Loading){CircularProgressIndicator();Text("Solicitando análisis validado…")}
+        if(vm.state is Resource.Loading){CircularProgressIndicator();Text("Consultando indicadores y explicaciones…")}
         if(vm.state is Resource.Error){Text(vm.state.message.orEmpty(),color=MaterialTheme.colorScheme.error);Button(onClick={vm.load(ticker,year)}){Text("Reintentar")}}
         val data=vm.lastValid
         if(data!=null) {
             if(data.level!=vm.requestedLevel) Text("Se conserva el último análisis válido (${if(data.level=="simple")"sencillo" else "técnico"}).")
+            Card(colors=CardDefaults.cardColors(containerColor=Color(0xFF1C2024)),shape=RoundedCornerShape(16.dp)) { Column(Modifier.padding(16.dp)) {
+                Text(if(data.generation_mode=="ai") "Análisis con IA" else "Informe automático · Sin IA",fontWeight=FontWeight.Bold,color=MaterialTheme.colorScheme.primary)
+                Text(data.generation_notice ?: "El servidor no informó un proveedor de IA.")
+            } }
             Text("Versión de datos: ${data.metrics_version} · Datos a ${data.data_as_of}")
             Text("Periodo: ${data.period?.start} — ${data.period?.end}")
             Text("Validación: ${data.validation?.status} · ${data.validation?.checked_at} · Generado ${data.generated_at}")
             Text("Resumen",style=MaterialTheme.typography.titleLarge)
             data.summary.orEmpty().forEach{Text(it)}
             data.pillars.orEmpty().forEach{section ->
-                Text(pillarLabels[section.pillar_id] ?: "Pilar",style=MaterialTheme.typography.titleLarge)
-                Text(section.text.orEmpty());Text("Métricas: ${section.metric_ids?.joinToString()}")
+                Card(Modifier.fillMaxWidth(), colors=CardDefaults.cardColors(containerColor=Color(0xFF1C2024)),shape=RoundedCornerShape(16.dp)) {
+                    Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+                        Text(pillarLabels[section.pillar_id] ?: "Pilar",style=MaterialTheme.typography.titleLarge,color=MaterialTheme.colorScheme.primary)
+                        Text(section.text.orEmpty());Text("Métricas: ${section.metric_ids?.joinToString()}",style=MaterialTheme.typography.labelSmall)
+                    }
+                }
             }
             Text("Fortalezas",style=MaterialTheme.typography.titleLarge)
             if(data.strengths.isNullOrEmpty())Text("No hay evidencia suficiente para enumerar fortalezas.")

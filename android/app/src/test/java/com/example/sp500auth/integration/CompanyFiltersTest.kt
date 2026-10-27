@@ -21,10 +21,11 @@ class CompanyFiltersTest {
         }.build()
         val retrofit = Retrofit.Builder().baseUrl("https://fixture.invalid/api/v1/").client(client)
             .addConverterFactory(GsonConverterFactory.create()).build()
-        assertTrue(SprintRepository(retrofit).search("micro", 2, "technology", "-market_cap") is Resource.Success)
+        assertTrue(SprintRepository(retrofit).search("micro", 2, "technology", "-market_cap", true) is Resource.Success)
         assertEquals("micro", received!!.queryParameter("q"))
         assertEquals("2", received!!.queryParameter("page"))
         assertEquals("technology", received!!.queryParameter("sector"))
         assertEquals("-market_cap", received!!.queryParameter("ordering"))
+        assertEquals("true", received!!.queryParameter("ready"))
     }
 }

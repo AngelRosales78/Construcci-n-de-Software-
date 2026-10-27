@@ -1,0 +1,141 @@
+{
+  "schema_version": "analysis-v1",
+  "generation_mode": "ai",
+  "provider": "ollama-local:qwen2.5:1.5b",
+  "generation_notice": "Explicaciones conceptuales generadas con IA local. Los indicadores numéricos se adjuntan desde el servidor. La comprobación automática de estructura y cifras no certifica la interpretación; requiere revisión humana.",
+  "ticker": "AAPL",
+  "fiscal_year": 2024,
+  "level": "simple",
+  "snapshot_sha256": "73a86c6aedc31f77cac2ea4df5f80f0b3bd7e6eb58bb4e01444fbedf3afb9c43",
+  "metrics_version": "annual-ratios-v2",
+  "data_as_of": "2024-09-28",
+  "generated_at": "2026-10-27T16:54:46.115332+00:00",
+  "period": {
+    "start": "2023-10-01",
+    "end": "2024-09-28"
+  },
+  "validation": {
+    "status": "passed",
+    "checked_at": "2026-10-27T16:54:46.115332+00:00",
+    "scope": "estructura, referencias y cifras del bloque de indicadores; no interpretación semántica"
+  },
+  "summary": [
+    "Apple Inc. (AAPL), ejercicio fiscal 2024, en USD. El análisis usa los componentes del informe anual indicado en las fuentes.",
+    "Las notas son una escala académica del proyecto. No representan una clasificación sectorial ni una recomendación de inversión."
+  ],
+  "pillars": [
+    {
+      "pillar_id": "liquidity",
+      "text": "El pilar de liquidez evalúa la capacidad de cubrir obligaciones a corto plazo con activos corrientes y líquidos. Se mide con los indicadores disponibles en el ejercicio seleccionado.\n\nIndicadores verificados: Liquidez corriente: 0,87. Prueba ácida: 0,56.",
+      "metric_ids": [
+        "current_ratio",
+        "quick_ratio"
+      ],
+      "availability": {
+        "current_ratio": "available",
+        "quick_ratio": "available"
+      },
+      "academic_signal": "baja"
+    },
+    {
+      "pillar_id": "profitability",
+      "text": "El pilar de rentabilidad evalúa los beneficios en relación con el patrimonio, los activos y los ingresos. Se interpreta utilizando los indicadores disponibles del ejercicio seleccionado.\n\nIndicadores verificados: ROE: 157,41 %. ROA: 26,13 %. Margen neto: 23,97 %.",
+      "metric_ids": [
+        "roe",
+        "roa",
+        "net_margin"
+      ],
+      "availability": {
+        "roe": "available",
+        "roa": "available",
+        "net_margin": "available"
+      },
+      "academic_signal": "alta"
+    },
+    {
+      "pillar_id": "solvency",
+      "text": "El pilar de solvencia evalúa pasivos en relación con el patrimonio y la capacidad para cubrir los gastos de intereses. Se interpreta a partir de los indicadores disponibles del ejercicio seleccionado.\n\nIndicadores verificados: Pasivos sobre patrimonio: 5,41. Cobertura de intereses: Faltan componentes del balance anual.",
+      "metric_ids": [
+        "liabilities_to_equity",
+        "interest_coverage"
+      ],
+      "availability": {
+        "liabilities_to_equity": "available",
+        "interest_coverage": "unavailable"
+      },
+      "academic_signal": "sin nota"
+    },
+    {
+      "pillar_id": "efficiency",
+      "text": "El pilar de eficiencia evalúa las ventas obtenidas con los recursos y la duración del inventario. Se analiza con los indicadores disponibles del ejercicio seleccionado.\n\nIndicadores verificados: Rotación de activos: 1,09. Días de inventario: 11,81 días.",
+      "metric_ids": [
+        "asset_turnover",
+        "inventory_days"
+      ],
+      "availability": {
+        "asset_turnover": "available",
+        "inventory_days": "available"
+      },
+      "academic_signal": "alta"
+    },
+    {
+      "pillar_id": "growth",
+      "text": "El pilar de crecimiento analiza el cambio en los ingresos anuales y su evolución compuesta entre ejercicios comparables, utilizando los indicadores disponibles del ejercicio seleccionado.\n\nIndicadores verificados: Variación anual de ingresos: 2,02 %. Crecimiento compuesto a tres años: 2,25 %.",
+      "metric_ids": [
+        "revenue_growth",
+        "revenue_cagr_3y"
+      ],
+      "availability": {
+        "revenue_growth": "available",
+        "revenue_cagr_3y": "available"
+      },
+      "academic_signal": "baja"
+    }
+  ],
+  "strengths": [
+    {
+      "text": "Rentabilidad: nota académica 100,00 / 100 según la política del proyecto.",
+      "metric_ids": [
+        "roe",
+        "roa",
+        "net_margin"
+      ]
+    },
+    {
+      "text": "Eficiencia: nota académica 96,72 / 100 según la política del proyecto.",
+      "metric_ids": [
+        "asset_turnover",
+        "inventory_days"
+      ]
+    }
+  ],
+  "risks": [
+    {
+      "text": "Liquidez: nota académica 49,63 / 100 según la política del proyecto.",
+      "metric_ids": [
+        "current_ratio",
+        "quick_ratio"
+      ]
+    },
+    {
+      "text": "Solvencia: hay indicadores sin datos suficientes; la evaluación es parcial.",
+      "metric_ids": [
+        "liabilities_to_equity",
+        "interest_coverage"
+      ]
+    },
+    {
+      "text": "Crecimiento: nota académica 21,34 / 100 según la política del proyecto.",
+      "metric_ids": [
+        "revenue_growth",
+        "revenue_cagr_3y"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "label": "Informe anual 2024 · SEC",
+      "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+    }
+  ]
+}

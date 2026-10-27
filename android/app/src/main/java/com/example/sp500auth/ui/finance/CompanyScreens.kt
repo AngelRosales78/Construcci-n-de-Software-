@@ -81,7 +81,8 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
     var page by rememberSaveable { mutableStateOf(1) }
     var sector by rememberSaveable { mutableStateOf("") }
     var descending by rememberSaveable { mutableStateOf(true) }
-    fun search() = vm.search(query, page, sector, if (descending) "-market_cap" else "market_cap")
+    var readyOnly by rememberSaveable { mutableStateOf(true) }
+    fun search() = vm.search(query, page, sector, if (descending) "-market_cap" else "market_cap", readyOnly)
     LaunchedEffect(Unit) { search() }
     Scaffold(containerColor = Background, bottomBar = {
         NavigationBar(containerColor = Panel) {
@@ -107,6 +108,14 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(sectors) { (value, label) -> FilterChip(selected = sector == value, onClick = { sector = value; page = 1; search() }, label = { Text(label) }) }
                 }
+            }
+            item {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Switch(checked = readyOnly, onCheckedChange = { readyOnly = it; page = 1; search() })
+                    Spacer(Modifier.width(10.dp))
+                    Text("Solo empresas con datos para analizar", style = MaterialTheme.typography.bodySmall)
+                }
+                if (!readyOnly) Text("El catálogo completo también incluye empresas sin balances o histórico cargados.", color = Muted, style = MaterialTheme.typography.bodySmall)
             }
             item {
                 FinanceCard {
@@ -245,7 +254,7 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                         OutlinedButton(onClick = { nav.navigate("finance/$encoded/all") }, modifier = Modifier.fillMaxWidth()) { Text("Pilares, radar y puntaje") }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             FilledTonalButton(onClick = { nav.navigate("scenarios/$encoded") }, modifier = Modifier.weight(1f)) { Text("Escenarios") }
-                            FilledTonalButton(onClick = { nav.navigate("analysis/$encoded/2024") }, modifier = Modifier.weight(1f)) { Text("Análisis IA") }
+                            FilledTonalButton(onClick = { nav.navigate("analysis/$encoded/2024") }, modifier = Modifier.weight(1f)) { Text("Informe") }
                         }
                     }
                 }
