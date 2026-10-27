@@ -21,7 +21,9 @@ class CompanyAnalysisView(CompanyPillarsView):
     def get(self, request, ticker):
         pillars = super().get(request, ticker).data
         context = context_from_pillars(pillars)
-        level = 'simple'
+        level = request.query_params.get('level', 'simple')
+        if level not in ('simple', 'technical'):
+            raise ValidationError({'level': 'Use simple o technical.'})
         if not context['fiscal_year'] or not any(m['status'] == 'available' for m in context['metrics'].values()):
             return Response({'status': 'unavailable', 'reason': 'insufficient_context', 'message': 'No hay métricas verificables para generar un análisis.'})
         company = Company.objects.get(ticker=context['ticker'])
