@@ -27,7 +27,7 @@ export function useLoginViewModel() {
       navigate(result?.user?.role === 'admin' ? '/admin-panel' : '/dashboard')
     } catch (err) {
       setError(
-        err.response?.data?.error || 'Invalid credentials. Please try again.'
+        err.response?.data?.error || 'No se pudo iniciar sesión. Revisa tus datos e inténtalo de nuevo.'
       )
     } finally {
       setLoading(false)

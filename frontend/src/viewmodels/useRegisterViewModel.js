@@ -49,10 +49,10 @@ export function useRegisterViewModel() {
           const messages = Object.values(serverErrors)
           setError(messages.flat().join(' '))
         } else {
-          setError(typeof serverErrors === 'string' ? serverErrors : 'Registration failed')
+          setError(typeof serverErrors === 'string' ? serverErrors : 'No se pudo crear la cuenta.')
         }
       } else {
-        setError('Registration failed. Please try again.')
+        setError('No se pudo crear la cuenta. Inténtalo de nuevo.')
       }
     } finally {
       setLoading(false)

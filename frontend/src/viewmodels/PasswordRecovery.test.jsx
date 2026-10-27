@@ -41,6 +41,6 @@ test('confirmaciones distintas no se envían al servidor', async () => {
   fireEvent.change(screen.getByLabelText('Nueva Contraseña'), { target: { value: 'Nueva!Clave2026' } })
   fireEvent.change(screen.getByLabelText('Confirmar Nueva Contraseña'), { target: { value: 'Otra!Clave2026' } })
   fireEvent.click(screen.getByRole('button', { name: 'Restablecer Contraseña' }))
-  await waitFor(() => expect(screen.getByText('Passwords must match')).toBeTruthy())
+  await waitFor(() => expect(screen.getByText('Las contraseñas deben coincidir.')).toBeTruthy())
   expect(post).not.toHaveBeenCalled()
 })

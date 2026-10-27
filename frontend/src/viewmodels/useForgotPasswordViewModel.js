@@ -31,7 +31,7 @@ export function useForgotPasswordViewModel() {
       if (err.response?.data?.detail) {
         setError(err.response.data.detail)
       } else {
-        setError('Failed to send reset email. Please try again.')
+        setError('No se pudo solicitar el enlace. Inténtalo de nuevo.')
       }
     } finally {
       setLoading(false)

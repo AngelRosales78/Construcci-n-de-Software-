@@ -34,7 +34,7 @@ export function useResetPasswordViewModel() {
         const messages = Object.values(err.response.data).flat().join(' ')
         setError(messages)
       } else {
-        setError('Failed to reset password. The link may be expired.')
+        setError('No se pudo cambiar la contraseña. El enlace puede haber caducado.')
       }
     } finally {
       setLoading(false)

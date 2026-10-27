@@ -8,43 +8,43 @@ import * as yup from 'yup'
 export const registerSchema = yup.object().shape({
   username: yup
     .string()
-    .required('Username is required')
-    .min(3, 'Username must be at least 3 characters')
-    .max(150, 'Username must be less than 150 characters')
+    .required('Escribe tu nombre de usuario.')
+    .min(3, 'El usuario debe tener al menos 3 caracteres.')
+    .max(150, 'El usuario admite como máximo 150 caracteres.')
     .matches(
       /^[a-zA-Z0-9_]+$/,
-      'Username can only contain letters, numbers, and underscores'
+      'Usa solo letras, números y guion bajo.'
     ),
   email: yup
     .string()
-    .required('Email is required')
-    .email('Please enter a valid email address'),
+    .required('Escribe tu correo electrónico.')
+    .email('Escribe un correo electrónico válido.'),
   password: yup
     .string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/[0-9]/, 'Password must contain at least one number')
+    .required('Escribe tu contraseña.')
+    .min(8, 'La contraseña debe tener al menos 8 caracteres.')
+    .matches(/[A-Z]/, 'Incluye una letra mayúscula.')
+    .matches(/[a-z]/, 'Incluye una letra minúscula.')
+    .matches(/[0-9]/, 'Incluye un número.')
     .matches(
       /[!@#$%^&*(),.?":{}|<>]/,
-      'Password must contain at least one special character'
+      'Incluye un símbolo.'
     ),
   passwordConfirm: yup
     .string()
-    .required('Please confirm your password')
-    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+    .required('Repite tu contraseña.')
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir.'),
   firstName: yup
     .string()
-    .max(150, 'First name must be less than 150 characters')
+    .max(150, 'El nombre admite como máximo 150 caracteres.')
     .optional(),
   lastName: yup
     .string()
-    .max(150, 'Last name must be less than 150 characters')
+    .max(150, 'El apellido admite como máximo 150 caracteres.')
     .optional(),
   userType: yup
     .string()
-    .oneOf(['retail', 'institutional'], 'Invalid user type')
+    .oneOf(['retail', 'institutional'], 'Selecciona un tipo de cuenta válido.')
     .default('retail'),
 })
 
@@ -54,11 +54,11 @@ export const registerSchema = yup.object().shape({
 export const loginSchema = yup.object().shape({
   username: yup
     .string()
-    .required('Username or email is required')
-    .min(3, 'Must be at least 3 characters'),
+    .required('Escribe tu nombre de usuario.')
+    .min(3, 'El usuario debe tener al menos 3 caracteres.'),
   password: yup
     .string()
-    .required('Password is required'),
+    .required('Escribe tu contraseña.'),
 })
 
 /**
@@ -67,8 +67,8 @@ export const loginSchema = yup.object().shape({
 export const forgotPasswordSchema = yup.object().shape({
   email: yup
     .string()
-    .required('Email is required')
-    .email('Please enter a valid email address'),
+    .required('Escribe tu correo electrónico.')
+    .email('Escribe un correo electrónico válido.'),
 })
 
 /**
@@ -77,17 +77,17 @@ export const forgotPasswordSchema = yup.object().shape({
 export const resetPasswordSchema = yup.object().shape({
   password: yup
     .string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/[0-9]/, 'Password must contain at least one number')
+    .required('Escribe tu contraseña.')
+    .min(8, 'La contraseña debe tener al menos 8 caracteres.')
+    .matches(/[A-Z]/, 'Incluye una letra mayúscula.')
+    .matches(/[a-z]/, 'Incluye una letra minúscula.')
+    .matches(/[0-9]/, 'Incluye un número.')
     .matches(
       /[!@#$%^&*(),.?":{}|<>]/,
-      'Password must contain at least one special character'
+      'Incluye un símbolo.'
     ),
   passwordConfirm: yup
     .string()
-    .required('Please confirm your password')
-    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+    .required('Repite tu contraseña.')
+    .oneOf([yup.ref('password'), null], 'Las contraseñas deben coincidir.'),
 })

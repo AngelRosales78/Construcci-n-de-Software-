@@ -11,8 +11,8 @@ export default function ForgotPassword() {
           <p>Ingresa el correo asociado a tu cuenta para solicitar un enlace</p>
         </div>
 
-        {error && <div className="auth-error">{error}</div>}
-        {success && <div className="auth-success">Solicitud recibida. Si la cuenta existe, se generará un enlace de recuperación.</div>}
+        {error && <div className="auth-error" role="alert">{error}</div>}
+        {success && <div className="auth-success" role="status">Solicitud recibida. Si la cuenta existe, se generará un enlace de recuperación.</div>}
 
         {!success && (
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -23,10 +23,12 @@ export default function ForgotPassword() {
                 type="email"
                 autoComplete="email"
                 {...register('email')}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-error' : undefined}
                 placeholder="tu@correo.com"
               />
               {errors.email && (
-                <span className="error-text">{errors.email.message}</span>
+                <span id="email-error" className="error-text" role="alert">{errors.email.message}</span>
               )}
             </div>
 

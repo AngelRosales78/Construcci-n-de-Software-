@@ -1,3 +1,4 @@
+import PasswordInput from './PasswordInput'
 import { useRegisterViewModel } from '../../viewmodels/useRegisterViewModel'
 import { Link } from 'react-router-dom'
 import AuthHeader from './AuthHeader'
@@ -10,33 +11,37 @@ export default function Register() {
       <div className="auth-card auth-card--large">
         <AuthHeader mode="register" />
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && <div className="auth-error" role="alert">{error}</div>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="firstName">Nombre</label>
+              <label htmlFor="firstName">Nombre (opcional)</label>
               <input
                 id="firstName"
                 type="text"
                 {...register('firstName')}
-                placeholder="John"
+                aria-invalid={Boolean(errors.firstName)}
+                aria-describedby={errors.firstName ? 'firstName-error' : undefined}
+                placeholder="Tu nombre"
               />
               {errors.firstName && (
-                <span className="error-text">{errors.firstName.message}</span>
+                <span id="firstName-error" className="error-text" role="alert">{errors.firstName.message}</span>
               )}
             </div>
 
             <div className="form-group">
-              <label htmlFor="lastName">Apellido</label>
+              <label htmlFor="lastName">Apellido (opcional)</label>
               <input
                 id="lastName"
                 type="text"
                 {...register('lastName')}
-                placeholder="Doe"
+                aria-invalid={Boolean(errors.lastName)}
+                aria-describedby={errors.lastName ? 'lastName-error' : undefined}
+                placeholder="Tu apellido"
               />
               {errors.lastName && (
-                <span className="error-text">{errors.lastName.message}</span>
+                <span id="lastName-error" className="error-text" role="alert">{errors.lastName.message}</span>
               )}
             </div>
           </div>
@@ -48,10 +53,12 @@ export default function Register() {
               type="text"
               autoComplete="username"
               {...register('username')}
+                aria-invalid={Boolean(errors.username)}
+                aria-describedby={errors.username ? 'username-error' : undefined}
               placeholder="Elige un nombre de usuario"
             />
             {errors.username && (
-              <span className="error-text">{errors.username.message}</span>
+              <span id="username-error" className="error-text" role="alert">{errors.username.message}</span>
             )}
           </div>
 
@@ -62,10 +69,12 @@ export default function Register() {
               type="email"
               autoComplete="email"
               {...register('email')}
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'email-error' : undefined}
               placeholder="tu@correo.com"
             />
             {errors.email && (
-              <span className="error-text">{errors.email.message}</span>
+              <span id="email-error" className="error-text" role="alert">{errors.email.message}</span>
             )}
           </div>
 
@@ -75,33 +84,39 @@ export default function Register() {
               <option value="retail">Inversor individual</option>
               <option value="institutional">Inversor institucional</option>
             </select>
+            <small className="auth-hint">Describe tu perfil; no otorga permisos de administrador.</small>
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
-            <input
+            <PasswordInput
               id="password"
               type="password"
               autoComplete="new-password"
               {...register('password')}
-              placeholder="8 caracteres: mayúscula, minúscula, número y símbolo"
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'password-error' : undefined}
+              placeholder="Crea una contraseña segura"
             />
             {errors.password && (
-              <span className="error-text">{errors.password.message}</span>
+              <span id="password-error" className="error-text" role="alert">{errors.password.message}</span>
             )}
           </div>
 
           <div className="form-group">
             <label htmlFor="passwordConfirm">Confirmar contraseña</label>
-            <input
+            <PasswordInput
+              visibilityLabel="confirmación de contraseña"
               id="passwordConfirm"
               type="password"
               autoComplete="new-password"
               {...register('passwordConfirm')}
+                aria-invalid={Boolean(errors.passwordConfirm)}
+                aria-describedby={errors.passwordConfirm ? 'passwordConfirm-error' : undefined}
               placeholder="Repite tu contraseña"
             />
             {errors.passwordConfirm && (
-              <span className="error-text">{errors.passwordConfirm.message}</span>
+              <span id="passwordConfirm-error" className="error-text" role="alert">{errors.passwordConfirm.message}</span>
             )}
           </div>
 

@@ -1,3 +1,4 @@
+import PasswordInput from './PasswordInput'
 import { useLoginViewModel } from '../../viewmodels/useLoginViewModel'
 import { Link } from 'react-router-dom'
 import AuthHeader from './AuthHeader'
@@ -10,7 +11,7 @@ export default function Login() {
       <div className="auth-card">
         <AuthHeader mode="login" />
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && <div className="auth-error" role="alert">{error}</div>}
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="form-group">
@@ -20,24 +21,28 @@ export default function Login() {
               type="text"
               autoComplete="username"
               {...register('username')}
+                aria-invalid={Boolean(errors.username)}
+                aria-describedby={errors.username ? 'username-error' : undefined}
               placeholder="Tu nombre de usuario"
             />
             {errors.username && (
-              <span className="error-text">{errors.username.message}</span>
+              <span id="username-error" className="error-text" role="alert">{errors.username.message}</span>
             )}
           </div>
 
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
-            <input
+            <PasswordInput
               id="password"
               type="password"
               autoComplete="current-password"
               {...register('password')}
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'password-error' : undefined}
               placeholder="Tu contraseña"
             />
             {errors.password && (
-              <span className="error-text">{errors.password.message}</span>
+              <span id="password-error" className="error-text" role="alert">{errors.password.message}</span>
             )}
           </div>
 
