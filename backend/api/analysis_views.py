@@ -47,6 +47,8 @@ class CompanyAnalysisView(CompanyPillarsView):
             'model': MODEL, 'provider': 'llama.cpp local · Qwen2.5 1.5B', 'validated': True,
             'validation_scope': 'Estructura, referencias y cifras contrastadas; no certifica todas las interpretaciones del modelo.',
             'context_hash': digest, 'metrics': context['metrics'], 'analysis': content,
+            'pillar_availability': {key: any(m['status'] == 'available' and m['pillar'] == key
+                for m in context['metrics'].values()) for key in context['pillars']},
             'sources': sorted({c['source']['url'] for p in pillars['pillars'] for m in p['metrics'] for c in m.get('components', [])}),
             'generated_at': timezone.now().isoformat(), 'cache_hit': False}
         record = AnalysisRecord.objects.create(company=company, context_hash=digest, context=context, response=result, validated=True)

@@ -56,6 +56,8 @@ def validate_analysis(candidate, context):
                      if metric['status'] == 'available' and (pillar is None or metric['pillar'] == pillar)}
         if (available and not ids) or any(key not in available for key in ids):
             raise ValueError('unsupported_claim')
+        if not available and not re.search(r'no disponible|sin datos|faltan|insuficient', text, re.I):
+            raise ValueError('unsupported_claim')
         allowed = {Decimal(str(context['fiscal_year']))}
         for key in ids:
             raw = Decimal(str(available[key]['value']))
