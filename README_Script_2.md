@@ -47,3 +47,11 @@ Los contratos pendientes están en docs/android/CONTRATOS_PENDIENTES.md. No se p
 - Evidencias sin credenciales en docs/android/evidence/ y matriz de alcance en docs/android/MATRIZ.md.
 
 Desde android, las pruebas locales se ejecutan con gradlew.bat testDebugUnitTest. Los tres casos de servidor real solo se habilitan mediante tools/verify_android_server.py; no deben recibir credenciales de una base personal.
+
+## Si falla el registro
+
+- Iniciar el servidor antes de enviar el formulario y mantener su consola abierta. La app del emulador consulta `http://10.0.2.2:8000/api/v1/`; `localhost` dentro del emulador apunta al propio Android.
+- La contraseña debe tener al menos ocho caracteres, una mayúscula, una minúscula, un número y un símbolo. `1234` no cumple la validación del servidor. La app muestra esta regla y valida antes de enviar.
+- Los errores de usuario/correo duplicado o validación se muestran por campo. Los fallos de conexión, espera agotada y servidor se distinguen; no se muestran páginas HTML ni detalles internos de errores 500.
+- Si el registro pudo crear la cuenta pero la respuesta no se procesó, intentar iniciar sesión antes de repetir el registro.
+- Volver a ejecutar **app** desde Android Studio para instalar el código actualizado en el emulador.

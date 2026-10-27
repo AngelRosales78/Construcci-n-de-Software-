@@ -38,7 +38,7 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         }
     }
     fun register(username: String, email: String, password: String, passwordConfirm: String, firstName: String, lastName: String) {
-        if (password != passwordConfirm) { registerState = Resource.Error("Las contraseñas no coinciden"); return }
+        registrationPasswordError(password, passwordConfirm)?.let { registerState = Resource.Error(it); return }
         viewModelScope.launch {
             logoutState = Resource.Empty()
             registerState = Resource.Loading()

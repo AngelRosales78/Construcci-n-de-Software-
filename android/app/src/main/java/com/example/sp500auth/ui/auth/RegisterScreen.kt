@@ -105,6 +105,7 @@ fun RegisterScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text("Contraseña") },
+            supportingText = { Text(PASSWORD_HELP) },
             visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             trailingIcon = {
