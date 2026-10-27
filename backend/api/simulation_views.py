@@ -10,6 +10,21 @@ from .simulations import run_simulation
 
 class SimulationInput(serializers.Serializer):
     seed = serializers.IntegerField(min_value=0, max_value=2147483647, default=2026)
+    annual_return = serializers.FloatField(min_value=-1, max_value=1.5, required=False)
+    annual_volatility = serializers.FloatField(min_value=0, max_value=2, required=False)
+
+    def to_internal_value(self, data):
+        if not isinstance(data, dict) or set(data) - set(self.fields):
+            raise serializers.ValidationError('Use solo semilla, tasa anual y volatilidad admitidas.')
+        if any(isinstance(value, bool) for value in data.values()):
+            raise serializers.ValidationError('Los parámetros deben ser números, no booleanos.')
+        return super().to_internal_value(data)
+
+    def validate(self, attrs):
+        import math
+        if any(not math.isfinite(value) for value in attrs.values()):
+            raise serializers.ValidationError('Los parámetros deben ser números finitos.')
+        return attrs
 
 
 class SimulationThrottle(UserRateThrottle):
@@ -26,7 +41,8 @@ class CompanySimulationView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         rows = list(company.prices.filter(date__lte=timezone.localdate())
                     .order_by('-date').values('date', 'adjusted_close', 'currency', 'source', 'is_demo')[:1261])[::-1]
-        result, snapshot = run_simulation(rows, serializer.validated_data['seed'])
+        params = {key: value for key, value in serializer.validated_data.items() if key != 'seed'}
+        result, snapshot = run_simulation(rows, serializer.validated_data['seed'], params)
         result['ticker'] = company.ticker
         if result['status'] == 'available':
             run = SimulationRun.objects.create(user=request.user, company=company, source_snapshot=snapshot, result=result)
