@@ -41,6 +41,10 @@ def validate_analysis(candidate, context):
     for kind in ('strengths', 'risks'):
         if not isinstance(candidate[kind], list) or len(candidate[kind]) > 5:
             raise ValueError('invalid_list')
+    argument_texts = [claim.get('text', '').strip().casefold() for kind in ('strengths', 'risks')
+                      for claim in candidate[kind] if isinstance(claim, dict) and isinstance(claim.get('text'), str)]
+    if len(argument_texts) != len(set(argument_texts)):
+        raise ValueError('invalid_list')
     claims = [(candidate['summary'], None)]
     claims += [(claim, key) for key, claim in candidate['pillars'].items()]
     claims += [(claim, None) for kind in ('strengths', 'risks') for claim in candidate[kind]]
