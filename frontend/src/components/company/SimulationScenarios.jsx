@@ -3,7 +3,7 @@ import Highcharts from 'highcharts'
 import HighchartsReact from 'highcharts-react-official'
 import { useSimulationViewModel } from '../../viewmodels/useSimulationViewModel'
 
-const SCENARIOS = [['base', 'Base · percentil 50', '#75ff9e'], ['optimistic', 'Optimista · percentil 90', '#64b8ff']]
+const SCENARIOS = [['base', 'Base · percentil 50', '#75ff9e'], ['optimistic', 'Optimista · percentil 90', '#64b8ff'], ['pessimistic', 'Pesimista · percentil 10', '#ffb95f']]
 export default function SimulationScenarios() {
   const { data, loading, error, simulate } = useSimulationViewModel()
   const options = useMemo(() => ({
