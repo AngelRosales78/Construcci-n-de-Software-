@@ -37,9 +37,11 @@ fun RegisterScreen(
 
     LaunchedEffect(registerState) {
         if (registerState is Resource.Success) {
-            navController.navigate(NavRoutes.Dashboard.route) {
-                popUpTo(NavRoutes.Register.route) { inclusive = true }
+            navController.navigate(NavRoutes.Login.route) {
+                popUpTo(0) { inclusive = true }
+                launchSingleTop = true
             }
+            viewModel.registrationCompleted()
         }
     }
 

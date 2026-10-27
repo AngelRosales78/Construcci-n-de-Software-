@@ -46,6 +46,12 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
             if (registerState is Resource.Success) biometricEnabled = false
         }
     }
+    fun registrationCompleted() {
+        registerState = Resource.Empty()
+        loginState = Resource.Empty()
+        sessionState = Resource.Empty()
+        userProfileState = Resource.Empty()
+    }
     fun restoreSession() {
         viewModelScope.launch {
             sessionState = Resource.Loading()

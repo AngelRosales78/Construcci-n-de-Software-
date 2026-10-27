@@ -31,7 +31,6 @@ class AuthRepository @Inject constructor(private val api: AuthApiService, privat
         val body = response.body()
         if (response.isSuccessful && body != null && body.accessToken.isNotBlank() && body.refreshToken.isNotBlank()) {
             tokens.clearTokens()
-            tokens.saveTokens(body.accessToken, body.refreshToken)
             Resource.Success(Unit)
         } else if (!response.isSuccessful) Resource.Error(registrationHttpError(response.code(), response.errorBody()?.string()))
         else Resource.Error("El servidor no devolvió una sesión válida. Intenta iniciar sesión con tu cuenta.")
