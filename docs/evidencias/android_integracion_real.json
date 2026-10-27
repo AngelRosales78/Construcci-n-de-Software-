@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-10-27T17:27:05.772192+00:00",
+  "mode": "Android JVM + Retrofit + Django + PostgreSQL + proveedor IA local",
+  "tests": 68,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "live_cases": [
+    "pilares y puntaje",
+    "catálogo/ficha",
+    "periodo ausente",
+    "percentiles/restauración",
+    "IA sencilla/técnica",
+    "datos ausentes"
+  ],
+  "device_test": "Se registra por separado; una prueba JVM no demuestra interfaz en dispositivo."
+}

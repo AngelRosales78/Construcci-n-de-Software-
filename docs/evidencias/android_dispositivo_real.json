@@ -1,0 +1,55 @@
+{
+  "checked_at": "2026-10-27T17:24:35.175056+00:00",
+  "device": "Pixel_7 / emulator-5556",
+  "passed": true,
+  "tests": 3,
+  "server": "misma API de la web en 58010",
+  "checks": [
+    "cinco pilares y puntaje 85,25",
+    "tres percentiles con datos reales de origen",
+    "ocultar curva sin recalcular",
+    "tasa y volatilidad cero",
+    "restauración reproducible",
+    "IA sencilla y técnica con cinco pilares"
+  ],
+  "screenshots": [
+    {
+      "screen": "puntaje",
+      "sha256": "58c5caf3a620569a64920bff02e3a7968734652a9531e3a1a2c4bb54aaa745d9"
+    },
+    {
+      "screen": "liquidity",
+      "sha256": "f324a0ee2847350447825f8dcf68817607200a98cb477c6b4a081bf287baa395"
+    },
+    {
+      "screen": "profitability",
+      "sha256": "6e4b1daca1b40849bc35eb001558ac15112b5a648dab1a761ab4b21d4e41a208"
+    },
+    {
+      "screen": "solvency",
+      "sha256": "d16c948262019917a7f0cbbbafcb30957d32312f8c3547b14f96d26211926c4a"
+    },
+    {
+      "screen": "efficiency",
+      "sha256": "47aae7e247754abdda91d2632f805598b31c3afb62fe023070201a8154fe75a5"
+    },
+    {
+      "screen": "growth",
+      "sha256": "2236dca5517c41633d8d12f30dbb8c720a5014a6e267c44d1bb4821947a56dae"
+    },
+    {
+      "screen": "escenarios",
+      "sha256": "253d9a083e1e9bb6c45e1094945ad662d726a48fb685ed2ce33ffef43ab3f271"
+    },
+    {
+      "screen": "ia_sencilla",
+      "sha256": "274c9a41ab56724a0a2e83a81bdf86318585eac99c59d8358917a5b2bb5c8fc6"
+    },
+    {
+      "screen": "ia_tecnica",
+      "sha256": "82b469b8af59e599f9194e0c577557598b9490da0f30e47c3a6822b3b09914af"
+    }
+  ],
+  "origin_android": "origin/Rosales@18e4893",
+  "limitation": "Emulador; no certifica funcionamiento en todos los dispositivos físicos."
+}

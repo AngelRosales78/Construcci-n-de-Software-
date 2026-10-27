@@ -63,7 +63,7 @@ const sorted = values => [...values].sort((a, b) => a.localeCompare(b, 'es', { s
     const evidence = {
       checkedAt: new Date().toISOString(), browser: 'Google Chrome',
       ascending, descending, sectors, suggestions, footers,
-      automatedTests: { frontend: 77, backend: 333 },
+      automatedTests: { frontend: 77, backend: 347 },
       limitation: 'La comprobación visual corresponde a la web; no certifica Android ni entrega SMTP.',
     }
     fs.writeFileSync(path.join(__dirname, '../../docs/evidencias/preparacion_sprint2_27_octubre.json'), JSON.stringify(evidence, null, 2) + '\n')

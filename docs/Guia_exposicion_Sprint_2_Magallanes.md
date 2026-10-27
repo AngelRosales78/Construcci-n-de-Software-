@@ -2,7 +2,9 @@
 
 Preparada el 27 de octubre de 2026 a partir del código y de las comprobaciones de la web. El guion principal dura aproximadamente 7 minutos; las fórmulas y preguntas son material de estudio, no texto para leer completo durante la exposición.
 
-**Alcance:** Diego presenta servidor y web. Android corresponde a Angel/Rosales y necesita su propia demostración. El documento vigente del Sprint 2 contiene 69 tareas; no debe confundirse con las 95 tareas del Sprint 1. Las 27 tareas exclusivas de Diego tienen implementación web/servidor; también se implementó el servicio de IA local y su configuración con autorización del usuario. Las tareas compartidas no quedan aceptadas en ambas plataformas solo por mostrar la web.
+**Alcance:** Diego presenta servidor y web. Android corresponde a Angel/Rosales; su implementación ya tiene demostración automatizada en emulador dentro de la rama integrada. El documento vigente del Sprint 2 contiene 69 tareas; no debe confundirse con las 95 tareas del Sprint 1. Las 27 tareas exclusivas de Diego tienen implementación web/servidor; también se implementó el servicio de IA local y su configuración con autorización del usuario. Las tareas compartidas no quedan aceptadas en ambas plataformas solo por mostrar la web.
+
+**Actualización del 27/10 después de integrar:** Android de Angel (`Rosales@18e4893`) está incorporado en la rama integrada mediante `b4a0ee3`. Se corrigieron los contratos de simulación/IA y el tiempo de espera del modelo. Se comprobaron 347 pruebas servidor, 77 web, 68 JVM y tres de interfaz en Pixel_7, incluyendo el recorrido real de los cinco pilares, puntaje, escenarios y ambos niveles de IA. Estado técnico: 66 tareas al 100 %; T65/T69 parciales y T66 pendiente por acuerdos y seguimiento reales del equipo. La matriz reconciliada está en `Sprint_2_avance_26_octubre.md`.
 
 ## 1. Demostración del Sprint 2
 
@@ -47,7 +49,7 @@ Si falta tiempo, demostrar el cambio de nivel de IA con respuestas ya preparadas
 | Argumentos y lenguaje | T57/T58, T61/T62 | Fortalezas, riesgos y nivel sencillo/técnico. |
 | Proveedor local | T67 | Qwen3 y llama.cpp preparados, con hashes de procedencia. |
 
-Las tareas pares de prueba T04, T08, T12, T16, T20, T24, T28, T32, T36, T40, T44, T48, T52, T56, T60 y T64 tienen evidencia servidor/web, pero siguen pendientes de la comparación conjunta con Android. La matriz detallada está en [el avance auditado](C:/Users/Magal/.codex/.chatgpt-projects/g-p-6acaed37aab8819194a2ca4d4594528c/Integracion_Sprint1/docs/Sprint_2_avance_26_octubre.md).
+Las tareas de prueba T04, T08, T12, T16, T20, T24, T28, T32, T36, T40, T44, T48, T52, T56, T60 y T64 cuentan con pruebas de servidor/web y Android y recorrido real en ambas plataformas. La aceptación del equipo sigue pendiente en T65/T66/T69. La matriz detallada está en [el avance auditado](C:/Users/Magal/.codex/.chatgpt-projects/g-p-6acaed37aab8819194a2ca4d4594528c/Integracion_Sprint1/docs/Sprint_2_avance_26_octubre.md).
 
 ### Lista de verificación: funciones, límites y pendientes
 
@@ -63,7 +65,8 @@ Las tareas pares de prueba T04, T08, T12, T16, T20, T24, T28, T32, T36, T40, T44
 
 - [ ] Verificación completa de correo: existe `is_verified`, pero registrarse no demuestra un flujo de activación por correo terminado.
 - [ ] Administración completa: el panel actual muestra un resumen; no una gestión completa de usuarios y datos.
-- [ ] Android, revisión conjunta de metodología, Planning Poker real y seguimiento/burndown: requieren evidencia propia del equipo.
+- [x] Integración Android de escenarios/IA y recorrido real en emulador.
+- [ ] Revisión conjunta de metodología (T65), Planning Poker real (T66) y seguimiento/burndown completo (T69).
 
 La configuración del arranque de la demostración ya fija `FRONTEND_URL` a `http://127.0.0.1:55183`, para que los enlaces de recuperación apunten a esta web. Esto corrige el destino del enlace; no configura el envío SMTP.
 
@@ -145,7 +148,7 @@ Las notas se calculan después de los ratios. Ejemplo: la regla de liquidez corr
 | Pregunta | Respuesta que puedes defender |
 |---|---|
 | ¿Qué agregaste en el Sprint 2? | Cinco pilares con fuentes, radar y puntaje; simulaciones configurables y guía de IA local. Registro y exploración sirven de base e integración. |
-| ¿Todo el Sprint está terminado? | Mi implementación web/servidor está preparada; el cierre conjunto necesita Android, revisión y evidencia de las tareas compartidas. |
+| ¿Todo el Sprint está terminado? | Mi implementación web/servidor está preparada; Android ya está integrado y comprobado en emulador; el cierre requiere los acuerdos y registros reales de T65, T66 y T69. |
 | ¿Cómo acreditas varias tareas con menos commits? | Muestro la matriz tarea–HU–archivo–prueba–commit. Un commit puede tocar varios archivos y una tarea puede necesitar correcciones posteriores; no se cuentan tareas solo por commits. |
 | ¿Qué significa cierre ajustado? | Es el cierre histórico ajustado por el proveedor por eventos como dividendos y divisiones de acciones para comparar fechas. No es una cotización en vivo. |
 | ¿Por qué existen 1M, 6M, 1Y y 5Y? | Solicitan uno/seis meses o uno/cinco años de precios hasta la fecha de consulta. No cambian el balance anual. Solo se devuelven las sesiones disponibles. |
@@ -181,7 +184,7 @@ Las notas se calculan después de los ratios. Ejemplo: la regla de liquidez corr
 | ¿Qué es un JWT? | Un token firmado que acredita una sesión hasta su vencimiento. Firmado no significa cifrado; no debe contener secretos. |
 | ¿Guardar tokens en localStorage es perfecto para producción? | No. Es la elección actual del prototipo y está expuesta a XSS. Un despliegue real requiere revisar cookies HttpOnly/Secure, CSRF, HTTPS y las demás amenazas. |
 | ¿Ya se envía el correo al buzón? | En esta demostración el backend es consola. El flujo tiene pruebas de recuperación/SMTP local, pero no afirmo entrega externa sin configurar un proveedor SMTP. |
-| ¿Qué limitaciones reconoces? | Cobertura de una empresa, comparación sectorial insuficiente, reglas académicas pendientes de revisión y cierre conjunto Android no certificado por la web. |
+| ¿Qué limitaciones reconoces? | Cobertura de una empresa, comparación sectorial insuficiente, reglas académicas pendientes de revisión y validación en emulador que no cubre todos los dispositivos físicos, y acuerdos/seguimiento del equipo pendientes. |
 
 ## 5. Código y verificación de ordenamiento y altura
 
@@ -232,7 +235,7 @@ No se añadió un `overflow: hidden` global para ocultar el problema. Si aparece
 
 ### Comprobaciones que puedes enseñar
 
-- Pruebas actuales: 77 frontend y 333 backend aprobadas; compilación correcta. Los conteos se refieren a esta revisión, no sustituyen la demostración Android.
+- Pruebas actuales: 77 frontend, 347 backend y 68 JVM Android aprobadas; tres pruebas de interfaz ejecutadas en emulador; compilación correcta. Los conteos se refieren a esta revisión, no sustituyen la demostración Android.
 - Chrome: empresas por nombre en ambas direcciones, sectores en español, autocompletado, navegación y acceso al pie de página en ventanas bajas/móviles.
 - Para consultar trazabilidad: `git log --all --oneline --grep="T25"` o sustituir por la tarea deseada. Mostrar también el archivo y una prueba; un mensaje de commit por sí solo no acredita aceptación.
 
