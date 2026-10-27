@@ -28,6 +28,7 @@ class SimulationInput(serializers.Serializer):
 
 
 class SimulationThrottle(UserRateThrottle):
+    scope = 'simulation'
     rate = '12/min'
 
 

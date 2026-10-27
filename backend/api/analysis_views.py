@@ -12,6 +12,7 @@ from .analysis_provider import generate, MODEL, MODEL_SHA256
 
 
 class AnalysisThrottle(UserRateThrottle):
+    scope = 'financial_analysis'
     rate = '4/min'
 
 
