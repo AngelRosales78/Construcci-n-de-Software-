@@ -7,10 +7,10 @@ import random
 from datetime import date
 from statistics import mean, stdev
 
-VERSION = 'gbm-monthly-v1'
+VERSION = 'gbm-monthly-v1.1'
 PATHS = 2000
 STEPS_PER_MONTH = 21
-SCENARIOS = {'base': 0.5}
+SCENARIOS = {'base': 0.5, 'optimistic': 0.9}
 
 
 def quantile(values, probability):
