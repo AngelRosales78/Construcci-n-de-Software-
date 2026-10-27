@@ -36,6 +36,8 @@
 .analysis-arguments ul { padding-left: 18px; }
 .ai-panel .financial-help { margin-top: 20px; }
 .ai-panel .financial-help a { overflow-wrap: anywhere; }
+.analysis-level { display: inline-flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 0 20px 16px 0; font-size: 14px; }
+.analysis-level select { padding: 10px; border-radius: 8px; background: var(--terminal-bg); color: var(--terminal-text); border: 1px solid var(--terminal-line); }
 body { background: var(--terminal-bg); color: var(--terminal-text); font-size: 15px; }
 button, input, select { font: inherit; }
 a { color: var(--primary); }

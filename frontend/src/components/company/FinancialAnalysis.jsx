@@ -8,10 +8,11 @@ function EvidenceClaim({ claim, metrics }) {
 }
 
 export default function FinancialAnalysis({ fiscalYear }) {
-  const { data, loading, error, generate } = useAnalysisViewModel(fiscalYear)
+  const { data, loading, error, generate, level, changeLevel } = useAnalysisViewModel(fiscalYear)
   return <section className="ai-panel" aria-labelledby="analysis-title">
     <p className="section-eyebrow">EXPLICACIÓN CON INTELIGENCIA ARTIFICIAL LOCAL</p><h2 id="analysis-title">Entender los resultados</h2>
     <p>La IA explica las métricas del ejercicio {fiscalYear || 'seleccionado'}. Las cifras las calcula el servidor; las interpretaciones pueden requerir revisión.</p>
+    <label className="analysis-level">Nivel de explicación <select value={level} onChange={event => changeLevel(event.target.value)} disabled={loading}><option value="simple">Sencillo</option><option value="technical">Técnico</option></select></label>
     <button className="primary-action" onClick={() => generate()} disabled={loading}>{loading ? 'Generando análisis…' : 'Generar explicación de IA'}</button>
     {loading && <p role="status">El modelo local está redactando y validando la respuesta. La primera consulta puede tardar.</p>}
     {error && <p role="alert">{error}</p>}
