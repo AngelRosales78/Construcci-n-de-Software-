@@ -12,7 +12,7 @@ test('las vistas no acceden directamente a HTTP, servicios de autenticación o a
 })
 
 test('los ViewModels dependen del Model y no importan componentes visuales', () => {
-  expect(Object.keys(viewModels)).toHaveLength(13)
+  expect(Object.keys(viewModels)).toHaveLength(14)
   for (const [file, source] of Object.entries(viewModels)) {
     expect(source, file).toContain('../models/')
     expect(source, file).not.toMatch(/from\s+['"][^'"]*components\//)

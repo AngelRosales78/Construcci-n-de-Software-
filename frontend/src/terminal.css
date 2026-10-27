@@ -12,6 +12,10 @@
   --terminal-muted: #bacbb9;
   --terminal-line: #343e39;
 }
+.simulation-panel, .ai-panel { background: var(--terminal-panel); border-radius: 14px; padding: 24px; margin: 24px 0; }
+.simulation-panel > p, .ai-panel > p { color: var(--terminal-muted); line-height: 1.8; margin: 14px 0; }
+.simulation-panel .financial-help { margin: 18px 0 0; }
+.simulation-panel .help-content { overflow-wrap: anywhere; }
 body { background: var(--terminal-bg); color: var(--terminal-text); font-size: 15px; }
 button, input, select { font: inherit; }
 a { color: var(--primary); }
