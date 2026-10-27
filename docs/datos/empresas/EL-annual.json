@@ -1,0 +1,569 @@
+{
+  "ticker": "EL",
+  "entity": "THE ESTEE LAUDER COMPANIES INC.",
+  "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001001250.json",
+  "snapshot_sha256": "3b9b6c1c907236f2149207b3a223aa1674e5f72b044346fa8be0acad363661c0",
+  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "annual_records": [
+    {
+      "fiscal_year": 2020,
+      "start": "2019-07-01",
+      "end": "2020-06-30",
+      "filed": "2020-08-28",
+      "accession": "0001001250-20-000065",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 8892000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 5179000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1194000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": 684000000,
+          "tag": "NetIncomeLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 17781000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 3935000000,
+          "tag": "StockholdersEquity",
+          "available": true
+        },
+        "revenue": {
+          "value": 14294000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": 1046000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": 161000000,
+          "tag": "InterestExpense",
+          "available": true
+        },
+        "inventory": {
+          "value": 2062000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 3552000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    },
+    {
+      "fiscal_year": 2021,
+      "start": "2020-07-01",
+      "end": "2021-06-30",
+      "filed": "2021-08-27",
+      "accession": "0001001250-21-000127",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 9768000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 5298000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1702000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": 2875000000,
+          "tag": "ProfitLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 21971000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 6057000000,
+          "tag": "StockholdersEquity",
+          "available": true
+        },
+        "revenue": {
+          "value": 16215000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": 3331000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": 173000000,
+          "tag": "InterestExpense",
+          "available": true
+        },
+        "inventory": {
+          "value": 2505000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 3834000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    },
+    {
+      "fiscal_year": 2022,
+      "start": "2021-07-01",
+      "end": "2022-06-30",
+      "filed": "2022-08-24",
+      "accession": "0001001250-22-000122",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 9298000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 5815000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1629000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": 2408000000,
+          "tag": "ProfitLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 20910000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 5590000000,
+          "tag": "StockholdersEquity",
+          "available": true
+        },
+        "revenue": {
+          "value": 17737000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": 3036000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": 167000000,
+          "tag": "InterestExpense",
+          "available": true
+        },
+        "inventory": {
+          "value": 2920000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 4305000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    },
+    {
+      "fiscal_year": 2023,
+      "start": "2022-07-01",
+      "end": "2023-06-30",
+      "filed": "2023-08-18",
+      "accession": "0001001250-23-000112",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 9139000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 6240000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1452000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": 1010000000,
+          "tag": "ProfitLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 23415000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 5585000000,
+          "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
+        },
+        "revenue": {
+          "value": 15910000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": 1397000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": 255000000,
+          "tag": "InterestExpense",
+          "available": true
+        },
+        "inventory": {
+          "value": 2979000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 4564000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    },
+    {
+      "fiscal_year": 2024,
+      "start": "2023-07-01",
+      "end": "2024-06-30",
+      "filed": "2024-08-19",
+      "accession": "0001001250-24-000116",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 7922000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 5702000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1727000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": 409000000,
+          "tag": "ProfitLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 21677000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 5314000000,
+          "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
+        },
+        "revenue": {
+          "value": 15608000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": 772000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": 378000000,
+          "tag": "InterestExpense",
+          "available": true
+        },
+        "inventory": {
+          "value": 2175000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 4424000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    },
+    {
+      "fiscal_year": 2025,
+      "start": "2024-07-01",
+      "end": "2025-06-30",
+      "filed": "2025-08-20",
+      "accession": "0001001250-25-000099",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 7069000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 5435000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1530000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": -1133000000,
+          "tag": "ProfitLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 19892000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 3865000000,
+          "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
+        },
+        "revenue": {
+          "value": 14326000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": -1040000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": null,
+          "tag": "InterestExpense",
+          "available": false
+        },
+        "inventory": {
+          "value": 2074000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 3729000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    },
+    {
+      "fiscal_year": 2026,
+      "start": "2025-07-01",
+      "end": "2026-06-30",
+      "filed": "2026-08-19",
+      "accession": "0001001250-26-000041",
+      "unit": "USD",
+      "values": {
+        "current_assets": {
+          "value": 7612000000,
+          "tag": "AssetsCurrent",
+          "available": true
+        },
+        "current_liabilities": {
+          "value": 6231000000,
+          "tag": "LiabilitiesCurrent",
+          "available": true
+        },
+        "cash": {
+          "value": null,
+          "tag": "CashAndCashEquivalentsAtCarryingValue",
+          "available": false
+        },
+        "short_term_investments": {
+          "value": null,
+          "tag": "ShortTermInvestments",
+          "available": false
+        },
+        "receivables": {
+          "value": 1518000000,
+          "tag": "AccountsReceivableNetCurrent",
+          "available": true
+        },
+        "net_income": {
+          "value": 182000000,
+          "tag": "ProfitLoss",
+          "available": true
+        },
+        "total_assets": {
+          "value": 19762000000,
+          "tag": "Assets",
+          "available": true
+        },
+        "book_equity": {
+          "value": 3806000000,
+          "tag": "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
+        },
+        "revenue": {
+          "value": 15049000000,
+          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
+          "available": true
+        },
+        "total_liabilities": {
+          "value": null,
+          "tag": "Liabilities",
+          "available": false
+        },
+        "income_before_tax": {
+          "value": 517000000,
+          "tag": "IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest",
+          "available": true
+        },
+        "interest_expense": {
+          "value": null,
+          "tag": "InterestExpense",
+          "available": false
+        },
+        "inventory": {
+          "value": 1999000000,
+          "tag": "InventoryNet",
+          "available": true
+        },
+        "cost_of_sales": {
+          "value": 3687000000,
+          "tag": "CostOfGoodsAndServicesSold",
+          "available": true
+        }
+      }
+    }
+  ]
+}

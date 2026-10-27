@@ -1,0 +1,47 @@
+{
+  "ticker": "CMCSA",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CMCSA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CMCSA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001166691.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "status": "unavailable",
+        "reason": "La fuente no ofrece componentes comparables suficientes para este indicador."
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001166691.json",
+    "is_demo": false,
+    "market_cap": "78299689686.00",
+    "per": "6.98",
+    "roe": "21.92",
+    "beta": "0.0301",
+    "dividend_yield": null,
+    "working_capital": "-3957000000.00",
+    "total_assets": "272631000000.00",
+    "retained_earnings": "66675000000.00",
+    "ebit": null,
+    "total_liabilities": null,
+    "sales": "123707000000.00",
+    "equity_value": null
+  }
+}

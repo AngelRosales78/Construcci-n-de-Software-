@@ -1,0 +1,48 @@
+{
+  "ticker": "WSM",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/WSM/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/WSM/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-02-02",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000719955.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/WSM/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-02-02",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000719955.json",
+    "is_demo": false,
+    "market_cap": "29440082083.00",
+    "per": "25.89",
+    "roe": "52.70",
+    "beta": "1.1471",
+    "dividend_yield": "1.1714",
+    "working_capital": "842635000.00",
+    "total_assets": "5301607000.00",
+    "retained_earnings": "1591630000.00",
+    "ebit": null,
+    "total_liabilities": "3159188000.00",
+    "sales": "7711541000.00",
+    "equity_value": null
+  }
+}

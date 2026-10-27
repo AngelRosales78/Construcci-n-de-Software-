@@ -1,0 +1,48 @@
+{
+  "ticker": "WY",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/WY/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/WY/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000106535.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/WY/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000106535.json",
+    "is_demo": false,
+    "market_cap": "14112010880.00",
+    "per": "29.53",
+    "roe": "3.38",
+    "beta": "0.2040",
+    "dividend_yield": "4.3693",
+    "working_capital": "374000000.00",
+    "total_assets": "16613000000.00",
+    "retained_earnings": "1428000000.00",
+    "ebit": "533000000.00",
+    "total_liabilities": "7187000000.00",
+    "sales": "6905000000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "ticker": "AZO",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/AZO/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/AZO/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "not_applicable",
+        "reason": "El patrimonio contable no es positivo en ambos cierres.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000866787.json",
+        "as_of": "2026-08-29"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/AZO/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-08-29",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000866787.json",
+    "is_demo": false,
+    "market_cap": "51593002110.00",
+    "per": "20.91",
+    "roe": null,
+    "beta": "0.1720",
+    "dividend_yield": "0.0000",
+    "working_capital": "-1000396000.00",
+    "total_assets": "21630510000.00",
+    "retained_earnings": "-2818482000.00",
+    "ebit": null,
+    "total_liabilities": null,
+    "sales": "20338555000.00",
+    "equity_value": null
+  }
+}

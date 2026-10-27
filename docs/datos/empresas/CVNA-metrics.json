@@ -1,0 +1,47 @@
+{
+  "ticker": "CVNA",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CVNA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CVNA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001690820.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "status": "unavailable",
+        "reason": "La fuente no ofrece componentes comparables suficientes para este indicador."
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001690820.json",
+    "is_demo": false,
+    "market_cap": "62297233923.00",
+    "per": "29.95",
+    "roe": "59.86",
+    "beta": "2.2783",
+    "dividend_yield": null,
+    "working_capital": "5030000000.00",
+    "total_assets": "13201000000.00",
+    "retained_earnings": "-9000000.00",
+    "ebit": null,
+    "total_liabilities": "8998000000.00",
+    "sales": "20322000000.00",
+    "equity_value": null
+  }
+}

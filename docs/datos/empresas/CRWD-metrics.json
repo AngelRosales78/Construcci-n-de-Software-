@@ -1,0 +1,47 @@
+{
+  "ticker": "CRWD",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CRWD/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CRWD/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "unavailable",
+        "reason": "Faltan ejercicios consecutivos comparables para calcular este indicador.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001535527.json",
+        "as_of": "2026-01-31"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "status": "unavailable",
+        "reason": "La fuente no ofrece componentes comparables suficientes para este indicador."
+      }
+    },
+    "as_of": "2026-01-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001535527.json",
+    "is_demo": false,
+    "market_cap": "268096859680.00",
+    "per": "6982.13",
+    "roe": null,
+    "beta": "1.5184",
+    "dividend_yield": null,
+    "working_capital": "3234927000.00",
+    "total_assets": "11086684000.00",
+    "retained_earnings": "-1283042000.00",
+    "ebit": null,
+    "total_liabilities": "6614079000.00",
+    "sales": "4812005000.00",
+    "equity_value": null
+  }
+}

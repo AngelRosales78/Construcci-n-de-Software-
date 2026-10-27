@@ -1,0 +1,48 @@
+{
+  "ticker": "VTRS",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/VTRS/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2021-02-26",
+        "source": "https://finance.yahoo.com/quote/VTRS/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001792044.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/VTRS/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001792044.json",
+    "is_demo": false,
+    "market_cap": "21007726902.00",
+    "per": "28.56",
+    "roe": "-21.08",
+    "beta": "0.7115",
+    "dividend_yield": "2.5648",
+    "working_capital": "2694900000.00",
+    "total_assets": "37193100000.00",
+    "retained_earnings": "-388300000.00",
+    "ebit": "-3193700000.00",
+    "total_liabilities": "22481800000.00",
+    "sales": "14250400000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "ticker": "VYLR",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/VYLR/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/VYLR/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "reporting_entity": {
+        "reason": "Estados combinados auditados del Seed Business antes de la separación de Vylor. Se excluyen las tablas de Corteva completo y los ajustes pro forma. La estructura de capital posterior a la separación puede ser distinta.",
+        "as_of": "2025-12-31",
+        "source": "https://www.sec.gov/Archives/edgar/data/2128626/000119312526396054/ck0002128626-ex99_1.htm"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://www.sec.gov/Archives/edgar/data/2128626/000119312526396054/ck0002128626-ex99_1.htm",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "status": "unavailable",
+        "reason": "Se necesitan al menos 181 cierres coincidentes con el S&P 500 para esta estimación de beta."
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/VYLR/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://www.sec.gov/Archives/edgar/data/2128626/000119312526396054/ck0002128626-ex99_1.htm",
+    "is_demo": false,
+    "market_cap": "49340378644.00",
+    "per": "104.27",
+    "roe": "4.17",
+    "beta": null,
+    "dividend_yield": "0.0000",
+    "working_capital": "-1035000000.00",
+    "total_assets": "22019000000.00",
+    "retained_earnings": null,
+    "ebit": "850000000.00",
+    "total_liabilities": "8781000000.00",
+    "sales": "9898000000.00",
+    "equity_value": null
+  }
+}

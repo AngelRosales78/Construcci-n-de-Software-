@@ -1,0 +1,48 @@
+{
+  "ticker": "BBY",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BBY/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BBY/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-01-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000764478.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/BBY/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-01-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000764478.json",
+    "is_demo": false,
+    "market_cap": "20542828019.00",
+    "per": "16.30",
+    "roe": "37.04",
+    "beta": "0.4602",
+    "dividend_yield": "3.9106",
+    "working_capital": "825000000.00",
+    "total_assets": "14670000000.00",
+    "retained_earnings": "2610000000.00",
+    "ebit": "1451000000.00",
+    "total_liabilities": null,
+    "sales": "41691000000.00",
+    "equity_value": null
+  }
+}

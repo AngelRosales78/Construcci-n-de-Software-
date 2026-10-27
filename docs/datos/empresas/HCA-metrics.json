@@ -1,0 +1,48 @@
+{
+  "ticker": "HCA",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/HCA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/HCA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "not_applicable",
+        "reason": "El patrimonio contable no es positivo en ambos cierres.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000860730.json",
+        "as_of": "2025-12-31"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/HCA/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000860730.json",
+    "is_demo": false,
+    "market_cap": "100729487890.00",
+    "per": "15.73",
+    "roe": null,
+    "beta": "0.1338",
+    "dividend_yield": "0.6862",
+    "working_capital": "-567000000.00",
+    "total_assets": "60720000000.00",
+    "retained_earnings": "-5724000000.00",
+    "ebit": "12080000000.00",
+    "total_liabilities": null,
+    "sales": "75600000000.00",
+    "equity_value": null
+  }
+}

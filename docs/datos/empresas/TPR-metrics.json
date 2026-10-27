@@ -1,0 +1,48 @@
+{
+  "ticker": "TPR",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/TPR/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/TPR/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-06-27",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001116132.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/TPR/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-06-27",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001116132.json",
+    "is_demo": false,
+    "market_cap": "22006479427.00",
+    "per": "15.25",
+    "roe": "197.14",
+    "beta": "1.0103",
+    "dividend_yield": "1.5106",
+    "working_capital": "1237300000.00",
+    "total_assets": "6691700000.00",
+    "retained_earnings": "-3209700000.00",
+    "ebit": null,
+    "total_liabilities": "5999600000.00",
+    "sales": "8004200000.00",
+    "equity_value": null
+  }
+}

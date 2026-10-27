@@ -1,0 +1,48 @@
+{
+  "ticker": "AMT",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/AMT/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/AMT/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001053507.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/AMT/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001053507.json",
+    "is_demo": false,
+    "market_cap": "87730957837.00",
+    "per": "25.90",
+    "roe": "74.73",
+    "beta": "-0.0433",
+    "dividend_yield": "3.8388",
+    "working_capital": "-4172000000.00",
+    "total_assets": "63190400000.00",
+    "retained_earnings": "-5086000000.00",
+    "ebit": null,
+    "total_liabilities": "52835100000.00",
+    "sales": "935900000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "ticker": "CVX",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CVX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CVX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000093410.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/CVX/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000093410.json",
+    "is_demo": false,
+    "market_cap": "455111575600.00",
+    "per": "22.33",
+    "roe": "7.26",
+    "beta": "-0.6222",
+    "dividend_yield": "3.0874",
+    "working_capital": "5165000000.00",
+    "total_assets": "324012000000.00",
+    "retained_earnings": "205365000000.00",
+    "ebit": null,
+    "total_liabilities": "131836000000.00",
+    "sales": "184432000000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "ticker": "HONA",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/HONA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/HONA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "reporting_entity": {
+        "reason": "Estados combinados auditados del negocio Honeywell Aerospace antes de su separación. No son cifras pro forma ni estados de Honeywell completo; la estructura de capital posterior a la separación puede ser distinta.",
+        "as_of": "2025-12-31",
+        "source": "https://www.sec.gov/Archives/edgar/data/2089271/000162828026041399/exhibit991-10x12ba2.htm"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://www.sec.gov/Archives/edgar/data/2089271/000162828026041399/exhibit991-10x12ba2.htm",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "status": "unavailable",
+        "reason": "Se necesitan al menos 181 cierres coincidentes con el S&P 500 para esta estimación de beta."
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/HONA/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://www.sec.gov/Archives/edgar/data/2089271/000162828026041399/exhibit991-10x12ba2.htm",
+    "is_demo": false,
+    "market_cap": "53450907544.00",
+    "per": "51.44",
+    "roe": "31.36",
+    "beta": null,
+    "dividend_yield": "0.0000",
+    "working_capital": "1813000000.00",
+    "total_assets": "17685000000.00",
+    "retained_earnings": null,
+    "ebit": null,
+    "total_liabilities": "9189000000.00",
+    "sales": "17404000000.00",
+    "equity_value": null
+  }
+}

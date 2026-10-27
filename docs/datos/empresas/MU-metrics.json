@@ -1,0 +1,48 @@
+{
+  "ticker": "MU",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/MU/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/MU/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-09-03",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000723125.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/MU/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-09-03",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000723125.json",
+    "is_demo": false,
+    "market_cap": "1022467156684.00",
+    "per": "12.16",
+    "roe": "88.26",
+    "beta": "3.3414",
+    "dividend_yield": "0.0606",
+    "working_capital": "63588000000.00",
+    "total_assets": "195888000000.00",
+    "retained_earnings": "131851000000.00",
+    "ebit": null,
+    "total_liabilities": "57510000000.00",
+    "sales": "133188000000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "ticker": "LRCX",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/LRCX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/LRCX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-06-28",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000707549.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/LRCX/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-06-28",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000707549.json",
+    "is_demo": false,
+    "market_cap": "297213285975.00",
+    "per": "35.39",
+    "roe": "65.07",
+    "beta": "3.2327",
+    "dividend_yield": "0.4620",
+    "working_capital": "9673456000.00",
+    "total_assets": "23529743000.00",
+    "retained_earnings": "34950254000.00",
+    "ebit": null,
+    "total_liabilities": "11058822000.00",
+    "sales": "23232690000.00",
+    "equity_value": null
+  }
+}

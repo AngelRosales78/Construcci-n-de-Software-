@@ -1,0 +1,48 @@
+{
+  "ticker": "FCX",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/FCX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/FCX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "unavailable",
+        "reason": "Faltan ejercicios consecutivos comparables para calcular este indicador.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000831259.json",
+        "as_of": "2025-12-31"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/FCX/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000831259.json",
+    "is_demo": false,
+    "market_cap": "93570901798.00",
+    "per": "31.94",
+    "roe": null,
+    "beta": "2.2049",
+    "dividend_yield": "0.9059",
+    "working_capital": "7771000000.00",
+    "total_assets": "58167000000.00",
+    "retained_earnings": "1385000000.00",
+    "ebit": null,
+    "total_liabilities": "27401000000.00",
+    "sales": "25186000000.00",
+    "equity_value": null
+  }
+}

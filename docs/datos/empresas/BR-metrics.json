@@ -1,0 +1,48 @@
+{
+  "ticker": "BR",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BR/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BR/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-06-30",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001383312.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/BR/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-06-30",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001383312.json",
+    "is_demo": false,
+    "market_cap": "20445066794.00",
+    "per": "18.86",
+    "roe": "40.92",
+    "beta": "0.0436",
+    "dividend_yield": "2.2550",
+    "working_capital": "333300000.00",
+    "total_assets": "8945300000.00",
+    "retained_earnings": "4553600000.00",
+    "ebit": null,
+    "total_liabilities": "6104700000.00",
+    "sales": "7476800000.00",
+    "equity_value": null
+  }
+}

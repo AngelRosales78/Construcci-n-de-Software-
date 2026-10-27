@@ -1,0 +1,48 @@
+{
+  "ticker": "SJM",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/SJM/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/SJM/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-04-30",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000091419.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/SJM/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-04-30",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000091419.json",
+    "is_demo": false,
+    "market_cap": "13741734261.00",
+    "per": "60.11",
+    "roe": "-2.39",
+    "beta": "-0.2945",
+    "dividend_yield": "3.4592",
+    "working_capital": "-565100000.00",
+    "total_assets": "16219400000.00",
+    "retained_earnings": "-101300000.00",
+    "ebit": null,
+    "total_liabilities": "10675600000.00",
+    "sales": "9050900000.00",
+    "equity_value": null
+  }
+}

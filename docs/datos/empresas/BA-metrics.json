@@ -1,0 +1,48 @@
+{
+  "ticker": "BA",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BA/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "not_applicable",
+        "reason": "El patrimonio contable no es positivo en ambos cierres.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000012927.json",
+        "as_of": "2025-12-31"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/BA/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000012927.json",
+    "is_demo": false,
+    "market_cap": "148834578466.00",
+    "per": "67.74",
+    "roe": null,
+    "beta": "1.1985",
+    "dividend_yield": "0.0000",
+    "working_capital": "20344000000.00",
+    "total_assets": "168235000000.00",
+    "retained_earnings": "17252000000.00",
+    "ebit": "5406000000.00",
+    "total_liabilities": "162778000000.00",
+    "sales": "89463000000.00",
+    "equity_value": null
+  }
+}

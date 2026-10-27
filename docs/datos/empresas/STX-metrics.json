@@ -1,0 +1,48 @@
+{
+  "ticker": "STX",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/STX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/STX/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "unavailable",
+        "reason": "Faltan ejercicios consecutivos comparables para calcular este indicador.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001137789.json",
+        "as_of": "2026-07-03"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/STX/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-07-03",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001137789.json",
+    "is_demo": false,
+    "market_cap": "146488853548.00",
+    "per": "45.36",
+    "roe": null,
+    "beta": "2.4292",
+    "dividend_yield": "0.4373",
+    "working_capital": "2094000000.00",
+    "total_assets": "9972000000.00",
+    "retained_earnings": "-5911000000.00",
+    "ebit": null,
+    "total_liabilities": "7805000000.00",
+    "sales": "12195000000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "ticker": "ROL",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/ROL/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/ROL/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000084839.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/ROL/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000084839.json",
+    "is_demo": false,
+    "market_cap": "16623573708.00",
+    "per": "32.01",
+    "roe": "38.94",
+    "beta": "0.0623",
+    "dividend_yield": "2.1612",
+    "working_capital": "-312843000.00",
+    "total_assets": "3140523000.00",
+    "retained_earnings": "738915000.00",
+    "ebit": null,
+    "total_liabilities": "1766202000.00",
+    "sales": "3761050000.00",
+    "equity_value": null
+  }
+}

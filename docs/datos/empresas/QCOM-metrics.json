@@ -1,0 +1,48 @@
+{
+  "ticker": "QCOM",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/QCOM/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/QCOM/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-09-28",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000804328.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/QCOM/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-09-28",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000804328.json",
+    "is_demo": false,
+    "market_cap": "191783975457.00",
+    "per": "20.10",
+    "roe": "23.34",
+    "beta": "2.0694",
+    "dividend_yield": "1.9991",
+    "working_capital": "16610000000.00",
+    "total_assets": "50143000000.00",
+    "retained_earnings": "20646000000.00",
+    "ebit": "13327000000.00",
+    "total_liabilities": "28937000000.00",
+    "sales": "44284000000.00",
+    "equity_value": null
+  }
+}

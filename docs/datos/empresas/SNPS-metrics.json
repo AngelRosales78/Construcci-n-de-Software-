@@ -1,0 +1,48 @@
+{
+  "ticker": "SNPS",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/SNPS/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/SNPS/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-10-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000883241.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/SNPS/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-10-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000883241.json",
+    "is_demo": false,
+    "market_cap": "87066277377.00",
+    "per": "75.07",
+    "roe": "7.14",
+    "beta": "1.6704",
+    "dividend_yield": "0.0000",
+    "working_capital": "2289608000.00",
+    "total_assets": "48224461000.00",
+    "retained_earnings": "10315487000.00",
+    "ebit": null,
+    "total_liabilities": "19897446000.00",
+    "sales": "7054178000.00",
+    "equity_value": null
+  }
+}

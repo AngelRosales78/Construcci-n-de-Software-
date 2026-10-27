@@ -1,0 +1,48 @@
+{
+  "ticker": "STE",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/STE/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/STE/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-03-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001757898.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/STE/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-03-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001757898.json",
+    "is_demo": false,
+    "market_cap": "22436725313.00",
+    "per": "28.38",
+    "roe": "11.35",
+    "beta": "0.4096",
+    "dividend_yield": "0.8519",
+    "working_capital": "1249600000.00",
+    "total_assets": "10737200000.00",
+    "retained_earnings": "3015900000.00",
+    "ebit": null,
+    "total_liabilities": "3540000000.00",
+    "sales": "5935900000.00",
+    "equity_value": null
+  }
+}

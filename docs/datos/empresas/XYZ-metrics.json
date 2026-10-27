@@ -1,0 +1,48 @@
+{
+  "ticker": "XYZ",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/XYZ/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/XYZ/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001512673.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/XYZ/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001512673.json",
+    "is_demo": false,
+    "market_cap": "44789267250.00",
+    "per": "133.13",
+    "roe": "6.01",
+    "beta": "1.8437",
+    "dividend_yield": "0.0000",
+    "working_capital": "12472420000.00",
+    "total_assets": "39549887000.00",
+    "retained_earnings": "3674254000.00",
+    "ebit": null,
+    "total_liabilities": "17380005000.00",
+    "sales": "24193683000.00",
+    "equity_value": null
+  }
+}

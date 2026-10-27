@@ -1,0 +1,48 @@
+{
+  "ticker": "JNJ",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/JNJ/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/JNJ/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-28",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000200406.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/JNJ/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-28",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000200406.json",
+    "is_demo": false,
+    "market_cap": "641066723835.00",
+    "per": "40.47",
+    "roe": "35.03",
+    "beta": "-0.1948",
+    "dividend_yield": "1.9716",
+    "working_capital": "1498000000.00",
+    "total_assets": "199210000000.00",
+    "retained_earnings": "168978000000.00",
+    "ebit": null,
+    "total_liabilities": "117666000000.00",
+    "sales": "94193000000.00",
+    "equity_value": null
+  }
+}

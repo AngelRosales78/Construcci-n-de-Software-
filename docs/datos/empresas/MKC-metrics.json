@@ -1,0 +1,48 @@
+{
+  "ticker": "MKC",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/MKC/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/MKC/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-11-30",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000063754.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/MKC/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-11-30",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000063754.json",
+    "is_demo": false,
+    "market_cap": "12911670373.00",
+    "per": "8.67",
+    "roe": "14.32",
+    "beta": "-0.3207",
+    "dividend_yield": "4.0498",
+    "working_capital": "-924100000.00",
+    "total_assets": "13200400000.00",
+    "retained_earnings": "3816400000.00",
+    "ebit": "1109200000.00",
+    "total_liabilities": "7432300000.00",
+    "sales": "6840300000.00",
+    "equity_value": null
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "ticker": "ADI",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/ADI/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/ADI/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-11-01",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000006281.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/ADI/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-11-01",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000006281.json",
+    "is_demo": false,
+    "market_cap": "197668790137.00",
+    "per": "48.45",
+    "roe": "6.57",
+    "beta": "1.6887",
+    "dividend_yield": "1.0189",
+    "working_capital": "3862260000.00",
+    "total_assets": "47992712000.00",
+    "retained_earnings": "10539541000.00",
+    "ebit": null,
+    "total_liabilities": null,
+    "sales": "11019707000.00",
+    "equity_value": null
+  }
+}

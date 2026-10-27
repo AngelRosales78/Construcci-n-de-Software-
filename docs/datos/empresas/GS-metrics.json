@@ -1,0 +1,48 @@
+{
+  "ticker": "GS",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/GS/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/GS/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000886982.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/GS/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000886982.json",
+    "is_demo": false,
+    "market_cap": "260097595338.00",
+    "per": "12.84",
+    "roe": "13.91",
+    "beta": "1.6212",
+    "dividend_yield": "1.9726",
+    "working_capital": null,
+    "total_assets": "1809320000000.00",
+    "retained_earnings": "165288000000.00",
+    "ebit": "88666000000.00",
+    "total_liabilities": "1684348000000.00",
+    "sales": null,
+    "equity_value": null
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "ticker": "FDXF",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/FDXF/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/FDXF/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "unavailable",
+        "reason": "Faltan ejercicios consecutivos comparables para calcular este indicador.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002082247.json",
+        "as_of": "2026-05-31"
+      },
+      "beta": {
+        "status": "unavailable",
+        "reason": "Se necesitan al menos 181 cierres coincidentes con el S&P 500 para esta estimación de beta."
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/FDXF/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-05-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002082247.json",
+    "is_demo": false,
+    "market_cap": "16364759656.00",
+    "per": "24.98",
+    "roe": null,
+    "beta": null,
+    "dividend_yield": "0.0000",
+    "working_capital": "513000000.00",
+    "total_assets": "6884000000.00",
+    "retained_earnings": "-509000000.00",
+    "ebit": null,
+    "total_liabilities": null,
+    "sales": "8795000000.00",
+    "equity_value": null
+  }
+}

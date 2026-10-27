@@ -1,0 +1,48 @@
+{
+  "ticker": "CCI",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CCI/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/CCI/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "status": "not_applicable",
+        "reason": "El patrimonio contable no es positivo en ambos cierres.",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001051470.json",
+        "as_of": "2025-12-31"
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/CCI/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001051470.json",
+    "is_demo": false,
+    "market_cap": "37214587249.00",
+    "per": "35.13",
+    "roe": null,
+    "beta": "0.2035",
+    "dividend_yield": "4.9253",
+    "working_capital": "-3335000000.00",
+    "total_assets": "31518000000.00",
+    "retained_earnings": "-20161000000.00",
+    "ebit": null,
+    "total_liabilities": "33153000000.00",
+    "sales": "215000000.00",
+    "equity_value": null
+  }
+}

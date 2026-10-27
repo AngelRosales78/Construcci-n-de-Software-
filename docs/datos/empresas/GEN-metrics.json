@@ -1,0 +1,48 @@
+{
+  "ticker": "GEN",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/GEN/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-23",
+        "source": "https://finance.yahoo.com/quote/GEN/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2026-04-03",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000849399.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2026
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/GEN/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2026-04-03",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000849399.json",
+    "is_demo": false,
+    "market_cap": "14611509451.00",
+    "per": "14.55",
+    "roe": "39.88",
+    "beta": "0.8155",
+    "dividend_yield": "2.0738",
+    "working_capital": "-1629000000.00",
+    "total_assets": "15589000000.00",
+    "retained_earnings": "269000000.00",
+    "ebit": "2080000000.00",
+    "total_liabilities": "12978000000.00",
+    "sales": "5000000000.00",
+    "equity_value": null
+  }
+}

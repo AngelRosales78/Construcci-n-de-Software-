@@ -1,0 +1,48 @@
+{
+  "ticker": "BLK",
+  "values": {
+    "field_sources": {
+      "market_cap": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BLK/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "per": {
+        "as_of": "2026-10-26",
+        "source": "https://finance.yahoo.com/quote/BLK/key-statistics/",
+        "method": "reported valuation series"
+      },
+      "roe": {
+        "as_of": "2025-12-31",
+        "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002012383.json",
+        "method": "Beneficio neto / ((Patrimonio contable + Patrimonio contable del cierre anterior) / 2) * 100",
+        "fiscal_year": 2025
+      },
+      "beta": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/%5EGSPC/history/",
+        "method": "covariance/variance of up to 252 matched daily adjusted returns versus S&P 500"
+      },
+      "dividend_yield": {
+        "as_of": "2026-10-27",
+        "source": "https://finance.yahoo.com/quote/BLK/history/",
+        "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      }
+    },
+    "as_of": "2025-12-31",
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002012383.json",
+    "is_demo": false,
+    "market_cap": "174336236000.00",
+    "per": "25.68",
+    "roe": "10.74",
+    "beta": "1.2001",
+    "dividend_yield": "1.9719",
+    "working_capital": null,
+    "total_assets": "169998000000.00",
+    "retained_earnings": null,
+    "ebit": null,
+    "total_liabilities": "108456000000.00",
+    "sales": "24216000000.00",
+    "equity_value": null
+  }
+}
