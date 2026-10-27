@@ -22,16 +22,15 @@ def generate(context, level):
                            for key, m in context['metrics'].items()}, 'pillars': context['pillars'],
                'eligible_strengths': [key for key, m in context['metrics'].items() if m['status'] == 'available' and m['band'] == 'high'],
                'eligible_risks': [key for key, m in context['metrics'].items() if m['status'] == 'available' and m['band'] in ('low', 'middle')]}
-    payload = {'model': MODEL, 'temperature': 0, 'seed': 2026, 'max_tokens': 1400,
-        'messages': [{'role': 'system', 'content': instruction},
-                     {'role': 'user', 'content': 'CONTEXTO: ' + json.dumps(compact, ensure_ascii=False)}],
-        'response_format': {'type': 'json_object', 'schema': schema_for(context)}}
+    prompt = '<|im_start|>system\n' + instruction + '<|im_end|>\n<|im_start|>user\nCONTEXTO: ' + json.dumps(compact, ensure_ascii=False) + '<|im_end|>\n<|im_start|>assistant\n'
+    payload = {'temperature': 0, 'seed': 2026, 'n_predict': 1400, 'prompt': prompt,
+               'json_schema': schema_for(context), 'stop': ['<|im_end|>'], 'cache_prompt': True}
     # URL fijada a loopback: no admite destinos enviados por el usuario ni expone credenciales.
-    request = urllib.request.Request('http://127.0.0.1:58110/v1/chat/completions',
+    request = urllib.request.Request('http://127.0.0.1:58110/completion',
         data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json'})
     with urllib.request.urlopen(request, timeout=150) as response:
         raw = response.read(100_001)
     if len(raw) > 100_000:
         raise ValueError('provider_response_too_large')
-    content = json.loads(raw)['choices'][0]['message']['content']
+    content = json.loads(raw)['content']
     return json.loads(content)

@@ -22,7 +22,7 @@ def schema_for(context):
     def claim(ids, prefix=''):
         return {'type': 'object', 'additionalProperties': False, 'required': ['text', 'metric_ids'],
                 'properties': {'text': {'type': 'string', 'minLength': 40, 'maxLength': 180,
-                    'pattern': '^' + prefix + '[^0-9<>]{40,150}$'},
+                    'pattern': '^' + prefix + '[A-Za-záéíóúÁÉÍÓÚñÑüÜ ,.;:()%-]{40,150}$'},
                     'metric_ids': {'type': 'array', 'items': {'type': 'string', 'enum': ids or ['unavailable']},
                                    'minItems': 1 if ids else 0, 'maxItems': min(len(ids), 3)}}}
     available = [key for key, metric in context['metrics'].items() if metric['status'] == 'available']
