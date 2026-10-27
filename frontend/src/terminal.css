@@ -1,4 +1,28 @@
 /* Terminal Apex: adaptación del diseño de referencia a datos y funciones disponibles. */
+[hidden] { display: none !important; }
+.company-sections { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; margin: 20px 0 28px; border: 1px solid var(--terminal-line); border-radius: 14px; background: var(--terminal-bg); }
+.company-sections button { flex: 1 1 145px; padding: 13px 16px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--terminal-muted); font-size: 14px; font-weight: 600; cursor: pointer; }
+.company-sections button[aria-pressed='true'] { color: var(--primary); background: #75ff9e12; border-color: #75ff9e35; }
+.company-sections button:hover { background: #75ff9e09; color: var(--terminal-text); }
+.company-sections button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.overview-intro { display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.overview-intro h2 { font-size: 21px; margin-bottom: 8px; }
+.overview-intro p { color: var(--terminal-muted); font-size: 14px; }
+.overview-intro > .financial-help { max-width: 100%; }
+.pillar-concept { margin: 10px 0; font-size: 13px; color: var(--terminal-muted); }
+.pillar-concept summary, .analysis-evidence summary { cursor: pointer; color: var(--primary); }
+.pillar-concept p { margin: 10px 0; max-width: 72ch; line-height: 1.7; }
+.analysis-evidence { margin: 10px 0; font-size: 12px; }
+.analysis-evidence small { display: block; margin-top: 8px; line-height: 1.8; }
+.metric-help { font-size: 12px; }
+.metric-help summary { color: var(--terminal-muted); cursor: pointer; }
+.metric-help p { line-height: 1.7; margin-top: 8px; }
+.simulation-settings { flex: 1 1 300px; border: 1px solid var(--terminal-line); border-radius: 10px; min-width: 0; }
+.simulation-settings summary { padding: 12px 16px; cursor: pointer; color: var(--terminal-muted); }
+.simulation-settings summary small { margin-left: 12px; font-size: 11px; }
+.simulation-settings-fields { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; padding: 16px; }
+.simulation-settings-fields label { min-width: 0; }
+@media (max-width: 480px) { .company-sections { gap: 4px; padding: 5px; } .company-sections button { flex-basis: 44%; padding: 12px 6px; font-size: 13px; } }
 :root {
   color-scheme: dark;
   --primary: #75ff9e;
@@ -178,7 +202,7 @@ a { color: var(--primary); }
 .metric-card .metric-label { color: var(--terminal-muted); }
 .metric-card .metric-value { color: var(--terminal-text); font-size: 24px; font-variant-numeric: tabular-nums; }
 .metric-explanation, .metric-unit-note { color: var(--terminal-muted); }
-.terminal-financial-grid > .dashboard-charts { grid-template-columns: 1fr; gap: 16px; margin: 0; }
+.terminal-financial-grid > .dashboard-charts { grid-column: 1 / -1; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 24px; margin: 0; align-items: start; }
 .altmanz-gauge, .financial-health, .price-chart { background: var(--terminal-panel); border: 0; border-radius: 14px; }
 .altmanz-gauge h3, .financial-health h3 { color: var(--terminal-text); }
 .risk-legend, .gauge-labels, .gauge-note, .health-explanation, .chart-caption { color: var(--terminal-muted); }
@@ -241,6 +265,7 @@ a { color: var(--primary); }
   .workspace-footer { margin: 0 20px; flex-direction: column; }
   .terminal-overview, .search-sidebar, .terminal-financial-grid { grid-template-columns: minmax(0, 1fr); }
   .terminal-financial-grid > .price-chart { grid-column: auto; grid-row: auto; }
+  .terminal-financial-grid > .dashboard-charts { grid-template-columns: minmax(0, 1fr); }
   .company-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
   .company-card { padding: 18px; }
   .dashboard-header { padding: 22px; }

@@ -17,7 +17,7 @@ export default function PillarRadar({ data }) {
   const complete = entries.length === 5 && entries.every(p => p.value !== null && Number.isFinite(p.value) && p.value >= 0 && p.value <= 100)
   return <section className="pillar-radar-section" aria-labelledby="pillar-radar-title">
     <h3 id="pillar-radar-title">Los cinco pilares en una escala común</h3>
-    <p className="pillar-muted">Notas académicas de 0 a 100 para el ejercicio {data.fiscal_year || 'sin datos'}. Selecciona un pilar para abrir su detalle. Las notas dependen de las reglas mostradas abajo.</p>
+    <p className="pillar-muted">Selecciona un pilar para ver sus indicadores. Escala académica de 0 a 100.</p>
     <div className="pillar-radar-layout">
       <figure className="pillar-radar-figure" aria-label="Radar de los cinco pilares financieros">
         <ResponsiveContainer width="100%" height={340}>

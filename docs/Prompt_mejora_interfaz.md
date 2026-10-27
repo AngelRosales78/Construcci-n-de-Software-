@@ -1,16 +1,11 @@
-# Prompt de mejora de la interfaz
+# Prompt para mejorar la interfaz financiera
 
-Actúa como diseñador de interfaces y desarrollador React. Mejora la web S&P 500 Finance para estudiantes e inversores principiantes que necesitan encontrar empresas e interpretar información histórica sin conocimientos financieros avanzados.
+Actúa como diseñador de producto y desarrollador frontend. Mejora esta aplicación de análisis de empresas para estudiantes y personas que empiezan a invertir. El usuario debe distinguir rápidamente el precio histórico, los indicadores del balance y los escenarios simulados.
 
-Conserva el tema Terminal Apex, las funciones existentes y MVVM. Trabaja en Magallanes. No modifiques secretos, bases de datos, dependencias locales ni las ramas del compañero. No añadas cotizaciones, indicadores o funciones de compra simuladas.
+Primero revisa el código y la interfaz real. Reduce el texto visible sin eliminar información necesaria para comprobar los cálculos. Organiza la ficha en Resumen, Salud financiera, Simulaciones y Explicación de IA. Mantén una sola sección principal visible y conserva los resultados al cambiar entre secciones.
 
-Prioriza estas mejoras:
+Muestra primero el valor, su unidad y su fecha. Usa títulos cortos, espacio entre bloques y acciones claras. Deja fórmulas, fuentes, componentes, supuestos y definiciones en desplegables accesibles. Los ajustes de simulación son opcionales; generar escenarios debe funcionar con los valores históricos predeterminados.
 
-1. Identifica en las tarjetas si existen indicadores disponibles usando los valores recibidos de la API, conservando los ceros válidos. Cuando falten todos, explica que la empresa está en el catálogo y su información financiera está pendiente de carga. No infieras cobertura de precios o balance completo a partir de una métrica.
-2. Ofrece un acceso directo a Microsoft como ficha de referencia de esta demostración, sin ocultar el resto del catálogo ni filtrar únicamente la página actual.
-3. Separa la fecha del balance de la fecha del cierre importado. Explica que cambiar el rango del gráfico no modifica las tarjetas financieras.
-4. Sustituye abreviaturas poco claras por rangos legibles; explica cierre ajustado, datos diarios y sesiones disponibles. Mantén la consulta por rangos y el zoom.
-5. Muestra Altman-Z con tres zonas, un marcador limitado a la escala y el puntaje real sin truncar. Explica sus componentes y su límite académico. No presentes el puntaje como porcentaje ni garantía.
-6. Permite consultar fuentes y fórmulas con controles desplegables accesibles. Usa textos breves, español y números legibles; mejora los estados vacíos, el foco del teclado y la adaptación móvil.
+Conserva MVVM, la autenticación, el ejercicio seleccionado, la caché y todos los estados de carga, error y datos ausentes. No conviertas ausencia de datos en cero, no presentes simulaciones como cotizaciones reales y no atribuyas a la IA cálculos que hace Django. Explica que el modelo local selecciona entre explicaciones financieras revisadas.
 
-No amplíes la cobertura de datos como parte de este cambio visual. Verifica regresiones frontend, compilación, navegación real, pantallas de escritorio/móvil y una ficha sin datos. Conserva evidencias y documenta los cambios concretos. Guarda y sube los cambios exclusivamente a Magallanes conforme a la autorización de la sesión.
+Comprueba los recorridos en Chrome a 1440 y 390 píxeles, con teclado, recarga y empresas sin datos. Verifica que los desplegables permiten demostrar las tareas originales y que cambiar de sección no vuelve a generar escenarios ni explicaciones. Ejecuta las pruebas pertinentes y entrega cambios, evidencias y mejoras que aún conviene abordar.

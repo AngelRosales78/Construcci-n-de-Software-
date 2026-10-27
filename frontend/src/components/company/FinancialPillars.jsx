@@ -41,12 +41,11 @@ export function PillarMetric({ metric }) {
   </article>
 }
 
-export default function FinancialPillars() {
+export default function FinancialPillars({ view = 'pillars' }) {
   const { data, year, setYear, loading, error, retry } = useFinancialPillarsViewModel()
   const years = data?.available_years || []
   return <section className="financial-pillars" aria-labelledby="financial-pillars-title">
-    <div className="section-title"><h2 id="financial-pillars-title">Pilares financieros anuales</h2></div>
-    <p className="pillar-muted">Estos indicadores corresponden al ejercicio fiscal elegido. Cambiar el rango de precios no cambia el balance anual.</p>
+    <div className="section-title"><h2 id="financial-pillars-title">{view === 'analysis' ? 'Entiende los resultados' : 'Salud financiera'}</h2><span>Balance anual</span></div>
     {loading && <p role="status">Cargando pilares financieros...</p>}
     {error && <div role="alert"><p>{error}</p><button onClick={retry}>Reintentar pilares</button></div>}
     {!loading && data && <>
@@ -59,13 +58,13 @@ export default function FinancialPillars() {
       </label>
       <p className="pillar-muted">Ejercicio: {data.fiscal_year || 'Sin datos'} · {data.period.start || 'Sin fecha inicial'} a {data.period.end || 'Sin fecha final'}</p>
       {!years.length && <p>No hay balances anuales importados para esta empresa.</p>}
+      <div hidden={view === 'analysis'}>
       {data.overall_score && <OverallScore score={data.overall_score} fiscalYear={data.fiscal_year} />}
       {data.pillars.length === 5 && <PillarRadar data={data} />}
-      <FinancialAnalysis fiscalYear={data.fiscal_year} />
       {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" id={`pillar-${pillar.id}`} tabIndex={-1} key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
-        <h3>{pillar.label}</h3><p className="pillar-muted">{CONCEPTS[pillar.id]}</p>
+        <h3>{pillar.label}</h3><details className="pillar-concept"><summary>Cómo interpretarlo</summary><p className="pillar-muted">{CONCEPTS[pillar.id]}</p></details>
         {pillar.score && <p className="pillar-note">Nota académica: {pillar.score.status === 'available' ? `${pillar.score.display_value} / 100` : 'No disponible'}</p>}
-        {pillar.sector_reference?.status === 'unavailable' && <p className="pillar-muted">Referencia sectorial no disponible: {pillar.sector_reference.explanation}</p>}
+        {pillar.sector_reference?.status === 'unavailable' && <details className="pillar-concept"><summary>Referencia sectorial no disponible</summary><p className="pillar-muted">{pillar.sector_reference.explanation}</p></details>}
         <div className="pillar-metrics">{pillar.metrics.map(metric => <PillarMetric key={metric.id} metric={metric} />)}</div>
         {!!pillar.history?.length && <div className="pillar-history"><table>
           <caption>Eficiencia en hasta tres ejercicios disponibles</caption>
@@ -79,6 +78,8 @@ export default function FinancialPillars() {
           </tr>)}</tbody>
         </table></div>}
       </section>)}
+      </div>
+      <div hidden={view !== 'analysis'}><FinancialAnalysis fiscalYear={data.fiscal_year} /></div>
     </>}
   </section>
 }

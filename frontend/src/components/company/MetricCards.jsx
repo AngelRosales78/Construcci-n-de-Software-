@@ -20,7 +20,7 @@ export default function MetricCards({ company }) {
     {indicators.map(([key, label, explanation]) => <article className="metric-card" key={key}>
       <abbr title={explanation} className="metric-label">{label}</abbr>
       <span className="metric-value">{format(key, company[key])}</span>
-      <p className="metric-explanation">{explanation}</p>
+      <details className="metric-help"><summary>Qué significa</summary><p className="metric-explanation">{explanation}</p></details>
       {key === 'market_cap' && <small className="metric-unit-note">B: mil millones · T: un billón</small>}
     </article>)}
   </section>
