@@ -7,6 +7,7 @@ authentication backend.
 """
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+import uuid
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 from django.contrib.postgres.indexes import GinIndex
@@ -159,6 +160,18 @@ class PriceHistory(models.Model):
         ordering = ['date']
         constraints = [models.UniqueConstraint(fields=['company', 'date'], name='price_company_date_unique')]
         indexes = [models.Index(fields=['company', '-date'], name='price_company_date_idx')]
+
+
+class SimulationRun(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='simulations')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='simulations')
+    created_at = models.DateTimeField(auto_now_add=True)
+    source_snapshot = models.JSONField()
+    result = models.JSONField()
+
+    class Meta:
+        db_table = 'simulation_runs'
 
 
 class AnnualFinancialStatement(models.Model):

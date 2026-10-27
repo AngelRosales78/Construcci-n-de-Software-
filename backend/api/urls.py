@@ -16,10 +16,12 @@ Endpoints:
 from django.urls import path
 from . import views
 from .pillar_views import CompanyPillarsView
+from .simulation_views import CompanySimulationView
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('companies/<str:ticker>/simulations/', CompanySimulationView.as_view(), name='company-simulations'),
     path('companies/<str:ticker>/pillars/', CompanyPillarsView.as_view(), name='company-pillars'),
     path('auth/admin/summary/', views.AdminSummaryView.as_view(), name='admin-summary'),
     # Contrato de Rosales reutilizado; se conservan las rutas anteriores de Magallanes.
