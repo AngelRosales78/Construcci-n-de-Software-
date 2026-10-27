@@ -16,6 +16,16 @@ try {
         Invoke-Manage -ManageArguments @("import_annual_financials", (Join-Path $projectRoot "docs/datos/sprint2_disponibilidad_MSFT.json"))
         Invoke-Manage -ManageArguments @("import_market_data", "--metrics", (Join-Path $projectRoot "docs/datos/MSFT_balance_2024.csv"), "--source", "https://www.sec.gov/edgar/browse/?CIK=789019")
         Invoke-Manage -ManageArguments @("import_market_data", "--prices", (Join-Path $projectRoot "docs/datos/MSFT_cierres_5y.csv"), "--source", "https://finance.yahoo.com/quote/MSFT/history/")
+        $extraData = Join-Path $projectRoot "docs/datos/empresas"
+        if (Test-Path -LiteralPath $extraData) {
+            Get-ChildItem -LiteralPath $extraData -Filter "*-annual.json" | ForEach-Object {
+                Invoke-Manage -ManageArguments @("import_annual_financials", $_.FullName)
+            }
+            Get-ChildItem -LiteralPath $extraData -Filter "*-prices.csv" | ForEach-Object {
+                $symbol = $_.BaseName.Replace("-prices", "")
+                Invoke-Manage -ManageArguments @("import_market_data", "--prices", $_.FullName, "--source", "https://finance.yahoo.com/quote/$symbol/history/")
+            }
+        }
     }
     Write-Host "Servidor local de Android. Base separada android-local.sqlite3. Registra una cuenta desde la app."
     Invoke-Manage -ManageArguments @("runserver", "0.0.0.0:$Port", "--noreload")

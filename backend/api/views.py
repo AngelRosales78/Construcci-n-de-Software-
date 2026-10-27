@@ -23,7 +23,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db import transaction, connection
-from django.db.models import Q, F
+from django.db.models import Q, F, Exists, OuterRef, Count
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
@@ -46,7 +46,7 @@ from .serializers import (
     SearchHistorySerializer,
 )
 from .redis_utils import blacklist_token, blacklist_jwt_token, get_autocomplete_suggestions
-from .models import Company, SearchHistory, FinancialMetrics, PriceHistory
+from .models import Company, SearchHistory, FinancialMetrics, PriceHistory, AnnualFinancialStatement
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -494,6 +494,14 @@ class CompanySearchView(generics.ListAPIView):
             raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
 
         queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
+        ready = self.request.query_params.get('ready', 'false').lower()
+        if ready not in ('true', 'false'):
+            raise ValidationError({'ready': 'Indique true o false.'})
+        if ready == 'true':
+            annual = AnnualFinancialStatement.objects.filter(company_id=OuterRef('pk'), is_demo=False)
+            prices = PriceHistory.objects.filter(company_id=OuterRef('pk'), is_demo=False).values('company_id').annotate(n=Count('id')).filter(n__gte=60)
+            queryset = queryset.annotate(has_annual=Exists(annual), has_prices=Exists(prices)).filter(has_annual=True, has_prices=True)
+
         if query and connection.vendor == 'postgresql':
             from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
             vector = (SearchVector('name', weight='A', config='simple')
