@@ -32,7 +32,7 @@ Se descargan el binario CPU de llama.cpp desde sus releases oficiales y Qwen3 1.
 
 Las cifras se calculan en Django antes de pedir texto. El contexto enumera métricas disponibles, unidades, periodo, versión y tramos académicos. El formato de generación limita la estructura y longitud; otro validador contrasta referencias y cifras con las métricas autorizadas, exige las cinco secciones y rechaza listas duplicadas, contenido sin respaldo, campos extra, texto de relleno y palabras o frases repetidas en bucle. Las referencias y fuentes mostradas provienen del servidor. La validación de estructura y cifras no certifica todas las interpretaciones semánticas del modelo.
 
-El servidor envía al modelo los nombres de las métricas y sus tramos derivados, sin pedirle recalcular valores. Se solicita redactar explicaciones breves; los valores exactos aparecen en las referencias que añade el servidor. El validador independiente rechaza cifras sin respaldo, repeticiones y oraciones truncadas en cualquier respuesta recibida. Los límites de simulaciones (12/minuto) y análisis (4/minuto) son independientes por usuario.
+El servidor envía al modelo los nombres de las métricas y sus tramos derivados. Qwen3 selecciona entre formulaciones financieras revisadas en analysis_knowledge.py, mediante un esquema JSON con opciones admitidas. El servidor rechaza cualquier texto fuera de esas opciones. Es una generación con vocabulario controlado, no un análisis financiero de redacción libre ni una evaluación experta automática. Si el modelo no está conectado, no se selecciona una respuesta local de respaldo. Los valores exactos aparecen en las referencias que añade Django. El validador independiente también rechaza cifras sin respaldo, repeticiones y oraciones truncadas. Los límites de simulaciones (12/minuto) y análisis (4/minuto) son independientes por usuario.
 
 La caché persistida se separa por empresa, métricas y periodo exactos, procedencia, versión de contrato, hash del modelo y nivel. Se reutilizan únicamente respuestas validadas recientes. Los fallos conservan el último resultado válido en la web, claramente identificado por nivel y periodo. Cambiar empresa o ejercicio elimina el resultado anterior. El servidor asigna las métricas de referencia a cada pregunta y valida otra vez el texto resultante; el modelo no decide qué referencias inventar.
 
@@ -41,10 +41,10 @@ La caché persistida se separa por empresa, métricas y periodo exactos, procede
 1. Preparar el proveedor con tools/prepare_local_ai.py; iniciar tools/Start-LocalAI.ps1 si el puerto 58110 no está ocupado por ese servicio.
 2. Ejecutar tools/Start-Sprint2-Demo.ps1. Usa exclusivamente sprint2_completion_validation; importa el catálogo y las fuentes existentes. La web usa 55183 y la API 58010. No reutiliza el checkout antiguo Magallanes ni reemplaza una base personal.
 3. Abrir la web en Chrome, iniciar sesión con la cuenta desechable local y abrir MSFT. No compartir el archivo de credenciales.
-4. Mostrar los cinco pilares y su puntaje FY2024; abrir sus fórmulas y fuentes. El balance es histórico.
-5. Generar escenarios. Mostrar P10/P50/P90, tabla, semilla y fecha de origen. Ocultar una curva no genera otra petición.
-6. Poner tasa y volatilidad a cero: el precio simulado permanece constante. Restablecer y explicar que la misma semilla/histórico recupera las curvas.
-7. Generar IA; mostrar resumen, cinco explicaciones, fortalezas/riesgos y sus métricas referenciadas. Abrir fuentes y validación. Cambiar a Técnico conserva periodo y cifras; la primera generación puede tardar.
+4. En Resumen, mostrar precio e indicadores. En Salud financiera, mostrar los cinco pilares y su puntaje FY2024; abrir sus fórmulas y fuentes. El balance es histórico.
+5. En Simulaciones, generar escenarios. Mostrar P10/P50/P90, tabla, semilla y fecha de origen. Ocultar una curva no genera otra petición.
+6. Abrir Ajustar supuestos y poner tasa y volatilidad a cero: el precio simulado permanece constante. Restablecer y explicar que la misma semilla/histórico recupera las curvas.
+7. En Explicación de IA, generar el resumen; mostrar cinco explicaciones, fortalezas/riesgos y abrir Ver cifras utilizadas. Abrir fuentes y validación. Cambiar a Técnico conserva periodo y cifras; la primera generación puede tardar alrededor de un minuto en este equipo.
 8. Recargar y volver a generar la explicación: una respuesta validada vigente se recupera de caché. Abrir AAPL para demostrar la ausencia de histórico y componentes sin heredar información MSFT.
 9. Mostrar los commits HU/T, archivos y pruebas. El historial acredita tareas reales; no reemplaza una validación conjunta con Android ni Planning Poker real.
 
@@ -58,6 +58,7 @@ Para abrir Chrome con la cuenta local de demostración, desde frontend ejecutar 
 | Monte Carlo, calibración y percentiles | backend/api/simulations.py |
 | Validación, autenticación y persistencia de simulaciones | backend/api/simulation_views.py y backend/api/models.py |
 | Conexión con el modelo local real | backend/api/analysis_provider.py |
+| Explicaciones financieras admitidas por el modelo | backend/api/analysis_knowledge.py |
 | Contraste independiente del texto con las métricas | backend/api/analysis_validation.py |
 | Caché de análisis y respuestas disponibles/no disponibles | backend/api/analysis_views.py |
 | Acceso web a los nuevos servicios (Model) | frontend/src/models/simulationRepository.js y analysisRepository.js |
