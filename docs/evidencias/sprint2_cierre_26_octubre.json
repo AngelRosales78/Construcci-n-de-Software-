@@ -1,0 +1,164 @@
+{
+  "recorded_at": "2026-10-27T04:34:46.328Z",
+  "passed": true,
+  "browser": "Google Chrome 156.0.8078.48",
+  "steps": [
+    "Login real y regresión de pilares, radar y puntaje FY2024",
+    "Navegación en cuatro secciones; resumen inicial sin paneles técnicos desplegados",
+    "Tres percentiles de la misma ejecución y leyenda sin nueva solicitud",
+    "Controles y restablecimiento reproducible; volatilidad y tasa cero producen precio constante",
+    "Generación real local en lenguaje sencillo, cinco explicaciones y referencias validadas",
+    "Lenguaje técnico generado sobre las mismas cifras y periodo",
+    "Simulación e IA visibles a 1440 y 390 píxeles sin desbordamiento",
+    "Página recargada conserva funciones y recupera el análisis validado desde caché",
+    "Empresa sin datos no recibe curvas ni análisis heredados de Microsoft"
+  ],
+  "errors": [],
+  "simulation": {
+    "id": "9604471d-1a78-42c5-98cb-772c360d1b32",
+    "model": "gbm-monthly-v1.2",
+    "observations": 1254,
+    "paths": 2000,
+    "source_hash": "d0001d8b1ec88869776664cec707be081132f52d51e9ff1b70c9f4cb308df21c"
+  },
+  "ai": {
+    "model": "sp500-local-qwen3",
+    "provider": "llama.cpp local · Qwen3 1.7B",
+    "version": "controlled-analysis-v1",
+    "simple_id": "bc7c509d-603e-48be-9535-7d2735c6f614",
+    "technical_id": "ca3d07e4-9fdb-4e3c-9d7e-aeac57758632",
+    "validated": true,
+    "sources": [
+      "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"
+    ],
+    "is_real_provider": true,
+    "simple": {
+      "risks": [
+        {
+          "text": "Liquidez corriente: la clasificación académica sitúa esta métrica en el tramo intermedio; no equivale a una garantía sobre resultados futuros.",
+          "metric_ids": [
+            "current_ratio"
+          ]
+        }
+      ],
+      "pillars": {
+        "growth": {
+          "text": "La variación anual compara los ingresos con los del ejercicio anterior comparable. El crecimiento compuesto resume el cambio anual equivalente de ingresos durante tres años.",
+          "metric_ids": [
+            "revenue_growth",
+            "revenue_cagr_3y"
+          ]
+        },
+        "solvency": {
+          "text": "Los pasivos sobre patrimonio comparan las obligaciones totales con el patrimonio de los propietarios. La cobertura de intereses compara el resultado antes de intereses e impuestos con los gastos financieros.",
+          "metric_ids": [
+            "liabilities_to_equity",
+            "interest_coverage"
+          ]
+        },
+        "liquidity": {
+          "text": "La liquidez corriente compara los recursos y las obligaciones de corto plazo. La prueba ácida compara efectivo, inversiones de corto plazo y cuentas por cobrar con obligaciones corrientes.",
+          "metric_ids": [
+            "current_ratio",
+            "quick_ratio"
+          ]
+        },
+        "efficiency": {
+          "text": "La rotación de activos relaciona las ventas con los activos promedio utilizados. Los días de inventario estiman cuánto tiempo permanece el inventario según el costo de ventas.",
+          "metric_ids": [
+            "asset_turnover",
+            "inventory_days"
+          ]
+        },
+        "profitability": {
+          "text": "El ROE relaciona los beneficios con el patrimonio promedio de los propietarios. El ROA relaciona los beneficios con los activos promedio de la empresa. El margen neto muestra qué parte de las ventas queda como beneficio neto.",
+          "metric_ids": [
+            "roe",
+            "roa",
+            "net_margin"
+          ]
+        }
+      },
+      "summary": {
+        "text": "Los indicadores disponibles permiten examinar la situación financiera histórica; deben leerse junto a sus componentes y periodo.",
+        "metric_ids": [
+          "current_ratio",
+          "quick_ratio",
+          "roe"
+        ]
+      },
+      "strengths": [
+        {
+          "text": "Prueba ácida: la clasificación académica sitúa esta métrica en el tramo favorable; no equivale a una garantía sobre resultados futuros.",
+          "metric_ids": [
+            "quick_ratio"
+          ]
+        }
+      ]
+    },
+    "technical": {
+      "risks": [
+        {
+          "text": "Liquidez corriente: el tramo intermedio procede de reglas académicas; su interpretación requiere analizar componentes, periodo y límites metodológicos.",
+          "metric_ids": [
+            "current_ratio"
+          ]
+        }
+      ],
+      "pillars": {
+        "growth": {
+          "text": "El crecimiento interanual expresa la variación relativa de ingresos entre ejercicios consecutivos comparables. El crecimiento compuesto de ingresos anualiza geométricamente la variación entre los extremos de tres años.",
+          "metric_ids": [
+            "revenue_growth",
+            "revenue_cagr_3y"
+          ]
+        },
+        "solvency": {
+          "text": "La razón de pasivos sobre patrimonio relaciona el pasivo total con el patrimonio contable. La cobertura divide el EBIT aproximado, calculado como resultado antes de impuestos más intereses, entre gastos financieros.",
+          "metric_ids": [
+            "liabilities_to_equity",
+            "interest_coverage"
+          ]
+        },
+        "liquidity": {
+          "text": "La razón corriente divide el activo corriente entre el pasivo corriente. La prueba ácida relaciona efectivo, inversiones temporales y cuentas por cobrar con el pasivo corriente.",
+          "metric_ids": [
+            "current_ratio",
+            "quick_ratio"
+          ]
+        },
+        "efficiency": {
+          "text": "La rotación de activos divide los ingresos entre el activo total promedio. Los días de inventario convierten la relación entre inventario promedio y costo de ventas anual en días.",
+          "metric_ids": [
+            "asset_turnover",
+            "inventory_days"
+          ]
+        },
+        "profitability": {
+          "text": "El ROE expresa el beneficio neto como porcentaje del patrimonio contable promedio. El ROA expresa el beneficio neto como porcentaje del activo total promedio. El margen neto relaciona el resultado neto con los ingresos del ejercicio.",
+          "metric_ids": [
+            "roe",
+            "roa",
+            "net_margin"
+          ]
+        }
+      },
+      "summary": {
+        "text": "La lectura conjunta de ratios históricos exige considerar componentes, ejercicio fiscal y metodología; no constituye una previsión de resultados.",
+        "metric_ids": [
+          "current_ratio",
+          "quick_ratio",
+          "roe"
+        ]
+      },
+      "strengths": [
+        {
+          "text": "Prueba ácida: el tramo favorable procede de reglas académicas; su interpretación requiere analizar componentes, periodo y límites metodológicos.",
+          "metric_ids": [
+            "quick_ratio"
+          ]
+        }
+      ]
+    }
+  }
+}
