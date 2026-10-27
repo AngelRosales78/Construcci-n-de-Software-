@@ -10,7 +10,7 @@ data class PillarsResponse(
     val pillars: List<FinancialPillar>? = null,
     val currency: String? = null, val available_years: List<Int>? = null,
     val methodology_status: String? = null, val overall_score: PillarScore? = null,
-    val scoring_policy: ScoringPolicy? = null
+    val scoring_policy: ScoringPolicy? = null, val reporting_note: String? = null
 )
 data class FiscalPeriod(val start: String? = null, val end: String? = null)
 data class FinancialPillar(

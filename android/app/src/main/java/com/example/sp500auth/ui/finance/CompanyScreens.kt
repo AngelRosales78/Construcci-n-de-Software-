@@ -203,6 +203,7 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                     Spacer(Modifier.height(12.dp))
                     Text(company.quote?.adjusted_close?.let { "$${money(it)}" } ?: "Precio no disponible", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                     Text("${company.quote?.currency ?: "Moneda no informada"} · Cierre ajustado ${company.quote?.date ?: "sin fecha"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                    company.reporting_note?.let { Text(it, color = Muted, style = MaterialTheme.typography.bodySmall) }
                     if (company.is_demo == true || company.quote?.is_demo == true) Text("Datos de demostración o heredados sin verificar", color = MaterialTheme.colorScheme.error)
                 }
                 else -> Unit
@@ -236,14 +237,22 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                 item { SectionTitle("Métricas fundamentales", company.as_of ?: "Sin fecha") }
                 item {
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        MetricTile("P/E Ratio", company.per ?: "No disponible", "Según fuente del servidor", Modifier.weight(1f))
-                        MetricTile("Retorno (ROE)", company.roe?.let { "$it %" } ?: "No disponible", "Rentabilidad del patrimonio", Modifier.weight(1f))
+                        MetricTile("P/E Ratio", company.per ?: "No disponible", "Dato al ${company.field_sources?.get("per")?.as_of ?: company.as_of ?: "sin fecha"}", Modifier.weight(1f))
+                        MetricTile("Retorno (ROE)", company.roe?.let { "$it %" } ?: if (company.field_sources?.get("roe")?.status == "not_applicable") "No interpretable" else "No disponible", company.field_sources?.get("roe")?.reason ?: "Balance al ${company.field_sources?.get("roe")?.as_of ?: company.as_of ?: "sin fecha"}", Modifier.weight(1f))
                     }
                 }
                 item {
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        MetricTile("Capitalización", capital(company.market_cap), "Valor de mercado", Modifier.weight(1f))
-                        MetricTile("Beta / dividendos", "No disponible", "Sin datos del proveedor", Modifier.weight(1f))
+                        MetricTile("Capitalización", capital(company.market_cap), "Dato al ${company.field_sources?.get("market_cap")?.as_of ?: company.as_of ?: "sin fecha"}", Modifier.weight(1f))
+                        MetricTile("Beta · S&P 500", company.beta ?: "No disponible", company.field_sources?.get("beta")?.reason ?: "Dato al ${company.field_sources?.get("beta")?.as_of ?: "sin fecha"}", Modifier.weight(1f))
+                    }
+                }
+                item {
+                    FinanceCard {
+                        SectionTitle("Rendimiento por dividendos")
+                        Text(company.dividend_yield?.let { "$it %" } ?: "No disponible", color = Green, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                        Text("Dividendos registrados en los últimos doce meses · ${company.field_sources?.get("dividend_yield")?.as_of ?: "Sin fecha"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        if (company.dividend_yield == null) Text(company.field_sources?.get("dividend_yield")?.reason ?: "La fuente no proporcionó datos suficientes.", color = Muted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
                 item { SolvencyCard(company) }
@@ -266,6 +275,10 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                         Text("Fecha financiera: ${company.as_of ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
                         Text("Fuente financiera: ${company.source ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
                         Text("Fuente del precio: ${company.quote?.source ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        company.field_sources.orEmpty().forEach { (key, origin) ->
+                            val label = mapOf("market_cap" to "Capitalización", "per" to "P/E", "roe" to "ROE", "beta" to "Beta", "dividend_yield" to "Dividendos")[key]
+                            if (label != null && origin.source != null) com.example.sp500auth.ui.common.SourceLink(origin.source, "$label · ${origin.as_of ?: "Fecha no disponible"}")
+                        }
                     }
                 }
             }

@@ -51,6 +51,7 @@ fun PillarScreen(navController: NavController, pillarId: String, viewModel: Pill
                 is PillarsState.Error -> AnalysisCard { Text(state.message, color = MaterialTheme.colorScheme.error); TextButton(onClick = { viewModel.load(initialTicker, year) }) { Text("Reintentar") } }
                 is PillarsState.Ready -> {
                     val data = state.data
+                    data.reporting_note?.let { AnalysisCard { Text(it, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.bodySmall) } }
                     AnalysisCard {
                         Text("${data.ticker} · FY${data.fiscal_year}", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                         Text("${data.period?.start ?: "Sin fecha"} — ${data.period?.end ?: "Sin fecha"} · ${data.currency ?: "Sin moneda"}", color = FinanceMuted, style = MaterialTheme.typography.bodySmall)
