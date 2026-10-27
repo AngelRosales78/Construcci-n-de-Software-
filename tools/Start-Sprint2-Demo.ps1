@@ -20,6 +20,7 @@ if(!(Port-Open 56379)) {
 }
 $env:DB_HOST='127.0.0.1';$env:DB_PORT='55432';$env:DB_USER='postgres';$env:DB_PASSWORD='';$env:DB_NAME='sprint2_completion_validation';$env:USE_POSTGRES='True'
 $env:REDIS_URL='redis://127.0.0.1:56379/0'
+$env:FRONTEND_URL='http://127.0.0.1:55183'
 $env:PYTHONPATH=$state;$env:DJANGO_SETTINGS_MODULE='sprint2_settings'
 if(!(Test-Path (Join-Path $state 'sprint2_settings.py'))) {
  $settings="from config.settings import *`nDEBUG = False`nCORS_ALLOWED_ORIGINS = ['http://127.0.0.1:55183']`nSECRET_KEY = '" + [guid]::NewGuid().ToString('N') + [guid]::NewGuid().ToString('N') + "'`n"
