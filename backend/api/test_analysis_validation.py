@@ -43,3 +43,17 @@ def test_missing_context_does_not_call_provider(case, monkeypatch):
 @pytest.mark.parametrize('bad', [None, {}, {'summary': 'texto'}])
 def test_invalid_structure_is_rejected(analysis_case, bad):
     with pytest.raises(ValueError): validate_analysis(bad, analysis_case[1])
+
+
+def test_only_the_authoritative_display_rounding_is_accepted(analysis_case):
+    context = copy.deepcopy(analysis_case[1])
+    context['metrics']['current_ratio'].update(value='1.005', display_value='1,01')
+    answer = valid(context)
+    answer['summary']['text'] = 'La liquidez corriente de 1,01 requiere una lectura conjunta del balance.'
+    answer['summary']['metric_ids'] = ['current_ratio']
+    validate_analysis(answer, context)
+
+
+def test_labels_padded_with_spaces_are_not_published(analysis_case):
+    answer = valid(analysis_case[1]); answer['summary']['text'] = 'Liquidez: ' + ' '*70
+    with pytest.raises(ValueError): validate_analysis(answer, analysis_case[1])

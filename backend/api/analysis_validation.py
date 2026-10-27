@@ -2,7 +2,7 @@
 from decimal import Decimal, InvalidOperation
 import re
 
-VERSION = 'grounded-analysis-v3'
+VERSION = 'grounded-analysis-v5'
 
 
 def context_from_pillars(data):
@@ -13,27 +13,12 @@ def context_from_pillars(data):
                 'value': metric.get('value'), 'display_value': metric.get('display_value'),
                 'unit': metric['unit'], 'pillar': pillar['id'],
                 'band': metric.get('thresholds', {}).get('band') if metric.get('thresholds') else None}
-    return {'ticker': data['ticker'], 'fiscal_year': data['fiscal_year'], 'period': data['period'],
+    provenance = sorted({(str(c['source'].get('url', '')), str(c['source'].get('filed', '')),
+                          str(c['source'].get('accession', '')), str(c['source'].get('tag', '')))
+                         for pillar in data['pillars'] for metric in pillar['metrics'] for c in metric.get('components', [])})
+    return {'ticker': data['ticker'], 'fiscal_year': data['fiscal_year'], 'period': data['period'], 'provenance': provenance,
             'metrics': metrics, 'methodology_version': data['methodology_version'],
             'pillars': {pillar['id']: pillar['label'] for pillar in data['pillars']}}
-
-
-def schema_for(context):
-    def claim(ids, prefix=''):
-        return {'type': 'object', 'additionalProperties': False, 'required': ['text', 'metric_ids'],
-                'properties': {'text': {'type': 'string', 'minLength': 40, 'maxLength': 180,
-                    'pattern': '^' + prefix + '[A-Za-záéíóúÁÉÍÓÚñÑüÜ ,.;:()%-]{40,150}$'},
-                    'metric_ids': {'type': 'array', 'items': {'type': 'string', 'enum': ids or ['unavailable']},
-                                   'minItems': 1 if ids else 0, 'maxItems': min(len(ids), 3)}}}
-    available = [key for key, metric in context['metrics'].items() if metric['status'] == 'available']
-    pillars = {key: claim([m for m in available if context['metrics'][m]['pillar'] == key]) for key in context['pillars']}
-    positive = [key for key in available if context['metrics'][key]['band'] == 'high']
-    risks = [key for key in available if context['metrics'][key]['band'] in ('low', 'middle')]
-    return {'type': 'object', 'additionalProperties': False, 'required': ['summary', 'pillars', 'strengths', 'risks'],
-            'properties': {'summary': claim(available),
-                'pillars': {'type': 'object', 'additionalProperties': False, 'required': list(pillars), 'properties': pillars},
-                'strengths': {'type': 'array', 'maxItems': 1 if positive else 0, 'items': claim(positive, 'Fortaleza: ')},
-                'risks': {'type': 'array', 'maxItems': 1 if risks else 0, 'items': claim(risks, 'Atención: ')}}}
 
 
 def validate_analysis(candidate, context):
@@ -76,7 +61,7 @@ def validate_analysis(candidate, context):
         allowed = {Decimal(str(context['fiscal_year']))}
         for key in ids:
             raw = Decimal(str(available[key]['value']))
-            allowed.update((raw, raw.quantize(Decimal('.01'))))
+            allowed.update((raw, Decimal(str(available[key]['display_value']).replace(',', '.'))))
         for number in re.findall(r'(?<![a-zA-Z_])[-+]?\d+(?:[.,]\d+)?', text):
             try:
                 if Decimal(number.replace(',', '.')) not in allowed:
