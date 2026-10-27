@@ -16,6 +16,11 @@
 .simulation-panel > p, .ai-panel > p { color: var(--terminal-muted); line-height: 1.8; margin: 14px 0; }
 .simulation-panel .financial-help { margin: 18px 0 0; }
 .simulation-panel .help-content { overflow-wrap: anywhere; }
+.simulation-controls { display: flex; flex-wrap: wrap; gap: 16px; align-items: end; margin: 20px 0; }
+.simulation-controls label { display: grid; gap: 8px; flex: 1 1 230px; font-size: 13px; }
+.simulation-controls small { color: var(--terminal-muted); }
+.simulation-controls input { background: var(--terminal-bg); color: var(--terminal-text); border: 1px solid var(--terminal-line); border-radius: 8px; padding: 12px; width: 100%; }
+.simulation-controls button:not(.primary-action) { background: var(--terminal-raised); color: var(--terminal-text); border: 1px solid var(--terminal-line); padding: 11px; border-radius: 8px; }
 body { background: var(--terminal-bg); color: var(--terminal-text); font-size: 15px; }
 button, input, select { font: inherit; }
 a { color: var(--primary); }

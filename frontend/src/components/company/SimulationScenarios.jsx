@@ -5,7 +5,7 @@ import { useSimulationViewModel } from '../../viewmodels/useSimulationViewModel'
 
 const SCENARIOS = [['base', 'Base · percentil 50', '#75ff9e'], ['optimistic', 'Optimista · percentil 90', '#64b8ff'], ['pessimistic', 'Pesimista · percentil 10', '#ffb95f']]
 export default function SimulationScenarios() {
-  const { data, loading, error, simulate } = useSimulationViewModel()
+  const { data, loading, error, simulate, draft, update } = useSimulationViewModel()
   const options = useMemo(() => ({
     chart: { backgroundColor: 'transparent', height: 340, animation: false },
     title: { text: null }, credits: { enabled: false }, legend: { itemStyle: { color: '#dfe2eb' } },
@@ -19,7 +19,12 @@ export default function SimulationScenarios() {
   return <section className="simulation-panel" aria-labelledby="simulation-title">
     <p className="section-eyebrow">ESCENARIOS A DOCE MESES</p><h2 id="simulation-title">Simulación de precios</h2>
     <p>Monte Carlo genera trayectorias posibles a partir del histórico. Son escenarios académicos, no precios futuros garantizados.</p>
-    <button className="primary-action" onClick={() => simulate()} disabled={loading}>{loading ? 'Calculando escenarios…' : 'Generar escenarios'}</button>
+    <form className="simulation-controls" onSubmit={event => { event.preventDefault(); simulate() }}>
+      <label>Tasa anual continua del modelo (%)<input aria-label="Tasa anual del modelo" type="number" min="-100" max="150" step="0.1" value={draft.annual_return} onChange={event => update('annual_return', event.target.value)} placeholder="Estimada del histórico" disabled={loading} /><small>Límite: -100 a 150 %. No es crecimiento de ventas.</small></label>
+      <label>Volatilidad anual (%)<input aria-label="Volatilidad anual" type="number" min="0" max="200" step="0.1" value={draft.annual_volatility} onChange={event => update('annual_volatility', event.target.value)} placeholder="Estimada del histórico" disabled={loading} /><small>Límite: 0 a 200 %. Variación del precio.</small></label>
+      <button className="primary-action" type="submit" disabled={loading}>{loading ? 'Calculando escenarios…' : 'Generar escenarios'}</button>
+      <button type="button" onClick={() => simulate(true)} disabled={loading}>Restablecer supuestos históricos</button>
+    </form>
     {error && <p role="alert">{error}</p>}
     {loading && <p role="status">Generando las trayectorias del mismo conjunto…</p>}
     {data?.status === 'unavailable' && <p>No se dispone de un histórico válido suficiente. Se requieren al menos 253 cierres comparables; disponibles: {data.available_observations}.</p>}
