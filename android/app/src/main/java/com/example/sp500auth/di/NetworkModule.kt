@@ -13,12 +13,15 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
 import com.example.sp500auth.data.local.TokenManager
+import com.example.sp500auth.BuildConfig
+import com.example.sp500auth.data.api.SessionAuthenticator
+import com.example.sp500auth.data.api.SessionRefreshApi
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:8000/api/v1/"
+    private val BASE_URL = BuildConfig.API_BASE_URL
 
     @Provides
     @Singleton
@@ -32,7 +35,11 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenManager: TokenManager): OkHttpClient {
+        val refreshApi = Retrofit.Builder().baseUrl(BASE_URL)
+            .client(OkHttpClient.Builder().callTimeout(30, TimeUnit.SECONDS).build())
+            .addConverterFactory(GsonConverterFactory.create()).build().create(SessionRefreshApi::class.java)
         return OkHttpClient.Builder()
+            .authenticator(SessionAuthenticator(tokenManager, refreshApi))
             .addInterceptor { chain ->
                 val request = chain.request()
                 val publicPaths = listOf("auth/token/", "auth/register/", "auth/refresh/", "auth/password/reset/", "auth/password/reset/confirm/")
@@ -45,6 +52,12 @@ object NetworkModule {
                 chain.proceed(builder.build())
             }
             .addInterceptor(loggingInterceptor)
+            .addInterceptor { chain ->
+                // La inferencia local puede tardar más que una consulta de datos.
+                val effective = if (chain.request().url.encodedPath.endsWith("/analysis/"))
+                    chain.withReadTimeout(160, TimeUnit.SECONDS) else chain
+                effective.proceed(chain.request())
+            }
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)

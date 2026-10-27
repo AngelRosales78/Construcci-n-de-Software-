@@ -13,9 +13,12 @@ class CompanyPillarsView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, ticker):
+        return self.for_year(ticker, request.query_params.get('fiscal_year'))
+
+    def for_year(self, ticker, year):
         company = get_object_or_404(Company, ticker=ticker.upper())
-        year = request.query_params.get('fiscal_year')
         if year is not None:
+            year = str(year)
             if not re.fullmatch(r'[0-9]{4}', year) or not 1900 <= int(year) <= timezone.localdate().year:
                 raise ValidationError({'fiscal_year': 'Indique un año de cierre válido, sin fechas futuras.'})
             year = int(year)

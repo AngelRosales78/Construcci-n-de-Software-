@@ -25,7 +25,10 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "2.0"
+        val baseUrl = providers.gradleProperty("apiBaseUrl").getOrElse("http://10.0.2.2:8000/api/v1/")
+        require(baseUrl.matches(Regex("https?://[a-zA-Z0-9.:_-]+/api/v1/"))) { "apiBaseUrl debe terminar en /api/v1/" }
+        buildConfigField("String", "API_BASE_URL", "\"$baseUrl\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -57,6 +60,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 

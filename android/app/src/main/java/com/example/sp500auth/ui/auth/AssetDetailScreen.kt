@@ -115,6 +115,14 @@ fun AssetDetailScreen(
         ) {
             item { Spacer(modifier = Modifier.height(4.dp)) }
 
+            item {
+                OutlinedButton(onClick = { navController?.navigate("pillars/liquidity") }) {
+                    Text("Consultar pilar de liquidez")
+                }
+                OutlinedButton(onClick = { navController?.navigate("pillars/profitability") }) {
+                    Text("Consultar pilar de rentabilidad")
+                }
+            }
             // 1. TopBar
             item {
                 Row(
@@ -143,8 +151,6 @@ fun AssetDetailScreen(
                     }
                 }
             }
-
-            item { Text("Maqueta con datos ilustrativos. Los datos importados se consultan en la versión web.", color = TextMuted, fontSize = 12.sp) }
 
             // 2. Precio Principal
             item {

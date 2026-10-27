@@ -16,12 +16,13 @@ Endpoints:
 from django.urls import path
 from . import views
 from .pillar_views import CompanyPillarsView
-from .simulation_views import CompanySimulationView, SimulationDetailView
+from .simulation_views import CompanySimulationView, SimulationDetailView, CompanySimulationDefaultsView
 from .analysis_views import CompanyAnalysisView
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('companies/<str:ticker>/simulations/defaults/', CompanySimulationDefaultsView.as_view(), name='simulation-defaults'),
     path('companies/<str:ticker>/analysis/', CompanyAnalysisView.as_view(), name='company-analysis'),
     path('simulations/<uuid:run_id>/', SimulationDetailView.as_view(), name='simulation-detail'),
     path('companies/<str:ticker>/simulations/', CompanySimulationView.as_view(), name='company-simulations'),

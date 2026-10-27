@@ -33,7 +33,8 @@ def source_snapshot(rows):
     return snapshot, digest
 
 
-def run_simulation(rows, seed, parameters=None):
+def prepare_simulation(rows):
+    """Valida y calibra sin generar trayectorias ni guardar una ejecución."""
     snapshot, digest = source_snapshot(rows)
     unavailable = {'status': 'unavailable', 'reason': 'insufficient_history',
                    'available_observations': len(rows), 'required_observations': 253}
@@ -49,9 +50,17 @@ def run_simulation(rows, seed, parameters=None):
     sigma = stdev(returns) * math.sqrt(252)
     drift = mean(returns) * 252 + 0.5 * sigma * sigma
     defaults = {'annual_return': drift, 'annual_volatility': sigma}
+    return {'status': 'available', 'defaults': defaults, 'prices': prices, 'source_sha256': digest}, snapshot
+
+
+def run_simulation(rows, seed, parameters=None):
+    prepared, snapshot = prepare_simulation(rows)
+    if prepared['status'] != 'available':
+        return prepared, snapshot
+    prices, defaults, digest = prepared['prices'], prepared['defaults'], prepared['source_sha256']
     effective = defaults | (parameters or {})
     if any(not math.isfinite(value) or abs(value) > 10 for value in effective.values()):
-        return unavailable | {'reason': 'unstable_parameters'}, snapshot
+        return {'status': 'unavailable', 'reason': 'unstable_parameters'}, snapshot
     rng = random.Random(seed)
     paths = [[prices[-1]] for _ in range(PATHS)]
     mu, volatility = effective['annual_return'], effective['annual_volatility']

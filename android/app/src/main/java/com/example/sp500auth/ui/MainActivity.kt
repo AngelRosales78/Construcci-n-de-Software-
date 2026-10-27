@@ -91,13 +91,29 @@ fun AppNavigation() {
             RegisterScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavRoutes.Dashboard.route) {
-            DashboardScreen(navController = navController, viewModel = authViewModel)
+            com.example.sp500auth.ui.finance.CompanySearchScreen(navController, authViewModel)
         }
         composable(NavRoutes.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavRoutes.Profile.route) {
             ProfileScreen(navController = navController, viewModel = authViewModel)
+        }
+        composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
+        composable("pillars/profitability") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability") }
+        composable("analysis/{ticker}/{year}") { entry ->
+            com.example.sp500auth.ui.analysis.AnalysisScreen(navController,entry.arguments?.getString("ticker") ?: "MSFT",
+                entry.arguments?.getString("year")?.toIntOrNull() ?: 2024)
+        }
+        composable("scenarios/{ticker}") { entry ->
+            com.example.sp500auth.ui.scenarios.ScenariosScreen(navController,entry.arguments?.getString("ticker") ?: "MSFT")
+        }
+        composable("company/{ticker}") { entry ->
+            com.example.sp500auth.ui.finance.CompanyDetailScreen(navController, entry.arguments?.getString("ticker") ?: "MSFT")
+        }
+        composable("finance/{ticker}/{pillar}") { entry ->
+            com.example.sp500auth.ui.pillars.PillarScreen(navController, entry.arguments?.getString("pillar") ?: "all",
+                initialTicker=entry.arguments?.getString("ticker") ?: "MSFT")
         }
         composable(NavRoutes.AssetDetail.route) {
             AssetDetailScreen(navController = navController)

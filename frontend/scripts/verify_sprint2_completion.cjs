@@ -4,7 +4,7 @@ const assert = require('node:assert/strict')
 const { chromium } = require('playwright')
 const web = 'http://127.0.0.1:55183'
 const root = path.resolve(__dirname, '../../..')
-const output = path.join(root, 'output/sprint2_cierre_26_oct')
+const output = process.env.SPRINT_EVIDENCE_DIR || path.join(root, 'output/sprint2_integracion_27_oct')
 const credentials = JSON.parse(fs.readFileSync(path.join(root, 'presentation_runtime_sprint2/demo_credentials.json'), 'utf8'))
 fs.mkdirSync(output, { recursive: true })
 
