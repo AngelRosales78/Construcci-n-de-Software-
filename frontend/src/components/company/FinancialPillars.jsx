@@ -2,6 +2,7 @@ import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboa
 import PillarRadar from './PillarRadar'
 import OverallScore from './OverallScore'
 import FinancialAnalysis from './FinancialAnalysis'
+import { useEffect, useState } from 'react'
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
 const BANDS = { low: 'Tramo de atención', middle: 'Tramo intermedio', high: 'Tramo favorable' }
@@ -44,25 +45,41 @@ export function PillarMetric({ metric }) {
 export default function FinancialPillars({ view = 'pillars' }) {
   const { data, year, setYear, loading, error, retry } = useFinancialPillarsViewModel()
   const years = data?.available_years || []
+  const [activePillar, setActivePillar] = useState('liquidity')
+  useEffect(() => {
+    const selectHash = () => {
+      const id = window.location.hash.replace('#pillar-', '')
+      if (VISIBLE_PILLARS.includes(id)) setActivePillar(id)
+    }
+    selectHash()
+    window.addEventListener('hashchange', selectHash)
+    return () => window.removeEventListener('hashchange', selectHash)
+  }, [])
+  const openLinkedPillar = event => {
+    const target = event.target.closest?.('a')?.getAttribute('href')?.replace('#pillar-', '')
+    if (VISIBLE_PILLARS.includes(target)) setActivePillar(target)
+  }
   return <section className="financial-pillars" aria-labelledby="financial-pillars-title">
     <div className="section-title"><h2 id="financial-pillars-title">{view === 'analysis' ? 'Entiende los resultados' : 'Salud financiera'}</h2><span>Balance anual</span></div>
     {loading && <p role="status">Cargando pilares financieros...</p>}
     {error && <div role="alert"><p>{error}</p><button onClick={retry}>Reintentar pilares</button></div>}
     {!loading && data && <>
-      <label className="pillar-year">Ejercicio fiscal
-        <select value={year} onChange={event => setYear(event.target.value)}>
+      <div className="pillar-year"><label htmlFor="fiscal-year">Ejercicio fiscal</label>
+        <select id="fiscal-year" value={year} onChange={event => setYear(event.target.value)}>
           <option value="">Último disponible{years.length ? ` (${years[0]})` : ''}</option>
           {year && !years.includes(Number(year)) && <option value={year}>{year} · Sin datos</option>}
           {years.map(value => <option key={value} value={value}>{value}</option>)}
         </select>
-      </label>
+      </div>
       <p className="pillar-muted">Ejercicio: {data.fiscal_year || 'Sin datos'} · {data.period.start || 'Sin fecha inicial'} a {data.period.end || 'Sin fecha final'}</p>
       {!years.length && <p>No hay balances anuales importados para esta empresa.</p>}
-      <div hidden={view === 'analysis'}>
+      <div hidden={view === 'analysis'} onClick={openLinkedPillar}>
       {data.overall_score && <OverallScore score={data.overall_score} fiscalYear={data.fiscal_year} />}
       {data.pillars.length === 5 && <PillarRadar data={data} />}
       {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" id={`pillar-${pillar.id}`} tabIndex={-1} key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
-        <h3>{pillar.label}</h3><details className="pillar-concept"><summary>Cómo interpretarlo</summary><p className="pillar-muted">{CONCEPTS[pillar.id]}</p></details>
+        <h3><button className="pillar-toggle" type="button" aria-label={`Mostrar ${pillar.label}`} aria-expanded={activePillar === pillar.id} aria-controls={`detail-${pillar.id}`} onClick={() => setActivePillar(previous => previous === pillar.id ? null : pillar.id)}><span>{pillar.label}</span><small>{pillar.score?.status === 'available' ? `${pillar.score.display_value} / 100` : 'Ver indicadores'} · {activePillar === pillar.id ? '−' : '+'}</small></button></h3>
+        <div id={`detail-${pillar.id}`} hidden={activePillar !== pillar.id}>
+        <details className="pillar-concept"><summary>Cómo interpretarlo</summary><p className="pillar-muted">{CONCEPTS[pillar.id]}</p></details>
         {pillar.score && <p className="pillar-note">Nota académica: {pillar.score.status === 'available' ? `${pillar.score.display_value} / 100` : 'No disponible'}</p>}
         {pillar.sector_reference?.status === 'unavailable' && <details className="pillar-concept"><summary>Referencia sectorial no disponible</summary><p className="pillar-muted">{pillar.sector_reference.explanation}</p></details>}
         <div className="pillar-metrics">{pillar.metrics.map(metric => <PillarMetric key={metric.id} metric={metric} />)}</div>
@@ -77,6 +94,7 @@ export default function FinancialPillars({ view = 'pillars' }) {
             })}
           </tr>)}</tbody>
         </table></div>}
+        </div>
       </section>)}
       </div>
       <div hidden={view !== 'analysis'}><FinancialAnalysis fiscalYear={data.fiscal_year} /></div>

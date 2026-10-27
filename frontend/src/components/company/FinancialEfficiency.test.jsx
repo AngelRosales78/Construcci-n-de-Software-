@@ -1,6 +1,6 @@
 import React from 'react'
 import { afterEach, expect, test, vi } from 'vitest'
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, within, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import FinancialPillars from './FinancialPillars'
 import api from '../../services/api'
@@ -21,6 +21,7 @@ test('eficiencia muestra unidades, serie disponible y No aplica distinto de cero
         { ...turnover, status: 'unavailable' }, { ...days, status: 'available', display_value: '0,00' }] },
     ] }] } })
   render(<MemoryRouter initialEntries={['/company/MSFT']}><Routes><Route path="/company/:ticker" element={<FinancialPillars />} /></Routes></MemoryRouter>)
+  fireEvent.click(await screen.findByRole('button', { name: 'Mostrar Eficiencia' }))
   await screen.findByRole('article', { name: 'Rotación de activos' })
   expect(within(screen.getByRole('article', { name: 'Días de inventario' })).getByText('No aplica')).toBeTruthy()
   const table = screen.getByRole('table', { name: 'Eficiencia en hasta tres ejercicios disponibles' })

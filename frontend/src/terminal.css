@@ -345,3 +345,56 @@ a { color: var(--primary); }
   .chart-caption { flex-direction: column; gap: 8px; }
   .company-filters .filter-group select { max-width: 225px; }
 }
+
+/* Navegación y lectura compacta tras la revisión de uso. */
+.catalog-notice { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 20px; margin: 16px 0 24px; border: 1px solid var(--terminal-line); border-radius: 10px; color: var(--terminal-muted); font-size: 14px; }
+.catalog-notice a { white-space: nowrap; }
+.coverage-filter { display: flex; align-items: center; gap: 10px; margin: 16px 0; color: var(--terminal-text); font-size: 14px; cursor: pointer; }
+.coverage-filter input { width: 18px; height: 18px; accent-color: var(--primary); }
+.search-error { padding: 20px; border: 1px solid #ffb4ab55; border-radius: 10px; color: var(--danger); }
+.search-error button { padding: 10px 18px; margin-top: 14px; color: var(--terminal-text); background: var(--terminal-raised); border: 1px solid var(--terminal-line); border-radius: 8px; }
+.company-list { display: flex; flex-direction: column; gap: 10px; }
+.company-card { display: grid; grid-template-columns: 110px minmax(140px,1.3fr) minmax(100px,.8fr) minmax(140px,1fr) auto; grid-template-areas: 'symbol name sector status action' 'symbol metrics metrics metrics action'; align-items: center; gap: 8px 16px; padding: 16px 20px; min-height: 0; text-align: left; }
+.company-card-header { grid-area: symbol; margin: 0; gap: 8px; }
+.company-card .company-name { grid-area: name; margin: 0; min-height: 0; font-size: 16px; }
+.company-card .company-sector { grid-area: sector; margin: 0; justify-self: start; }
+.company-card .coverage-label { grid-area: status; margin: 0; font-size: 13px; }
+.company-card .company-metrics { grid-area: metrics; display: flex; flex-wrap: wrap; gap: 24px; padding: 0; margin: 0; border: 0; }
+.company-card .company-card-action { grid-area: action; margin: 0; padding: 8px 10px; align-self: center; }
+.company-card .metric-value { font-size: 14px; }
+.pillar-toggle { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px; border: 1px solid var(--terminal-line); background: var(--terminal-bg); color: var(--terminal-text); border-radius: 10px; text-align: left; cursor: pointer; }
+.pillar-toggle[aria-expanded='true'] { border-color: #75ff9e66; }
+.pillar-toggle small { font-size: 13px; color: var(--terminal-muted); white-space: nowrap; }
+.pillar-section { scroll-margin-top: 130px; }
+.pillar-section > div { padding: 8px 0 16px; }
+.analysis-key-value { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; color: var(--terminal-muted); font-size: 13px; }
+.analysis-key-value strong { color: var(--primary); font-size: 19px; }
+.scenario-legend label { display: inline-flex; align-items: center; gap: 7px; }
+.scenario-swatch { width: 16px; height: 4px; display: inline-block; border-radius: 2px; }
+.password-field { position: relative; }
+.auth-card .password-field input { padding-right: 88px; }
+.password-field button { position: absolute; right: 6px; top: 6px; padding: 8px; color: var(--primary); background: var(--terminal-raised); border: 0; border-radius: 6px; min-height: 34px; font-size: 13px; cursor: pointer; }
+.auth-hint { display: block; color: var(--terminal-muted); font-size: 13px; line-height: 1.6; margin-top: 8px; }
+.workspace-brand small, .terminal-quote small, .terminal-status { font-size: 12px; }
+.chart-caption, .chart-date-range, .metrics-period-note, .workspace-footer { font-size: 13px; }
+@media (max-width: 1000px) {
+  .company-card { grid-template-columns: 110px minmax(0,1fr) auto; grid-template-areas: 'symbol name action' 'symbol sector status' 'metrics metrics metrics'; }
+}
+@media (max-width: 760px) {
+  .company-card { grid-template-columns: minmax(0,1fr) auto; grid-template-areas: 'symbol action' 'name name' 'sector status' 'metrics metrics'; padding: 14px 16px; gap: 8px 12px; }
+  .company-card .company-name { font-size: 15px; }
+  .company-card .coverage-label { max-width: 160px; font-size: 12px; text-align: right; }
+  .company-card .company-metrics { gap: 16px; }
+  .dashboard-header { display: grid; grid-template-columns: auto minmax(0,1fr); padding: 14px 16px; gap: 10px; }
+  .dashboard-title h1 { font-size: 24px; }
+  .dashboard-title .section-eyebrow { display: none; }
+  .terminal-quote { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+  .terminal-quote strong { font-size: 26px; }
+  .terminal-quote small:first-child { flex-basis: 100%; }
+  .data-provenance { padding: 12px 16px; gap: 8px 16px; }
+  .data-provenance p { display: none; }
+  .company-sections { position: sticky; top: 0; z-index: 20; margin: 12px 0 20px; background: var(--terminal-bg); box-shadow: 0 5px 14px #0004; }
+  .workspace-content { padding-top: 18px; }
+  .company-sections button { padding: 10px 6px; }
+  .catalog-notice { padding: 12px 16px; margin: 12px 0 20px; }
+}

@@ -19,7 +19,7 @@ it('muestra cinco métricas, conserva cero y describe los indicadores',()=>{
 })
 it('muestra una clasificación explícita en color semántico',()=>{
  render(<FinancialHealthIndicator altmanZ={{zone:'grey',score:1.81}}/> )
- expect(screen.getByText('Moderado')).toBeTruthy()
+ expect(screen.getByText('Zona intermedia según Altman-Z')).toBeTruthy()
  expect(screen.getByLabelText('Perfil financiero').className).toContain('orange')
 })
 it('cambia el rango y entrega más de mil puntos a Highcharts con zoom y crosshair',async()=>{

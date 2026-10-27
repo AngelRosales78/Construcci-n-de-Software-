@@ -4,7 +4,7 @@ export default function OverallScore({ score, fiscalYear }) {
     <div><h3 id="overall-score-title">Puntaje general de los cinco pilares</h3>
       <p className="pillar-muted">Ejercicio {fiscalYear || 'sin datos'} · {score.period?.start || 'Sin fecha inicial'} a {score.period?.end || 'Sin fecha final'}</p>
       <p className="overall-score-value">{ready ? score.display_value : 'No disponible'}{ready && <small> / 100</small>}</p>
-      <p className="pillar-muted">Cinco pilares, un resumen académico.</p>
+      <p className="pillar-muted">Promedio de cinco notas académicas. No es una probabilidad de ganancia ni el puntaje Altman-Z.</p>
       {!ready && <p>{score.explanation}</p>}
       {!!score.missing_pillars?.length && <p>Notas pendientes: {score.contributions.filter(p => score.missing_pillars.includes(p.id)).map(p => p.label).join(', ')}.</p>}
     </div>

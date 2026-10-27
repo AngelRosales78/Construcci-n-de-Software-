@@ -1,6 +1,6 @@
 import React from 'react'
 import { afterEach, expect, test, vi } from 'vitest'
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { cleanup, render, screen, within, fireEvent } from '@testing-library/react'
 import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import FinancialPillars from './FinancialPillars'
 import api from '../../services/api'
@@ -17,6 +17,7 @@ test('crecimiento distingue variación negativa de falta de cuatro cierres', asy
         explanation: 'Faltan cuatro cierres consecutivos.', period, components: [] },
     ] }] } })
   render(<MemoryRouter initialEntries={['/company/MSFT']}><Routes><Route path="/company/:ticker" element={<FinancialPillars />} /></Routes></MemoryRouter>)
+  fireEvent.click(await screen.findByRole('button', { name: 'Mostrar Crecimiento' }))
   await screen.findByText('-10,00')
   expect(within(screen.getByRole('article', { name: 'Crecimiento compuesto a tres años' })).getByText('No disponible')).toBeTruthy()
   expect(screen.getByText(/no es el retorno de la acción/)).toBeTruthy()
