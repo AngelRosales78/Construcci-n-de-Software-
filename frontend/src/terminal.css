@@ -28,6 +28,14 @@
 .scenario-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .scenario-table caption { text-align: left; color: var(--terminal-muted); margin-bottom: 12px; }
 .scenario-table td, .scenario-table th { padding: 12px; border-bottom: 1px solid var(--terminal-line); text-align: left; }
+.analysis-claim { margin: 14px 0; }
+.analysis-claim p { line-height: 1.8; }
+.analysis-claim small { display: block; color: var(--terminal-muted); margin-top: 8px; line-height: 1.8; }
+.analysis-validation { color: var(--primary) !important; }
+.analysis-arguments { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,280px),1fr)); gap: 24px; margin: 24px 0; }
+.analysis-arguments ul { padding-left: 18px; }
+.ai-panel .financial-help { margin-top: 20px; }
+.ai-panel .financial-help a { overflow-wrap: anywhere; }
 body { background: var(--terminal-bg); color: var(--terminal-text); font-size: 15px; }
 button, input, select { font: inherit; }
 a { color: var(--primary); }
