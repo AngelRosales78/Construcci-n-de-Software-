@@ -16,14 +16,14 @@ export function useCompanySearchViewModel() {
     const values = new URLSearchParams(signature)
     const page = Number(values.get('page') || 1)
     return { q: values.get('q') || '', sector: values.get('sector') || '',
-      ordering: ['market_cap', '-market_cap'].includes(values.get('ordering')) ? values.get('ordering') : '-market_cap',
+      ordering: ['name', '-name', 'market_cap', '-market_cap'].includes(values.get('ordering')) ? values.get('ordering') : 'name',
       page: Number.isSafeInteger(page) && page > 0 ? page : 1,
       withData: values.get('with_data') === 'true' }
   }, [signature])
   const setParams = useCallback(update => setUrlParams(previous => {
     const currentPage = Number(previous.get('page') || 1)
     const current = { q: previous.get('q') || '', sector: previous.get('sector') || '',
-      ordering: ['market_cap', '-market_cap'].includes(previous.get('ordering')) ? previous.get('ordering') : '-market_cap',
+      ordering: ['name', '-name', 'market_cap', '-market_cap'].includes(previous.get('ordering')) ? previous.get('ordering') : 'name',
       page: Number.isSafeInteger(currentPage) && currentPage > 0 ? currentPage : 1,
       withData: previous.get('with_data') === 'true' }
     const next = update(current)

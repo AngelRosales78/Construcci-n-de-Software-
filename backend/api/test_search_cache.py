@@ -23,3 +23,15 @@ def test_cached_search_is_validated_and_isolated(monkeypatch,django_assert_num_q
     client.get(url,{'sector':'technology'})
     assert len(redis.keys('sp500:search:*'))==2
     for key in redis.keys('sp500:search:*'):assert 0<redis.ttl(key)<=30
+
+
+def test_autocomplete_sorts_names_before_limiting_candidates(monkeypatch):
+    from types import SimpleNamespace
+    from api.search_cache import preload_autocomplete, autocomplete
+    redis = fakeredis.FakeRedis(decode_responses=True)
+    monkeypatch.setattr('api.search_cache.get_redis_connection', lambda: redis)
+    rows = [SimpleNamespace(ticker=f'A{i:02}', name=f'Zulu {i:02}') for i in range(20)]
+    rows[-1].name = 'Alpha final'
+    preload_autocomplete(rows)
+    suggestions = autocomplete('a', limit=2)
+    assert [row['name'] for row in suggestions] == ['Alpha final', 'Zulu 00']

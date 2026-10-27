@@ -24,6 +24,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import Q, F
+from django.db.models.functions import Lower
 from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
@@ -482,14 +483,14 @@ class CompanySearchView(generics.ListAPIView):
     def get_queryset(self):
         query = self.request.query_params.get('q', '').strip()
         sector = self.request.query_params.get('sector', '').strip()
-        ordering = self.request.query_params.get('ordering', '').strip()
+        ordering = self.request.query_params.get('ordering', 'name').strip() or 'name'
         with_data = self.request.query_params.get('with_data', '').strip()
 
         sectors = {str(label).casefold(): value for value, label in Company.SECTOR_CHOICES}
         sector = sectors.get(sector.casefold(), sector.casefold())
         if sector and sector not in dict(Company.SECTOR_CHOICES):
             raise ValidationError({'sector': 'El sector no es válido.'})
-        if ordering not in ('', 'market_cap', '-market_cap'):
+        if ordering not in ('name', '-name', 'market_cap', '-market_cap'):
             raise ValidationError({'ordering': 'El orden no es válido.'})
         if len(query) > 200:
             raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
@@ -509,6 +510,9 @@ class CompanySearchView(generics.ListAPIView):
             )
         if sector:
             queryset = queryset.filter(sector=sector)
+        if ordering in ('name', '-name'):
+            alphabetical = Lower('name').desc() if ordering == '-name' else Lower('name').asc()
+            return queryset.order_by(alphabetical, 'ticker')
         if ordering:
             cap_order = F('market_cap').desc(nulls_last=True) if ordering.startswith('-') else F('market_cap').asc(nulls_last=True)
             return queryset.order_by(cap_order, 'ticker')

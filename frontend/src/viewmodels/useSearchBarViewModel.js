@@ -43,7 +43,8 @@ export function useSearchBarViewModel({ onSearch, onSubmitSearch = onSearch, ini
       try {
         const response = await companyRepository.autocomplete(query)
         if (!active) return
-        setSuggestions(response.suggestions || [])
+        setSuggestions([...(response.suggestions || [])].sort((a, b) =>
+          a.name.localeCompare(b.name, 'es', { sensitivity: 'base' }) || a.ticker.localeCompare(b.ticker)))
         setShowSuggestions(true)
       } catch (err) {
         if (active) setSuggestions([])

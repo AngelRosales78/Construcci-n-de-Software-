@@ -130,3 +130,21 @@ it('el filtro de cobertura se pide al servidor y reinicia la página', async () 
   fireEvent.click(screen.getByRole('checkbox', { name: 'Solo empresas con indicadores cargados' }))
   await waitFor(() => expect(search.mock.lastCall[0]).toContain('page=1&with_data=true'))
 })
+
+it('el catálogo abre en orden alfabético y permite invertirlo', async () => {
+  mount()
+  await screen.findByText('Empresa AAA')
+  expect(search.mock.lastCall[0]).toContain('ordering=name&page=1')
+  fireEvent.change(screen.getByLabelText('Ordenar por:'), { target: { value: '-name' } })
+  await waitFor(() => expect(search.mock.lastCall[0]).toContain('ordering=-name&page=1'))
+})
+
+it('ordena sectores según su etiqueta visible en español', async () => {
+  api.get.mockImplementation(url => url.includes('/sectors/')
+    ? Promise.resolve({ data: { sectors: [{ value: 'technology', label: 'Technology' }, { value: 'energy', label: 'Energy' }, { value: 'real_estate', label: 'Real Estate' }] } })
+    : url.includes('/autocomplete/') ? Promise.resolve({ data: { suggestions: [] } }) : Promise.resolve(result()))
+  mount()
+  await screen.findByRole('option', { name: 'Bienes raíces' })
+  const sector = screen.getByLabelText('Sector:')
+  expect([...sector.options].map(option => option.textContent)).toEqual(['Todos los sectores', 'Bienes raíces', 'Energía', 'Tecnología'])
+})

@@ -40,13 +40,13 @@ def test_exact_sector(client, companies, sector, expected):
 @pytest.mark.parametrize('ordering,expected', [
     ('market_cap', ['DDD', 'CCC', 'AAA', 'BBB']),
     ('-market_cap', ['AAA', 'BBB', 'CCC', 'DDD']),
-    ('', ['AAA', 'BBB', 'CCC', 'DDD'])])
+    ('', ['AAA', 'BBB', 'DDD', 'CCC'])])
 def test_numeric_order_and_stable_ties(client, companies, ordering, expected):
     response = client.get(URL, {'ordering': ordering})
     assert response.status_code == 200
     assert [row['ticker'] for row in response.data['results']] == expected
 
-@pytest.mark.parametrize('params', [{'sector': 'invalid'}, {'ordering': 'name'}, {'q': 'a'*201}])
+@pytest.mark.parametrize('params', [{'sector': 'invalid'}, {'ordering': 'unsupported'}, {'q': 'a'*201}])
 def test_invalid_parameters(client, params):
     assert client.get(URL, params).status_code == 400
 
@@ -123,3 +123,23 @@ def test_with_data_is_applied_before_pagination_and_with_sector(client):
 
 def test_with_data_rejects_unrecognized_values(client):
     assert client.get(URL, {'with_data': 'maybe'}).status_code == 400
+
+
+@pytest.mark.parametrize('ordering,expected', [
+    ('name', ['SECOND', 'THIRD', 'FIRST']),
+    ('-name', ['FIRST', 'THIRD', 'SECOND']),
+])
+def test_alphabetical_name_order_is_case_insensitive(client, ordering, expected):
+    for ticker, name in [('FIRST', 'zeta'), ('SECOND', 'Alpha'), ('THIRD', 'beta')]:
+        Company.objects.create(ticker=ticker, name=name, sector='technology')
+    response = client.get(URL, {'ordering': ordering})
+    assert [row['ticker'] for row in response.data['results']] == expected
+
+
+def test_default_name_order_is_global_before_pagination(client):
+    Company.objects.bulk_create([Company(ticker=f'X{i:02}', name=f'Nombre {25-i:02}',
+        sector='technology', market_cap=i) for i in range(25)])
+    first = client.get(URL)
+    second = client.get(URL, {'page': 2})
+    assert [row['name'] for row in first.data['results']] == [f'Nombre {i:02}' for i in range(1, 21)]
+    assert [row['name'] for row in second.data['results']] == [f'Nombre {i:02}' for i in range(21, 26)]

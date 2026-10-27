@@ -33,14 +33,13 @@ def autocomplete(prefix, limit=10):
     key = r.get(AUTOCOMPLETE_KEY)
     if not key:
         return []
-    members = r.zrangebylex(key, f'[{prefix}', f'[{prefix}\U0010ffff', start=0, num=limit*2)
+    # Ordenar todos los candidatos antes del límite; no solo una selección por ticker.
+    members = r.zrangebylex(key, f'[{prefix}', f'[{prefix}\U0010ffff')
     suggestions = {}
     for member in members:
         item = json.loads(member.split('\x00', 1)[1])
         suggestions.setdefault(item['ticker'], item)
-        if len(suggestions) == limit:
-            break
-    return list(suggestions.values())
+    return sorted(suggestions.values(), key=lambda item: (item['name'].casefold(), item['ticker'].casefold()))[:limit]
 
 def history_key(user_id):
     return f'sp500:history:{user_id}'

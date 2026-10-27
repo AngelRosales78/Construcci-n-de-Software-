@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { companyRepository } from '../models/companyRepository'
+import { sectorLabel } from '../utils/financialPresentation'
 
-export function useCompanyFiltersViewModel({ onFilterChange, initialSector = '', initialOrdering = '-market_cap' }) {
+export function useCompanyFiltersViewModel({ onFilterChange, initialSector = '', initialOrdering = 'name' }) {
   const [sectors, setSectors] = useState([])
   const [selectedSector, setSelectedSector] = useState(initialSector)
   const [ordering, setOrdering] = useState(initialOrdering)
@@ -10,7 +11,8 @@ export function useCompanyFiltersViewModel({ onFilterChange, initialSector = '',
     const fetchSectors = async () => {
       try {
         const response = await companyRepository.sectors()
-        setSectors(response.sectors || [])
+        setSectors([...(response.sectors || [])].sort((a, b) =>
+          sectorLabel(a.value, a.label).localeCompare(sectorLabel(b.value, b.label), 'es', { sensitivity: 'base' })))
       } catch (err) {
         console.error('Error fetching sectors:', err)
       }

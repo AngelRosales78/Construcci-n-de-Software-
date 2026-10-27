@@ -49,3 +49,16 @@ it('muestra el logo configurado y conserva métricas con valor cero',()=>{
  expect(screen.getByText('AAA').tagName).toBe('STRONG')
  expect(screen.getByText('0%')).toBeTruthy()
 })
+
+it('presenta sugerencias por nombre y selecciona la primera al usar el teclado', async () => {
+ api.get.mockResolvedValue({data:{suggestions:[{ticker:'AAA',name:'Zeta'}, {ticker:'ZZZ',name:'Alpha'}]}})
+ const submit=vi.fn()
+ render(<SearchBar onSearch={vi.fn()} onSubmitSearch={submit}/>)
+ const input=screen.getByRole('combobox')
+ fireEvent.change(input,{target:{value:'a'}})
+ const options=await screen.findAllByRole('option')
+ expect(options[0].textContent).toContain('Alpha')
+ fireEvent.keyDown(input,{key:'ArrowDown'})
+ fireEvent.keyDown(input,{key:'Enter'})
+ expect(submit).toHaveBeenCalledWith('ZZZ')
+})
