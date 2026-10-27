@@ -55,3 +55,11 @@ Desde android, las pruebas locales se ejecutan con gradlew.bat testDebugUnitTest
 - Los errores de usuario/correo duplicado o validación se muestran por campo. Los fallos de conexión, espera agotada y servidor se distinguen; no se muestran páginas HTML ni detalles internos de errores 500.
 - Si el registro pudo crear la cuenta pero la respuesta no se procesó, intentar iniciar sesión antes de repetir el registro.
 - Volver a ejecutar **app** desde Android Studio para instalar el código actualizado en el emulador.
+
+## Interfaces de exploración y ficha
+
+Inicio y detalle usan tarjetas oscuras, acentos verdes, navegación inferior y gráfico de área basado en cierres del servidor. Los filtros por sector y el orden por capitalización se aplican sobre todo el catálogo mediante la API, no solo sobre la página visible. Se conservan paginación, carga, errores, períodos, fuentes y avisos de datos de demostración.
+
+La ficha mantiene accesos a los cinco pilares/radar/puntaje, escenarios e IA. Beta y dividendos se indican como no disponibles porque la API actual no los entrega. No se muestran cotizaciones, variaciones, imágenes corporativas ni valores de índice ficticios. Los escenarios y la IA siguen sujetos a los servicios pendientes descritos arriba.
+
+Después de registrarse se regresa al login y no se guardan los tokens recibidos del registro. El usuario debe iniciar sesión para entrar al catálogo.

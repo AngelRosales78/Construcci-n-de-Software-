@@ -18,9 +18,9 @@ class CompanyViewModel @Inject constructor(private val repository: SprintReposit
     private var searchJob: Job?=null
     private var summaryJob: Job?=null
     private var historyJob: Job?=null
-    fun search(query: String,page: Int=1) {
+    fun search(query: String,page: Int=1,sector: String="",ordering: String="") {
         searchJob?.cancel();companies=Resource.Loading()
-        searchJob=viewModelScope.launch{companies=repository.search(query.take(200),page)}
+        searchJob=viewModelScope.launch{companies=repository.search(query.take(200),page,sector,ordering)}
     }
     fun load(ticker: String) {
         summaryJob?.cancel();summary=Resource.Loading()

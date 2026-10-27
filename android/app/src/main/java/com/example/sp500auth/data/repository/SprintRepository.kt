@@ -21,7 +21,7 @@ suspend fun <T : Any> remoteCall(block: suspend () -> Response<T>): Resource<T> 
 
 class SprintRepository @Inject constructor(retrofit: Retrofit) {
     private val api=retrofit.create(SprintApiService::class.java)
-    suspend fun search(query: String,page: Int)=remoteCall{api.search(query,page)}
+    suspend fun search(query: String,page: Int,sector: String="",ordering: String="")=remoteCall{api.search(query,page,sector,ordering)}
     suspend fun summary(ticker: String)=remoteCall{api.summary(ticker)}
     suspend fun history(ticker: String,range: String)=remoteCall{api.history(ticker,range)}
 }

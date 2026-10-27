@@ -1,95 +1,302 @@
 package com.example.sp500auth.ui.finance
+
 import android.net.Uri
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.sp500auth.data.api.models.CompanyItem
+import com.example.sp500auth.data.api.models.CompanySummary
 import com.example.sp500auth.ui.auth.AuthViewModel
 import com.example.sp500auth.util.Resource
+import java.math.BigDecimal
+import java.text.NumberFormat
 import java.util.Locale
 
+private val Background = Color(0xFF101416)
+private val Panel = Color(0xFF1C2024)
+private val Inner = Color(0xFF252B30)
+private val Green = Color(0xFF36F5A0)
+private val Muted = Color(0xFF9BAAA8)
+private val sectors = listOf("" to "Todos", "technology" to "Tecnología", "healthcare" to "Salud",
+    "financials" to "Finanzas", "consumer_discretionary" to "Consumo discrecional",
+    "consumer_staples" to "Consumo básico", "industrials" to "Industria", "energy" to "Energía",
+    "materials" to "Materiales", "utilities" to "Servicios públicos", "real_estate" to "Inmuebles",
+    "communication_services" to "Comunicaciones")
+
+private fun money(value: String?): String = value?.toBigDecimalOrNull()?.let {
+    NumberFormat.getNumberInstance(Locale.US).apply { minimumFractionDigits = 2; maximumFractionDigits = 2 }.format(it)
+} ?: "No disponible"
+
+private fun capital(value: String?): String {
+    val amount = value?.toBigDecimalOrNull() ?: return "No disponible"
+    val unit = listOf(BigDecimal("1000000000000") to " T", BigDecimal("1000000000") to " mil M", BigDecimal("1000000") to " M")
+        .firstOrNull { amount.abs() >= it.first }
+    return if (unit == null) "$${money(value)}" else "$${amount.divide(unit.first, 2, java.math.RoundingMode.HALF_UP).toPlainString()}${unit.second}"
+}
+
 @Composable
-fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel=hiltViewModel()) {
-    var query by rememberSaveable{mutableStateOf("")};var page by rememberSaveable{mutableStateOf(1)}
-    LaunchedEffect(Unit){vm.search(query,page)}
-    LazyColumn(Modifier.fillMaxSize().padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-        item {
-            Text("S&P 500 · Empresas",style=MaterialTheme.typography.headlineSmall)
-            Row { TextButton(onClick={nav.navigate("profile")}){Text("Mi perfil")};TextButton(onClick={auth.logout()}){Text("Cerrar sesión")} }
-            OutlinedTextField(query,{query=it.take(200)},label={Text("Empresa o símbolo")},modifier=Modifier.fillMaxWidth())
-            Button(onClick={page=1;vm.search(query,page)}){Text("Buscar en servidor")}
-            TextButton(onClick={
-                val ticker=query.trim().uppercase(Locale.ROOT)
-                if(ticker.matches(Regex("[A-Z0-9][A-Z0-9.-]{0,14}"))) nav.navigate("company/${Uri.encode(ticker)}")
-            }){Text("Abrir símbolo escrito")}
+private fun FinanceCard(content: @Composable ColumnScope.() -> Unit) {
+    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
+    }
+}
+
+@Composable
+private fun SectionTitle(title: String, subtitle: String? = null) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+        subtitle?.let { Text(it, style = MaterialTheme.typography.labelSmall, color = Muted) }
+    }
+}
+
+@Composable
+private fun Retry(message: String, action: () -> Unit) {
+    FinanceCard { Text(message, color = MaterialTheme.colorScheme.error); TextButton(onClick = action) { Text("Reintentar") } }
+}
+
+@Composable
+fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel()) {
+    var query by rememberSaveable { mutableStateOf("") }
+    var page by rememberSaveable { mutableStateOf(1) }
+    var sector by rememberSaveable { mutableStateOf("") }
+    var descending by rememberSaveable { mutableStateOf(true) }
+    fun search() = vm.search(query, page, sector, if (descending) "-market_cap" else "market_cap")
+    LaunchedEffect(Unit) { search() }
+    Scaffold(containerColor = Background, bottomBar = {
+        NavigationBar(containerColor = Panel) {
+            NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Default.Explore, null) }, label = { Text("Explorar") })
+            NavigationBarItem(selected = false, onClick = { nav.navigate("profile") }, icon = { Icon(Icons.Default.Person, null) }, label = { Text("Mi cuenta") })
+            NavigationBarItem(selected = false, onClick = { auth.logout() }, icon = { Icon(Icons.Default.Logout, null) }, label = { Text("Salir") })
         }
-        when(val state=vm.companies) {
-            is Resource.Loading -> item{CircularProgressIndicator()}
-            is Resource.Error -> item{Text(state.message.orEmpty());Button(onClick={vm.search(query,page)}){Text("Reintentar")}}
-            is Resource.Success -> {
-                val data=state.successData
-                item{Text("${data.count} empresas · Página $page")}
-                if(data.results.isNullOrEmpty()) item{Text("No se encontraron empresas.")}
-                items(data.results.orEmpty()){company ->
-                    OutlinedButton(onClick={company.ticker?.let{nav.navigate("company/${Uri.encode(it)}")}},modifier=Modifier.fillMaxWidth()) {
-                        Column{Text("${company.ticker.orEmpty()} · ${company.name.orEmpty()}");Text(company.sector_display ?: company.sector.orEmpty())}
+    }) { padding ->
+        LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            item {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) { Text("MERCADOS", color = Muted, style = MaterialTheme.typography.labelSmall); Text("Explorar", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold) }
+                    FilledTonalIconButton(onClick = { nav.navigate("profile") }) { Icon(Icons.Default.Person, "Mi perfil") }
+                }
+            }
+            item {
+                OutlinedTextField(query, { query = it.take(200) }, modifier = Modifier.fillMaxWidth(), singleLine = true,
+                    placeholder = { Text("Buscar empresa o símbolo") }, leadingIcon = { Icon(Icons.Default.Search, null) },
+                    trailingIcon = { IconButton(onClick = { page = 1; search() }) { Icon(Icons.AutoMirrored.Filled.ArrowForward, "Buscar") } },
+                    shape = RoundedCornerShape(14.dp))
+            }
+            item {
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(sectors) { (value, label) -> FilterChip(selected = sector == value, onClick = { sector = value; page = 1; search() }, label = { Text(label) }) }
+                }
+            }
+            item {
+                FinanceCard {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Icon(Icons.Default.TrendingUp, null, tint = Green, modifier = Modifier.size(32.dp))
+                        Column { Text("Universo S&P 500", fontWeight = FontWeight.Bold); Text("Empresas y análisis financiero", color = Muted, style = MaterialTheme.typography.bodySmall) }
+                    }
+                    Text("Consulta datos, fuentes y cinco pilares de cada empresa.", color = Muted, style = MaterialTheme.typography.bodySmall)
+                }
+            }
+            item {
+                SectionTitle("Empresas", "Orden por capitalización")
+                TextButton(onClick = { descending = !descending; page = 1; search() }) { Icon(Icons.Default.SwapVert, null); Text(if (descending) "Mayor a menor" else "Menor a mayor") }
+            }
+            when (val state = vm.companies) {
+                is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green) }
+                is Resource.Error -> item { Retry(state.message.orEmpty()) { search() } }
+                is Resource.Success -> {
+                    val data = state.successData
+                    item { Text("${data.count} resultados · Página $page", color = Muted, style = MaterialTheme.typography.bodySmall) }
+                    if (data.results.isNullOrEmpty()) item { FinanceCard { Text("No encontramos empresas con esta búsqueda.") } }
+                    items(data.results.orEmpty()) { company -> CompanyRow(company) { company.ticker?.let { nav.navigate("company/${Uri.encode(it)}") } } }
+                    item {
+                        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                            OutlinedButton(enabled = data.previous != null, onClick = { page--; search() }) { Text("Anterior") }
+                            OutlinedButton(enabled = data.next != null, onClick = { page++; search() }) { Text("Siguiente") }
+                        }
                     }
                 }
-                item{Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
-                    Button(enabled=data.previous!=null,onClick={page--;vm.search(query,page)}){Text("Anterior")}
-                    Button(enabled=data.next!=null,onClick={page++;vm.search(query,page)}){Text("Siguiente")}
-                }}
+                else -> Unit
             }
-            else -> Unit
         }
     }
 }
 
 @Composable
-fun CompanyDetailScreen(nav: NavController,ticker: String,vm: CompanyViewModel=hiltViewModel()) {
-    var range by rememberSaveable{mutableStateOf("1Y")}
-    LaunchedEffect(ticker){vm.load(ticker)}
-    LazyColumn(Modifier.fillMaxSize().padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-        item{TextButton(onClick={nav.popBackStack()}){Text("Volver a empresas")};Text(ticker,style=MaterialTheme.typography.headlineLarge)}
-        when(val state=vm.summary) {
-            is Resource.Loading -> item{CircularProgressIndicator()}
-            is Resource.Error -> item{Text(state.message.orEmpty());Button(onClick={vm.load(ticker)}){Text("Reintentar")}}
-            is Resource.Success -> item {
-                val company=state.successData
-                Text(company.name.orEmpty(),style=MaterialTheme.typography.titleLarge)
-                Text(company.sector_display.orEmpty())
-                Text("Datos financieros: ${company.as_of ?: "Fecha no disponible"} · ${company.source ?: "Sin fuente"}")
-                if(company.is_demo==true) Text("Ficha con datos de demostración o heredados sin verificar.")
-                Text("Capitalización: ${company.market_cap ?: "No disponible"} · PER: ${company.per ?: "No disponible"}")
-                Text("Altman Z: ${company.altman_z?.score ?: "No disponible"} · ${company.altman_z?.zone ?: "Sin zona"}")
-                company.quote?.let{Text("Cierre ajustado: ${it.adjusted_close} ${it.currency} · ${it.date} · ${it.source}")}
-                Button(onClick={nav.navigate("finance/${Uri.encode(ticker)}/all")}){Text("Cinco pilares y puntaje")}
-                TextButton(onClick={nav.navigate("scenarios/${Uri.encode(ticker)}")}){Text("Escenarios")}
-                TextButton(onClick={nav.navigate("analysis/${Uri.encode(ticker)}/2024")}){Text("Explicación de IA")}
+private fun CompanyRow(company: CompanyItem, onOpen: () -> Unit) {
+    FinanceCard {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Surface(color = Inner, shape = RoundedCornerShape(12.dp)) {
+                Box(Modifier.size(52.dp), contentAlignment = Alignment.Center) { Text(company.ticker.orEmpty(), color = Green, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) }
             }
-            else -> Unit
-        }
-        item{Text("Histórico de cierres ajustados",style=MaterialTheme.typography.titleMedium)
-            Row{listOf("1M","6M","1Y","5Y").forEach{period ->TextButton(onClick={range=period;vm.history(ticker,period)}){Text(period)}}}
-        }
-        when(val state=vm.prices) {
-            is Resource.Loading -> item{CircularProgressIndicator()}
-            is Resource.Error -> item{Text(state.message.orEmpty());TextButton(onClick={vm.history(ticker,range)}){Text("Reintentar histórico")}}
-            is Resource.Success -> item{
-                val data=state.successData
-                Text("Moneda: ${data.currencies?.joinToString() ?: "No informada"} · Fuentes: ${data.sources?.joinToString() ?: "No informadas"}")
-                if(data.is_demo==true) Text("Serie de demostración")
-                val values=data.history.orEmpty().mapNotNull{it.price?.takeIf{v->v.isFinite()}}
-                if(values.isEmpty()) Text("No hay precios para este periodo.")
-                else { PriceLine(values);Text("${data.history?.firstOrNull()?.date} — ${data.history?.lastOrNull()?.date} · ${values.size} cierres") }
+            Column(Modifier.weight(1f)) {
+                Text(company.name.orEmpty(), fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(company.sector_display ?: company.sector.orEmpty(), color = Muted, style = MaterialTheme.typography.bodySmall)
             }
-            else -> Unit
+        }
+        HorizontalDivider(color = Inner)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) { Text("Capitalización", color = Muted, style = MaterialTheme.typography.labelSmall); Text(capital(company.market_cap), style = MaterialTheme.typography.titleSmall) }
+            FilledTonalButton(onClick = onOpen) { Text("Ver ficha"); Spacer(Modifier.width(5.dp)); Icon(Icons.AutoMirrored.Filled.ArrowForward, null, Modifier.size(16.dp)) }
+        }
+    }
+}
+
+@Composable
+fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel = hiltViewModel()) {
+    var range by rememberSaveable(ticker) { mutableStateOf("1Y") }
+    LaunchedEffect(ticker) { vm.load(ticker); if (range != "1Y") vm.history(ticker, range) }
+    val encoded = Uri.encode(ticker)
+    Scaffold(containerColor = Background, bottomBar = {
+        Surface(color = Panel) {
+            Row(Modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 18.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Insights, null, tint = Green)
+                Spacer(Modifier.width(12.dp))
+                Button(onClick = { nav.navigate("finance/$encoded/all") }, modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp)) { Text("Ver cinco pilares y puntaje") }
+            }
+        }
+    }) { padding ->
+        LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(18.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            item {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { nav.popBackStack() }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver a empresas") }
+                    Text("Detalle del activo", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                    IconButton(onClick = { nav.navigate("profile") }) { Icon(Icons.Default.AccountCircle, "Mi perfil", tint = Green) }
+                }
+            }
+            when (val state = vm.summary) {
+                is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green) }
+                is Resource.Error -> item { Retry(state.message.orEmpty()) { vm.load(ticker); if (range != "1Y") vm.history(ticker, range) } }
+                is Resource.Success -> item {
+                    val company = state.successData
+                    Text(ticker, color = Green, style = MaterialTheme.typography.labelLarge)
+                    Text(company.name.orEmpty(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.height(12.dp))
+                    Text(company.quote?.adjusted_close?.let { "$${money(it)}" } ?: "Precio no disponible", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
+                    Text("${company.quote?.currency ?: "Moneda no informada"} · Cierre ajustado ${company.quote?.date ?: "sin fecha"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                    if (company.is_demo == true || company.quote?.is_demo == true) Text("Datos de demostración o heredados sin verificar", color = MaterialTheme.colorScheme.error)
+                }
+                else -> Unit
+            }
+            item {
+                FinanceCard {
+                    SectionTitle("Comportamiento del precio", "Histórico")
+                    when (val state = vm.prices) {
+                        is Resource.Loading -> LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green)
+                        is Resource.Error -> { Text(state.message.orEmpty(), color = MaterialTheme.colorScheme.error); TextButton(onClick = { vm.history(ticker, range) }) { Text("Reintentar histórico") } }
+                        is Resource.Success -> {
+                            val data = state.successData
+                            val values = data.history.orEmpty().mapNotNull { it.price?.takeIf { v -> v.isFinite() } }
+                            if (values.isEmpty()) Text("No hay cierres disponibles para este período.", color = Muted)
+                            else { PriceLine(values); Text("${data.history?.firstOrNull()?.date} — ${data.history?.lastOrNull()?.date}", color = Muted, style = MaterialTheme.typography.labelSmall) }
+                            Text("Moneda: ${data.currencies?.joinToString() ?: "No informada"}", color = Muted, style = MaterialTheme.typography.labelSmall)
+                            Text("Fuente: ${data.sources?.joinToString() ?: "No informada"}", color = Muted, style = MaterialTheme.typography.labelSmall)
+                            if (data.is_demo == true) Text("Serie de demostración", color = MaterialTheme.colorScheme.error)
+                        }
+                        else -> Unit
+                    }
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                        listOf("1M", "6M", "1Y", "5Y").forEach { period ->
+                            FilterChip(selected = range == period, onClick = { range = period; vm.history(ticker, period) }, label = { Text(period) })
+                        }
+                    }
+                }
+            }
+            val company = (vm.summary as? Resource.Success<CompanySummary>)?.successData
+            if (company != null) {
+                item { SectionTitle("Métricas fundamentales", company.as_of ?: "Sin fecha") }
+                item {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        MetricTile("P/E Ratio", company.per ?: "No disponible", "Según fuente del servidor", Modifier.weight(1f))
+                        MetricTile("Retorno (ROE)", company.roe?.let { "$it %" } ?: "No disponible", "Rentabilidad del patrimonio", Modifier.weight(1f))
+                    }
+                }
+                item {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        MetricTile("Capitalización", capital(company.market_cap), "Valor de mercado", Modifier.weight(1f))
+                        MetricTile("Beta / dividendos", "No disponible", "Sin datos del proveedor", Modifier.weight(1f))
+                    }
+                }
+                item { SolvencyCard(company) }
+                item {
+                    FinanceCard {
+                        SectionTitle("Análisis del Script 2")
+                        Text("Liquidez · Rentabilidad · Solvencia · Eficiencia · Crecimiento", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        OutlinedButton(onClick = { nav.navigate("finance/$encoded/all") }, modifier = Modifier.fillMaxWidth()) { Text("Pilares, radar y puntaje") }
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            FilledTonalButton(onClick = { nav.navigate("scenarios/$encoded") }, modifier = Modifier.weight(1f)) { Text("Escenarios") }
+                            FilledTonalButton(onClick = { nav.navigate("analysis/$encoded/2024") }, modifier = Modifier.weight(1f)) { Text("Análisis IA") }
+                        }
+                    }
+                }
+                item {
+                    FinanceCard {
+                        SectionTitle("Perfil de la compañía")
+                        Text(company.name.orEmpty(), fontWeight = FontWeight.Bold)
+                        Text(company.sector_display.orEmpty(), color = Green)
+                        Text("Fecha financiera: ${company.as_of ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        Text("Fuente financiera: ${company.source ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                        Text("Fuente del precio: ${company.quote?.source ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MetricTile(label: String, value: String, note: String, modifier: Modifier) {
+    Surface(modifier, color = Panel, shape = RoundedCornerShape(14.dp)) {
+        Column(Modifier.padding(14.dp).heightIn(min = 104.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(label, color = Muted, style = MaterialTheme.typography.labelMedium)
+            Text(value, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleLarge, color = Green)
+            Text(note, color = Muted, style = MaterialTheme.typography.labelSmall)
+        }
+    }
+}
+
+@Composable
+private fun SolvencyCard(company: CompanySummary) {
+    FinanceCard {
+        SectionTitle("Solvencia (Altman Z-Score)")
+        val score = company.altman_z?.score?.toDoubleOrNull()?.takeIf { it.isFinite() }
+        if (score == null) Text("Sin componentes suficientes para calcular el Z-Score.", color = Muted)
+        else {
+            Box(Modifier.fillMaxWidth().height(155.dp), contentAlignment = Alignment.BottomCenter) {
+                Canvas(Modifier.fillMaxWidth().height(150.dp)) {
+                    val diameter = minOf(size.width * .8f, size.height * 1.65f)
+                    val topLeft = Offset((size.width - diameter) / 2, size.height - diameter / 2 - 8.dp.toPx())
+                    listOf(Color(0xFFFF8F8F), Color(0xFFE0C34D), Green).forEachIndexed { index, color ->
+                        drawArc(color, 180f + index * 60f, 56f, false, topLeft, androidx.compose.ui.geometry.Size(diameter, diameter), style = androidx.compose.ui.graphics.drawscope.Stroke(12.dp.toPx(), cap = StrokeCap.Round))
+                    }
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.padding(bottom = 12.dp)) {
+                    Text("Z-Score ${company.altman_z?.score}", color = Green, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
+                    Text(when (company.altman_z?.zone) { "safe" -> "Zona segura"; "grey" -> "Zona gris"; "distress" -> "Zona de riesgo"; else -> "Zona no informada" }, color = Muted)
+                }
+            }
+            Text("< 1,81 Riesgo   ·   1,81–2,99 Gris   ·   > 2,99 Segura", style = MaterialTheme.typography.labelSmall, color = Muted)
+            Text("Indicador calculado por el servidor con el balance disponible.", style = MaterialTheme.typography.bodySmall, color = Muted)
         }
     }
 }
