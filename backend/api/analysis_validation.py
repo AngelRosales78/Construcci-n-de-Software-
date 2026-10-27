@@ -2,7 +2,7 @@
 from decimal import Decimal, InvalidOperation
 import re
 
-VERSION = 'grounded-analysis-v8'
+VERSION = 'grounded-analysis-v10'
 
 
 def context_from_pillars(data):
@@ -49,6 +49,8 @@ def validate_analysis(candidate, context):
         if not isinstance(text, str) or not 10 <= len(text) <= 650 or '<' in text or '>' in text:
             raise ValueError('invalid_text')
         if len(text.strip()) < 30 or re.search(r' {3,}', text) or len(text.split()) < 6:
+            raise ValueError('invalid_text')
+        if not text.rstrip().endswith(('.', '!', '?')) or re.search(r'[^\u0000-\u024f\u2000-\u206f]', text):
             raise ValueError('invalid_text')
         words = re.findall(r'\w+', text.casefold())
         for size in range(1, 5):
