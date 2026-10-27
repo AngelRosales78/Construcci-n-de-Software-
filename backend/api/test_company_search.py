@@ -97,3 +97,29 @@ def test_document_sector_label_is_supported(client,companies):
     response=client.get(URL,{'sector':'Technology'})
     assert response.status_code==200
     assert [row['ticker'] for row in response.data['results']]==['AAA','BBB']
+
+
+def test_with_data_filters_all_results_and_preserves_zero(client):
+    Company.objects.create(ticker='EMPTY', name='Sin métricas', sector='technology')
+    Company.objects.create(ticker='ZERO', name='Valor cero', sector='technology', market_cap=0)
+    Company.objects.create(ticker='RATIO', name='Solo ratio', sector='technology', per=12)
+    complete = client.get(URL)
+    filtered = client.get(URL, {'with_data': 'true'})
+    assert complete.data['count'] == 3
+    assert filtered.data['count'] == 2
+    assert {row['ticker'] for row in filtered.data['results']} == {'ZERO', 'RATIO'}
+    assert client.get(URL, {'with_data': 'false'}).data['count'] == 3
+
+
+def test_with_data_is_applied_before_pagination_and_with_sector(client):
+    Company.objects.bulk_create([Company(ticker=f'FULL{i:02}', name=f'Empresa {i}',
+        sector='technology', market_cap=i) for i in range(25)])
+    Company.objects.create(ticker='EMPTY', name='Sin métricas', sector='technology')
+    Company.objects.create(ticker='HEALTH', name='Salud', sector='healthcare', market_cap=100)
+    response = client.get(URL, {'with_data': 'true', 'sector': 'technology', 'page': 2, 'ordering': 'market_cap'})
+    assert response.status_code == 200 and response.data['count'] == 25
+    assert [row['ticker'] for row in response.data['results']] == [f'FULL{i:02}' for i in range(20, 25)]
+
+
+def test_with_data_rejects_unrecognized_values(client):
+    assert client.get(URL, {'with_data': 'maybe'}).status_code == 400

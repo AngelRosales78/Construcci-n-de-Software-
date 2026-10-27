@@ -483,6 +483,7 @@ class CompanySearchView(generics.ListAPIView):
         query = self.request.query_params.get('q', '').strip()
         sector = self.request.query_params.get('sector', '').strip()
         ordering = self.request.query_params.get('ordering', '').strip()
+        with_data = self.request.query_params.get('with_data', '').strip()
 
         sectors = {str(label).casefold(): value for value, label in Company.SECTOR_CHOICES}
         sector = sectors.get(sector.casefold(), sector.casefold())
@@ -492,8 +493,12 @@ class CompanySearchView(generics.ListAPIView):
             raise ValidationError({'ordering': 'El orden no es válido.'})
         if len(query) > 200:
             raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
+        if with_data not in ('', 'true', 'false'):
+            raise ValidationError({'with_data': 'Use true o false.'})
 
         queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
+        if with_data == 'true':
+            queryset = queryset.filter(Q(market_cap__isnull=False) | Q(per__isnull=False) | Q(roe__isnull=False))
         if query:
             from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
             vector = (SearchVector('name', weight='A', config='simple')
