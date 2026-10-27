@@ -17,10 +17,12 @@ from django.urls import path
 from . import views
 from .pillar_views import CompanyPillarsView
 from .simulation_views import CompanySimulationView, SimulationDetailView
+from .analysis_views import CompanyAnalysisView
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('companies/<str:ticker>/analysis/', CompanyAnalysisView.as_view(), name='company-analysis'),
     path('simulations/<uuid:run_id>/', SimulationDetailView.as_view(), name='simulation-detail'),
     path('companies/<str:ticker>/simulations/', CompanySimulationView.as_view(), name='company-simulations'),
     path('companies/<str:ticker>/pillars/', CompanyPillarsView.as_view(), name='company-pillars'),

@@ -162,6 +162,20 @@ class PriceHistory(models.Model):
         indexes = [models.Index(fields=['company', '-date'], name='price_company_date_idx')]
 
 
+class AnalysisRecord(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='analyses')
+    context_hash = models.CharField(max_length=64, db_index=True)
+    context = models.JSONField()
+    response = models.JSONField()
+    validated = models.BooleanField(default=False)
+    validation_reason = models.CharField(max_length=80, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'analysis_records'
+
+
 class SimulationRun(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='simulations')
