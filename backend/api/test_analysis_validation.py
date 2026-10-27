@@ -67,3 +67,11 @@ def test_liquidity_is_not_published_as_profit_generation(analysis_case):
     }
     with pytest.raises(ValueError, match='unsupported_claim'):
         validate_analysis(answer, analysis_case[1])
+
+
+@pytest.mark.parametrize('repeated', ['iones ' * 10, 'obligaciones corrientes ' * 5])
+def test_repeated_words_and_phrases_are_not_published(analysis_case, repeated):
+    answer = valid(analysis_case[1])
+    answer['summary']['text'] = 'La liquidez corriente indica ' + repeated + '.'
+    with pytest.raises(ValueError, match='invalid_text'):
+        validate_analysis(answer, analysis_case[1])
