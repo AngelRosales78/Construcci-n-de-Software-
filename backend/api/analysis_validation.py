@@ -21,7 +21,7 @@ def context_from_pillars(data):
 def schema_for(context):
     def claim(ids):
         return {'type': 'object', 'additionalProperties': False, 'required': ['text', 'metric_ids'],
-                'properties': {'text': {'type': 'string', 'minLength': 10, 'maxLength': 650},
+                'properties': {'text': {'type': 'string', 'minLength': 10, 'maxLength': 130},
                     'metric_ids': {'type': 'array', 'items': {'type': 'string', 'enum': ids or ['unavailable']},
                                    'minItems': 1 if ids else 0, 'maxItems': min(len(ids), 3)}}}
     available = [key for key, metric in context['metrics'].items() if metric['status'] == 'available']
@@ -29,8 +29,8 @@ def schema_for(context):
     return {'type': 'object', 'additionalProperties': False, 'required': ['summary', 'pillars', 'strengths', 'risks'],
             'properties': {'summary': claim(available),
                 'pillars': {'type': 'object', 'additionalProperties': False, 'required': list(pillars), 'properties': pillars},
-                'strengths': {'type': 'array', 'maxItems': 5, 'items': claim(available)},
-                'risks': {'type': 'array', 'maxItems': 5, 'items': claim(available)}}}
+                'strengths': {'type': 'array', 'maxItems': 1, 'items': claim(available)},
+                'risks': {'type': 'array', 'maxItems': 1, 'items': claim(available)}}}
 
 
 def validate_analysis(candidate, context):

@@ -1,6 +1,5 @@
 """Proveedor local llama.cpp. No hay respuesta financiera simulada de respaldo."""
 import json
-import os
 import urllib.request
 from .analysis_validation import schema_for
 
@@ -12,14 +11,14 @@ def generate(context, level):
         'Es un ejercicio académico histórico, no asesoría de inversión. No inventes cifras ni pronósticos. '
         'Prefiere texto SIN números: la aplicación muestra las cifras verificadas por separado. '
         'Cada afirmación cita solo metric_ids disponibles del contexto. Nunca cites otra empresa. '
-        'Una oración breve por pilar, un párrafo de resumen y como máximo dos fortalezas y dos riesgos. '
+        'Una oración de máximo doce palabras por pilar y resumen, máximo una fortaleza y un riesgo. '
         'Si faltan métricas en un pilar, escribe No disponible y usa una lista vacía de referencias. '
         'No completes listas con afirmaciones sin evidencia. '
         + ('Usa lenguaje sencillo y define conceptos.' if level == 'simple' else 'Usa lenguaje técnico conciso, sin alterar cifras ni periodo.'))
-    payload = {'model': MODEL, 'temperature': 0, 'seed': 2026, 'max_tokens': 1200,
+    payload = {'model': MODEL, 'temperature': 0, 'seed': 2026, 'max_tokens': 1400,
         'messages': [{'role': 'system', 'content': instruction},
                      {'role': 'user', 'content': 'CONTEXTO: ' + json.dumps(context, ensure_ascii=False)}],
-        'response_format': {'type': 'json_schema', 'schema': schema_for(context)}}
+        'response_format': {'type': 'json_object', 'schema': schema_for(context)}}
     # URL fijada a loopback: no admite destinos enviados por el usuario ni expone credenciales.
     request = urllib.request.Request('http://127.0.0.1:58110/v1/chat/completions',
         data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json'})
