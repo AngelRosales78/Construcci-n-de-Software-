@@ -15,9 +15,9 @@ class SimulationInput(serializers.Serializer):
 
     def to_internal_value(self, data):
         if not isinstance(data, dict) or set(data) - set(self.fields):
-            raise serializers.ValidationError('Use solo semilla, tasa anual y volatilidad admitidas.')
+            raise serializers.ValidationError({'non_field_errors': ['Use solo semilla, tasa anual y volatilidad admitidas.']})
         if any(isinstance(value, bool) for value in data.values()):
-            raise serializers.ValidationError('Los parámetros deben ser números, no booleanos.')
+            raise serializers.ValidationError({'non_field_errors': ['Los parámetros deben ser números, no booleanos.']})
         return super().to_internal_value(data)
 
     def validate(self, attrs):
