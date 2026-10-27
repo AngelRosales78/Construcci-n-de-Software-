@@ -75,3 +75,13 @@ def test_repeated_words_and_phrases_are_not_published(analysis_case, repeated):
     answer['summary']['text'] = 'La liquidez corriente indica ' + repeated + '.'
     with pytest.raises(ValueError, match='invalid_text'):
         validate_analysis(answer, analysis_case[1])
+
+
+@pytest.mark.parametrize('text', [
+    'La liquidez permite cubrir las obligaciones corrientes mientras que la',
+    'La liquidez permite examinar las obligaciones corrientes con margen净.',
+])
+def test_truncated_or_non_latin_generation_is_not_published(analysis_case, text):
+    answer = valid(analysis_case[1]); answer['summary']['text'] = text
+    with pytest.raises(ValueError, match='invalid_text'):
+        validate_analysis(answer, analysis_case[1])
