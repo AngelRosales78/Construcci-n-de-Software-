@@ -19,7 +19,6 @@ test('muestra ticker y dato ausente cuando falta el logo o la capitalización', 
   show({ ticker: 'VMRK', name: 'Vivmark Residential', market_cap: null })
   expect(screen.queryByRole('img')).toBeNull()
   expect(screen.getByLabelText('Logo no disponible para Vivmark Residential')).toBeTruthy()
-  expect(screen.getByText('Sin datos')).toBeTruthy()
   expect(screen.getByText('Información financiera pendiente')).toBeTruthy()
 })
 

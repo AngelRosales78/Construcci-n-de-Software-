@@ -10,10 +10,11 @@ vi.mock('../models/companyRepository', () => ({ companyRepository: { search: vi.
 vi.mock('../models/historyRepository', () => ({ historyRepository: { save: vi.fn() } }))
 beforeEach(() => vi.resetAllMocks())
 afterEach(cleanup)
+const searchWrapper = ({ children }) => <MemoryRouter>{children}</MemoryRouter>
 
 test('el ViewModel consulta el Model y expone estado y acciones sin renderizar una pantalla', async () => {
   companyRepository.search.mockResolvedValue({ results: [{ ticker: 'MSFT' }], count: 25, next: 'page2' })
-  const { result } = renderHook(() => useCompanySearchViewModel())
+  const { result } = renderHook(() => useCompanySearchViewModel(), { wrapper: searchWrapper })
   await waitFor(() => expect(result.current.loading).toBe(false))
   expect(result.current.companies[0].ticker).toBe('MSFT')
   act(() => result.current.nextPage())
@@ -27,7 +28,7 @@ test('una respuesta anterior no sobrescribe la búsqueda más reciente', async (
   let resolveOld
   companyRepository.search.mockImplementationOnce(() => new Promise(resolve => { resolveOld = resolve }))
   companyRepository.search.mockResolvedValue({ results: [{ ticker: 'AAPL' }], count: 1 })
-  const { result } = renderHook(() => useCompanySearchViewModel())
+  const { result } = renderHook(() => useCompanySearchViewModel(), { wrapper: searchWrapper })
   act(() => result.current.handleSearch('AAPL'))
   await waitFor(() => expect(result.current.companies[0]?.ticker).toBe('AAPL'))
   await act(async () => resolveOld({ results: [{ ticker: 'MSFT' }], count: 1 }))

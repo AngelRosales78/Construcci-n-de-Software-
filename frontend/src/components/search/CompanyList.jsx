@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 import { useState } from 'react'
 import verifiedLogos from '../../data/verifiedLogos.json'
@@ -16,9 +16,10 @@ function CompanyLogo({ company }) {
 
 export default function CompanyList({ companies, loading }) {
   const navigate = useNavigate()
+  const location = useLocation()
 
   const handleSelectCompany = (ticker) => {
-    navigate(`/company/${ticker}`)
+    navigate(`/company/${ticker}`, { state: { searchReturn: '/search' + location.search } })
   }
 
   if (loading) {
@@ -59,7 +60,7 @@ export default function CompanyList({ companies, loading }) {
               <span className="metric-label">ROE</span>
               <span className="metric-value">{company.roe != null ? `${company.roe}%` : 'Sin datos'}</span>
             </div>
-          </div> : <div className="company-empty-data"><strong>Sin datos</strong><p>Empresa incluida en el catálogo. Sus indicadores están pendientes de carga.</p></div>}
+          </div> : null}
           <span className="company-card-action">Consultar ficha <span aria-hidden="true">↗</span></span>
         </button>
       ))}

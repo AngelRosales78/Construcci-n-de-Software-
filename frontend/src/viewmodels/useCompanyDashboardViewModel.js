@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { companyRepository } from '../models/companyRepository'
 
 export function useCompanyDashboardViewModel() {
   const { ticker } = useParams()
   const navigate = useNavigate()
+  const location = useLocation()
+  const previousSearch = location.state?.searchReturn
+  const returnTo = typeof previousSearch === 'string' && (previousSearch === '/search' || previousSearch.startsWith('/search?')) ? previousSearch : '/search'
   const [company, setCompany] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -28,7 +31,7 @@ export function useCompanyDashboardViewModel() {
     return () => { active = false }
   }, [ticker])
 
-  return { company, loading, error, navigate }
+  return { company, loading, error, navigate, returnTo }
 }
 
 export function useFinancialPillarsViewModel() {

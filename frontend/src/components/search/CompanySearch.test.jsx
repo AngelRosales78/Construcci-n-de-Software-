@@ -96,3 +96,37 @@ it('muestra un resultado vacío sin fallar', async () => {
   await screen.findByText('No se encontraron empresas')
   expect(screen.getByRole('button', { name: 'Siguiente' }).disabled).toBe(true)
 })
+
+it('reintenta un fallo sin confundirlo con una búsqueda vacía', async () => {
+  search.mockRejectedValueOnce(new Error('sin conexión')).mockResolvedValue(result([company('AAA')]))
+  mount()
+  await screen.findByRole('alert')
+  expect(screen.queryByText('No se encontraron empresas')).toBeNull()
+  fireEvent.click(screen.getByRole('button', { name: 'Reintentar', exact: true }))
+  await screen.findByText('Empresa AAA')
+  expect(search).toHaveBeenCalledTimes(2)
+})
+
+it('Buscar reintenta la misma consulta después de un fallo', async () => {
+  search.mockRejectedValueOnce(new Error('sin conexión')).mockResolvedValue(result([company('AAA')]))
+  mount()
+  await screen.findByRole('alert')
+  fireEvent.click(screen.getByRole('button', { name: 'Buscar', exact: true }))
+  await screen.findByText('Empresa AAA')
+  expect(search).toHaveBeenCalledTimes(2)
+})
+
+it('restaura consulta sector orden página y cobertura desde la URL', async () => {
+  render(<MemoryRouter initialEntries={['/search?q=MSFT&sector=technology&ordering=market_cap&page=2&with_data=true']}><CompanySearch /></MemoryRouter>)
+  await screen.findByText('Empresa AAA')
+  expect(search.mock.lastCall[0]).toContain('ordering=market_cap&page=2&q=MSFT&sector=technology&with_data=true')
+  expect(screen.getByRole('combobox', { name: 'Buscar empresas' }).value).toBe('MSFT')
+  expect(screen.getByRole('checkbox', { name: 'Solo empresas con indicadores cargados' }).checked).toBe(true)
+})
+
+it('el filtro de cobertura se pide al servidor y reinicia la página', async () => {
+  mount()
+  await screen.findByText('Empresa AAA')
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Solo empresas con indicadores cargados' }))
+  await waitFor(() => expect(search.mock.lastCall[0]).toContain('page=1&with_data=true'))
+})
