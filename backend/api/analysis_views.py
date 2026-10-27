@@ -8,7 +8,7 @@ from rest_framework.throttling import UserRateThrottle
 from .pillar_views import CompanyPillarsView
 from .models import AnalysisRecord, Company
 from .analysis_validation import context_from_pillars, validate_analysis, VERSION
-from .analysis_provider import generate, MODEL
+from .analysis_provider import generate, MODEL, MODEL_SHA256
 
 
 class AnalysisThrottle(UserRateThrottle):
@@ -27,7 +27,7 @@ class CompanyAnalysisView(CompanyPillarsView):
         if not context['fiscal_year'] or not any(m['status'] == 'available' for m in context['metrics'].values()):
             return Response({'status': 'unavailable', 'reason': 'insufficient_context', 'message': 'No hay métricas verificables para generar un análisis.'})
         company = Company.objects.get(ticker=context['ticker'])
-        signature = {'context': context, 'level': level, 'version': VERSION, 'model': MODEL}
+        signature = {'context': context, 'level': level, 'version': VERSION, 'model': MODEL, 'model_sha256': MODEL_SHA256}
         digest = hashlib.sha256(json.dumps(signature, sort_keys=True, default=str).encode()).hexdigest()
         cached = AnalysisRecord.objects.filter(company=company, context_hash=digest, validated=True,
             created_at__gte=timezone.now() - timedelta(hours=24)).order_by('-created_at').first()
@@ -46,7 +46,7 @@ class CompanyAnalysisView(CompanyPillarsView):
                 'message': 'El análisis no está disponible: el proveedor falló o la respuesta no superó la validación. Puedes reintentar.'}, status=503)
         result = {'status': 'available', 'schema_version': VERSION, 'ticker': context['ticker'],
             'fiscal_year': context['fiscal_year'], 'period': context['period'], 'level': level,
-            'model': MODEL, 'provider': 'llama.cpp local · Qwen2.5 1.5B', 'validated': True,
+            'model': MODEL, 'model_sha256': MODEL_SHA256, 'provider': 'llama.cpp local · Qwen3 1.7B', 'validated': True,
             'validation_scope': 'Estructura, referencias y cifras contrastadas; no certifica todas las interpretaciones del modelo.',
             'context_hash': digest, 'metrics': context['metrics'], 'analysis': content,
             'pillar_availability': {key: any(m['status'] == 'available' and m['pillar'] == key
