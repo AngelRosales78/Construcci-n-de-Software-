@@ -30,13 +30,12 @@ def generate(context, level):
         questions[key] = purpose + ' Datos históricos: ' + facts
     instruction = ('Responde en español una oración completa por pregunta, sin listas internas ni campos adicionales. '
         'Cada respuesta debe explicar, no repetir una etiqueta. Usa entre ocho y veinte palabras. '
-        'No inventes cifras; si incluyes una, cópiala exactamente de los datos de esa pregunta. '
+        'No escribas cifras en el texto: las métricas numéricas se muestran por separado junto a la explicación. '
         'No hagas pronósticos ni recomendaciones de compra. No agregues fechas ni fuentes nuevas. '
         'Los tramos son convenciones académicas, no garantías. No confundas liquidez con generación de beneficios. No rellenes con espacios. '
         + ('Usa palabras sencillas.' if level == 'simple' else 'Usa vocabulario financiero técnico y preciso.'))
     schema = {'type': 'object', 'additionalProperties': False, 'required': list(questions),
-        'properties': {key: {'type': 'string', 'minLength': 40, 'maxLength': 220,
-            'pattern': '^[A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ ,;:()%-]{39,209}[.]$'} for key in questions}}
+        'properties': {key: {'type': 'string', 'minLength': 40, 'maxLength': 220} for key in questions}}
     prompt = '<|im_start|>system\n' + instruction + ' /no_think<|im_end|>\n<|im_start|>user\nPREGUNTAS: ' + json.dumps(questions, ensure_ascii=False) + '<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
     payload = {'temperature': 0, 'seed': 2026, 'n_predict': 1200, 'prompt': prompt,
                'json_schema': schema, 'stop': ['<|im_end|>'], 'cache_prompt': True}
