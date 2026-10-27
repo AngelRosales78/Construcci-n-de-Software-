@@ -2,7 +2,7 @@
 from decimal import Decimal, InvalidOperation
 import re
 
-VERSION = 'grounded-analysis-v10'
+VERSION = 'controlled-analysis-v1'
 
 
 def context_from_pillars(data):

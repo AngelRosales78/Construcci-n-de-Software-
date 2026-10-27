@@ -1,6 +1,7 @@
 """Proveedor local llama.cpp. No hay respuesta financiera simulada de respaldo."""
 import json
 import urllib.request
+from .analysis_knowledge import explanation_options
 
 MODEL = 'sp500-local-qwen3'
 MODEL_SHA256 = '061b54daade076b5d3362dac252678d17da8c68f07560be70818cace6590cb1a'
@@ -30,18 +31,14 @@ def generate(context, level):
         if key in ('strength', 'risk'):
             purpose += ' Concepto que debes explicar: ' + concepts[available[ids[0]]['pillar']]
         questions[key] = purpose + ' Datos históricos: ' + facts
-    instruction = ('Devuelve un objeto JSON con una oración breve y completa por pregunta. Escribe solamente en español. '
-        'Cada respuesta debe tener entre ocho y veinte palabras y terminar con punto. No copies la pregunta. '
-        'Ejemplo de extensión: Estos indicadores permiten valorar la capacidad de pago de la empresa. '
-        'No escribas cifras: las métricas exactas ya se muestran junto a tu explicación. '
-        'Si una métrica no tiene clasificación, explica qué mide sin valorarla como alta, baja o eficiente. '
-        'No hagas pronósticos ni recomendaciones de compra. No agregues fechas ni fuentes nuevas. '
-        'Los tramos son convenciones académicas, no garantías. No confundas liquidez con generación de beneficios. No rellenes con espacios. '
-        + ('Usa palabras sencillas.' if level == 'simple' else 'Usa vocabulario financiero técnico y preciso.'))
+    choices = {key: explanation_options(key, references[key], available, level) for key in questions}
+    instruction = ('Selecciona una explicación revisada para cada pregunta. '
+        'Devuelve un objeto JSON usando exactamente una de las opciones permitidas por campo. '
+        'No agregues cifras, fórmulas, consejos ni campos nuevos. '
+        + ('Se presenta a un lector principiante.' if level == 'simple' else 'Se presenta a un lector con vocabulario financiero.'))
     schema = {'type': 'object', 'additionalProperties': False, 'required': list(questions),
-        'properties': {key: {'type': 'string', 'maxLength': 360,
-            'pattern': '^[A-Za-z0-9áéíóúÁÉÍÓÚñÑüÜ ,;:()%-]{30,349}[.]$'} for key in questions}}
-    prompt = '<|im_start|>system\n' + instruction + ' /no_think<|im_end|>\n<|im_start|>user\nPREGUNTAS: ' + json.dumps(questions, ensure_ascii=False) + '<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
+        'properties': {key: {'type': 'string', 'enum': options} for key, options in choices.items()}}
+    prompt = '<|im_start|>system\n' + instruction + ' /no_think<|im_end|>\n<|im_start|>user\nPREGUNTAS: ' + json.dumps(questions, ensure_ascii=False) + '\nOPCIONES REVISADAS: ' + json.dumps(choices, ensure_ascii=False) + '<|im_end|>\n<|im_start|>assistant\n<think>\n\n</think>\n\n'
     payload = {'temperature': 0, 'seed': 2026, 'n_predict': 1200, 'prompt': prompt,
                'json_schema': schema, 'stop': ['<|im_end|>'], 'cache_prompt': True}
     # URL fijada a loopback: no admite destinos enviados por el usuario ni expone credenciales.
@@ -53,6 +50,8 @@ def generate(context, level):
         raise ValueError('provider_response_too_large')
     content = json.loads(raw)['content']
     texts = json.loads(content)
+    if set(texts) != set(choices) or any(texts[key] not in choices[key] for key in choices):
+        raise ValueError('unsupported_claim')
     # Las referencias las fija el servidor según la pregunta; nunca las inventa el modelo.
     def claim(key):
         return {'text': texts[key], 'metric_ids': references[key]} if references[key] else {
