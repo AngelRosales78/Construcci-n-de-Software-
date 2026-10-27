@@ -45,6 +45,19 @@ class CompanySimulationView(generics.GenericAPIView):
         result, snapshot = run_simulation(rows, serializer.validated_data['seed'], params)
         result['ticker'] = company.ticker
         if result['status'] == 'available':
+            result['schema_version'] = 'simulation-v1'
+            result['final_prices'] = {key: {'date': curve[-1]['date'], 'price': curve[-1]['price'],
+                                           'percentile': result['percentiles'][key]}
+                                      for key, curve in result['scenarios'].items()}
+            result['parameter_limits'] = {'annual_return': [-1, 1.5], 'annual_volatility': [0, 2]}
             run = SimulationRun.objects.create(user=request.user, company=company, source_snapshot=snapshot, result=result)
             result['simulation_id'] = str(run.pk)
         return Response(result)
+
+
+class SimulationDetailView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, run_id):
+        run = get_object_or_404(SimulationRun, pk=run_id, user=request.user)
+        return Response(run.result | {'simulation_id': str(run.pk)})
