@@ -57,3 +57,13 @@ def test_only_the_authoritative_display_rounding_is_accepted(analysis_case):
 def test_labels_padded_with_spaces_are_not_published(analysis_case):
     answer = valid(analysis_case[1]); answer['summary']['text'] = 'Liquidez: ' + ' '*70
     with pytest.raises(ValueError): validate_analysis(answer, analysis_case[1])
+
+
+def test_liquidity_is_not_published_as_profit_generation(analysis_case):
+    answer = valid(analysis_case[1])
+    answer['summary'] = {
+        'text': 'La razón corriente demuestra una elevada generación de beneficios.',
+        'metric_ids': ['current_ratio'],
+    }
+    with pytest.raises(ValueError, match='unsupported_claim'):
+        validate_analysis(answer, analysis_case[1])
