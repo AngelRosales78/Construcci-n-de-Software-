@@ -2,7 +2,7 @@
 from decimal import Decimal, InvalidOperation
 import re
 
-VERSION = 'grounded-analysis-v1'
+VERSION = 'grounded-analysis-v2'
 
 
 def context_from_pillars(data):
@@ -19,18 +19,21 @@ def context_from_pillars(data):
 
 
 def schema_for(context):
-    def claim(ids):
+    def claim(ids, prefix=''):
         return {'type': 'object', 'additionalProperties': False, 'required': ['text', 'metric_ids'],
-                'properties': {'text': {'type': 'string', 'minLength': 10, 'maxLength': 130},
+                'properties': {'text': {'type': 'string', 'minLength': 40, 'maxLength': 180,
+                    'pattern': '^' + prefix + '[^0-9<>]{40,150}$'},
                     'metric_ids': {'type': 'array', 'items': {'type': 'string', 'enum': ids or ['unavailable']},
                                    'minItems': 1 if ids else 0, 'maxItems': min(len(ids), 3)}}}
     available = [key for key, metric in context['metrics'].items() if metric['status'] == 'available']
     pillars = {key: claim([m for m in available if context['metrics'][m]['pillar'] == key]) for key in context['pillars']}
+    positive = [key for key in available if context['metrics'][key]['band'] == 'high']
+    risks = [key for key in available if context['metrics'][key]['band'] in ('low', 'middle')]
     return {'type': 'object', 'additionalProperties': False, 'required': ['summary', 'pillars', 'strengths', 'risks'],
             'properties': {'summary': claim(available),
                 'pillars': {'type': 'object', 'additionalProperties': False, 'required': list(pillars), 'properties': pillars},
-                'strengths': {'type': 'array', 'maxItems': 1, 'items': claim(available)},
-                'risks': {'type': 'array', 'maxItems': 1, 'items': claim(available)}}}
+                'strengths': {'type': 'array', 'maxItems': 1 if positive else 0, 'items': claim(positive, 'Fortaleza: ')},
+                'risks': {'type': 'array', 'maxItems': 1 if risks else 0, 'items': claim(risks, 'Atención: ')}}}
 
 
 def validate_analysis(candidate, context):
@@ -45,6 +48,12 @@ def validate_analysis(candidate, context):
                       for claim in candidate[kind] if isinstance(claim, dict) and isinstance(claim.get('text'), str)]
     if len(argument_texts) != len(set(argument_texts)):
         raise ValueError('invalid_list')
+    for kind, bands in (('strengths', {'high'}), ('risks', {'low', 'middle'})):
+        for claim in candidate[kind]:
+            if isinstance(claim, dict) and isinstance(claim.get('metric_ids'), list):
+                if any(not isinstance(key, str) or context['metrics'].get(key, {}).get('band') not in bands
+                       for key in claim['metric_ids']):
+                    raise ValueError('unsupported_claim')
     claims = [(candidate['summary'], None)]
     claims += [(claim, key) for key, claim in candidate['pillars'].items()]
     claims += [(claim, None) for kind in ('strengths', 'risks') for claim in candidate[kind]]
