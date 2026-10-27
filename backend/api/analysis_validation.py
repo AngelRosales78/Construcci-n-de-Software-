@@ -2,7 +2,7 @@
 from decimal import Decimal, InvalidOperation
 import re
 
-VERSION = 'grounded-analysis-v5'
+VERSION = 'grounded-analysis-v6'
 
 
 def context_from_pillars(data):
@@ -55,6 +55,8 @@ def validate_analysis(candidate, context):
         available = {key: metric for key, metric in context['metrics'].items()
                      if metric['status'] == 'available' and (pillar is None or metric['pillar'] == pillar)}
         if (available and not ids) or any(key not in available for key in ids):
+            raise ValueError('unsupported_claim')
+        if ids and {available[key]['pillar'] for key in ids} == {'liquidity'} and re.search(r'beneficio|rentabilidad|ganancia', text, re.I):
             raise ValueError('unsupported_claim')
         if not available and not re.search(r'no disponible|sin datos|faltan|insuficient', text, re.I):
             raise ValueError('unsupported_claim')
