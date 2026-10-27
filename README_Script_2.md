@@ -8,7 +8,7 @@ Proyecto completo creado a partir de Script 1 en una carpeta independiente, cons
 2. En Settings > Build, Execution, Deployment > Build Tools > Gradle seleccionar **JDK 17** y sincronizar. Se incluye Gradle Wrapper 8.4.
 3. Preparar e iniciar el servidor como se indica abajo. Crear una cuenta desde la pantalla de registro de Android.
 4. Elegir un emulador y ejecutar la configuración **app**. No hay un APK de entrega.
-5. Buscar **MSFT**, abrir la ficha y elegir **Cinco pilares y puntaje**. Consultar **2024** para reproducir los datos anuales importados. El catálogo tiene 503 símbolos; la cobertura financiera cargada comprende nueve empresas; consulta docs/android/SERVICIOS_EMPRESAS.md.
+5. Buscar **MSFT**, abrir la ficha y elegir **Cinco pilares y puntaje**. Consultar **2024** para reproducir los datos anuales importados. El catálogo tiene 503 símbolos; el catálogo completo de 503 empresas tiene datos cargados; consulta docs/android/SERVICIOS_EMPRESAS.md.
 
 ## Servidor de desarrollo separado
 
@@ -60,9 +60,12 @@ Desde android, las pruebas locales se ejecutan con gradlew.bat testDebugUnitTest
 
 Inicio y detalle usan tarjetas oscuras, acentos verdes, navegación inferior y gráfico de área basado en cierres del servidor. Los filtros por sector y el orden por capitalización se aplican sobre todo el catálogo mediante la API, no solo sobre la página visible. Se conservan paginación, carga, errores, períodos, fuentes y avisos de datos de demostración.
 
-La ficha mantiene accesos a los cinco pilares/radar/puntaje, escenarios e IA. Beta y dividendos se indican como no disponibles porque la API actual no los entrega. No se muestran cotizaciones, variaciones, imágenes corporativas ni valores de índice ficticios. Los escenarios y la IA siguen sujetos a los servicios pendientes descritos arriba.
+La ficha mantiene accesos a los cinco pilares/radar/puntaje, escenarios e IA. Beta y dividendos se calculan desde los datos disponibles y se muestran junto a sus fechas; las limitaciones se explican cuando no pueden interpretarse. No se muestran cotizaciones, variaciones, imágenes corporativas ni valores de índice ficticios. Los escenarios y la IA siguen sujetos a los servicios pendientes descritos arriba.
 
 Después de registrarse se regresa al login y no se guardan los tokens recibidos del registro. El usuario debe iniciar sesión para entrar al catálogo.
 
 
 Para activar la IA local, ejecutar tools/Start-LocalAI.ps1 en otra ventana antes de abrir el informe. Ver docs/android/SERVICIOS_EMPRESAS.md para cobertura y verificación.
+
+
+Actualización del 27/10/2026: cobertura de 503 empresas, con métricas de ficha conectadas al servidor y fechas/fuentes por indicador. Los registros corporativos especiales y el alcance están documentados en docs/android/SERVICIOS_EMPRESAS.md.

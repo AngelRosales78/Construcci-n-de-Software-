@@ -28,3 +28,6 @@ No se registra Planning Poker ni aprobación de metodología por el equipo. La i
 ## Ampliación del 27/10/2026
 
 Se añadieron datos reales de ocho empresas adicionales, escenarios GBM, informe de métricas e integración con IA local Ollama. El alcance técnico y sus límites se detallan en SERVICIOS_EMPRESAS.md. La evidencia HTTP está en evidence/company_services.json. Esto no implica aprobación metodológica ni cierre formal del sprint por el equipo.
+
+
+Actualización posterior del 27/10/2026: se amplió la cobertura al catálogo completo de 503 empresas y se conectaron las métricas de las fichas con valores y procedencia. Véanse SERVICIOS_EMPRESAS.md, docs/datos/empresas/coverage.json y evidence/full_catalog.json. Los valores no interpretables conservan su motivo y no se sustituyen por cifras ficticias.

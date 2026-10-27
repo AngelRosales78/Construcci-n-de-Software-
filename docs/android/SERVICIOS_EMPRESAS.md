@@ -2,11 +2,24 @@
 
 ## Datos cargados
 
-El catálogo conserva 503 símbolos. Se incluyen balances anuales reales de 2020 a 2025 cuando el filing original está disponible y cinco años de cierres ajustados para AAPL, NVDA, JPM, JNJ, GOOGL, AMZN, META y TSLA. MSFT conserva sus cinco ejercicios y el histórico entregado con Script 1. No todas las empresas del catálogo tienen cobertura financiera.
+El catálogo completo de **503 empresas** tiene fichas, balances anuales publicados y cierres ajustados cargados. El histórico llega hasta cinco años cuando la empresa tiene esa antigüedad; las cotizaciones de HONA y VYLR comienzan con su propia salida a bolsa. No se copia el histórico bursátil de la matriz para alargar artificialmente sus series.
 
-El inicio activa por defecto «Solo empresas con datos para analizar». El filtro `ready=true` exige al menos un balance anual real y sesenta precios reales. Desactivarlo muestra también empresas sin cobertura. La disponibilidad de cada indicador depende de los componentes y de ejercicios comparables; por ejemplo, los balances bancarios no siempre desglosan activos corrientes.
+La ficha incorpora capitalización y P/E reportados por la serie de valoración de Yahoo, ROE calculado con los balances comparables del mismo emisor, beta estimada frente al S&P 500 y rendimiento de dividendos registrado. Cada indicador conserva su propia fecha/fuente: no se presentan los datos anuales como si fueran valores en vivo.
 
-Los inventarios y CSV de `docs/datos/empresas/` se importan al preparar el servidor. La carga es idempotente. Los snapshots completos descargados quedan en `backend/data-cache/`, excluidos de Git. Cada inventario conserva fuente SEC, filing y SHA-256; los cierres tienen su archivo de procedencia. La selección anual conserva un mismo 10-K original por ejercicio y deja nulos los datos ausentes o ambiguos.
+La cobertura y los motivos de ausencia están en `docs/datos/empresas/coverage.json`. ROE no se interpreta con patrimonio no positivo; beta requiere al menos ciento ochenta y un cierres coincidentes; la rentabilidad por dividendos no se calcula si un split reciente impide comparar los pagos sin un ajuste adicional. Un dato no aplicable no se sustituye por cero.
+
+El filtro inicial «Solo empresas con datos para analizar» incluye balances publicados y un mínimo de diez cierres reales. Para series de menos de sesenta cierres el servicio de escenarios declara explícitamente la historia limitada y Android muestra el aviso.
+
+### Reorganizaciones y estados de negocios escindidos
+
+- XOM conserva los estados históricos de Exxon Mobil Corporation, operadora del nuevo holding. Se identifica la entidad y la fecha original.
+- SKYD conserva los años completos de Paramount Global anteriores a la combinación. Se indica que no representan el grupo sucesor ni se comparan automáticamente con los períodos posteriores.
+- HONA usa exclusivamente las tablas auditadas del negocio Honeywell Aerospace del formulario de registro, excluyendo las columnas pro forma.
+- VYLR usa exclusivamente las tablas auditadas del Seed Business, excluyendo los balances de Corteva completo y los ajustes pro forma.
+
+Estas notas se conservan en cada balance y se muestran en la ficha, los pilares y el informe. Las fuentes archivadas SEC están enlazadas en los inventarios.
+
+Los inventarios y CSV de `docs/datos/empresas/` se importan al preparar el servidor. La carga es idempotente. Los snapshots completos descargados quedan en `backend/data-cache/`, excluidos de Git. Cada inventario conserva fuente SEC, filing y SHA-256; los cierres tienen su archivo de procedencia. La selección general conserva un mismo 10-K original por ejercicio y deja nulos los datos ausentes o ambiguos; los cuatro casos corporativos documentados utilizan sus fuentes específicas.
 
 Fuentes: [API oficial SEC](https://www.sec.gov/search-filings/edgar-application-programming-interfaces) y [históricos Yahoo Finance](https://finance.yahoo.com/).
 
@@ -59,6 +72,18 @@ Referencias de integración: [Ollama en Windows](https://docs.ollama.com/windows
 
 ## Verificación
 
-`tools/verify_company_services.py` consulta pilares y escenarios por HTTP para las nueve empresas y solicita una explicación real de AAPL a la IA local. Usa una cuenta efímera, la elimina y guarda solo metadatos sin credenciales en `docs/android/evidence/company_services.json`.
+`tools/verify_full_catalog.py` verifica las fichas, los pilares y los supuestos de escenarios de las 503 empresas por HTTP y ejecuta escenarios de AAPL, HONA y VYLR. `tools/verify_company_services.py` conserva además una comprobación real de IA local para AAPL. Usa una cuenta efímera, la elimina y guarda solo metadatos sin credenciales en `docs/android/evidence/company_services.json`.
 
 La pantalla financiera conserva fuentes, fórmulas, componentes, referencia sectorial, ejercicios, serie de eficiencia, radar y puntaje. La consulta queda vinculada a la empresa elegida en la ficha. La metodología académica sigue pendiente de revisión del equipo; no se declara una aprobación que no ocurrió.
+
+
+## Carga completa y restauración
+
+```powershell
+.\.venv\Scripts\python.exe backend/manage.py sync_all_companies --settings=config.android_local
+.\.venv\Scripts\python.exe backend/manage.py import_corporate_history --settings=config.android_local
+.\.venv\Scripts\python.exe backend/manage.py rebuild_company_snapshots --settings=config.android_local
+.\.venv\Scripts\python.exe backend/manage.py update_company_coverage --settings=config.android_local
+```
+
+Las descargas usan hasta tres trabajadores y limitan el acceso a SEC. Se guardan snapshots para no repetir consultas y se registra cada fallo sin producir sustitutos. `--resume` omite las empresas ya preparadas. Las fichas exportadas incluyen los valores y su procedencia, por lo que `Start-AndroidServer.ps1 -Prepare` restaura todo el paquete sin consultar fuentes externas. Los datos son el snapshot cargado, no una actualización automática en segundo plano.
