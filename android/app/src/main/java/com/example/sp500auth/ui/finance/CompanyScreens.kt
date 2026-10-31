@@ -87,6 +87,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
     Scaffold(containerColor = Background, bottomBar = {
         NavigationBar(containerColor = Panel) {
             NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Default.Explore, null) }, label = { Text("Explorar") })
+            NavigationBarItem(selected = false, onClick = { nav.navigate("compare") }, icon = { Icon(Icons.Default.CompareArrows, null) }, label = { Text("Comparar") })
             NavigationBarItem(selected = false, onClick = { nav.navigate("profile") }, icon = { Icon(Icons.Default.Person, null) }, label = { Text("Mi cuenta") })
             NavigationBarItem(selected = false, onClick = { auth.logout() }, icon = { Icon(Icons.Default.Logout, null) }, label = { Text("Salir") })
         }
@@ -191,6 +192,9 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                     IconButton(onClick = { nav.popBackStack() }) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver a empresas") }
                     Text("Detalle del activo", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                     IconButton(onClick = { nav.navigate("profile") }) { Icon(Icons.Default.AccountCircle, "Mi perfil", tint = Green) }
+                }
+                OutlinedButton(onClick = { nav.navigate("compare?ticker=$encoded") }, modifier = Modifier.fillMaxWidth()) {
+                    Text("Comparar $ticker con otra empresa")
                 }
             }
             when (val state = vm.summary) {
