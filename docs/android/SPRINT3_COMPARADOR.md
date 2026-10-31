@@ -23,9 +23,39 @@ Tabla de cinco ejes con columnas A y B y desplazamiento horizontal, notas sobre 
 
 Los valores ausentes se muestran como No disponible y no como cero. Android solo presenta la decisión y diferencia enviadas por el servicio. Una nota mayor no se anuncia como recomendación de inversión.
 
-## Estado de los servicios
+## T02.2 Integración y casos límite de pilares
 
-La copia del servidor de Script 2 tiene búsqueda, ficha y pilares por empresa, pero no tiene una ruta de comparación. La integración Android se documentará sin dar por realizado el servidor de Diego ni la aceptación conjunta de Web y Android.
+Si compare responde 404 o 501, se consultan ambos endpoints reales de pilares y se identifica claramente el modo consulta independiente. La tabla conserva notas y fuentes reales, pero no calcula ganadores ni diferencias. No se activa esta alternativa ante 401, 403, 500 o 503 y tampoco se acepta una respuesta de otra empresa o ejercicio.
+
+Con un servicio comparativo disponible, se muestran sus decisiones solo si hay notas válidas, periodos anuales idénticos y válidos, misma metodología y versión de normalización y una decisión completa. El contrato de esta versión exige equivalencia exacta de fechas para presentar un resultado; si Diego adopta otra política de comparabilidad, debe versionarse y acordarse con el cliente. Una nota ausente, fila duplicada, periodo incompatible, versión distinta o decisión incoherente se presenta como No comparable. Nunca se deriva un ganador a partir de ratios brutos.
+
+Se añaden pruebas JVM para estos casos, recuperación de errores y consultas independientes, y una prueba Compose para las etiquetas de la tabla. La prueba Compose debe ejecutarse con un emulador conectado.
+
+### Recorrido de aceptación en Android Studio
+
+1. Iniciar el servidor y entrar con una cuenta real de prueba. Abrir Comparar desde Explorar.
+2. Buscar AAPL en Empresa A y MSFT en Empresa B. Comprobar máximo cinco sugerencias e impedir AAPL en ambas.
+3. Intercambiar: A pasa a MSFT y B a AAPL, conservando los nombres. Quitar una empresa deshabilita Comparar.
+4. Abrir la ficha de AAPL y pulsar Comparar AAPL con otra empresa: A se completa inicialmente. Elegir MSFT en B y un ejercicio con datos, por ejemplo 2024.
+5. Consultar: verificar cinco filas y notas del servidor. Con el servidor heredado debe aparecer el aviso de servicio comparativo pendiente y No comparable en cada resultado; esto no significa que se hayan inventado o perdido las notas individuales.
+6. Deslizar la tabla para ver A y B; revisar periodos y fuentes. Girar el emulador conserva selección y ejercicio. Si el proceso se recrea, volver a consultar para obtener resultados vigentes.
+7. Detener temporalmente el servidor, consultar y comprobar error con reintento sin perder A/B ni ejercicio; reiniciarlo y reintentar.
+8. Con el servicio de Diego implementado, comprobar empate, nota ausente, periodos incompatibles y cambio rápido de empresas. Contrastar las cifras y decisiones con la Web para la misma cuenta y periodo antes de declarar aceptación integral de la HU.
+
+### Pruebas locales
+
+Desde android, con JDK 17: `gradlew.bat testDebugUnitTest compileDebugKotlin compileDebugAndroidTestKotlin`.
+Con emulador conectado: `gradlew.bat connectedDebugAndroidTest`.
+
+## Dependencia pendiente
+
+La copia del servidor de Script 2 tiene búsqueda, ficha y pilares por empresa, pero no tiene una ruta de comparación. La integración Android queda preparada sin dar por realizado el servidor de Diego ni la aceptación conjunta de Web y Android.
+
+## Resultado de la verificación del 30 de octubre de 2026
+
+`compileDebugKotlin`, `testDebugUnitTest` y `compileDebugAndroidTestKotlin` finalizaron correctamente con Gradle 8.4 y Java 17. Se descubrieron 91 pruebas JVM: 88 aprobadas, 3 integraciones opcionales omitidas, cero fallos y cero errores. Las 23 pruebas nuevas del comparador aprobaron. Se precargó el agente Byte Buddy existente para ejecutar las pruebas heredadas que usan Mockito en este entorno; no se cambian dependencias de producción.
+
+La prueba Compose del comparador está compilada, pero no ejecutada. `adb devices` no encontró emulador ni teléfono conectado. Por ello, la revisión visual, el giro real del dispositivo y la comparación conjunta con Web siguen pendientes; las pruebas de restauración aquí ejecutadas son JVM sobre SavedStateHandle, no una captura o ejecución instrumental en un dispositivo. Ver evidencia resumida en `evidence/sprint3_comparador.json`.
 
 ## Ejecutar
 

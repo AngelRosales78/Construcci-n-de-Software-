@@ -71,8 +71,8 @@ private fun PeriodCard(slot: String, data: PillarsResponse?) {
 
 @Composable
 private fun CompanySources(data: PillarsResponse?) {
-    val sources = data?.pillars.orEmpty().flatMap { it.metrics.orEmpty() }
-        .flatMap { it.components.orEmpty() }.mapNotNull { it.source }
+    val sources = data?.pillars.orEmpty().filterNotNull().flatMap { it.metrics.orEmpty().filterNotNull() }
+        .flatMap { it.components.orEmpty().filterNotNull() }.mapNotNull { it.source }
         .filter { !it.url.isNullOrBlank() }.distinctBy { it.url }
     Text(data?.ticker.orEmpty(), fontWeight = FontWeight.SemiBold)
     if (sources.isEmpty()) Text("Fuentes no informadas por el servidor.", style = MaterialTheme.typography.bodySmall)

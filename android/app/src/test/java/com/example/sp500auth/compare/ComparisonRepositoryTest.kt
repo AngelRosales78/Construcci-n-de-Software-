@@ -44,7 +44,7 @@ class ComparisonRepositoryTest {
         assertTrue(requests.isEmpty())
     }
     @Test fun rejectsMismatchedCompanyYearAndUnsupportedSchema() = runBlocking {
-        for (json in listOf(response("NVDA"), response().replace("2024", "2023"), response().replace("comparison-v1", "comparison-v2"))) {
+        for (json in listOf(response("NVDA"), response().replace("2024", "2023"), response().replace("comparison-v1", "comparison-v2"), response().replace("pillars-v1", "pillars-v2"))) {
             body = json
             assertTrue(repo.compare("AAPL", "MSFT", 2024) is Resource.Error)
         }

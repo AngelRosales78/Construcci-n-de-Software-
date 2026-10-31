@@ -25,4 +25,8 @@ Los objetos `a` y `b` deben incluir el objeto completo de pilares existente: per
 
 Cada fila incluye `id`, `status` (available o not_comparable), `result` (a, b, tie o not_comparable), `delta` decimal como cadena, `unit` (points) y `reason`. Delta significa nota A menos nota B. La API debe determinar comparabilidad y resultado con notas de la misma metodología y explicar las diferencias de periodos. No comparar ratios brutos asumiendo que mayor siempre es mejor. Android no reconstruye el resultado ni completa una fila omitida con cero.
 
+Esta versión Android solo presenta una decisión disponible si las fechas de inicio y fin son iguales para ambas empresas, la metodología coincide y las notas pertenecen a la versión de scoring y periodo declarados en su respuesta. `a` requiere delta positivo; `b`, negativo; `tie`, cero. No se infiere el ganador desde los números. El servicio debe validar también que el delta corresponda a sus notas. Una política distinta de equivalencia temporal debe acordarse y versionarse antes de flexibilizar el cliente.
+
+Compatibilidad temporal: ante 404 o 501, Android puede consultar `companies/{ticker}/pillars/?fiscal_year=` para A y B. Lo identifica internamente como `independent-pillars-v1`, muestra un aviso visible y no atribuye ganadores ni diferencias al servidor. No es una respuesta del endpoint compare ni una implementación del trabajo Web. No se usa ante denegación de permisos o errores del servidor.
+
 400: parámetros inválidos o empresas repetidas; 401/403: sesión o permisos insuficientes; 404: empresa o servicio no disponible; 503: dependencia no disponible. No enviar contenido privado ante 403. La aceptación conjunta queda pendiente de que este contrato se confirme e implemente y se verifique contra la Web.

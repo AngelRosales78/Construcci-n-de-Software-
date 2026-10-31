@@ -1,0 +1,38 @@
+{
+  "verified_on": "2026-10-30",
+  "scope": "Android HU08_01 T01.1 T01.2 y HU08_02 T02.1 T02.2",
+  "base_commit": "2b3dc615672a7147e3cc84690e440e1a5dd1bd59",
+  "gradle": "8.4",
+  "java": "17.0.14",
+  "build": "SUCCESSFUL",
+  "tasks": [
+    "compileDebugKotlin",
+    "testDebugUnitTest",
+    "compileDebugAndroidTestKotlin"
+  ],
+  "jvm": {
+    "total": 91,
+    "passed": 88,
+    "skipped_optional": 3,
+    "failures": 0,
+    "errors": 0,
+    "new_comparison_tests_passed": 23
+  },
+  "test_environment": {
+    "inherited_mockito_tests_used_preloaded_byte_buddy_agent": true,
+    "production_dependencies_changed": false
+  },
+  "device": {
+    "connected": 0,
+    "comparison_ui_test_compiled": true,
+    "instrumented_tests_executed": false,
+    "manual_visual_review_executed": false
+  },
+  "backend": {
+    "modified": false,
+    "comparison_endpoint_implemented": false,
+    "independent_pillars_integration_tested_with_controlled_http_responses": true,
+    "real_comparison_endpoint_acceptance": false
+  },
+  "web_modified": false
+}

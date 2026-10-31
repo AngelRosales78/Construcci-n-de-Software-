@@ -54,6 +54,7 @@ class ComparisonViewModel internal constructor(
         jobs[slot] = viewModelScope.launch {
             delay(300)
             val result = source.search(value)
+            coroutineContext.ensureActive()
             if (value == if (slot == CompanySlot.A) queryA else queryB) suggestions(slot, result)
         }
     }
