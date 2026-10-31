@@ -47,6 +47,8 @@ fun ComparisonScreen(nav: NavController, initialTicker: String = "", vm: Compari
                 }
                 is Resource.Success -> item {
                     Text("${result.successData.a?.ticker} y ${result.successData.b?.ticker} · FY${result.successData.fiscal_year}", fontWeight = FontWeight.Bold)
+                    Spacer(Modifier.height(12.dp))
+                    ComparisonTable(result.successData)
                 }
                 else -> Unit
             }

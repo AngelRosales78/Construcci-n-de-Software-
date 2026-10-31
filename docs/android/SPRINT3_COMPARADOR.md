@@ -17,7 +17,13 @@ Se añade una llamada Retrofit autenticada con A, B y fiscal_year, validación d
 
 Pruebas de contrato con respuestas HTTP controladas cubren autenticación, parámetros, orden A/B, datos de otra empresa, ejercicio incorrecto, JSON inválido y recuperación de red. Pruebas del ViewModel cubren reintento, selección incompleta y respuesta tardía. El contrato propuesto para coordinar con Diego está en CONTRATO_COMPARADOR.md.
 
-## Dependencia del servidor
+## T02.1 Tabla de pilares en Android
+
+Tabla de cinco ejes con columnas A y B y desplazamiento horizontal, notas sobre 100, periodo y moneda por empresa, metodología, versión de normalización, avisos y fuentes enlazadas. El resultado usa texto y símbolos además de color: Mayor nota, Empate o No comparable. El quinto eje es Crecimiento según el servidor actual. No se cambia a Valuación en el cliente.
+
+Los valores ausentes se muestran como No disponible y no como cero. Android solo presenta la decisión y diferencia enviadas por el servicio. Una nota mayor no se anuncia como recomendación de inversión.
+
+## Estado de los servicios
 
 La copia del servidor de Script 2 tiene búsqueda, ficha y pilares por empresa, pero no tiene una ruta de comparación. La integración Android se documentará sin dar por realizado el servidor de Diego ni la aceptación conjunta de Web y Android.
 
