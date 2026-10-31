@@ -33,7 +33,22 @@ fun ComparisonScreen(nav: NavController, initialTicker: String = "", vm: Compari
             item { CompanyPicker(CompanySlot.B, vm.selection.b, vm.selection.bName, vm.queryB, vm.suggestionsB, vm::query, vm::select, vm::remove) }
             vm.selectionError?.let { message -> item { Text(message, color = MaterialTheme.colorScheme.error) } }
             item {
-                Text(if (vm.selection.canCompare) "Selección lista: ${vm.selection.a} y ${vm.selection.b}" else "Selecciona una empresa distinta en cada buscador.")
+                OutlinedTextField(vm.year, vm::changeYear, label = { Text("Ejercicio fiscal") }, singleLine = true,
+                    keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number), modifier = Modifier.fillMaxWidth())
+                Spacer(Modifier.height(8.dp))
+                Button(onClick = vm::compare, enabled = vm.selection.canCompare && vm.result !is Resource.Loading, modifier = Modifier.fillMaxWidth()) { Text("Comparar cinco pilares") }
+                if (!vm.selection.canCompare) Text("Selecciona una empresa distinta en cada buscador.")
+            }
+            when (val result = vm.result) {
+                is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth()); Text("Consultando ambas empresas…") }
+                is Resource.Error -> item {
+                    Text(result.message.orEmpty(), color = MaterialTheme.colorScheme.error)
+                    TextButton(onClick = vm::compare) { Text("Reintentar comparación") }
+                }
+                is Resource.Success -> item {
+                    Text("${result.successData.a?.ticker} y ${result.successData.b?.ticker} · FY${result.successData.fiscal_year}", fontWeight = FontWeight.Bold)
+                }
+                else -> Unit
             }
         }
     }

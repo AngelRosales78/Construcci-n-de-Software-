@@ -11,7 +11,13 @@ Comprobación manual: buscar AAPL en A y MSFT en B; intentar seleccionar AAPL do
 
 Las pruebas JVM cubren identificadores, duplicados, quitar, intercambio, búsquedas independientes y restauración del ViewModel. Las pruebas de interfaz requieren ejecutar el proyecto en Android Studio y no se confunden con pruebas JVM.
 
-## Servicio compartido
+## T01.2 Consulta y pruebas del comparador móvil
+
+Se añade una llamada Retrofit autenticada con A, B y fiscal_year, validación de identidad y ejercicio, progreso, error y reintento. La selección permanece tras un fallo. Cambiar el par o el ejercicio cancela la consulta e invalida el resultado anterior; una respuesta tardía no sustituye otra selección. El ejercicio se restaura con SavedStateHandle. La respuesta del comparador no se guarda como caché sin revalidarla al recrear el proceso.
+
+Pruebas de contrato con respuestas HTTP controladas cubren autenticación, parámetros, orden A/B, datos de otra empresa, ejercicio incorrecto, JSON inválido y recuperación de red. Pruebas del ViewModel cubren reintento, selección incompleta y respuesta tardía. El contrato propuesto para coordinar con Diego está en CONTRATO_COMPARADOR.md.
+
+## Dependencia del servidor
 
 La copia del servidor de Script 2 tiene búsqueda, ficha y pilares por empresa, pero no tiene una ruta de comparación. La integración Android se documentará sin dar por realizado el servidor de Diego ni la aceptación conjunta de Web y Android.
 

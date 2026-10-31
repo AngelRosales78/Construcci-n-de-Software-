@@ -7,6 +7,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sp500auth.data.api.models.CompanyItem
+import com.example.sp500auth.data.api.models.ComparisonResponse
 import com.example.sp500auth.data.repository.ComparisonDataSource
 import com.example.sp500auth.data.repository.ComparisonRepository
 import com.example.sp500auth.util.Resource
@@ -14,6 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.ensureActive
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +31,9 @@ class ComparisonViewModel internal constructor(
     var suggestionsA by mutableStateOf<Resource<List<CompanyItem>>>(Resource.Empty()); private set
     var suggestionsB by mutableStateOf<Resource<List<CompanyItem>>>(Resource.Empty()); private set
     var selectionError by mutableStateOf<String?>(null); private set
+    var year by mutableStateOf(saved.get<String>("year") ?: (LocalDate.now().year - 1).toString()); private set
+    var result by mutableStateOf<Resource<ComparisonResponse>>(Resource.Empty()); private set
+    private var comparisonJob: Job? = null
     private val jobs = mutableMapOf<CompanySlot, Job>()
 
     fun initialize(ticker: String) {
@@ -66,8 +72,34 @@ class ComparisonViewModel internal constructor(
     fun swap() { update(selection.swap()); query(CompanySlot.A, ""); query(CompanySlot.B, "") }
 
     private fun update(value: CompanySelection) {
+        clearResult()
         selection = value; selectionError = null
         saved["a"] = value.a; saved["aName"] = value.aName
         saved["b"] = value.b; saved["bName"] = value.bName
+    }
+
+    fun changeYear(value: String) {
+        clearResult()
+        year = value.take(4); saved["year"] = year
+    }
+
+    private fun clearResult() {
+        comparisonJob?.cancel(); result = Resource.Empty()
+    }
+
+    fun compare() {
+        clearResult()
+        val fiscalYear = year.toIntOrNull()
+        if (!selection.canCompare || fiscalYear == null || fiscalYear !in 2000..2100) {
+            result = Resource.Error("Selecciona dos empresas distintas y un ejercicio de cuatro cifras entre 2000 y 2100.")
+            return
+        }
+        val pair = selection
+        result = Resource.Loading()
+        comparisonJob = viewModelScope.launch {
+            val response = source.compare(pair.a, pair.b, fiscalYear)
+            coroutineContext.ensureActive()
+            if (selection == pair && year.toIntOrNull() == fiscalYear) result = response
+        }
     }
 }

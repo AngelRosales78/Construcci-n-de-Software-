@@ -14,6 +14,7 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class ComparisonSelectionViewModelTest {
     private class Catalog : ComparisonDataSource {
+        override suspend fun compare(a: String, b: String, fiscalYear: Int): Resource<com.example.sp500auth.data.api.models.ComparisonResponse> = error("Not used by selection tests")
         val queries = mutableListOf<String>()
         override suspend fun search(query: String): Resource<List<CompanyItem>> {
             queries.add(query)
