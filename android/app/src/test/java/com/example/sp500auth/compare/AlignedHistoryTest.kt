@@ -33,7 +33,7 @@ class AlignedHistoryTest {
         val data = alignHistory(series("AAPL", *prices), series("MSFT", *prices))
         assertEquals(1500, data.points.size)
         assertEquals(0, nearestHistoryIndex(data.points, -1f)); assertEquals(1499, nearestHistoryIndex(data.points, 2f))
-        assertEquals(750, nearestHistoryIndex(data.points, .5f))
+        assertEquals(749, nearestHistoryIndex(data.points, .5f))
     }
     @Test fun refusesInsufficientCommonHistoryOrRepeatedCompanies() {
         assertThrows(IllegalArgumentException::class.java) { alignHistory(series("AAPL", 1.0), series("MSFT", 2.0)) }

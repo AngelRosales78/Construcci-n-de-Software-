@@ -32,6 +32,7 @@ fun ComparisonScreen(nav: NavController, initialTicker: String = "", vm: Compari
             item { OutlinedButton(onClick = vm::swap, enabled = vm.selection.a.isNotBlank() || vm.selection.b.isNotBlank(), modifier = Modifier.fillMaxWidth()) { Text("Intercambiar A y B") } }
             item { CompanyPicker(CompanySlot.B, vm.selection.b, vm.selection.bName, vm.queryB, vm.suggestionsB, vm::query, vm::select, vm::remove) }
             vm.selectionError?.let { message -> item { Text(message, color = MaterialTheme.colorScheme.error) } }
+            item { HistoryComparisonSection(vm.selection.a, vm.selection.b) }
             item {
                 OutlinedTextField(vm.year, vm::changeYear, label = { Text("Ejercicio fiscal") }, singleLine = true,
                     keyboardOptions = androidx.compose.foundation.text.KeyboardOptions(keyboardType = androidx.compose.ui.text.input.KeyboardType.Number), modifier = Modifier.fillMaxWidth())
