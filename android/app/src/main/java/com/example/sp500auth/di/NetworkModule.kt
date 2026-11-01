@@ -52,6 +52,10 @@ object NetworkModule {
                 chain.proceed(builder.build())
             }
             .addInterceptor(loggingInterceptor)
+            .addNetworkInterceptor { chain ->
+                com.example.sp500auth.data.repository.enforceFavoriteAccount(chain.request(), tokenManager.getAccessToken())
+                chain.proceed(chain.request())
+            }
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
