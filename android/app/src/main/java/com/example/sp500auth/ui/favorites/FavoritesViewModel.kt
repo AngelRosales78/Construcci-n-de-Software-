@@ -68,8 +68,12 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
                 if (source.owner() != owner || epoch != generation) return@launch
                 when (result) {
                     is FavoriteResult.Success -> {
-                        state = Resource.Success(items.filterNot { it.ticker == ticker } + result.value)
-                        accountMessage = "$ticker guardado en tus favoritos."
+                        if (result.value.ticker != ticker || result.value.id == null || items.any { it.id == result.value.id && it.ticker != ticker }) {
+                            accountMessage = "El servidor devolvió un favorito incoherente. Actualiza la lista."
+                        } else {
+                            state = Resource.Success(items.filterNot { it.ticker == ticker } + result.value)
+                            accountMessage = "$ticker guardado en tus favoritos."
+                        }
                     }
                     is FavoriteResult.Failure -> { if (result.clearPrivate) state = Resource.Error(result.message); accountMessage = result.message }
                 }

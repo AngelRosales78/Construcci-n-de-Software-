@@ -26,7 +26,7 @@ private fun number(value: Double) = String.format(Locale.getDefault(), "%.2f", v
 @Composable
 fun HistoryComparisonChart(data: AlignedHistory) {
     if (data.points.size < 2) { Text("No hay suficientes fechas comunes."); return }
-    var index by rememberSaveable(data.a, data.b, data.range, data.points.first().date, data.points.last().date) { mutableStateOf(data.points.lastIndex) }
+    var index by rememberSaveable(data.a, data.b, data.range, data.points.first().date, data.points.last().date, data.points.size) { mutableStateOf(data.points.lastIndex) }
     val selected = data.points[index.coerceIn(0, data.points.lastIndex)]
     val colorA = CompareGreen; val colorB = Color(0xFF60CDF9)
     val low = minOf(0.0, data.points.minOf { minOf(it.a, it.b) })

@@ -21,7 +21,6 @@ fun RefreshFavoritesOnResume(vm: FavoritesViewModel) {
     DisposableEffect(lifecycle, vm) {
         val observer = LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_RESUME) vm.refresh() }
         lifecycle.addObserver(observer)
-        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) vm.refresh()
         onDispose { lifecycle.removeObserver(observer) }
     }
     RemovalConfirmation(vm)
@@ -60,7 +59,7 @@ fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel) {
             }
             val state = vm.visibleState
             if (state is Resource.Success) {
-                item { Text("${state.successData.size} empresas favoritas") }
+                item { Text("${state.successData.size} ${if (state.successData.size == 1) "empresa favorita" else "empresas favoritas"}") }
                 if (state.successData.isEmpty()) item { Text("Aún no tienes favoritos. Puedes añadir empresas desde Explorar o su ficha.") }
                 items(state.successData, key = { it.id ?: it.ticker.orEmpty() }) { favorite ->
                     Card(Modifier.fillMaxWidth()) {

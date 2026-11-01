@@ -1,0 +1,41 @@
+{
+  "verified_on": "2026-11-01",
+  "scope": "Android HU08_03 T03.1/T03.2, HU10_01 T11.1/T11.2, HU10_02 T12.1/T12.2",
+  "base_commit": "aad8fbb120175fd048c4bbdbbb5d59ecacbf4989",
+  "build": "SUCCESSFUL",
+  "gradle": "8.4",
+  "java": "17.0.14",
+  "tasks": [
+    "testDebugUnitTest",
+    "compileDebugKotlin",
+    "compileDebugAndroidTestKotlin"
+  ],
+  "jvm": {
+    "total": 114,
+    "passed": 111,
+    "skipped_optional": 3,
+    "failures": 0,
+    "errors": 0,
+    "new_history_and_favorites_tests_passed": 23
+  },
+  "ui": {
+    "new_tests_compiled": 2,
+    "instrumented_tests_executed": false,
+    "connected_devices": 0,
+    "manual_visual_acceptance": false
+  },
+  "backend": {
+    "modified": false,
+    "existing_price_history_routes_used": true,
+    "favorites_endpoints_present": false,
+    "favorites_http_contract_tested_with_controlled_responses": true,
+    "real_favorites_persistence_verified": false
+  },
+  "web_modified": false,
+  "histories": {
+    "normalization": "Android: (price / initial common price - 1) * 100",
+    "observed_common_dates_only": true,
+    "domain_test_points": 1500,
+    "device_render_performance_measured": false
+  }
+}

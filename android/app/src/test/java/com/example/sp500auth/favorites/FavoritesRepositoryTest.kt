@@ -52,5 +52,25 @@ class FavoritesRepositoryTest {
         assertThrows(java.io.IOException::class.java) { enforceFavoriteAccount(request, jwt("2")) }
         assertThrows(java.io.IOException::class.java) { enforceFavoriteAccount(request.newBuilder().header("Authorization", "Bearer ${jwt("2")}").build(), token) }
     }
+    @Test fun deleteUsesFavoriteIdAndOnlyConfirms204() = runBlocking {
+        queue.add(204 to "")
+        assertTrue(repo.remove(FavoriteItem(7, "AAPL")) is FavoriteResult.Success)
+        assertEquals("DELETE", requests.single().method)
+        assertEquals("/api/v1/favorites/7/", requests.single().url.encodedPath)
+        queue.add(403 to "{}"); assertTrue((repo.remove(FavoriteItem(7, "AAPL")) as FavoriteResult.Failure).clearPrivate)
+    }
+    @Test fun repeatedDeleteRequiresFreshListToProveAbsence() = runBlocking {
+        queue.add(404 to "{}"); queue.add(200 to list())
+        assertTrue(repo.remove(FavoriteItem(7, "AAPL")) is FavoriteResult.Success)
+        queue.add(404 to "{}"); queue.add(200 to list(results = "[$item]"))
+        assertTrue(repo.remove(FavoriteItem(7, "AAPL")) is FavoriteResult.Failure)
+        queue.add(404 to "{}"); queue.add(404 to "{}")
+        assertTrue(repo.remove(FavoriteItem(7, "AAPL")) is FavoriteResult.Failure)
+    }
+    @Test fun missingSessionOrInvalidDeleteNeverSendsRequest() = runBlocking {
+        assertTrue(repo.remove(FavoriteItem(-1, "AAPL")) is FavoriteResult.Failure)
+        token = ""; assertTrue(repo.remove(FavoriteItem(7, "AAPL")) is FavoriteResult.Failure)
+        assertTrue(requests.isEmpty())
+    }
     companion object { fun jwt(id: String) = "e30." + Base64.getUrlEncoder().withoutPadding().encodeToString("""{"user_id":$id}""".toByteArray()) + ".fixture" }
 }

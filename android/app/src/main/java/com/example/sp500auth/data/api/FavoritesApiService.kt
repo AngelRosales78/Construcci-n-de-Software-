@@ -11,4 +11,5 @@ data class AddFavoriteRequest(val ticker: String)
 interface FavoritesApiService {
     @GET("favorites/") suspend fun list(@Header("Authorization") bearer: String, @Tag account: AccountBinding): Response<FavoritesPage>
     @POST("favorites/") suspend fun add(@Body request: AddFavoriteRequest, @Header("Authorization") bearer: String, @Tag account: AccountBinding): Response<FavoriteMutation>
+    @DELETE("favorites/{id}/") suspend fun remove(@Path("id") id: Long, @Header("Authorization") bearer: String, @Tag account: AccountBinding): Response<Unit>
 }

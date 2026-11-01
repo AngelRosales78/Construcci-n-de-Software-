@@ -20,7 +20,7 @@ interface FavoritesDataSource {
     fun owner(): String?
     suspend fun list(): FavoriteResult<List<FavoriteItem>>
     suspend fun add(ticker: String): FavoriteResult<FavoriteItem>
-    suspend fun remove(item: FavoriteItem): FavoriteResult<Unit> = FavoriteResult.Failure("La baja de favoritos todavía no está conectada.")
+    suspend fun remove(item: FavoriteItem): FavoriteResult<Unit>
 }
 
 /** Only an account cache key, never an authorization decision. The server validates the JWT. */
@@ -60,17 +60,37 @@ class FavoritesRepository internal constructor(private val retrofit: Retrofit, p
         if (response.code() == 409) {
             response.errorBody()?.close()
             val list = list()
+            if (owner() != user) return@safely changedAccount()
             if (list is FavoriteResult.Success) {
                 val existing = list.value.singleOrNull { it.ticker == ticker }
                 return@safely if (existing != null) FavoriteResult.Success(existing) else FavoriteResult.Failure("El servidor rechazó un duplicado, pero no confirmó el favorito. Actualiza la lista.")
             }
             return@safely list as FavoriteResult.Failure
         }
-        if (!response.isSuccessful) return@safely httpFailure(response.code())
+        if (response.code() !in setOf(200, 201)) return@safely httpFailure(response.code())
         val body = response.body(); val item = body?.favorite
         if (body?.schema_version != "favorites-v1" || body.owner_id != user || !valid(item) || item?.ticker != ticker)
             return@safely FavoriteResult.Failure("El servidor no confirmó el favorito solicitado.")
         FavoriteResult.Success(item!!)
+    }
+
+    override suspend fun remove(item: FavoriteItem): FavoriteResult<Unit> = safely {
+        if (!valid(item)) return@safely FavoriteResult.Failure("El favorito no tiene un identificador válido. Actualiza la lista.")
+        val access = token(); val user = favoritesOwner(access) ?: return@safely FavoriteResult.Failure("Inicia sesión para quitar favoritos.", true)
+        val response = api.remove(item.id!!, "Bearer $access", AccountBinding(user))
+        if (owner() != user) return@safely changedAccount()
+        if (response.code() == 204) return@safely FavoriteResult.Success(Unit)
+        if (response.code() == 404) {
+            response.errorBody()?.close()
+            val refreshed = list()
+            if (owner() != user) return@safely changedAccount()
+            if (refreshed is FavoriteResult.Failure) return@safely refreshed
+            val items = (refreshed as FavoriteResult.Success).value
+            return@safely if (items.none { it.id == item.id || it.ticker == item.ticker }) FavoriteResult.Success(Unit)
+            else FavoriteResult.Failure("El servidor no confirmó la baja. El favorito sigue en tu lista; actualízala.")
+        }
+        response.errorBody()?.close()
+        httpFailure(response.code())
     }
 
     private fun valid(item: FavoriteItem?) = item != null && (item.id ?: 0) > 0 && validTicker(item.ticker.orEmpty())

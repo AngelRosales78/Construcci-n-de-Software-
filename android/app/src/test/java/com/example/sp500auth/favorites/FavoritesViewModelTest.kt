@@ -13,6 +13,7 @@ class FavoritesViewModelTest {
     private class Source : FavoritesDataSource {
         var user: String? = "1"; var calls = 0; var fail = false; var slow = false
         override fun owner() = user
+        override suspend fun remove(item: FavoriteItem): FavoriteResult<Unit> = error("Unused")
         override suspend fun list(): FavoriteResult<List<FavoriteItem>> = FavoriteResult.Success(emptyList())
         override suspend fun add(ticker: String): FavoriteResult<FavoriteItem> {
             calls++; if (slow) withContext(NonCancellable) { delay(1000) }
