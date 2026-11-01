@@ -29,6 +29,7 @@ import com.example.sp500auth.data.api.models.CompanyItem
 import com.example.sp500auth.data.api.models.CompanySummary
 import com.example.sp500auth.ui.auth.AuthViewModel
 import com.example.sp500auth.util.Resource
+import com.example.sp500auth.ui.favorites.*
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -76,7 +77,8 @@ private fun Retry(message: String, action: () -> Unit) {
 }
 
 @Composable
-fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel()) {
+fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel()) {
+    RefreshFavoritesOnResume(favorites)
     var query by rememberSaveable { mutableStateOf("") }
     var page by rememberSaveable { mutableStateOf(1) }
     var sector by rememberSaveable { mutableStateOf("") }
@@ -88,6 +90,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
         NavigationBar(containerColor = Panel) {
             NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Default.Explore, null) }, label = { Text("Explorar") })
             NavigationBarItem(selected = false, onClick = { nav.navigate("compare") }, icon = { Icon(Icons.Default.CompareArrows, null) }, label = { Text("Comparar") })
+            NavigationBarItem(selected = false, onClick = { nav.navigate("favorites") }, icon = { Icon(Icons.Default.Star, null) }, label = { Text("Favoritos") })
             NavigationBarItem(selected = false, onClick = { nav.navigate("profile") }, icon = { Icon(Icons.Default.Person, null) }, label = { Text("Mi cuenta") })
             NavigationBarItem(selected = false, onClick = { auth.logout() }, icon = { Icon(Icons.Default.Logout, null) }, label = { Text("Salir") })
         }
@@ -129,6 +132,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
             }
             item {
                 SectionTitle("Empresas", "Orden por capitalización")
+                FavoritesStatus(favorites)
                 TextButton(onClick = { descending = !descending; page = 1; search() }) { Icon(Icons.Default.SwapVert, null); Text(if (descending) "Mayor a menor" else "Menor a mayor") }
             }
             when (val state = vm.companies) {
@@ -138,7 +142,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
                     val data = state.successData
                     item { Text("${data.count} resultados · Página $page", color = Muted, style = MaterialTheme.typography.bodySmall) }
                     if (data.results.isNullOrEmpty()) item { FinanceCard { Text("No encontramos empresas con esta búsqueda.") } }
-                    items(data.results.orEmpty()) { company -> CompanyRow(company) { company.ticker?.let { nav.navigate("company/${Uri.encode(it)}") } } }
+                    items(data.results.orEmpty()) { company -> CompanyRow(company, favorites) { company.ticker?.let { nav.navigate("company/${Uri.encode(it)}") } } }
                     item {
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                             OutlinedButton(enabled = data.previous != null, onClick = { page--; search() }) { Text("Anterior") }
@@ -153,7 +157,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
 }
 
 @Composable
-private fun CompanyRow(company: CompanyItem, onOpen: () -> Unit) {
+private fun CompanyRow(company: CompanyItem, favorites: FavoritesViewModel, onOpen: () -> Unit) {
     FinanceCard {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Surface(color = Inner, shape = RoundedCornerShape(12.dp)) {
@@ -169,11 +173,13 @@ private fun CompanyRow(company: CompanyItem, onOpen: () -> Unit) {
             Column(Modifier.weight(1f)) { Text("Capitalización", color = Muted, style = MaterialTheme.typography.labelSmall); Text(capital(company.market_cap), style = MaterialTheme.typography.titleSmall) }
             FilledTonalButton(onClick = onOpen) { Text("Ver ficha"); Spacer(Modifier.width(5.dp)); Icon(Icons.AutoMirrored.Filled.ArrowForward, null, Modifier.size(16.dp)) }
         }
+        FavoriteAction(company.ticker.orEmpty(), favorites)
     }
 }
 
 @Composable
-fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel = hiltViewModel()) {
+fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel()) {
+    RefreshFavoritesOnResume(favorites)
     var range by rememberSaveable(ticker) { mutableStateOf("1Y") }
     LaunchedEffect(ticker) { vm.load(ticker); if (range != "1Y") vm.history(ticker, range) }
     val encoded = Uri.encode(ticker)
@@ -196,6 +202,8 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                 OutlinedButton(onClick = { nav.navigate("compare?ticker=$encoded") }, modifier = Modifier.fillMaxWidth()) {
                     Text("Comparar $ticker con otra empresa")
                 }
+                FavoritesStatus(favorites)
+                FavoriteAction(ticker, favorites)
             }
             when (val state = vm.summary) {
                 is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green) }

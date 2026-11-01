@@ -55,9 +55,11 @@ class MainActivity : FragmentActivity() {
 fun AppNavigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
+    val favoritesViewModel: com.example.sp500auth.ui.favorites.FavoritesViewModel = hiltViewModel()
     LaunchedEffect(Unit) { authViewModel.restoreSession() }
     LaunchedEffect(authViewModel.logoutState) {
         if (authViewModel.logoutState is Resource.Success || authViewModel.logoutState is Resource.Error) {
+            favoritesViewModel.clear()
             navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
         }
     }
@@ -91,7 +93,7 @@ fun AppNavigation() {
             RegisterScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavRoutes.Dashboard.route) {
-            com.example.sp500auth.ui.finance.CompanySearchScreen(navController, authViewModel)
+            com.example.sp500auth.ui.finance.CompanySearchScreen(navController, authViewModel, favorites = favoritesViewModel)
         }
         composable(NavRoutes.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController, viewModel = authViewModel)
@@ -102,6 +104,7 @@ fun AppNavigation() {
         composable("compare?ticker={ticker}", arguments = listOf(androidx.navigation.navArgument("ticker") { defaultValue = "" })) { entry ->
             com.example.sp500auth.ui.compare.ComparisonScreen(navController, entry.arguments?.getString("ticker").orEmpty())
         }
+        composable("favorites") { com.example.sp500auth.ui.favorites.FavoritesScreen(navController, favoritesViewModel) }
         composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
         composable("pillars/profitability") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability") }
         composable("analysis/{ticker}/{year}") { entry ->
@@ -112,7 +115,7 @@ fun AppNavigation() {
             com.example.sp500auth.ui.scenarios.ScenariosScreen(navController,entry.arguments?.getString("ticker") ?: "MSFT")
         }
         composable("company/{ticker}") { entry ->
-            com.example.sp500auth.ui.finance.CompanyDetailScreen(navController, entry.arguments?.getString("ticker") ?: "MSFT")
+            com.example.sp500auth.ui.finance.CompanyDetailScreen(navController, entry.arguments?.getString("ticker") ?: "MSFT", favorites = favoritesViewModel)
         }
         composable("finance/{ticker}/{pillar}") { entry ->
             com.example.sp500auth.ui.pillars.PillarScreen(navController, entry.arguments?.getString("pillar") ?: "all",
