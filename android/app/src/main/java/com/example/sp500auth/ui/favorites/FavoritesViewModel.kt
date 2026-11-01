@@ -20,6 +20,8 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
     private var job: Job? = null
     private var epoch = 0
     private var working by mutableStateOf(false)
+    private var candidate by mutableStateOf<FavoriteItem?>(null)
+    val removalCandidate get() = candidate.takeIf { account == source.owner() }
     private var accountMessage by mutableStateOf<String?>(null)
     val message get() = accountMessage.takeIf { account == source.owner() }
     val visibleState: Resource<List<FavoriteItem>> get() = when {
@@ -30,7 +32,7 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
     val busy get() = working && account == source.owner()
     fun item(ticker: String): FavoriteItem? = (visibleState as? Resource.Success)?.successData?.singleOrNull { it.ticker == ticker }
     fun clear() {
-        job?.cancel(); epoch++; account = null; state = Resource.Empty(); working = false; accountMessage = null
+        job?.cancel(); epoch++; account = null; state = Resource.Empty(); working = false; accountMessage = null; candidate = null
     }
     private fun synchronizeAccount(): String? {
         val current = source.owner()
@@ -41,7 +43,7 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
         val owner = synchronizeAccount() ?: return
         if (working) return
         val generation = epoch
-        state = Resource.Loading(); working = true; accountMessage = null
+        state = Resource.Loading(); working = true; accountMessage = null; candidate = null
         job = viewModelScope.launch {
             try {
                 val result = source.list(); coroutineContext.ensureActive()
@@ -70,6 +72,36 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
                         accountMessage = "$ticker guardado en tus favoritos."
                     }
                     is FavoriteResult.Failure -> { if (result.clearPrivate) state = Resource.Error(result.message); accountMessage = result.message }
+                }
+            } finally { if (account == owner && epoch == generation) working = false }
+        }
+    }
+
+    fun requestRemoval(ticker: String) {
+        synchronizeAccount()
+        if (!working) { candidate = item(ticker); accountMessage = null }
+    }
+    fun cancelRemoval() { if (!working) { candidate = null; accountMessage = null } }
+    fun confirmRemoval() {
+        val owner = synchronizeAccount() ?: return
+        val selected = removalCandidate ?: return
+        val items = (visibleState as? Resource.Success)?.successData ?: return
+        if (working || selected.id == null || item(selected.ticker.orEmpty())?.id != selected.id) return
+        val generation = epoch
+        working = true; accountMessage = null
+        job = viewModelScope.launch {
+            try {
+                val result = source.remove(selected); coroutineContext.ensureActive()
+                if (source.owner() != owner || epoch != generation) return@launch
+                when (result) {
+                    is FavoriteResult.Success -> {
+                        state = Resource.Success(items.filterNot { it.id == selected.id && it.ticker == selected.ticker })
+                        candidate = null; accountMessage = "${selected.ticker} quitado de favoritos."
+                    }
+                    is FavoriteResult.Failure -> {
+                        if (result.clearPrivate) { state = Resource.Error(result.message); candidate = null }
+                        accountMessage = result.message
+                    }
                 }
             } finally { if (account == owner && epoch == generation) working = false }
         }

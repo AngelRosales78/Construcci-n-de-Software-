@@ -20,6 +20,7 @@ interface FavoritesDataSource {
     fun owner(): String?
     suspend fun list(): FavoriteResult<List<FavoriteItem>>
     suspend fun add(ticker: String): FavoriteResult<FavoriteItem>
+    suspend fun remove(item: FavoriteItem): FavoriteResult<Unit> = FavoriteResult.Failure("La baja de favoritos todavía no está conectada.")
 }
 
 /** Only an account cache key, never an authorization decision. The server validates the JWT. */

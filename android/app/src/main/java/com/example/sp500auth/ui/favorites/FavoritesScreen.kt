@@ -24,6 +24,7 @@ fun RefreshFavoritesOnResume(vm: FavoritesViewModel) {
         if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) vm.refresh()
         onDispose { lifecycle.removeObserver(observer) }
     }
+    RemovalConfirmation(vm)
 }
 
 @Composable
@@ -40,8 +41,8 @@ fun FavoritesStatus(vm: FavoritesViewModel) {
 fun FavoriteAction(ticker: String, vm: FavoritesViewModel) {
     val available = vm.visibleState is Resource.Success
     val marked = vm.item(ticker) != null
-    OutlinedButton(onClick = { vm.add(ticker) }, enabled = available && !vm.busy && !marked) {
-        Text(when { !available -> "Favoritos no disponibles"; vm.busy -> "Actualizando favoritos…"; marked -> "★ En favoritos"; else -> "☆ Guardar en favoritos" })
+    OutlinedButton(onClick = { if (marked) vm.requestRemoval(ticker) else vm.add(ticker) }, enabled = available && !vm.busy) {
+        Text(when { !available -> "Favoritos no disponibles"; vm.busy -> "Actualizando favoritos…"; marked -> "★ Quitar de favoritos"; else -> "☆ Guardar en favoritos" })
     }
 }
 
@@ -67,10 +68,21 @@ fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel) {
                             Text(favorite.ticker.orEmpty(), fontWeight = FontWeight.Bold)
                             Text(favorite.name ?: favorite.ticker.orEmpty())
                             TextButton(onClick = { nav.navigate("company/${Uri.encode(favorite.ticker.orEmpty())}") }) { Text("Ver ficha") }
+                            TextButton(onClick = { vm.requestRemoval(favorite.ticker.orEmpty()) }, enabled = !vm.busy) { Text("Quitar ${favorite.ticker} de favoritos") }
                         }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+private fun RemovalConfirmation(vm: FavoritesViewModel) {
+    val selected = vm.removalCandidate ?: return
+    AlertDialog(onDismissRequest = vm::cancelRemoval,
+        title = { Text("Quitar de favoritos") },
+        text = { Column { Text("¿Quieres quitar ${selected.name ?: selected.ticker} (${selected.ticker}) de tu lista?"); vm.message?.let { Text(it, color = MaterialTheme.colorScheme.error) } } },
+        confirmButton = { TextButton(onClick = vm::confirmRemoval, enabled = !vm.busy) { Text(if (vm.busy) "Quitando…" else "Quitar de favoritos") } },
+        dismissButton = { TextButton(onClick = vm::cancelRemoval, enabled = !vm.busy) { Text("Cancelar") } })
 }
