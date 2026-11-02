@@ -23,6 +23,12 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
     private var candidate by mutableStateOf<FavoriteItem?>(null)
     val removalCandidate get() = candidate.takeIf { account == source.owner() }
     private var accountMessage by mutableStateOf<String?>(null)
+    private var synced by mutableStateOf<Long?>(null)
+    private var stale by mutableStateOf(false)
+    private var syncProblem by mutableStateOf<String?>(null)
+    val lastSynced get()=synced.takeIf {account==source.owner()}
+    val isStale get()=stale && account==source.owner()
+    val syncError get()=syncProblem.takeIf {account==source.owner()}
     val message get() = accountMessage.takeIf { account == source.owner() }
     val visibleState: Resource<List<FavoriteItem>> get() = when {
         source.owner() == null -> Resource.Error("Inicia sesión para consultar tus favoritos.")
@@ -32,7 +38,7 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
     val busy get() = working && account == source.owner()
     fun item(ticker: String): FavoriteItem? = (visibleState as? Resource.Success)?.successData?.singleOrNull { it.ticker == ticker }
     fun clear() {
-        job?.cancel(); epoch++; account = null; state = Resource.Empty(); working = false; accountMessage = null; candidate = null
+        job?.cancel(); epoch++; account = null; state = Resource.Empty(); working = false; accountMessage = null; candidate = null;synced=null;stale=false;syncProblem=null
     }
     private fun synchronizeAccount(): String? {
         val current = source.owner()
@@ -41,16 +47,21 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
     }
     fun refresh() {
         val owner = synchronizeAccount() ?: return
-        if (working) return
+        if (working || candidate!=null) return
         val generation = epoch
-        state = Resource.Loading(); working = true; accountMessage = null; candidate = null
+        val previous=(state as? Resource.Success)?.successData
+        if(previous==null)state = Resource.Loading()
+        working = true;syncProblem=null
         job = viewModelScope.launch {
             try {
                 val result = source.list(); coroutineContext.ensureActive()
                 if (source.owner() != owner || epoch != generation) return@launch
                 state = when (result) {
-                    is FavoriteResult.Success -> Resource.Success(result.value)
-                    is FavoriteResult.Failure -> Resource.Error(result.message)
+                    is FavoriteResult.Success -> {synced=System.currentTimeMillis();stale=false;Resource.Success(result.value)}
+                    is FavoriteResult.Failure -> {
+                        syncProblem=result.message
+                        if(previous!=null && !result.clearPrivate){stale=true;Resource.Success(previous)} else {stale=false;synced=null;Resource.Error(result.message)}
+                    }
                 }
             } finally { if (account == owner && epoch == generation) working = false }
         }
@@ -58,7 +69,7 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
     fun add(ticker: String) {
         val owner = synchronizeAccount() ?: return
         val items = (visibleState as? Resource.Success)?.successData
-        if (working || items == null || !validTicker(ticker)) return
+        if (working || stale || items == null || !validTicker(ticker)) return
         if (items.any { it.ticker == ticker }) { accountMessage = "$ticker ya está en favoritos."; return }
         val generation = epoch
         working = true; accountMessage = null
@@ -83,7 +94,7 @@ class FavoritesViewModel internal constructor(private val source: FavoritesDataS
 
     fun requestRemoval(ticker: String) {
         synchronizeAccount()
-        if (!working) { candidate = item(ticker); accountMessage = null }
+        if (!working && !stale) { candidate = item(ticker); accountMessage = null }
     }
     fun cancelRemoval() { if (!working) { candidate = null; accountMessage = null } }
     fun confirmRemoval() {

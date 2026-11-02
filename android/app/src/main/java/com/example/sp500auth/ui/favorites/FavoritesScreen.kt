@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -12,6 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import androidx.navigation.NavController
 import com.example.sp500auth.util.Resource
 
@@ -34,13 +38,14 @@ fun FavoritesStatus(vm: FavoritesViewModel) {
         else -> Unit
     }
     vm.message?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+    FavoritesSyncStamp(vm.lastSynced,vm.isStale,if(vm.visibleState is Resource.Error) null else vm.syncError)
 }
 
 @Composable
 fun FavoriteAction(ticker: String, vm: FavoritesViewModel) {
     val available = vm.visibleState is Resource.Success
     val marked = vm.item(ticker) != null
-    OutlinedButton(onClick = { if (marked) vm.requestRemoval(ticker) else vm.add(ticker) }, enabled = available && !vm.busy) {
+    OutlinedButton(onClick = { if (marked) vm.requestRemoval(ticker) else vm.add(ticker) }, enabled = available && !vm.busy && !vm.isStale) {
         Text(when { !available -> "Favoritos no disponibles"; vm.busy -> "Actualizando favoritos…"; marked -> "★ Quitar de favoritos"; else -> "☆ Guardar en favoritos" })
     }
 }
@@ -48,8 +53,12 @@ fun FavoriteAction(ticker: String, vm: FavoritesViewModel) {
 @Composable
 fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel) {
     RefreshFavoritesOnResume(vm)
+    val lifecycle=LocalLifecycleOwner.current.lifecycle
+    LaunchedEffect(lifecycle,vm){lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){while(isActive){vm.refresh();delay(2000)}}}
+    val listState=rememberLazyListState()
     Scaffold { padding ->
-        LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        PullFavoritesRefresh(listState.firstVisibleItemIndex==0 && listState.firstVisibleItemScrollOffset==0,!vm.busy,vm::refresh) {
+        LazyColumn(Modifier.fillMaxSize().padding(padding),state=listState,contentPadding = PaddingValues(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             item {
                 TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }
                 Text("Mis favoritos", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
@@ -67,11 +76,12 @@ fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel) {
                             Text(favorite.ticker.orEmpty(), fontWeight = FontWeight.Bold)
                             Text(favorite.name ?: favorite.ticker.orEmpty())
                             TextButton(onClick = { nav.navigate("company/${Uri.encode(favorite.ticker.orEmpty())}") }) { Text("Ver ficha") }
-                            TextButton(onClick = { vm.requestRemoval(favorite.ticker.orEmpty()) }, enabled = !vm.busy) { Text("Quitar ${favorite.ticker} de favoritos") }
+                            TextButton(onClick = { vm.requestRemoval(favorite.ticker.orEmpty()) }, enabled = !vm.busy && !vm.isStale) { Text("Quitar ${favorite.ticker} de favoritos") }
                         }
                     }
                 }
             }
+        }
         }
     }
 }
