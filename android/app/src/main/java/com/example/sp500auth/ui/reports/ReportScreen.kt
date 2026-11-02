@@ -30,7 +30,7 @@ import java.time.LocalDate
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { vm.save(it,pendingHash) }
     Column(Modifier.fillMaxSize().padding(18.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }
-        Text("Exportar ficha financiera", style = MaterialTheme.typography.headlineMedium)
+        Text(if(b==null) "Exportar ficha financiera" else "Exportar comparación Pro", style = MaterialTheme.typography.headlineMedium)
         Text("Empresa: $a${b?.let { " y $it" }.orEmpty()}")
         OutlinedTextField(year, { year=it.take(4) }, label = { Text("Ejercicio fiscal") })
         ChartOptions(charts,range,vm.state is Resource.Empty,{charts=it},{range=it})
@@ -46,7 +46,7 @@ import java.time.LocalDate
         }
         vm.message?.let { Text(it) }
         PdfFileActions(vm.payload != null,vm.savedUri != null,vm.saving,
-            onSave = { vm.payload?.let { pendingHash=it.sha256; launcher.launch("${it.request.a}_${it.request.fiscal_year}.pdf") } },
+            onSave = { vm.payload?.let { pendingHash=it.sha256; launcher.launch("${it.request.a}${it.request.b?.let {b -> "_$b"}.orEmpty()}_${it.request.fiscal_year}.pdf") } },
             onOpen = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri,"application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) } } },
             onShare = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("application/pdf").putExtra(Intent.EXTRA_STREAM,uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),"Compartir reporte")) } } })
     }

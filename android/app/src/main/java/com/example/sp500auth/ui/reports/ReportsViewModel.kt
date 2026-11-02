@@ -50,7 +50,11 @@ import javax.inject.Inject
                     val file = File.createTempFile("report-check-", ".pdf", context.cacheDir)
                     try {
                         file.writeBytes(result.successData.bytes)
-                        PdfRenderer(ParcelFileDescriptor.open(file,ParcelFileDescriptor.MODE_READ_ONLY)).use { it.pageCount in 1..200 }
+                        PdfRenderer(ParcelFileDescriptor.open(file,ParcelFileDescriptor.MODE_READ_ONLY)).use { renderer ->
+                            if(job.request?.kind=="comparison") renderer.pageCount in 1..2 && renderer.pageCount==job.page_count &&
+                                (0 until renderer.pageCount).all { index -> renderer.openPage(index).use {it.width>it.height} }
+                            else renderer.pageCount in 1..200
+                        }
                     } catch (_: Exception) { false } finally { file.delete() }
                 }
                 if (account == source.owner() && valid) { pdf = result.successData; message = "PDF completo verificado. Elige dónde guardarlo." }

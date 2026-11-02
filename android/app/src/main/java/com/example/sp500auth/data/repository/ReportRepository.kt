@@ -18,7 +18,8 @@ data class ReportRequest(val request_id: String = UUID.randomUUID().toString(), 
 data class ReportJob(val schema_version: String? = null, val owner_id: String? = null, val id: String? = null,
     val status: String? = null, val request: ReportRequest? = null, val data_version: String? = null,
     val content_sha256: String? = null, val size_bytes: Long? = null, val message: String? = null, val progress: Int? = null,
-    val chart_format: String? = null, val chart_range: String? = null, val analysis_version:String?=null, val analysis_origin:String?=null)
+    val chart_format: String? = null, val chart_range: String? = null, val analysis_version:String?=null, val analysis_origin:String?=null,
+    val page_count:Int?=null,val orientation:String?=null)
 data class PdfPayload(val bytes: ByteArray, val sha256: String, val request: ReportRequest)
 fun validReportRequest(r: ReportRequest): Boolean = validTicker(r.a) && r.fiscal_year in 2000..2100 && r.range in historyRanges &&
     r.analysis_level in setOf("simple","technical") && r.request_id.matches(Regex("[a-zA-Z0-9-]{1,80}")) &&
@@ -30,7 +31,8 @@ fun validReportJob(job: ReportJob, user: String, request: ReportRequest, expecte
     job.status in setOf("queued","running","ready","error","cancelled") && (job.progress == null || job.progress in 0..100) &&
     (job.status != "ready" || (!job.data_version.isNullOrBlank() && job.content_sha256?.matches(Regex("[a-f0-9]{64}")) == true && (job.size_bytes ?: 0L) in 1L..20_000_000L &&
         (!request.include_charts || (job.chart_format == "vector" && job.chart_range == request.range)) &&
-        (!request.include_analysis || (job.analysis_version==request.analysis_version && job.analysis_origin==request.analysis_origin))))
+        (!request.include_analysis || (job.analysis_version==request.analysis_version && job.analysis_origin==request.analysis_origin)) &&
+        (request.kind!="comparison" || (job.page_count in 1..2 && job.orientation=="landscape"))))
 fun verifyPdf(bytes: ByteArray, expectedHash: String, expectedSize: Long): Boolean {
     if (bytes.size.toLong() != expectedSize || bytes.size !in 12..20_000_000 || !bytes.copyOfRange(0,5).contentEquals("%PDF-".toByteArray())) return false
     if (!String(bytes.takeLast(1024).toByteArray(), Charsets.ISO_8859_1).contains("%%EOF")) return false
@@ -47,11 +49,15 @@ interface ReportSource {
     suspend fun status(id: String, request: ReportRequest): Resource<ReportJob>
     suspend fun download(job: ReportJob): Resource<PdfPayload>
 }
-class ReportRepository @Inject constructor(private val remote: ScopedRemote) : ReportSource {
+class ReportRepository @Inject constructor(private val remote: ScopedRemote, private val access:AccessRepository) : ReportSource {
     private val api = remote.retrofit.create(ReportApi::class.java)
     override fun owner() = remote.owner()
     override suspend fun submit(request: ReportRequest): Resource<ReportJob> {
         if (!validReportRequest(request)) return Resource.Error("Revisa empresa, ejercicio y opciones de exportación.")
+        if(request.kind=="comparison") {
+            val plan=access.load()
+            if(plan !is Resource.Success || !canCompare(plan.successData)) return Resource.Error(plan.message ?: "El reporte comparativo requiere un plan Pro activo.")
+        }
         return remote.call({ job, user -> validReportJob(job,user,request) }) { token, account -> api.submit(request,token,account) }
     }
     override suspend fun status(id: String, request: ReportRequest): Resource<ReportJob> {
@@ -61,6 +67,10 @@ class ReportRepository @Inject constructor(private val remote: ScopedRemote) : R
     override suspend fun download(job: ReportJob): Resource<PdfPayload> = withContext(Dispatchers.IO) {
         val user = owner(); val request = job.request
         if (user == null || request == null || job.status != "ready" || !validReportJob(job,user,request)) return@withContext Resource.Error("El reporte todavía no está listo o no pertenece a esta cuenta.")
+        if(request.kind=="comparison") {
+            val plan=access.load()
+            if(plan !is Resource.Success || !canCompare(plan.successData)) return@withContext Resource.Error(plan.message ?: "Tu plan no permite descargar esta comparación.")
+        }
         val result = remote.call({ body: ResponseBody, _ -> body.contentType()?.let { it.type == "application" && it.subtype == "pdf" } == true }) { token, account -> api.file(job.id!!,token,account) }
         if (result !is Resource.Success) return@withContext Resource.Error(result.message ?: "No se pudo descargar el PDF.")
         try {

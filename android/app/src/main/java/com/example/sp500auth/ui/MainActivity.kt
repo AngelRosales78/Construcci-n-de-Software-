@@ -109,9 +109,11 @@ fun AppNavigation() {
             }
         }
         composable("plans") { com.example.sp500auth.ui.sprint3.PlansScreen(navController) }
-        composable("report?a={a}&year={year}&range={range}", arguments = listOf(
-            androidx.navigation.navArgument("a") { defaultValue="" }, androidx.navigation.navArgument("year") { defaultValue="" }, androidx.navigation.navArgument("range") { defaultValue="1Y" })) { entry ->
-            com.example.sp500auth.ui.reports.ReportScreen(navController,entry.arguments?.getString("a").orEmpty(),null,entry.arguments?.getString("year").orEmpty(),entry.arguments?.getString("range") ?: "1Y",reportsViewModel)
+        composable("report?a={a}&b={b}&year={year}&range={range}", arguments = listOf(
+            androidx.navigation.navArgument("a") { defaultValue="" }, androidx.navigation.navArgument("b") {defaultValue=""}, androidx.navigation.navArgument("year") { defaultValue="" }, androidx.navigation.navArgument("range") { defaultValue="1Y" })) { entry ->
+            val b=entry.arguments?.getString("b")?.takeIf {it.isNotBlank()}
+            val screen: @Composable ()->Unit = { com.example.sp500auth.ui.reports.ReportScreen(navController,entry.arguments?.getString("a").orEmpty(),b,entry.arguments?.getString("year").orEmpty(),entry.arguments?.getString("range") ?: "1Y",reportsViewModel) }
+            if(b!=null) com.example.sp500auth.ui.sprint3.ComparisonAccessGate(navController) {screen()} else screen()
         }
         composable("favorites") { com.example.sp500auth.ui.favorites.FavoritesScreen(navController, favoritesViewModel) }
         composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
