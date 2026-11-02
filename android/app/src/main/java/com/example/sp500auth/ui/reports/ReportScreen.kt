@@ -22,12 +22,15 @@ import java.time.LocalDate
     val context = LocalContext.current
     var year by rememberSaveable(a,b) { mutableStateOf(initialYear.ifBlank { (LocalDate.now().year-1).toString() }) }
     var pendingHash by rememberSaveable { mutableStateOf<String?>(null) }
+    var charts by rememberSaveable(a,b) { mutableStateOf(false) }
+    var range by rememberSaveable(a,b) { mutableStateOf(initialRange.takeIf { it in com.example.sp500auth.ui.compare.historyRanges } ?: "1Y") }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { vm.save(it,pendingHash) }
     Column(Modifier.fillMaxSize().padding(18.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }
         Text("Exportar ficha financiera", style = MaterialTheme.typography.headlineMedium)
         Text("Empresa: $a${b?.let { " y $it" }.orEmpty()}")
         OutlinedTextField(year, { year=it.take(4) }, label = { Text("Ejercicio fiscal") })
+        ChartOptions(charts,range,vm.state is Resource.Empty,{charts=it},{range=it})
         Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=initialRange)) } }, enabled = vm.state !is Resource.Loading) { Text("Generar PDF") }
         if (vm.state !is Resource.Empty) RemoteContent(vm.state, vm::refresh) { job ->
             Text("Reporte actual: ${job.request?.a} · FY${job.request?.fiscal_year} · ${job.status}")
