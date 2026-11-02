@@ -56,10 +56,12 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
     val favoritesViewModel: com.example.sp500auth.ui.favorites.FavoritesViewModel = hiltViewModel()
+    val reportsViewModel: com.example.sp500auth.ui.reports.ReportsViewModel = hiltViewModel()
     LaunchedEffect(Unit) { authViewModel.restoreSession() }
     LaunchedEffect(authViewModel.logoutState) {
         if (authViewModel.logoutState is Resource.Success || authViewModel.logoutState is Resource.Error) {
             favoritesViewModel.clear()
+            reportsViewModel.reset()
             navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
         }
     }
@@ -107,6 +109,10 @@ fun AppNavigation() {
             }
         }
         composable("plans") { com.example.sp500auth.ui.sprint3.PlansScreen(navController) }
+        composable("report?a={a}&year={year}&range={range}", arguments = listOf(
+            androidx.navigation.navArgument("a") { defaultValue="" }, androidx.navigation.navArgument("year") { defaultValue="" }, androidx.navigation.navArgument("range") { defaultValue="1Y" })) { entry ->
+            com.example.sp500auth.ui.reports.ReportScreen(navController,entry.arguments?.getString("a").orEmpty(),null,entry.arguments?.getString("year").orEmpty(),entry.arguments?.getString("range") ?: "1Y",reportsViewModel)
+        }
         composable("favorites") { com.example.sp500auth.ui.favorites.FavoritesScreen(navController, favoritesViewModel) }
         composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
         composable("pillars/profitability") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability") }

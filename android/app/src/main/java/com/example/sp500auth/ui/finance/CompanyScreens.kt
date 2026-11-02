@@ -204,6 +204,7 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                 }
                 FavoritesStatus(favorites)
                 FavoriteAction(ticker, favorites)
+                OutlinedButton(onClick = { nav.navigate("report?a=$encoded&range=$range") }, modifier = Modifier.fillMaxWidth()) { Text("Exportar ficha en PDF") }
             }
             when (val state = vm.summary) {
                 is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green) }
