@@ -58,9 +58,11 @@ class ReportRepository @Inject constructor(private val remote: ScopedRemote, pri
         if (!validReportRequest(request)) return Resource.Error("Revisa empresa, ejercicio y opciones de exportación.")
         if(request.kind=="comparison") {
             val plan=access.load()
-            if(plan !is Resource.Success || !canCompare(plan.successData)) return Resource.Error(plan.message ?: "El reporte comparativo requiere un plan Pro activo.")
+            if(plan !is Resource.Success || !canCompare(plan.successData)) return Resource.Error(plan.message ?: "El reporte comparativo requiere un plan Pro activo.",ReportJob(status="not_submitted",request=request))
         }
-        return remote.call({ job, user -> validReportJob(job,user,request) }) { token, account -> api.submit(request,token,account) }
+        var code:Int?=null
+        val result=remote.call({ job, user -> validReportJob(job,user,request) }) { token, account -> api.submit(request,token,account).also{code=it.code()} }
+        return if(result is Resource.Error && code in setOf(400,401,403,404,405,422,501))Resource.Error(result.message.orEmpty(),ReportJob(status="not_submitted",request=request))else result
     }
     override suspend fun status(id: String, request: ReportRequest): Resource<ReportJob> {
         if (!id.matches(Regex("[A-Za-z0-9_-]{1,128}"))) return Resource.Error("Identificador de trabajo no válido.")

@@ -42,7 +42,7 @@ class TagsRepository @Inject constructor(private val remote:ScopedRemote):TagsSo
     override suspend fun load()=remote.call({data:TagsSnapshot,user->validTags(data,user)}){token,account->api.get(token,account)}
     override suspend fun edit(id:Long?,name:String,color:String,version:String):Resource<TagsSnapshot>{
         if((id!=null && id<=0) || !validTagName(name) || !color.matches(Regex("#[0-9a-fA-F]{6}")) || version.isBlank())return Resource.Error("Nombre, color o versión de etiqueta no válidos.")
-        return remote.call({data:TagsSnapshot,user->validTags(data,user)}){token,account->if(id==null)api.create(TagEdit(name.trim(),color,version),token,account)else api.edit(id,TagEdit(name.trim(),color,version),token,account)}
+        return remote.call({data:TagsSnapshot,user->validTags(data,user) && data.tags.orEmpty().singleOrNull{if(id==null)normalizedTag(it?.name.orEmpty())==normalizedTag(name)else it?.id==id}?.let {normalizedTag(it.name.orEmpty())==normalizedTag(name) && it.color.equals(color,true)}==true}){token,account->if(id==null)api.create(TagEdit(name.trim(),color,version),token,account)else api.edit(id,TagEdit(name.trim(),color,version),token,account)}
     }
     override suspend fun delete(id:Long,version:String):Resource<TagsSnapshot>{
         if(id<=0 || version.isBlank())return Resource.Error("Etiqueta no válida.")

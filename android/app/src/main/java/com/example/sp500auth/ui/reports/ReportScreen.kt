@@ -42,7 +42,7 @@ import androidx.lifecycle.*
         ReportAnalysisSelector(a,b,year,level,includeAnalysis,vm.request==null,{includeAnalysis=it},{level=it},{analysis=it})
         Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=range,include_charts=charts,include_analysis=includeAnalysis,analysis_level=level,analysis_version=analysis?.version,analysis_origin=analysis?.origin)) } }, enabled = vm.request==null && year.toIntOrNull() in 2000..2100) { Text("Generar PDF") }
         if (vm.state !is Resource.Empty) RemoteContent(vm.state, vm::refresh) { job ->
-            Text("Reporte actual: ${job.request?.a} · FY${job.request?.fiscal_year} · ${job.status}")
+            Text("Reporte actual: ${job.request?.a} · FY${job.request?.fiscal_year}")
             ReportProgress(job,vm.acceptedMillis,vm.readyMillis,vm.downloadMillis,true,vm::cancel)
             if (job.request?.include_charts == true) Text("Gráficos solicitados: precios ${job.request.range} y radar · formato anunciado: ${job.chart_format ?: "pendiente"}")
             if (job.request?.include_analysis==true) Text("Análisis incluido: ${job.analysis_origin ?: "pendiente"} · ${job.analysis_version ?: "pendiente"}")
@@ -52,10 +52,11 @@ import androidx.lifecycle.*
             job.message?.let { Text(it) }
         }
         vm.message?.let { Text(it) }
+        if(vm.state is Resource.Error && vm.canPrepareNew)TextButton(onClick=vm::prepareNew){Text("Cambiar datos de la solicitud rechazada")}
         if(vm.downloading)TextButton(onClick=vm::cancelDownload){Text("Detener descarga")}
         PdfFileActions(vm.payload != null,vm.savedUri != null,vm.saving,
             onSave = { vm.payload?.let { pendingHash=it.sha256; launcher.launch("${it.request.a}${it.request.b?.let {b -> "_$b"}.orEmpty()}_${it.request.fiscal_year}.pdf") } },
-            onOpen = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri,"application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) } } },
-            onShare = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("application/pdf").putExtra(Intent.EXTRA_STREAM,uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),"Compartir reporte")) } } })
+            onOpen = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri,"application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) }.onFailure{vm.openFailure()} } },
+            onShare = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("application/pdf").putExtra(Intent.EXTRA_STREAM,uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),"Compartir reporte")) }.onFailure{vm.openFailure()} } })
     }
 }

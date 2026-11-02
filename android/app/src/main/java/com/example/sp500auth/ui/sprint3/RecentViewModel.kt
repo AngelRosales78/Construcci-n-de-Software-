@@ -27,7 +27,7 @@ import javax.inject.Inject
             val data=source.visit(ticker,event);coroutineContext.ensureActive()
             if(owner==account && source.owner()==account){
                 if(data is Resource.Success)saved["recent_events"]=ArrayList((saved.get<ArrayList<String>>("recent_events").orEmpty()+event).takeLast(30))
-                if(generation==revision)result=data
+                if(generation==revision){result=data;revision++}
             }
         }} finally {pending.remove(event)}}
     }

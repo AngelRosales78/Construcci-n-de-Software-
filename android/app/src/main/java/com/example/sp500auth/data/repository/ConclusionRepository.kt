@@ -10,7 +10,7 @@ import retrofit2.http.*
 import javax.inject.Inject
 
 interface ConclusionApi {
-    @GET("compare/conclusion/") suspend fun conclusion(@Query("a") a: String, @Query("b") b: String, @Query("fiscal_year") year: Int,
+    @GET("compare/conclusion/") suspend fun conclusion(@Query("a") a: String, @Query("b") b: String, @Query("fiscal_year") year: Int,@Query("level")level:String,
         @Header("Authorization") token: String, @Tag account: AccountBinding): Response<ComparisonConclusion>
 }
 interface ConclusionSource {
@@ -26,10 +26,15 @@ fun validConclusion(data: ComparisonConclusion, owner: String, a: String, b: Str
     !data.sources.isNullOrEmpty() && data.sources.all { it != null && safeSourceUrl(it.url) }
 
 class ConclusionRepository @Inject constructor(private val remote: ScopedRemote) : ConclusionSource {
-    private val api = remote.retrofit.create(ConclusionApi::class.java)
+    private val scoped=remote.longRunning()
+    private val api = scoped.retrofit.create(ConclusionApi::class.java)
     override fun owner() = remote.owner()
     override suspend fun load(a: String, b: String, year: Int): Resource<ComparisonConclusion> {
+        return loadForReport(a,b,year,"simple")
+    }
+    suspend fun loadForReport(a:String,b:String,year:Int,level:String):Resource<ComparisonConclusion>{
         if (!validTicker(a) || !validTicker(b) || a == b || year !in 2000..2100) return Resource.Error("Revisa las empresas y el ejercicio.")
-        return remote.call({ data, owner -> validConclusion(data, owner, a, b, year) }) { token, account -> api.conclusion(a, b, year, token, account) }
+        if(level !in setOf("simple","technical"))return Resource.Error("Nivel de análisis no válido.")
+        return scoped.call({ data, owner -> validConclusion(data, owner, a, b, year) && data.level==level }) { token, account -> api.conclusion(a, b, year,level, token, account) }
     }
 }

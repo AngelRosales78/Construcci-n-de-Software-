@@ -14,6 +14,8 @@ No se entrega un APK. El proyecto conserva Gradle Wrapper y las dependencias And
 
 ## Historias y tareas Android
 
+Actualización del 02/11/2026: se incorporaron las veinte tareas Android restantes, completando el código cliente de las quince historias. La matriz completa, los contratos y las comprobaciones pendientes están en `docs/android/CIERRE_ANDROID_SPRINT3.md`. El cuadro siguiente conserva la primera entrega de diez tareas como registro de base.
+
 | Historia | Tarea | Entrega |
 |---|---|---|
 | HU08_01 | T01.1 | Dos buscadores, sugerencias, empresas distintas, quitar, intercambio y restauración de selección. |
@@ -31,7 +33,9 @@ La implementación Android no acredita por sí sola la aceptación integral de l
 
 El quinto pilar actual es Crecimiento, de acuerdo con el servidor de Script 2. Los nombres y las metodologías se mantienen coherentes con esa base.
 
-El gráfico histórico usa las dos rutas de precios existentes y realiza la normalización de visualización en Android, mostrando ese origen. Usa solo fechas comunes, no rellena huecos ni convierte monedas. Los favoritos necesitan que Diego implemente GET/POST/DELETE según el contrato de `docs/android/HISTORICO_Y_FAVORITOS.md`; hasta entonces, la app informa que el servicio no está disponible y no simula guardar ni eliminar. La sincronización periódica de HU10_03 queda fuera de este avance.
+El gráfico histórico usa las dos rutas de precios existentes y realiza la normalización de visualización en Android, mostrando ese origen. Usa solo fechas comunes, no rellena huecos ni convierte monedas. Favoritos se consulta periódicamente mientras la lista está visible; se conserva una copia anterior identificada si falla la red y se bloquean escrituras sobre ella. La persistencia y propagación requieren el servicio real de Diego.
+
+El comparador ahora verifica el plan Pro antes de cargar contenido. Sin `user/subscription/` no se concede acceso. Las conclusiones comparativas, reportes, favoritos, recientes y etiquetas requieren los servicios descritos en el cierre; los fallos se muestran sin simular respuestas de producción. Se implementaron los flujos Android, pero la aceptación conjunta del sprint sigue pendiente de servidor, Web y dispositivo.
 
 ## Verificación
 
@@ -46,3 +50,5 @@ Con emulador conectado, ejecutar también las pruebas de interfaz y el recorrido
 Verificación del 30/10/2026: compilación de aplicación y de pruebas de interfaz aprobada; 91 pruebas JVM descubiertas, 88 aprobadas y 3 integraciones opcionales omitidas. Las 23 nuevas pruebas del comparador aprobaron. La interfaz no se ejecutó en dispositivo porque no había ninguno conectado. El resultado resumido se registra en `docs/android/evidence/sprint3_comparador.json`.
 
 Actualización del 01/11/2026 para HU08_03, HU10_01 y HU10_02: compilación de aplicación y pruebas de interfaz aprobada; 114 pruebas JVM descubiertas, 111 aprobadas y 3 integraciones opcionales omitidas, sin fallos ni errores. Aprobaron las 23 pruebas nuevas de históricos y favoritos. Las dos nuevas pruebas Compose están compiladas pero no ejecutadas, pues no había emulador o teléfono conectado. Guía y contrato: `docs/android/HISTORICO_Y_FAVORITOS.md`. Evidencia: `docs/android/evidence/sprint3_historico_favoritos.json`.
+
+Cierre del cliente Android del 02/11/2026: 135 pruebas JVM descubiertas, 132 aprobadas y 3 opcionales omitidas, sin fallos ni errores; aplicación y pruebas de interfaz compiladas. No hubo dispositivo conectado para ejecutar los recorridos visuales. Estado completo y contratos: `docs/android/CIERRE_ANDROID_SPRINT3.md`. Evidencia: `docs/android/evidence/sprint3_cierre_android.json`. Las treinta tareas Android tienen implementación; la aceptación integral del Sprint 3 sigue pendiente de los servicios de Diego, la Web y las comprobaciones en dispositivo.

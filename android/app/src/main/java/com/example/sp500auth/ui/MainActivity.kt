@@ -117,7 +117,7 @@ fun AppNavigation() {
             val screen: @Composable ()->Unit = { com.example.sp500auth.ui.reports.ReportScreen(navController,entry.arguments?.getString("a").orEmpty(),b,entry.arguments?.getString("year").orEmpty(),entry.arguments?.getString("range") ?: "1Y",reportsViewModel) }
             if(b!=null) com.example.sp500auth.ui.sprint3.ComparisonAccessGate(navController) {screen()} else screen()
         }
-        composable("favorites") { com.example.sp500auth.ui.favorites.FavoritesScreen(navController, favoritesViewModel) }
+        composable("favorites") { val tags:com.example.sp500auth.ui.favorites.TagsViewModel=hiltViewModel();com.example.sp500auth.ui.favorites.FavoritesScreen(navController, favoritesViewModel,tags) }
         composable("tags?favorite={favorite}",arguments=listOf(androidx.navigation.navArgument("favorite"){defaultValue=""})){entry->com.example.sp500auth.ui.favorites.TagsScreen(navController,entry.arguments?.getString("favorite")?.toLongOrNull(),favoritesViewModel)}
         composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
         composable("pillars/profitability") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability") }

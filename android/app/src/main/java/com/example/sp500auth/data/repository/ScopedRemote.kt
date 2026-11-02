@@ -14,9 +14,9 @@ class ScopedRemote internal constructor(val retrofit: Retrofit, private val toke
     suspend fun <T : Any> call(validate: (T, String) -> Boolean, block: suspend (String, AccountBinding) -> Response<T>): Resource<T> {
         val access = token(); val user = favoritesOwner(access) ?: return Resource.Error("Inicia sesión para consultar este servicio.")
         val result = remoteCall { block("Bearer $access", AccountBinding(user)) }
-        if (owner() != user) return Resource.Error("La cuenta cambió. Vuelve a consultar.")
+        if (owner() != user) {if(result is Resource.Success)runCatching{(result.successData as? java.io.Closeable)?.close()};return Resource.Error("La cuenta cambió. Vuelve a consultar.")}
         return if (result is Resource.Success && !runCatching { validate(result.successData, user) }.getOrDefault(false)) {
-            (result.successData as? java.io.Closeable)?.close()
+            runCatching{(result.successData as? java.io.Closeable)?.close()}
             Resource.Error("El servidor devolvió datos incompletos o de otra consulta.")
         } else result
     }

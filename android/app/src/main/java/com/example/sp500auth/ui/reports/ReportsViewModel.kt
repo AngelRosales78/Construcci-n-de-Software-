@@ -38,7 +38,8 @@ import com.google.gson.Gson
     val savedUri get() = document.takeIf { owner != null && owner == source.owner() }
     val request get()=current.takeIf {owner!=null && owner==source.owner()}
     fun reset() { task?.cancel();polling?.cancel(); owner = source.owner(); data = Resource.Empty(); pdf = null; document = null; message = null; saving = false;downloading=false;current=null;last=null;acceptedMillis=null;readyMillis=null;downloadMillis=null;saved["report_request"]=null;saved["report_id"]=null;saved["report_owner"]=owner }
-    fun prepareNew(){if(last?.status in setOf("ready","error","cancelled")) reset() else message="Recupera o cancela el trabajo actual antes de crear otro."}
+    val canPrepareNew get()=last?.status in setOf("ready","error","cancelled") || (state as? Resource.Error)?.errorData?.status=="not_submitted"
+    fun prepareNew(){if(saving || downloading)return;if(canPrepareNew) reset() else message="Recupera o cancela el trabajo actual antes de crear otro."}
     fun generate(request: ReportRequest) {
         if(owner!=source.owner()) reset()
         if(current!=null) {message="Ya existe una solicitud. Continúa su seguimiento para evitar duplicados.";return}
@@ -114,9 +115,10 @@ import com.google.gson.Gson
         viewModelScope.launch {
             val ok = withContext(Dispatchers.IO) { runCatching { context.contentResolver.openOutputStream(uri,"w")?.use { it.write(value.bytes); it.flush() } ?: error("Sin destino") }.isSuccess }
             saving = false
-            if (!ok || account != source.owner()) { discard(uri); message = "No se pudo completar el guardado." }
+            if (!ok || account != source.owner() || payload?.sha256!=expectedHash) { discard(uri); message = "No se pudo completar el guardado." }
             else { document = uri; message = "PDF guardado correctamente." }
         }
     }
     private fun discard(uri: Uri) { runCatching { DocumentsContract.deleteDocument(context.contentResolver,uri) } }
+    fun openFailure(){message="No hay una aplicación disponible para abrir o compartir este PDF."}
 }

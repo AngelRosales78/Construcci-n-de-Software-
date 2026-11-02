@@ -5,7 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 
-@Composable fun TagEditor(title:String,initialName:String,initialColor:String,busy:Boolean,message:String?,save:(String,String)->Unit,cancel:()->Unit) {
+@Composable fun TagEditor(title:String,initialName:String,initialColor:String,busy:Boolean,message:String?,save:(String,String)->Unit,cancel:()->Unit,retry:(()->Unit)?=null) {
     var name by remember(initialName){mutableStateOf(initialName)};var color by remember(initialColor){mutableStateOf(initialColor)}
     AlertDialog(onDismissRequest={if(!busy)cancel()},title={Text(title)},text={Column {
         OutlinedTextField(name,{name=it.take(40)},label={Text("Nombre de etiqueta")},enabled=!busy)
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
             FilterChip(selected=color==value,onClick={color=value},enabled=!busy,label={Text(label)})
         }
         message?.let {Text(it,color=MaterialTheme.colorScheme.error)}
+        if(message!=null && retry!=null)TextButton(onClick=retry,enabled=!busy){Text("Reconectar antes de guardar")}
         Text("Al quitar una etiqueta se conservan las empresas favoritas.")
     }},confirmButton={TextButton(onClick={save(name,color)},enabled=!busy && name.isNotBlank()){Text("Guardar")}},dismissButton={TextButton(onClick=cancel,enabled=!busy){Text("Cancelar")}})
 }

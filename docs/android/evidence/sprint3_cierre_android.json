@@ -1,0 +1,74 @@
+{
+  "verified_on": "2026-11-02",
+  "scope": "Cliente Android de las 15 historias del Sprint 3",
+  "baseline_commit": "1bf3bf6",
+  "android_tasks_implemented": 30,
+  "new_task_commits": [
+    "e1b7001 feat(android): HU08_04 T04.1 lectura de conclusion comparativa y fuentes",
+    "2c5a621 feat(android): HU08_04 T04.2 integrar conclusion por par y ejercicio",
+    "906aec5 feat(android): HU08_05 T05.1 vista previa del comparador Pro",
+    "cb23221 feat(android): HU08_05 T05.2 verificar plan y bloquear accesos no autorizados",
+    "872bf97 feat(android): HU09_01 T06.1 acciones para guardar abrir y compartir PDF",
+    "1f57bc7 feat(android): HU09_01 T06.2 descargar y verificar PDF autenticado con selector de archivos",
+    "ff5fb4c feat(android): HU09_02 T07.1 seleccionar graficos y rango del reporte",
+    "01f9105 feat(android): HU09_02 T07.2 validar rango y formato grafico del PDF solicitado",
+    "d30aa80 feat(android): HU09_03 T08.1 opciones de analisis y nivel para PDF",
+    "e3b9569 feat(android): HU09_03 T08.2 vincular analisis verificado y conservar su origen en PDF",
+    "ca80f72 feat(android): HU09_04 T09.1 exportar par activo desde el comparador",
+    "e595aa1 feat(android): HU09_04 T09.2 verificar permiso Pro y PDF comparativo horizontal",
+    "720a218 feat(android): HU09_05 T10.1 mostrar estados y medidas separadas de exportacion",
+    "65e59b9 feat(android): HU09_05 T10.2 reanudar trabajos idempotentes y medir descarga PDF",
+    "d4a07a0 feat(android): HU10_03 T13.1 gesto de actualizacion y estado de sincronizacion",
+    "514f806 feat(android): HU10_03 T13.2 sincronizar al reanudar y consultar cambios visibles",
+    "9a2f589 feat(android): HU10_04 T14.1 seccion de empresas vistas recientemente",
+    "148d3c1 feat(android): HU10_04 T14.2 registrar visitas confirmadas e historial privado",
+    "b6b30f2 feat(android): HU10_05 T15.1 editor accesible de etiquetas personales",
+    "68a5df5 feat(android): HU10_05 T15.2 integrar etiquetas versionadas y filtros de favoritos"
+  ],
+  "production_dependencies_changed": false,
+  "gradle": "8.4",
+  "java": "17.0.14",
+  "jvm": {
+    "total": 135,
+    "passed": 132,
+    "skipped_optional": 3,
+    "failures": 0,
+    "errors": 0,
+    "new_remaining_scope_tests_passed": 21
+  },
+  "compilation": {
+    "app": "SUCCESSFUL",
+    "instrumented_tests": "SUCCESSFUL",
+    "instrumented_tests_added": 2
+  },
+  "device": {
+    "connected": 0,
+    "instrumented_tests_executed": false,
+    "manual_visual_acceptance": false,
+    "save_open_share_provider_flow_executed": false
+  },
+  "backend": {
+    "modified": false,
+    "services_pending": [
+      "user/subscription",
+      "compare",
+      "compare/conclusion",
+      "reports/jobs",
+      "favorites",
+      "companies/recent",
+      "companies/{ticker}/visits",
+      "tags"
+    ],
+    "real_pdf_quality_verified": false,
+    "real_pdf_generation_latency_measured": false,
+    "real_favorites_sync_latency_measured": false
+  },
+  "web_modified": false,
+  "full_sprint_acceptance": "PENDING_SERVER_WEB_AND_DEVICE",
+  "notes": [
+    "Los tests HTTP usan respuestas controladas; no prueban servicios de Diego ausentes.",
+    "Las pruebas PDF JVM comprueban metadatos, integridad e identidad; la validación PdfRenderer y la inspección visual requieren dispositivo y PDF real.",
+    "Después de la ejecución JVM aprobada se recompilaron aplicación y pruebas de interfaz tras ajustar únicamente las insignias visuales de etiquetas.",
+    "Se precargó el agente Byte Buddy existente para los tests heredados de Mockito."
+  ]
+}

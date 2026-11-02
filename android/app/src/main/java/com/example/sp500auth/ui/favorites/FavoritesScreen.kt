@@ -53,8 +53,8 @@ fun FavoriteAction(ticker: String, vm: FavoritesViewModel) {
 
 @Composable
 fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel,tags:TagsViewModel?=null) {
-    val tagModel=tags ?: hiltViewModel<TagsViewModel>()
-    var selectedTag by remember(tagModel.accountKey){mutableStateOf<Long?>(null)}
+    val tagModel=tags
+    var selectedTag by remember(tagModel?.accountKey){mutableStateOf<Long?>(null)}
     RefreshFavoritesOnResume(vm)
     val lifecycle=LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(lifecycle,vm){lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){while(isActive){vm.refresh();delay(2000)}}}
@@ -69,13 +69,13 @@ fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel,tags:TagsViewMode
                 FavoritesStatus(vm)
                 TextButton(onClick = vm::refresh, enabled = !vm.busy) { Text("Actualizar lista") }
                 TextButton(onClick={nav.navigate("tags")}){Text("Organizar etiquetas")}
-                FavoritesTagFilter(tagModel,selectedTag){selectedTag=it}
+                if(tagModel!=null)FavoritesTagFilter(tagModel,selectedTag){selectedTag=it}
             }
             val state = vm.visibleState
             if (state is Resource.Success) {
                 item { Text("${state.successData.size} ${if (state.successData.size == 1) "empresa favorita" else "empresas favoritas"}") }
                 if (state.successData.isEmpty()) item { Text("Aún no tienes favoritos. Puedes añadir empresas desde Explorar o su ficha.") }
-                val snapshot=(tagModel.state as? Resource.Success)?.successData
+                val snapshot=(tagModel?.state as? Resource.Success)?.successData
                 val filtered=state.successData.filter {favorite->selectedTag==null || snapshot==null || snapshot.assignments?.singleOrNull{it?.favorite_id==favorite.id}?.tag_ids.orEmpty().contains(selectedTag)}
                 if(selectedTag!=null)item{Text("Mostrando ${filtered.size} de ${state.successData.size}")}
                 items(filtered, key = { it.id ?: it.ticker.orEmpty() }) { favorite ->

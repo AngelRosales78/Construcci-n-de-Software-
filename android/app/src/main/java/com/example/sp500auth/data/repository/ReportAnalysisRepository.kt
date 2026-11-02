@@ -16,7 +16,7 @@ class ReportAnalysisRepository @Inject constructor(remote: ScopedRemote, private
     private val scoped=remote.longRunning(); private val api=scoped.retrofit.create(ReportAnalysisApi::class.java)
     fun owner()=scoped.owner()
     suspend fun load(a:String,b:String?,year:Int,level:String):Resource<ReportAnalysis> {
-        if (b != null) return when(val result=comparison.load(a,b,year)) {
+        if (b != null) return when(val result=comparison.loadForReport(a,b,year,level)) {
             is Resource.Success -> Resource.Success(ReportAnalysis(a,b,year,level,result.successData.generation_mode!!,"${result.successData.data_version}/${result.successData.generated_at}"))
             else -> Resource.Error(result.message ?: "No hay conclusión comparativa disponible.")
         }
