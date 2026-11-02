@@ -17,9 +17,13 @@ import com.example.sp500auth.data.repository.*
 import com.example.sp500auth.ui.sprint3.RemoteContent
 import com.example.sp500auth.util.Resource
 import java.time.LocalDate
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.*
 
 @Composable fun ReportScreen(nav: NavController, a: String, b: String?, initialYear: String, initialRange: String, vm: ReportsViewModel) {
     val context = LocalContext.current
+    val lifecycle=LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(vm,lifecycle){val observer=LifecycleEventObserver {_,event->when(event){Lifecycle.Event.ON_RESUME->vm.resume();Lifecycle.Event.ON_PAUSE->vm.pause();else->Unit}};lifecycle.addObserver(observer);onDispose{lifecycle.removeObserver(observer);vm.pause()}}
     var year by rememberSaveable(a,b) { mutableStateOf(initialYear.ifBlank { (LocalDate.now().year-1).toString() }) }
     var pendingHash by rememberSaveable { mutableStateOf<String?>(null) }
     var charts by rememberSaveable(a,b) { mutableStateOf(false) }
@@ -32,19 +36,23 @@ import java.time.LocalDate
         TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }
         Text(if(b==null) "Exportar ficha financiera" else "Exportar comparación Pro", style = MaterialTheme.typography.headlineMedium)
         Text("Empresa: $a${b?.let { " y $it" }.orEmpty()}")
-        OutlinedTextField(year, { year=it.take(4) }, label = { Text("Ejercicio fiscal") })
-        ChartOptions(charts,range,vm.state is Resource.Empty,{charts=it},{range=it})
-        ReportAnalysisSelector(a,b,year,level,includeAnalysis,vm.state is Resource.Empty,{includeAnalysis=it},{level=it},{analysis=it})
-        Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=range,include_charts=charts,include_analysis=includeAnalysis,analysis_level=level,analysis_version=analysis?.version,analysis_origin=analysis?.origin)) } }, enabled = vm.state !is Resource.Loading) { Text("Generar PDF") }
+        vm.request?.let{Text("Seguimiento actual: ${it.a}${it.b?.let {b->" y $b"}.orEmpty()} · FY${it.fiscal_year}. Se conserva hasta terminar o cancelar.")}
+        OutlinedTextField(year, { year=it.take(4) }, label = { Text("Ejercicio fiscal") },enabled=vm.request==null)
+        ChartOptions(charts,range,vm.request==null,{charts=it},{range=it})
+        ReportAnalysisSelector(a,b,year,level,includeAnalysis,vm.request==null,{includeAnalysis=it},{level=it},{analysis=it})
+        Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=range,include_charts=charts,include_analysis=includeAnalysis,analysis_level=level,analysis_version=analysis?.version,analysis_origin=analysis?.origin)) } }, enabled = vm.request==null && year.toIntOrNull() in 2000..2100) { Text("Generar PDF") }
         if (vm.state !is Resource.Empty) RemoteContent(vm.state, vm::refresh) { job ->
             Text("Reporte actual: ${job.request?.a} · FY${job.request?.fiscal_year} · ${job.status}")
+            ReportProgress(job,vm.acceptedMillis,vm.readyMillis,vm.downloadMillis,true,vm::cancel)
             if (job.request?.include_charts == true) Text("Gráficos solicitados: precios ${job.request.range} y radar · formato anunciado: ${job.chart_format ?: "pendiente"}")
             if (job.request?.include_analysis==true) Text("Análisis incluido: ${job.analysis_origin ?: "pendiente"} · ${job.analysis_version ?: "pendiente"}")
             if (job.status in setOf("queued","running")) TextButton(onClick = vm::refresh) { Text("Consultar estado") }
-            if (job.status == "ready") Button(onClick = vm::download) { Text("Descargar PDF") }
+            if (job.status == "ready") Button(onClick = vm::download,enabled=!vm.downloading) { Text("Descargar PDF") }
+            if(job.status in setOf("ready","error","cancelled")) TextButton(onClick=vm::prepareNew){Text("Nuevo reporte")}
             job.message?.let { Text(it) }
         }
         vm.message?.let { Text(it) }
+        if(vm.downloading)TextButton(onClick=vm::cancelDownload){Text("Detener descarga")}
         PdfFileActions(vm.payload != null,vm.savedUri != null,vm.saving,
             onSave = { vm.payload?.let { pendingHash=it.sha256; launcher.launch("${it.request.a}${it.request.b?.let {b -> "_$b"}.orEmpty()}_${it.request.fiscal_year}.pdf") } },
             onOpen = { vm.savedUri?.let { uri -> runCatching { context.startActivity(Intent(Intent.ACTION_VIEW).setDataAndType(uri,"application/pdf").addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)) } } },

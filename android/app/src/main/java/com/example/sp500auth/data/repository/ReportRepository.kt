@@ -42,12 +42,14 @@ interface ReportApi {
     @POST("reports/jobs/") suspend fun submit(@Body request: ReportRequest, @Header("Authorization") token: String, @Tag account: AccountBinding): Response<ReportJob>
     @GET("reports/jobs/{id}/") suspend fun status(@Path("id") id: String, @Header("Authorization") token: String, @Tag account: AccountBinding): Response<ReportJob>
     @Streaming @GET("reports/jobs/{id}/file/") suspend fun file(@Path("id") id: String, @Header("Authorization") token: String, @Tag account: AccountBinding): Response<ResponseBody>
+    @POST("reports/jobs/{id}/cancel/") suspend fun cancel(@Path("id") id:String,@Header("Authorization") token:String,@Tag account:AccountBinding):Response<ReportJob>
 }
 interface ReportSource {
     fun owner(): String?
     suspend fun submit(request: ReportRequest): Resource<ReportJob>
     suspend fun status(id: String, request: ReportRequest): Resource<ReportJob>
     suspend fun download(job: ReportJob): Resource<PdfPayload>
+    suspend fun cancel(job:ReportJob):Resource<ReportJob>
 }
 class ReportRepository @Inject constructor(private val remote: ScopedRemote, private val access:AccessRepository) : ReportSource {
     private val api = remote.retrofit.create(ReportApi::class.java)
@@ -63,6 +65,11 @@ class ReportRepository @Inject constructor(private val remote: ScopedRemote, pri
     override suspend fun status(id: String, request: ReportRequest): Resource<ReportJob> {
         if (!id.matches(Regex("[A-Za-z0-9_-]{1,128}"))) return Resource.Error("Identificador de trabajo no válido.")
         return remote.call({ job, user -> validReportJob(job,user,request,id) }) { token, account -> api.status(id,token,account) }
+    }
+    override suspend fun cancel(job:ReportJob):Resource<ReportJob> {
+        val request=job.request ?: return Resource.Error("No hay solicitud que cancelar.")
+        val id=job.id?.takeIf {it.matches(Regex("[A-Za-z0-9_-]{1,128}"))} ?: return Resource.Error("Trabajo no válido.")
+        return remote.call({value,user->validReportJob(value,user,request,id) && value.status in setOf("cancelled","ready","error")}) {token,account->api.cancel(id,token,account)}
     }
     override suspend fun download(job: ReportJob): Resource<PdfPayload> = withContext(Dispatchers.IO) {
         val user = owner(); val request = job.request
