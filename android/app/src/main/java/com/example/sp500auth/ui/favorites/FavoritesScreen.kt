@@ -16,6 +16,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.sp500auth.util.Resource
 
@@ -51,7 +52,9 @@ fun FavoriteAction(ticker: String, vm: FavoritesViewModel) {
 }
 
 @Composable
-fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel) {
+fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel,tags:TagsViewModel?=null) {
+    val tagModel=tags ?: hiltViewModel<TagsViewModel>()
+    var selectedTag by remember(tagModel.accountKey){mutableStateOf<Long?>(null)}
     RefreshFavoritesOnResume(vm)
     val lifecycle=LocalLifecycleOwner.current.lifecycle
     LaunchedEffect(lifecycle,vm){lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED){while(isActive){vm.refresh();delay(2000)}}}
@@ -65,17 +68,23 @@ fun FavoritesScreen(nav: NavController, vm: FavoritesViewModel) {
                 Text("Tu lista personal guardada en el servidor.")
                 FavoritesStatus(vm)
                 TextButton(onClick = vm::refresh, enabled = !vm.busy) { Text("Actualizar lista") }
+                TextButton(onClick={nav.navigate("tags")}){Text("Organizar etiquetas")}
+                FavoritesTagFilter(tagModel,selectedTag){selectedTag=it}
             }
             val state = vm.visibleState
             if (state is Resource.Success) {
                 item { Text("${state.successData.size} ${if (state.successData.size == 1) "empresa favorita" else "empresas favoritas"}") }
                 if (state.successData.isEmpty()) item { Text("Aún no tienes favoritos. Puedes añadir empresas desde Explorar o su ficha.") }
-                items(state.successData, key = { it.id ?: it.ticker.orEmpty() }) { favorite ->
+                val snapshot=(tagModel.state as? Resource.Success)?.successData
+                val filtered=state.successData.filter {favorite->selectedTag==null || snapshot==null || snapshot.assignments?.singleOrNull{it?.favorite_id==favorite.id}?.tag_ids.orEmpty().contains(selectedTag)}
+                if(selectedTag!=null)item{Text("Mostrando ${filtered.size} de ${state.successData.size}")}
+                items(filtered, key = { it.id ?: it.ticker.orEmpty() }) { favorite ->
                     Card(Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(16.dp)) {
                             Text(favorite.ticker.orEmpty(), fontWeight = FontWeight.Bold)
                             Text(favorite.name ?: favorite.ticker.orEmpty())
                             TextButton(onClick = { nav.navigate("company/${Uri.encode(favorite.ticker.orEmpty())}") }) { Text("Ver ficha") }
+                            TextButton(onClick={nav.navigate("tags?favorite=${favorite.id}")}){Text("Etiquetas de ${favorite.ticker}")}
                             TextButton(onClick = { vm.requestRemoval(favorite.ticker.orEmpty()) }, enabled = !vm.busy && !vm.isStale) { Text("Quitar ${favorite.ticker} de favoritos") }
                         }
                     }
