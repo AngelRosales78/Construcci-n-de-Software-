@@ -24,6 +24,9 @@ import java.time.LocalDate
     var pendingHash by rememberSaveable { mutableStateOf<String?>(null) }
     var charts by rememberSaveable(a,b) { mutableStateOf(false) }
     var range by rememberSaveable(a,b) { mutableStateOf(initialRange.takeIf { it in com.example.sp500auth.ui.compare.historyRanges } ?: "1Y") }
+    var includeAnalysis by rememberSaveable(a,b) { mutableStateOf(false) }
+    var level by rememberSaveable(a,b) { mutableStateOf("simple") }
+    var analysis by remember { mutableStateOf<ReportAnalysis?>(null) }
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { vm.save(it,pendingHash) }
     Column(Modifier.fillMaxSize().padding(18.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }
@@ -31,10 +34,12 @@ import java.time.LocalDate
         Text("Empresa: $a${b?.let { " y $it" }.orEmpty()}")
         OutlinedTextField(year, { year=it.take(4) }, label = { Text("Ejercicio fiscal") })
         ChartOptions(charts,range,vm.state is Resource.Empty,{charts=it},{range=it})
-        Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=range,include_charts=charts)) } }, enabled = vm.state !is Resource.Loading) { Text("Generar PDF") }
+        ReportAnalysisSelector(a,b,year,level,includeAnalysis,vm.state is Resource.Empty,{includeAnalysis=it},{level=it},{analysis=it})
+        Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=range,include_charts=charts,include_analysis=includeAnalysis,analysis_level=level,analysis_version=analysis?.version,analysis_origin=analysis?.origin)) } }, enabled = vm.state !is Resource.Loading) { Text("Generar PDF") }
         if (vm.state !is Resource.Empty) RemoteContent(vm.state, vm::refresh) { job ->
             Text("Reporte actual: ${job.request?.a} · FY${job.request?.fiscal_year} · ${job.status}")
             if (job.request?.include_charts == true) Text("Gráficos solicitados: precios ${job.request.range} y radar · formato anunciado: ${job.chart_format ?: "pendiente"}")
+            if (job.request?.include_analysis==true) Text("Análisis incluido: ${job.analysis_origin ?: "pendiente"} · ${job.analysis_version ?: "pendiente"}")
             if (job.status in setOf("queued","running")) TextButton(onClick = vm::refresh) { Text("Consultar estado") }
             if (job.status == "ready") Button(onClick = vm::download) { Text("Descargar PDF") }
             job.message?.let { Text(it) }

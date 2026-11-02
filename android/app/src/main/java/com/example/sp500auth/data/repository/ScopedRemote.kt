@@ -15,6 +15,13 @@ class ScopedRemote internal constructor(val retrofit: Retrofit, private val toke
         val access = token(); val user = favoritesOwner(access) ?: return Resource.Error("Inicia sesión para consultar este servicio.")
         val result = remoteCall { block("Bearer $access", AccountBinding(user)) }
         if (owner() != user) return Resource.Error("La cuenta cambió. Vuelve a consultar.")
-        return if (result is Resource.Success && !validate(result.successData, user)) Resource.Error("El servidor devolvió datos incompletos o de otra consulta.") else result
+        return if (result is Resource.Success && !runCatching { validate(result.successData, user) }.getOrDefault(false)) {
+            (result.successData as? java.io.Closeable)?.close()
+            Resource.Error("El servidor devolvió datos incompletos o de otra consulta.")
+        } else result
+    }
+    fun longRunning(): ScopedRemote {
+        val client = retrofit.callFactory() as? okhttp3.OkHttpClient ?: return this
+        return ScopedRemote(retrofit.newBuilder().client(client.newBuilder().readTimeout(160,java.util.concurrent.TimeUnit.SECONDS).callTimeout(170,java.util.concurrent.TimeUnit.SECONDS).build()).build(),token)
     }
 }
