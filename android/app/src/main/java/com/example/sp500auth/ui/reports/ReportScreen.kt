@@ -31,9 +31,10 @@ import java.time.LocalDate
         Text("Empresa: $a${b?.let { " y $it" }.orEmpty()}")
         OutlinedTextField(year, { year=it.take(4) }, label = { Text("Ejercicio fiscal") })
         ChartOptions(charts,range,vm.state is Resource.Empty,{charts=it},{range=it})
-        Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=initialRange)) } }, enabled = vm.state !is Resource.Loading) { Text("Generar PDF") }
+        Button(onClick = { year.toIntOrNull()?.let { vm.generate(ReportRequest(a=a,b=b,kind=if(b==null) "company" else "comparison", fiscal_year=it, range=range,include_charts=charts)) } }, enabled = vm.state !is Resource.Loading) { Text("Generar PDF") }
         if (vm.state !is Resource.Empty) RemoteContent(vm.state, vm::refresh) { job ->
             Text("Reporte actual: ${job.request?.a} · FY${job.request?.fiscal_year} · ${job.status}")
+            if (job.request?.include_charts == true) Text("Gráficos solicitados: precios ${job.request.range} y radar · formato anunciado: ${job.chart_format ?: "pendiente"}")
             if (job.status in setOf("queued","running")) TextButton(onClick = vm::refresh) { Text("Consultar estado") }
             if (job.status == "ready") Button(onClick = vm::download) { Text("Descargar PDF") }
             job.message?.let { Text(it) }

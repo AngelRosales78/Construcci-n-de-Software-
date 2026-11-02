@@ -17,7 +17,8 @@ data class ReportRequest(val request_id: String = UUID.randomUUID().toString(), 
     val include_analysis: Boolean = false, val analysis_level: String = "simple")
 data class ReportJob(val schema_version: String? = null, val owner_id: String? = null, val id: String? = null,
     val status: String? = null, val request: ReportRequest? = null, val data_version: String? = null,
-    val content_sha256: String? = null, val size_bytes: Long? = null, val message: String? = null, val progress: Int? = null)
+    val content_sha256: String? = null, val size_bytes: Long? = null, val message: String? = null, val progress: Int? = null,
+    val chart_format: String? = null, val chart_range: String? = null)
 data class PdfPayload(val bytes: ByteArray, val sha256: String, val request: ReportRequest)
 fun validReportRequest(r: ReportRequest): Boolean = validTicker(r.a) && r.fiscal_year in 2000..2100 && r.range in historyRanges &&
     r.analysis_level in setOf("simple","technical") && r.request_id.matches(Regex("[a-zA-Z0-9-]{1,80}")) &&
@@ -26,7 +27,8 @@ fun validReportJob(job: ReportJob, user: String, request: ReportRequest, expecte
     job.schema_version == "report-job-v1" && job.owner_id == user && job.request == request &&
     job.id?.matches(Regex("[A-Za-z0-9_-]{1,128}")) == true && (expectedId == null || job.id == expectedId) &&
     job.status in setOf("queued","running","ready","error","cancelled") && (job.progress == null || job.progress in 0..100) &&
-    (job.status != "ready" || (!job.data_version.isNullOrBlank() && job.content_sha256?.matches(Regex("[a-f0-9]{64}")) == true && job.size_bytes in 1..20_000_000))
+    (job.status != "ready" || (!job.data_version.isNullOrBlank() && job.content_sha256?.matches(Regex("[a-f0-9]{64}")) == true && (job.size_bytes ?: 0L) in 1L..20_000_000L &&
+        (!request.include_charts || (job.chart_format == "vector" && job.chart_range == request.range))))
 fun verifyPdf(bytes: ByteArray, expectedHash: String, expectedSize: Long): Boolean {
     if (bytes.size.toLong() != expectedSize || bytes.size !in 12..20_000_000 || !bytes.copyOfRange(0,5).contentEquals("%PDF-".toByteArray())) return false
     if (!String(bytes.takeLast(1024).toByteArray(), Charsets.ISO_8859_1).contains("%%EOF")) return false
