@@ -54,6 +54,9 @@ fun ComparisonScreen(nav: NavController, initialTicker: String = "", vm: Compari
                 else -> Unit
             }
             item { ComparisonConclusionSection(vm.selection.a, vm.selection.b, vm.year) }
+            item {
+                OutlinedButton(onClick={nav.navigate("report?a=${vm.selection.a}&b=${vm.selection.b}&year=${vm.year}")}, enabled=vm.selection.canCompare && vm.year.toIntOrNull() in 2000..2100) { Text("Exportar comparación en PDF") }
+            }
         }
     }
 }
