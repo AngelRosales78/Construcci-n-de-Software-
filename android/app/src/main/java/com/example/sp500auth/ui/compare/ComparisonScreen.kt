@@ -53,6 +53,7 @@ fun ComparisonScreen(nav: NavController, initialTicker: String = "", vm: Compari
                 }
                 else -> Unit
             }
+            item { ComparisonConclusionSection(vm.selection.a, vm.selection.b, vm.year) }
         }
     }
 }
