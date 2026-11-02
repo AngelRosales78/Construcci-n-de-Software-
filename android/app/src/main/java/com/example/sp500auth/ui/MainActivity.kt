@@ -102,8 +102,11 @@ fun AppNavigation() {
             ProfileScreen(navController = navController, viewModel = authViewModel)
         }
         composable("compare?ticker={ticker}", arguments = listOf(androidx.navigation.navArgument("ticker") { defaultValue = "" })) { entry ->
-            com.example.sp500auth.ui.compare.ComparisonScreen(navController, entry.arguments?.getString("ticker").orEmpty())
+            com.example.sp500auth.ui.sprint3.ComparisonAccessGate(navController) {
+                com.example.sp500auth.ui.compare.ComparisonScreen(navController, entry.arguments?.getString("ticker").orEmpty())
+            }
         }
+        composable("plans") { com.example.sp500auth.ui.sprint3.PlansScreen(navController) }
         composable("favorites") { com.example.sp500auth.ui.favorites.FavoritesScreen(navController, favoritesViewModel) }
         composable("pillars/liquidity") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "liquidity") }
         composable("pillars/profitability") { com.example.sp500auth.ui.pillars.PillarScreen(navController, "profitability") }
