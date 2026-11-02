@@ -57,11 +57,13 @@ fun AppNavigation() {
     val authViewModel: AuthViewModel = hiltViewModel()
     val favoritesViewModel: com.example.sp500auth.ui.favorites.FavoritesViewModel = hiltViewModel()
     val reportsViewModel: com.example.sp500auth.ui.reports.ReportsViewModel = hiltViewModel()
+    val recentViewModel:com.example.sp500auth.ui.sprint3.RecentViewModel=hiltViewModel()
     LaunchedEffect(Unit) { authViewModel.restoreSession() }
     LaunchedEffect(authViewModel.logoutState) {
         if (authViewModel.logoutState is Resource.Success || authViewModel.logoutState is Resource.Error) {
             favoritesViewModel.clear()
             reportsViewModel.reset()
+            recentViewModel.clear()
             navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
         }
     }
@@ -95,7 +97,7 @@ fun AppNavigation() {
             RegisterScreen(navController = navController, viewModel = authViewModel)
         }
         composable(NavRoutes.Dashboard.route) {
-            com.example.sp500auth.ui.finance.CompanySearchScreen(navController, authViewModel, favorites = favoritesViewModel)
+            com.example.sp500auth.ui.finance.CompanySearchScreen(navController, authViewModel, favorites = favoritesViewModel,recent=recentViewModel)
         }
         composable(NavRoutes.ForgotPassword.route) {
             ForgotPasswordScreen(navController = navController, viewModel = authViewModel)
@@ -126,7 +128,7 @@ fun AppNavigation() {
             com.example.sp500auth.ui.scenarios.ScenariosScreen(navController,entry.arguments?.getString("ticker") ?: "MSFT")
         }
         composable("company/{ticker}") { entry ->
-            com.example.sp500auth.ui.finance.CompanyDetailScreen(navController, entry.arguments?.getString("ticker") ?: "MSFT", favorites = favoritesViewModel)
+            com.example.sp500auth.ui.finance.CompanyDetailScreen(navController, entry.arguments?.getString("ticker") ?: "MSFT", favorites = favoritesViewModel,recent=recentViewModel)
         }
         composable("finance/{ticker}/{pillar}") { entry ->
             com.example.sp500auth.ui.pillars.PillarScreen(navController, entry.arguments?.getString("pillar") ?: "all",

@@ -30,6 +30,7 @@ import com.example.sp500auth.data.api.models.CompanySummary
 import com.example.sp500auth.ui.auth.AuthViewModel
 import com.example.sp500auth.util.Resource
 import com.example.sp500auth.ui.favorites.*
+import com.example.sp500auth.ui.sprint3.*
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -77,7 +78,7 @@ private fun Retry(message: String, action: () -> Unit) {
 }
 
 @Composable
-fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel()) {
+fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel(),recent:RecentViewModel=hiltViewModel()) {
     RefreshFavoritesOnResume(favorites)
     var query by rememberSaveable { mutableStateOf("") }
     var page by rememberSaveable { mutableStateOf(1) }
@@ -86,6 +87,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
     var readyOnly by rememberSaveable { mutableStateOf(true) }
     fun search() = vm.search(query, page, sector, if (descending) "-market_cap" else "market_cap", readyOnly)
     LaunchedEffect(Unit) { search() }
+    LaunchedEffect(Unit){recent.load()}
     Scaffold(containerColor = Background, bottomBar = {
         NavigationBar(containerColor = Panel) {
             NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Default.Explore, null) }, label = { Text("Explorar") })
@@ -135,6 +137,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
                 FavoritesStatus(favorites)
                 TextButton(onClick = { descending = !descending; page = 1; search() }) { Icon(Icons.Default.SwapVert, null); Text(if (descending) "Mayor a menor" else "Menor a mayor") }
             }
+            item {RemoteContent(recent.state,recent::load){RecentCompanies(it.results.orEmpty().filterNotNull()){ticker->nav.navigate("company/${Uri.encode(ticker)}")}}}
             when (val state = vm.companies) {
                 is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green) }
                 is Resource.Error -> item { Retry(state.message.orEmpty()) { search() } }
@@ -178,9 +181,11 @@ private fun CompanyRow(company: CompanyItem, favorites: FavoritesViewModel, onOp
 }
 
 @Composable
-fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel()) {
+fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel(),recent:RecentViewModel=hiltViewModel()) {
     RefreshFavoritesOnResume(favorites)
     var range by rememberSaveable(ticker) { mutableStateOf("1Y") }
+    val visitEvent=rememberSaveable(ticker){java.util.UUID.randomUUID().toString()}
+    LaunchedEffect(ticker,vm.summary){if((vm.summary as? Resource.Success)?.successData?.ticker==ticker)recent.visit(ticker,visitEvent)}
     LaunchedEffect(ticker) { vm.load(ticker); if (range != "1Y") vm.history(ticker, range) }
     val encoded = Uri.encode(ticker)
     Scaffold(containerColor = Background, bottomBar = {
@@ -204,6 +209,7 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                 }
                 FavoritesStatus(favorites)
                 FavoriteAction(ticker, favorites)
+                if(recent.state is Resource.Error){Text("No se pudo registrar la visita en recientes.");TextButton(onClick={recent.visit(ticker,visitEvent)}){Text("Reintentar registro de visita")}}
                 OutlinedButton(onClick = { nav.navigate("report?a=$encoded&range=$range") }, modifier = Modifier.fillMaxWidth()) { Text("Exportar ficha en PDF") }
             }
             when (val state = vm.summary) {
