@@ -19,10 +19,12 @@ from .pillar_views import CompanyPillarsView
 from .simulation_views import CompanySimulationView, SimulationDetailView, CompanySimulationDefaultsView
 from .analysis_views import CompanyAnalysisView
 from .access_views import SubscriptionView
+from .favorite_views import FavoritesView
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('favorites/', FavoritesView.as_view(), name='favorites'),
     path('user/subscription/', SubscriptionView.as_view(), name='subscription'),
     path('companies/<str:ticker>/simulations/defaults/', CompanySimulationDefaultsView.as_view(), name='simulation-defaults'),
     path('companies/<str:ticker>/analysis/', CompanyAnalysisView.as_view(), name='company-analysis'),

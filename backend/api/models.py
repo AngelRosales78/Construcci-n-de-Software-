@@ -115,6 +115,16 @@ class Company(models.Model):
         return f"{self.ticker} - {self.name}"
 
 
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favorites')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='favorited_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-id']
+        constraints = [models.UniqueConstraint(fields=['user', 'company'], name='favorite_user_company_unique')]
+
+
 class SearchHistory(models.Model):
     """
     Stores user search history for quick access.
