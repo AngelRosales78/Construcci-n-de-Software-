@@ -14,6 +14,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   search = vi.fn().mockResolvedValue(result([company('AAA')]))
   api.get.mockImplementation(url => {
+    if (url === '/favorites/') return Promise.resolve({ data: { schema_version: 'favorites-v1', owner_id: '1', results: [] } })
     if (url.includes('/sectors/')) return Promise.resolve({ data: { sectors: [{ value: 'technology', label: 'Technology' }] } })
     if (url.includes('/autocomplete/')) return Promise.resolve({ data: { suggestions: [] } })
     if (url.includes('/history/')) return Promise.resolve(result([{ id: 1, query: 'MSFT' }]))

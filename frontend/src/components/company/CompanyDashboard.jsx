@@ -9,9 +9,12 @@ import DataSources from './DataSources'
 import FinancialPillars from './FinancialPillars'
 import SimulationScenarios from './SimulationScenarios'
 import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
+import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
+import FavoriteButton from '../favorites/FavoriteButton'
 
 
 export default function CompanyDashboard() {
+  const favorites = useFavoritesViewModel()
   const { company, loading, error, navigate, returnTo } = useCompanyDashboardViewModel()
   const [section, setSection] = useState('overview')
   if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
@@ -27,12 +30,15 @@ export default function CompanyDashboard() {
         <div className="dashboard-title">
           <p className="section-eyebrow">FICHA FINANCIERA · {company.ticker}</p>
           <h1>{company.name}</h1>
+          <FavoriteButton ticker={company.ticker} favorites={favorites} />
           <span className="dashboard-sector">{sectorLabel(company.sector, company.sector_display)}</span>
         </div>
         {company.quote && <div className="terminal-quote"><small>Último cierre ajustado importado</small><strong>{Number(company.quote.adjusted_close).toLocaleString('es-PE', { maximumFractionDigits: 2, minimumFractionDigits: 2 })} <span>{company.quote.currency}</span></strong><small>{company.quote.date}</small></div>}
       </div>
 
       <div className="dashboard-content">
+        {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
+        {favorites.message && <p role="status">{favorites.message}</p>}
         <div className="data-provenance" hidden={section === 'pillars' || section === 'analysis'}><span><small>Balance del resumen</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span><p>Datos históricos</p>{company.quote && <span><small>Precios hasta</small><strong>{company.quote.date} · {company.quote.currency}</strong></span>}</div>
         <nav className="company-sections" aria-label="Secciones de la empresa">
           {[['overview', 'Resumen'], ['pillars', 'Salud financiera'], ['simulation', 'Simulaciones'], ['analysis', 'Explicación de IA']].map(([id, label]) =>

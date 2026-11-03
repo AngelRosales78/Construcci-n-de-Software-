@@ -7,7 +7,7 @@ export function useCompanyDashboardViewModel() {
   const navigate = useNavigate()
   const location = useLocation()
   const previousSearch = location.state?.searchReturn
-  const returnTo = typeof previousSearch === 'string' && (previousSearch === '/search' || previousSearch.startsWith('/search?')) ? previousSearch : '/search'
+  const returnTo = typeof previousSearch === 'string' && (previousSearch === '/favorites' || previousSearch === '/search' || previousSearch.startsWith('/search?')) ? previousSearch : '/search'
   const [company, setCompany] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)

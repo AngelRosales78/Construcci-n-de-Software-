@@ -1,4 +1,15 @@
 /* Terminal Apex: adaptación del diseño de referencia a datos y funciones disponibles. */
+.company-card-wrapper { display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--terminal-line); border-radius: 14px; overflow: hidden; background: var(--terminal-panel); }
+.company-card-wrapper > .company-card { flex: 1; width: 100%; margin: 0; border: 0; border-radius: 0; }
+.favorite-button { color: var(--terminal-text); background: var(--terminal-raised); border: 1px solid var(--terminal-line); border-radius: 8px; padding: 10px 14px; cursor: pointer; }
+.company-card-wrapper > .favorite-button { margin: 0 16px 16px; }
+.favorite-button[aria-pressed='true'] { color: var(--primary); }
+.favorite-button:disabled { cursor: default; opacity: .75; }
+.favorites-page { max-width: 900px; margin: 20px auto; }
+.favorites-page > p { margin: 16px 0; line-height: 1.7; color: var(--terminal-muted); }
+.favorites-list { list-style: none; padding: 0; }
+.favorites-list li { display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; padding: 20px; margin: 12px 0; background: var(--terminal-panel); border: 1px solid var(--terminal-line); border-radius: 12px; }
+.favorites-list li span { display: block; margin-top: 8px; }
 [hidden] { display: none !important; }
 .company-sections { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px; margin: 20px 0 28px; border: 1px solid var(--terminal-line); border-radius: 14px; background: var(--terminal-bg); }
 .company-sections button { flex: 1 1 145px; padding: 13px 16px; border: 1px solid transparent; border-radius: 9px; background: transparent; color: var(--terminal-muted); font-size: 14px; font-weight: 600; cursor: pointer; }

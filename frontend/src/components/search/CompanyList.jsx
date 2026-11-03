@@ -3,6 +3,7 @@ import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 import { useState } from 'react'
 import verifiedLogos from '../../data/verifiedLogos.json'
 import lightLogos from '../../data/lightLogos.json'
+import FavoriteButton from '../favorites/FavoriteButton'
 
 function CompanyLogo({ company }) {
   const [failed, setFailed] = useState(false)
@@ -14,7 +15,7 @@ function CompanyLogo({ company }) {
     : <span className="company-logo-fallback" aria-label={`Logo no disponible para ${company.name}`}>{company.ticker}</span>
 }
 
-export default function CompanyList({ companies, loading }) {
+export default function CompanyList({ companies, loading, favorites }) {
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -33,6 +34,7 @@ export default function CompanyList({ companies, loading }) {
   return (
     <div className="company-list">
       {companies.map((company) => (
+        <div className="company-card-wrapper" key={company.ticker}>
         <button
           type="button"
           key={company.ticker}
@@ -63,6 +65,8 @@ export default function CompanyList({ companies, loading }) {
           </div> : null}
           <span className="company-card-action">Consultar ficha <span aria-hidden="true">↗</span></span>
         </button>
+        {favorites && <FavoriteButton ticker={company.ticker} favorites={favorites} />}
+        </div>
       ))}
     </div>
   )

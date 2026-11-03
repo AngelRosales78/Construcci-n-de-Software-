@@ -5,9 +5,11 @@ import SearchHistory from './SearchHistory'
 import CompanyList from './CompanyList'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import { Link } from 'react-router-dom'
+import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
 
 
 export default function CompanySearch() {
+  const favorites = useFavoritesViewModel()
   const { companies, loading, error, count, hasNext, historyVersion, params, handleSearch, saveHistory, handleFilterChange, previousPage, nextPage, retry, setWithData, searchPath } = useCompanySearchViewModel()
   return (
     <WorkspaceLayout><div className="company-search">
@@ -27,7 +29,9 @@ export default function CompanySearch() {
           <CompanyFilters onFilterChange={handleFilterChange}
             initialSector={params.sector} initialOrdering={params.ordering} />
           <label className="coverage-filter"><input type="checkbox" checked={params.withData} onChange={event => setWithData(event.target.checked)} /> Solo empresas con indicadores cargados</label>
-          {error ? <div className="search-error" role="alert"><p>{error}</p><button type="button" onClick={retry}>Reintentar</button></div> : <CompanyList companies={companies} loading={loading} />}
+          {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
+          {favorites.message && <p role="status">{favorites.message} <Link to="/favorites">Ver favoritos</Link></p>}
+          {error ? <div className="search-error" role="alert"><p>{error}</p><button type="button" onClick={retry}>Reintentar</button></div> : <CompanyList companies={companies} loading={loading} favorites={favorites} />}
           {!error && <nav aria-label="Páginas de empresas">
             <button disabled={loading || params.page === 1}
               onClick={previousPage}>Anterior</button>
