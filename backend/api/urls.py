@@ -20,10 +20,12 @@ from .simulation_views import CompanySimulationView, SimulationDetailView, Compa
 from .analysis_views import CompanyAnalysisView
 from .access_views import SubscriptionView
 from .favorite_views import FavoritesView
+from .comparison_views import ComparisonView
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('compare/', ComparisonView.as_view(), name='comparison'),
     path('favorites/', FavoritesView.as_view(), name='favorites'),
     path('user/subscription/', SubscriptionView.as_view(), name='subscription'),
     path('companies/<str:ticker>/simulations/defaults/', CompanySimulationDefaultsView.as_view(), name='simulation-defaults'),
