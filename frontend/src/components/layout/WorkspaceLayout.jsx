@@ -15,6 +15,7 @@ export default function WorkspaceLayout({ children }) {
         <Link to="/dashboard" aria-current={pathname === '/dashboard' ? 'page' : undefined}>Inicio</Link>
         <Link to="/search" aria-current={pathname === '/search' ? 'page' : undefined}>Explorar empresas</Link>
         <Link to="/favorites" aria-current={pathname === '/favorites' ? 'page' : undefined}>Favoritos</Link>
+        <Link to="/compare" aria-current={pathname === '/compare' ? 'page' : undefined}>Comparar</Link>
         {pathname.startsWith('/company/') && <span className="workspace-current">Ficha financiera</span>}
       </nav>
       <div className="workspace-account"><span className="terminal-status">Datos importados</span><span className="account-avatar" aria-hidden="true">{name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span>
