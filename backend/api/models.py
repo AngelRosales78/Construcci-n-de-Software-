@@ -54,6 +54,14 @@ class User(AbstractUser):
         return f"{self.username} ({self.get_user_type_display()})"
 
 
+class AccountPlan(models.Model):
+    """Acceso asignado por administración; no representa cobros ni pagos."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account_plan')
+    plan = models.CharField(max_length=8, choices=[('free', 'Free'), ('pro', 'Pro')], default='free')
+    active = models.BooleanField(default=True)
+    expires_at = models.DateTimeField(null=True, blank=True)
+
+
 class Company(models.Model):
     """
     S&P 500 company model with financial data for analysis.
