@@ -1,0 +1,21 @@
+{
+  "verified_at": "2026-11-03T04:59:06.178Z",
+  "browser": "Microsoft Edge headless",
+  "checks": [
+    "Free recibe 403 al intentar consultar directamente la API del comparador",
+    "Free muestra la vista previa sin resultados Pro",
+    "Favorito agregado desde la tarjeta, visible en lista y persistente al recargar",
+    "La ficha reconoce el favorito guardado en el servidor",
+    "Repetir POST no duplica favoritos; otra cuenta no puede verlos",
+    "Búsqueda con teclado, rechazo de duplicados y selección GOOGL/META",
+    "Comparación real conserva identidades, FY2024 y períodos completos coincidentes",
+    "La URL restaura selección y permite intercambiar A/B",
+    "Vista móvil 390px sin desbordamiento horizontal de página",
+    "MSFT/META FY2024: fechas distintas, cinco resultados no comparables sin ganador",
+    "Un ejercicio ausente no se reemplaza por el más reciente",
+    "Quitar una empresa elimina el resultado anterior",
+    "Recorrido sin errores JavaScript de página"
+  ],
+  "page_errors": [],
+  "scope": "Web y API reales. No constituye ejecución en dispositivo Android."
+}
