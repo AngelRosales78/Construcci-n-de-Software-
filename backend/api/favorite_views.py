@@ -1,8 +1,9 @@
 import re
 from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from .models import Company, Favorite
 
@@ -30,3 +31,14 @@ class FavoritesView(APIView):
         favorite, created = Favorite.objects.get_or_create(user=request.user, company=company)
         return Response({'schema_version': 'favorites-v1', 'owner_id': str(request.user.pk),
                          'favorite': favorite_data(favorite)}, status=201 if created else 200)
+
+
+class FavoriteDetailView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request, favorite_id):
+        _, deleted = Favorite.objects.filter(pk=favorite_id, user=request.user).delete()
+        if not deleted.get(Favorite._meta.label):
+            # Ausentes y ajenos tienen la misma respuesta.
+            raise NotFound()
+        return Response(status=status.HTTP_204_NO_CONTENT)

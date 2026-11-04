@@ -45,3 +45,34 @@ def test_unknown_and_unauthenticated_requests_do_not_write(accounts):
     assert APIClient().get(URL).status_code == 401
     assert APIClient().post(URL, {'ticker': 'MSFT'}).status_code == 401
     assert not Favorite.objects.exists()
+
+
+def test_owner_removes_only_their_favorite_and_repeating_returns_404(accounts):
+    (owner, other), users, company = accounts
+    saved = [Favorite.objects.create(user=user, company=company) for user in users]
+    detail = f'{URL}{saved[0].pk}/'
+
+    response = owner.delete(detail)
+    assert response.status_code == 204
+    assert response.content == b''
+    assert owner.get(URL).json()['results'] == []
+    assert [row['id'] for row in other.get(URL).json()['results']] == [saved[1].pk]
+    assert owner.delete(detail).status_code == 404
+
+
+def test_foreign_favorite_is_indistinguishable_from_missing_favorite(accounts):
+    (owner, other), users, company = accounts
+    saved = Favorite.objects.create(user=users[0], company=company)
+
+    foreign = other.delete(f'{URL}{saved.pk}/')
+    missing = other.delete(f'{URL}0/')
+    assert foreign.status_code == missing.status_code == 404
+    assert foreign.json() == missing.json()
+    assert [row['id'] for row in owner.get(URL).json()['results']] == [saved.pk]
+
+
+def test_anonymous_cannot_remove_favorite(accounts):
+    _, users, company = accounts
+    saved = Favorite.objects.create(user=users[0], company=company)
+    assert APIClient().delete(f'{URL}{saved.pk}/').status_code == 401
+    assert Favorite.objects.filter(pk=saved.pk).exists()
