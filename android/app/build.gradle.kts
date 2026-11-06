@@ -1,3 +1,5 @@
+import java.util.Properties
+
 // app/build.gradle.kts
 
 val composeBom = rootProject.extra["composeBom"] as String
@@ -26,7 +28,12 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "2.0"
-        val baseUrl = providers.gradleProperty("apiBaseUrl").getOrElse("http://10.0.2.2:8000/api/v1/")
+        // Local device configuration stays outside Git; -PapiBaseUrl still takes precedence.
+        val deviceProperties = Properties().apply {
+            rootProject.file("local.properties").takeIf { it.isFile }?.inputStream()?.use { load(it) }
+        }
+        val baseUrl = providers.gradleProperty("apiBaseUrl")
+            .getOrElse(deviceProperties.getProperty("apiBaseUrl", "http://10.0.2.2:8000/api/v1/"))
         require(baseUrl.matches(Regex("https?://[a-zA-Z0-9.:_-]+/api/v1/"))) { "apiBaseUrl debe terminar en /api/v1/" }
         buildConfigField("String", "API_BASE_URL", "\"$baseUrl\"")
 

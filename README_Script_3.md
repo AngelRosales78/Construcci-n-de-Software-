@@ -4,6 +4,8 @@ Proyecto completo basado en Script 2. Las modificaciones de este sprint están e
 
 ## Abrir y ejecutar
 
+Para un **teléfono conectado por USB**, usa `./tools/Start-AndroidUsb.ps1` desde la raíz de Script 3 y después sincroniza y ejecuta **app** desde Android Studio. El comando comprueba el teléfono, Redis, el servidor y el túnel USB. Instrucciones de conexión, activación de huella y verificación: [TELEFONO_Y_HUELLA.md](docs/android/TELEFONO_Y_HUELLA.md). La configuración local actual se prepara para USB; para emulador ejecutar primero `./tools/Configure-AndroidDevice.ps1 -Device Emulator`.
+
 1. Abrir `C:\Users\ADMIN\Ciclo4\ConstSoftware\Script 3\android` en Android Studio.
 2. Seleccionar JDK 17 como Gradle JDK, sincronizar y ejecutar la configuración app con un emulador.
 3. Mantener iniciado el servidor de desarrollo. El emulador usa `http://10.0.2.2:8000/api/v1/`. Puede utilizarse el servidor y la base ya preparados de Script 2. No deben iniciarse dos servidores en el mismo puerto.
