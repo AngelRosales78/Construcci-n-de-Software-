@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-06",
+  "scope": "Android: conexión por USB y acceso biométrico",
+  "build": {
+    "compileDebugKotlin": "passed",
+    "compileDebugAndroidTestKotlin": "passed",
+    "testDebugUnitTest": "passed",
+    "usb_api_base_url": "http://127.0.0.1:8000/api/v1/",
+    "usb_configuration_recompiled": true
+  },
+  "unit_tests": { "discovered": 138, "passed": 135, "skipped": 3, "failures": 0, "errors": 0 },
+  "biometric_session_tests": { "passed": 3, "checks": ["bloqueo local solo con activación previa y sin revocación", "comprobación del servidor tras callback biométrico", "error o cancelación no autentican"] },
+  "usb_script": {
+    "powershell_syntax": "passed",
+    "sdk_detection": "passed",
+    "no_device_case": "rechaza el arranque con instrucciones para conectar y autorizar el teléfono"
+  },
+  "pending": ["teléfono conectado y autorizado", "respuesta Redis y servidor desde el arranque USB", "túnel USB en dispositivo real", "instalación desde Android Studio", "registro y login reales", "activación y comprobación con sensor del teléfono"]
+}

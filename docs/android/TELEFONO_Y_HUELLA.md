@@ -44,3 +44,7 @@ Si el navegador tampoco conecta, comprueba el servidor, la misma red, las reglas
 6. **Cerrar sesión** revoca la sesión y elimina los tokens y la preferencia de huella de ese dispositivo. Para usar huella de nuevo, entra con contraseña y actívala otra vez. Bloquear conserva la sesión; no equivale a cerrar sesión.
 
 La app no recibe la huella del sensor. Android realiza la comprobación del sistema y los tokens de sesión se guardan cifrados. El dispositivo debe disponer de biometría fuerte compatible; la pantalla distingue sensor ausente, sensor temporalmente no disponible y huella no registrada. La verificación con sensor real queda pendiente cuando no hay un teléfono conectado a Android Studio.
+
+## Verificación del 06/11/2026
+
+Aplicación y pruebas de interfaz compiladas; 138 pruebas JVM descubiertas, 135 aprobadas y 3 integraciones opcionales omitidas, sin fallos ni errores. Las tres nuevas comprobaciones de sesión biométrica aprobaron. Tras cambiar el destino se recompiló la aplicación y se verificó la dirección USB generada. El comando PowerShell tiene sintaxis válida, detecta el SDK local y rechaza correctamente el arranque sin dispositivo. No se ha comprobado el registro, el túnel ni el sensor en un teléfono: no había ninguno conectado. Evidencia: `evidence/telefono_usb_huella.json`.

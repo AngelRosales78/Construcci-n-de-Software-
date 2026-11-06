@@ -312,6 +312,7 @@ fun LoginScreen(
             if (viewModel?.logoutState is Resource.Error) Text(viewModel.logoutState.message ?: "Cierre local realizado")
             // Biometric login never navigates on cancellation or failure.
             OutlinedButton(
+                enabled = loginState !is Resource.Loading,
                 onClick = {
                     onBiometricAuth()
                     launchBiometricPrompt()
@@ -339,6 +340,10 @@ fun LoginScreen(
                     fontWeight = FontWeight.Medium,
                     color = TextWhite
                 )
+            }
+
+            if (viewModel?.biometricEnabled != true) {
+                Text("Para activar la huella: inicia sesión y entra en Mi cuenta → Acceso por huella.", color = TextMuted, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(18.dp))

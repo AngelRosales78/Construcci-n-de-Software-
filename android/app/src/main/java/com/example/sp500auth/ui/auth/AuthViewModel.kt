@@ -81,6 +81,16 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         biometricEnabled = repository.isBiometricEnabled()
     }
     fun biometricError(message: String) { loginState = Resource.Error(message) }
+    // Local lock keeps the opted-in session for a subsequent system biometric check.
+    // Explicit logout below still revokes the session and removes local tokens.
+    fun lockSession(): Boolean {
+        biometricEnabled = repository.isBiometricEnabled()
+        if (!biometricEnabled || loginState is Resource.Loading || logoutState is Resource.Loading) return false
+        loginState = Resource.Empty()
+        sessionState = Resource.Empty()
+        userProfileState = Resource.Empty()
+        return true
+    }
     fun logout() {
         viewModelScope.launch {
             logoutState = Resource.Loading()
