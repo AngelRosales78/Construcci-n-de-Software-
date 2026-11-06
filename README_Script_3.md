@@ -1,6 +1,6 @@
 # Script 3 Android
 
-Proyecto completo basado en Script 2. Las modificaciones de este sprint están en Android y su documentación; no se implementan tareas Web ni se cambian los servicios del servidor.
+Proyecto completo basado en Script 2. La entrega original implementó Android. La actualización del 06/11/2026 incorpora además los servicios necesarios para usar favoritos, etiquetas, recientes, comparador, acceso local y PDF reales. Estado actual y arranque: [SERVIDOR_SPRINT3_ACTIVO.md](docs/android/SERVIDOR_SPRINT3_ACTIVO.md). No se modificó la Web.
 
 ## Abrir y ejecutar
 
@@ -8,7 +8,7 @@ Para un **teléfono conectado por USB**, usa `./tools/Start-AndroidUsb.ps1` desd
 
 1. Abrir `C:\Users\ADMIN\Ciclo4\ConstSoftware\Script 3\android` en Android Studio.
 2. Seleccionar JDK 17 como Gradle JDK, sincronizar y ejecutar la configuración app con un emulador.
-3. Mantener iniciado el servidor de desarrollo. El emulador usa `http://10.0.2.2:8000/api/v1/`. Puede utilizarse el servidor y la base ya preparados de Script 2. No deben iniciarse dos servidores en el mismo puerto.
+3. Mantener iniciado el servidor de Script 3. El arranque USB lo prepara con una base independiente que conserva las cuentas y empresas de Script 2. El emulador usa `http://10.0.2.2:8000/api/v1/` y el teléfono por USB `http://127.0.0.1:8000/api/v1/`. No iniciar dos servidores en el mismo puerto.
 4. Iniciar sesión, abrir Comparar desde la barra de Explorar o desde la ficha de una empresa y elegir A y B.
 5. Consultar un ejercicio con balances disponibles. La selección y el ejercicio se conservan al recrear el estado; los resultados se vuelven a consultar para evitar datos antiguos.
 

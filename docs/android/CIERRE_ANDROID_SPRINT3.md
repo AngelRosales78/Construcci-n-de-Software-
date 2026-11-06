@@ -1,5 +1,7 @@
 # Estado de Android al 2 de noviembre de 2026
 
+**Actualización del 06/11/2026:** se implementaron y activaron los servicios de servidor que este cierre original marcaba pendientes. Consultar [SERVIDOR_SPRINT3_ACTIVO.md](SERVIDOR_SPRINT3_ACTIVO.md) y sus evidencias. El contenido inferior conserva el estado histórico de la entrega Android del 2 de noviembre.
+
 Se implementaron las 30 tareas Android del plan de 15 historias. Diez tareas ya estaban en la base y las veinte restantes tienen un commit individual. Esta entrega corresponde al cliente Android, sus contratos y pruebas; no constituye la aceptación integral de las historias en Web, servidor y dispositivo.
 
 ## Matriz de implementación

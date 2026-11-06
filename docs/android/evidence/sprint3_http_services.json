@@ -1,0 +1,22 @@
+{
+  "favorites_tags_recent": "passed",
+  "subscription_comparison_conclusion": "passed",
+  "analysis": {
+    "mode": "ai",
+    "provider": "ollama-local:qwen2.5:1.5b",
+    "seconds": 10.17
+  },
+  "scenarios": "passed",
+  "company_pdf": {
+    "bytes": 7553,
+    "pages": 2,
+    "hash_verified": true,
+    "analysis_origin": "mixed"
+  },
+  "comparison_pdf": {
+    "bytes": 9848,
+    "pages": 2,
+    "hash_verified": true,
+    "analysis_origin": "rules"
+  }
+}

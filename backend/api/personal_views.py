@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, APIException
 from .models import Company, Favorite, FavoriteTag, PersonalVersion, CompanyVisit, VisitReceipt
@@ -15,6 +16,13 @@ from .models import Company, Favorite, FavoriteTag, PersonalVersion, CompanyVisi
 class Conflict(APIException):
     status_code = 409
     default_detail = 'Los datos cambiaron. Actualiza antes de repetir la operación.'
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def service_health(request):
+    return Response({'schema_version': 'android-services-v1', 'sprint': 3,
+                     'services': ['favorites', 'tags', 'recent', 'compare', 'conclusion', 'subscription', 'reports']})
 
 
 def favorite_row(row):

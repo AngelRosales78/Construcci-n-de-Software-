@@ -1,0 +1,26 @@
+{
+  "schema_version": "sprint3-services-verification-v1",
+  "checks": {
+    "personal_collections": "passed",
+    "comparison_and_access": "passed",
+    "company_pdf": {
+      "status": "passed",
+      "size_bytes": 7492,
+      "pages": 2,
+      "generation_and_download_seconds": 0.125,
+      "chart_format": "vector",
+      "analysis_origin": "rules"
+    },
+    "comparison_pdf": {
+      "status": "passed",
+      "size_bytes": 9915,
+      "pages": 2,
+      "generation_and_download_seconds": 0.078,
+      "chart_format": "vector",
+      "analysis_origin": "rules"
+    },
+    "simulation_defaults": "passed"
+  },
+  "real_companies": 503,
+  "verification_writes": "rolled back; no user favorites/accounts changed"
+}
