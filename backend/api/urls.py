@@ -20,10 +20,16 @@ from .simulation_views import SimulationDefaultsView, SimulationView
 from .analysis_views import CompanyAnalysisView
 from . import personal_views
 from . import comparison_views
+from . import report_views
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('health/', personal_views.service_health),
+    path('reports/jobs/', report_views.submit_report),
+    path('reports/jobs/<uuid:pk>/', report_views.report_status),
+    path('reports/jobs/<uuid:pk>/cancel/', report_views.cancel_report),
+    path('reports/jobs/<uuid:pk>/file/', report_views.report_file),
     path('user/subscription/', comparison_views.subscription),
     path('compare/', comparison_views.compare),
     path('compare/conclusion/', comparison_views.conclusion),

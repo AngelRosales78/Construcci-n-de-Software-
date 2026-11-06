@@ -4,6 +4,10 @@ from .models import User, Company, Favorite, CompanyVisit
 from .models import AnnualFinancialStatement, UserSubscription, AnalysisSnapshot
 from datetime import date, timedelta
 from django.utils import timezone
+from .models import ReportJob, PriceHistory
+from io import BytesIO
+import hashlib
+from pypdf import PdfReader
 
 
 class PersonalServicesTests(TestCase):
@@ -130,3 +134,70 @@ class ComparisonServicesTests(PersonalServicesTests):
             self.assertEqual(result.status_code, 200)
             self.assertEqual(result.data['generation_mode'], 'rules')
         self.assertEqual(AnalysisSnapshot.objects.filter(user=self.user).count(), 2)
+
+
+@override_settings(LOCAL_DEVELOPMENT_PRO=True)
+class ReportServicesTests(ComparisonServicesTests):
+    def setUp(self):
+        super().setUp()
+        for c in (self.a, self.b):
+            for i in range(4):
+                PriceHistory.objects.create(company=c, date=date(2024, 12, 20+i), adjusted_close=100+i,
+                                            source='https://finance.yahoo.com/', currency='USD')
+
+    def report_request(self, **options):
+        return {'request_id': 'test-request', 'kind': 'company', 'a': 'AAPL', 'fiscal_year': 2024,
+                'range': '1Y', 'include_charts': True, 'include_analysis': False, 'analysis_level': 'simple'} | options
+
+    def test_company_pdf_is_durable_complete_and_matches_metadata(self):
+        submitted = self.call('post', 'reports/jobs/', self.report_request())
+        self.assertEqual(submitted.status_code, 202)
+        self.assertEqual(submitted.data['status'], 'queued')
+        pk = submitted.data['id']
+        result = self.call('get', f'reports/jobs/{pk}/')
+        self.assertEqual(result.data['status'], 'ready', result.data)
+        downloaded = self.call('get', f'reports/jobs/{pk}/file/')
+        self.assertEqual(downloaded['Content-Type'], 'application/pdf')
+        self.assertEqual(len(downloaded.content), result.data['size_bytes'])
+        self.assertEqual(hashlib.sha256(downloaded.content).hexdigest(), result.data['content_sha256'])
+        self.assertEqual(result.data['chart_format'], 'vector')
+        pdf = PdfReader(BytesIO(downloaded.content))
+        self.assertEqual(len(pdf.pages), result.data['page_count'])
+        self.assertIn('AAPL', pdf.pages[0].extract_text())
+
+    def test_comparison_pdf_preserves_exact_analysis_and_two_landscape_pages(self):
+        analysis = self.call('get', 'compare/conclusion/?a=AAPL&b=MSFT&fiscal_year=2024&level=technical').data
+        value = self.report_request(kind='comparison', b='MSFT', include_analysis=True, analysis_level='technical',
+            analysis_origin='rules', analysis_version=f'{analysis["data_version"]}/{analysis["generated_at"]}')
+        submitted = self.call('post', 'reports/jobs/', value)
+        pk = submitted.data['id']
+        result = self.call('get', f'reports/jobs/{pk}/')
+        self.assertEqual(result.data['status'], 'ready', result.data)
+        self.assertEqual(result.data['analysis_version'], value['analysis_version'])
+        content = self.call('get', f'reports/jobs/{pk}/file/').content
+        pdf = PdfReader(BytesIO(content))
+        self.assertEqual(len(pdf.pages), 2)
+        self.assertTrue(all(p.mediabox.width > p.mediabox.height for p in pdf.pages))
+        self.assertIn(analysis['paragraphs'][0].split(':')[0], pdf.pages[1].extract_text())
+
+    def test_idempotency_conflict_cancellation_and_cross_account_access(self):
+        value = self.report_request()
+        first = self.call('post', 'reports/jobs/', value)
+        repeat = self.call('post', 'reports/jobs/', value)
+        self.assertEqual(first.data['id'], repeat.data['id'])
+        self.assertEqual(ReportJob.objects.count(), 1)
+        self.assertEqual(self.call('post', 'reports/jobs/', value | {'range': '5Y'}).status_code, 409)
+        pk = first.data['id']
+        self.client.force_authenticate(self.other)
+        for method, path in [('get', f'reports/jobs/{pk}/'), ('get', f'reports/jobs/{pk}/file/'), ('post', f'reports/jobs/{pk}/cancel/')]:
+            self.assertEqual(self.call(method, path).status_code, 404)
+        self.client.force_authenticate(self.user)
+        self.assertEqual(self.call('post', f'reports/jobs/{pk}/cancel/').data['status'], 'cancelled')
+        self.assertEqual(self.call('get', f'reports/jobs/{pk}/').data['status'], 'cancelled')
+        self.assertEqual(self.call('get', f'reports/jobs/{pk}/file/').status_code, 409)
+
+    def test_reports_reject_unverified_analysis_and_free_comparison(self):
+        invalid = self.report_request(include_analysis=True, analysis_version='missing', analysis_origin='rules')
+        self.assertEqual(self.call('post', 'reports/jobs/', invalid).status_code, 400)
+        with override_settings(LOCAL_DEVELOPMENT_PRO=False):
+            self.assertEqual(self.call('post', 'reports/jobs/', self.report_request(kind='comparison', b='MSFT')).status_code, 403)

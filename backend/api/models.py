@@ -9,6 +9,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
+import uuid
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVector
 from django.utils.translation import gettext_lazy as _
@@ -253,3 +254,20 @@ class AnalysisSnapshot(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'version'], name='analysis_user_version')]
+
+
+class ReportJob(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    request_id = models.CharField(max_length=80)
+    request = models.JSONField()
+    analysis_payload = models.JSONField(default=dict)
+    status = models.CharField(max_length=12, default='queued')
+    metadata = models.JSONField(default=dict)
+    content = models.BinaryField(null=True)
+    message = models.CharField(max_length=300, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='report_user_request')]

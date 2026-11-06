@@ -4,6 +4,12 @@ Run with: python manage.py <command>
 """
 import os
 import sys
+from pathlib import Path
+
+# Optional isolated dependencies for this local checkout; deployment uses requirements.txt.
+local_packages = Path(__file__).resolve().parent.parent / '.server-packages'
+if local_packages.is_dir():
+    sys.path.insert(0, str(local_packages))
 
 
 def main():
