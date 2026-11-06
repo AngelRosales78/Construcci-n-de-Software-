@@ -18,10 +18,18 @@ from . import views
 from .pillar_views import CompanyPillarsView
 from .simulation_views import SimulationDefaultsView, SimulationView
 from .analysis_views import CompanyAnalysisView
+from . import personal_views
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('favorites/', personal_views.favorites),
+    path('favorites/<int:pk>/', personal_views.favorite_delete),
+    path('favorites/<int:pk>/tags/', personal_views.assign_tags),
+    path('tags/', personal_views.tags),
+    path('tags/<int:pk>/', personal_views.tags),
+    path('companies/recent/', personal_views.recent),
+    path('companies/<str:ticker>/visits/', personal_views.recent),
     path('companies/<str:ticker>/simulations/defaults/', SimulationDefaultsView.as_view(), name='simulation-defaults'),
     path('companies/<str:ticker>/simulations/', SimulationView.as_view(), name='simulation'),
     path('companies/<str:ticker>/analysis/', CompanyAnalysisView.as_view(), name='company-analysis'),

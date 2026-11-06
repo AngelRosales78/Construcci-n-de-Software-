@@ -187,3 +187,47 @@ class AnnualFinancialStatement(models.Model):
     def clean(self):
         from .annual_financials import validate_statement
         validate_statement(self)
+
+
+class Favorite(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'company'], name='favorite_user_company')]
+        ordering = ['-created_at', '-id']
+
+
+class PersonalVersion(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    version = models.PositiveBigIntegerField(default=0)
+
+
+class FavoriteTag(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=40)
+    normalized_name = models.CharField(max_length=120)
+    color = models.CharField(max_length=7)
+    favorites = models.ManyToManyField(Favorite, related_name='tags', blank=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'normalized_name'], name='tag_user_normalized_name')]
+
+
+class CompanyVisit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    visited_at = models.DateTimeField()
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'company'], name='visit_user_company')]
+
+
+class VisitReceipt(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event_id = models.CharField(max_length=80)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'event_id'], name='visit_user_event')]
