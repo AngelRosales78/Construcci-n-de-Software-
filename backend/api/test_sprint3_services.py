@@ -1,6 +1,9 @@
 from django.test import TestCase, override_settings
 from rest_framework.test import APIClient
 from .models import User, Company, Favorite, CompanyVisit
+from .models import AnnualFinancialStatement, UserSubscription, AnalysisSnapshot
+from datetime import date, timedelta
+from django.utils import timezone
 
 
 class PersonalServicesTests(TestCase):
@@ -77,3 +80,53 @@ class PersonalServicesTests(TestCase):
         self.client.force_authenticate(None)
         for path in ('favorites/', 'tags/', 'companies/recent/'):
             self.assertEqual(self.call('get', path).status_code, 401)
+
+
+@override_settings(LOCAL_DEVELOPMENT_PRO=True)
+class ComparisonServicesTests(PersonalServicesTests):
+    def setUp(self):
+        super().setUp()
+        for company in (self.a, self.b):
+            for year in range(2021, 2025):
+                AnnualFinancialStatement.objects.create(company=company, fiscal_year=year,
+                    period_start=date(year, 1, 1), period_end=date(year, 12, 31),
+                    filed=date(year+1, 2, 1), source_url=f'https://www.sec.gov/{company.ticker}/{year}',
+                    accession=f'test-{company.ticker}-{year}', snapshot_sha256='a'*64,
+                    components={k: {'value': str(v), 'tag': k} for k, v in {
+                        'current_assets': 200, 'current_liabilities': 100, 'cash': 50,
+                        'short_term_investments': 20, 'receivables': 40, 'net_income': 20,
+                        'book_equity': 100, 'total_assets': 200, 'revenue': 200+year-2021,
+                        'total_liabilities': 100, 'income_before_tax': 25, 'interest_expense': 5,
+                        'inventory': 20, 'cost_of_sales': 100}.items()})
+
+    def test_local_pro_is_explicit_and_production_defaults_free(self):
+        info = self.call('get', 'user/subscription/').data
+        self.assertEqual(info['plan'], 'pro')
+        self.assertEqual(info['grant_origin'], 'local-development')
+        with override_settings(LOCAL_DEVELOPMENT_PRO=False):
+            self.assertEqual(self.call('get', 'user/subscription/').data['plan'], 'free')
+            self.assertEqual(self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=2024').status_code, 403)
+        UserSubscription.objects.create(user=self.user, plan='pro', active=True, valid_until=timezone.now()-timedelta(seconds=1))
+        self.assertEqual(self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=2024').status_code, 403)
+
+    def test_equal_periods_compare_five_real_scores_and_reject_invalid_pairs(self):
+        result = self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=2024')
+        self.assertEqual(result.status_code, 200)
+        self.assertEqual(len(result.data['comparisons']), 5)
+        self.assertTrue(all(r['result'] == 'tie' and float(r['delta']) == 0 for r in result.data['comparisons']))
+        self.assertEqual(self.call('get', 'compare/?a=AAPL&b=AAPL&fiscal_year=2024').status_code, 400)
+        self.assertEqual(self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=9999').status_code, 400)
+
+    def test_different_periods_never_invent_winners(self):
+        AnnualFinancialStatement.objects.filter(company=self.b, fiscal_year=2024).update(period_start=date(2024, 2, 1))
+        result = self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=2024')
+        self.assertTrue(all(r['result'] == 'not_comparable' and r['delta'] is None for r in result.data['comparisons']))
+
+    def test_conclusions_and_company_analysis_preserve_report_snapshot(self):
+        for path, method, data in [
+            ('compare/conclusion/?a=AAPL&b=MSFT&fiscal_year=2024&level=technical', 'get', None),
+            ('companies/AAPL/analysis/', 'post', {'fiscal_year': 2024, 'level': 'simple'})]:
+            result = self.call(method, path, data)
+            self.assertEqual(result.status_code, 200)
+            self.assertEqual(result.data['generation_mode'], 'rules')
+        self.assertEqual(AnalysisSnapshot.objects.filter(user=self.user).count(), 2)

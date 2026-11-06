@@ -19,10 +19,14 @@ from .pillar_views import CompanyPillarsView
 from .simulation_views import SimulationDefaultsView, SimulationView
 from .analysis_views import CompanyAnalysisView
 from . import personal_views
+from . import comparison_views
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('user/subscription/', comparison_views.subscription),
+    path('compare/', comparison_views.compare),
+    path('compare/conclusion/', comparison_views.conclusion),
     path('favorites/', personal_views.favorites),
     path('favorites/<int:pk>/', personal_views.favorite_delete),
     path('favorites/<int:pk>/tags/', personal_views.assign_tags),

@@ -231,3 +231,25 @@ class VisitReceipt(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'event_id'], name='visit_user_event')]
+
+
+class UserSubscription(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    plan = models.CharField(max_length=8, default='free', choices=[('free', 'Free'), ('pro', 'Pro')])
+    active = models.BooleanField(default=True)
+    valid_until = models.DateTimeField()
+
+
+class AnalysisSnapshot(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    version = models.CharField(max_length=500)
+    a = models.CharField(max_length=10)
+    b = models.CharField(max_length=10, blank=True, default='')
+    fiscal_year = models.PositiveSmallIntegerField()
+    level = models.CharField(max_length=12)
+    origin = models.CharField(max_length=8)
+    payload = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'version'], name='analysis_user_version')]
