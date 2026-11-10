@@ -62,6 +62,65 @@ class AccountPlan(models.Model):
     expires_at = models.DateTimeField(null=True, blank=True)
 
 
+class PersonalState(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    version = models.PositiveBigIntegerField(default=0)
+
+
+class FavoriteTag(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=40)
+    normalized_name = models.CharField(max_length=160)
+    color = models.CharField(max_length=7, default='#158569')
+    favorites = models.ManyToManyField('Favorite', related_name='tags', blank=True)
+
+    class Meta:
+        ordering = ['normalized_name', 'id']
+        constraints = [models.UniqueConstraint(fields=['user', 'normalized_name'], name='tag_owner_name_unique')]
+
+
+class RecentCompany(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    visited_at = models.DateTimeField()
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'company'], name='recent_owner_company_unique')]
+
+
+class VisitEvent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event_id = models.CharField(max_length=80)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'event_id'], name='visit_owner_event_unique')]
+
+
+class ComparisonAnalysis(models.Model):
+    key = models.CharField(max_length=64, primary_key=True)
+    response = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class ReportJob(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    request_id = models.CharField(max_length=80)
+    request = models.JSONField()
+    snapshot = models.JSONField()
+    status = models.CharField(max_length=12, default='queued')
+    progress = models.PositiveSmallIntegerField(default=0)
+    metadata = models.JSONField(default=dict)
+    message = models.CharField(max_length=400, blank=True)
+    content = models.BinaryField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='report_owner_request_unique')]
+
+
 class Company(models.Model):
     """
     S&P 500 company model with financial data for analysis.

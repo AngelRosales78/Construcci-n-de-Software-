@@ -21,10 +21,24 @@ from .analysis_views import CompanyAnalysisView
 from .access_views import SubscriptionView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
+from .comparison_services import ComparisonHistoryView, ComparisonConclusionView
+from .personal_views import TagsView, TagDetailView, FavoriteTagsView, RecentCompaniesView, CompanyVisitView
+from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportCancelView
 
 app_name = 'auth'
 
 urlpatterns = [
+    path('reports/jobs/', ReportsView.as_view()),
+    path('reports/jobs/<uuid:job_id>/', ReportStatusView.as_view()),
+    path('reports/jobs/<uuid:job_id>/file/', ReportFileView.as_view()),
+    path('reports/jobs/<uuid:job_id>/cancel/', ReportCancelView.as_view()),
+    path('compare/history/', ComparisonHistoryView.as_view()),
+    path('compare/conclusion/', ComparisonConclusionView.as_view()),
+    path('tags/', TagsView.as_view()),
+    path('tags/<int:tag_id>/', TagDetailView.as_view()),
+    path('favorites/<int:favorite_id>/tags/', FavoriteTagsView.as_view()),
+    path('companies/recent/', RecentCompaniesView.as_view()),
+    path('companies/<str:ticker>/visits/', CompanyVisitView.as_view()),
     path('compare/', ComparisonView.as_view(), name='comparison'),
     path('favorites/', FavoritesView.as_view(), name='favorites'),
     path('favorites/<int:favorite_id>/', FavoriteDetailView.as_view(), name='favorite-detail'),

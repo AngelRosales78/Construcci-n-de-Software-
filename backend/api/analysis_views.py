@@ -60,6 +60,7 @@ class CompanyAnalysisView(CompanyPillarsView):
             'sources': [{'label': 'Fuente de los componentes financieros', 'url': url} for url in data['sources']],
             'cache_hit': data['cache_hit'], 'analysis_id': data.get('analysis_id'),
             'context_hash': data['context_hash'], 'provider': data['provider'],
+            'generation_mode': 'ai', 'summary_origin': 'ai',
         })
 
     def analyse(self, ticker, fiscal_year, level):
@@ -75,7 +76,7 @@ class CompanyAnalysisView(CompanyPillarsView):
         cached = AnalysisRecord.objects.filter(company=company, context_hash=digest, validated=True,
             created_at__gte=timezone.now() - timedelta(hours=24)).order_by('-created_at').first()
         if cached:
-            return Response(cached.response | {'cache_hit': True, 'metrics_version': context['methodology_version']})
+            return Response(cached.response | {'cache_hit': True, 'metrics_version': context['methodology_version'], 'generation_mode': 'ai', 'summary_origin': 'ai'})
         try:
             content = generate(context, level)
             validate_analysis(content, context)
@@ -88,6 +89,7 @@ class CompanyAnalysisView(CompanyPillarsView):
             return Response({'status': 'unavailable', 'reason': reason,
                 'message': 'El análisis no está disponible: el proveedor falló o la respuesta no superó la validación. Puedes reintentar.'}, status=503)
         result = {'status': 'available', 'schema_version': VERSION, 'ticker': context['ticker'],
+            'generation_mode': 'ai', 'summary_origin': 'ai',
             'metrics_version': context['methodology_version'],
             'fiscal_year': context['fiscal_year'], 'period': context['period'], 'level': level,
             'model': MODEL, 'model_sha256': MODEL_SHA256, 'provider': 'llama.cpp local · Qwen3 1.7B', 'validated': True,

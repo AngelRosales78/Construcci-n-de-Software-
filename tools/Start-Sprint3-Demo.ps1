@@ -46,14 +46,20 @@ try {
         & $python -B manage.py import_annual_financials $inventory
         if ($LASTEXITCODE -ne 0) { throw "Falló el inventario $inventory" }
     }
+    foreach ($ticker in @('MSFT','GOOGL','META')) {
+        $provenance = Get-Content -LiteralPath "../docs/datos/sprint3/$ticker-prices-source.json" -Raw | ConvertFrom-Json
+        & $python -B manage.py import_market_data --prices "../docs/datos/sprint3/$ticker-prices.csv" --source $provenance.source
+        if ($LASTEXITCODE -ne 0) { throw "Falló el histórico $ticker" }
+    }
     & $python -B manage.py preload_search
     if ($LASTEXITCODE -ne 0) { throw 'Falló la precarga de búsqueda' }
     & $python -B manage.py prepare_sprint3_demo --credentials-file (Join-Path $state 'demo_credentials.json')
     if ($LASTEXITCODE -ne 0) { throw 'Fallaron las cuentas aisladas' }
 } finally { Pop-Location }
 $api = Start-Process -FilePath $python -ArgumentList '-B','-m','waitress','--listen=127.0.0.1:58020','--threads=4','config.wsgi:application' -WorkingDirectory (Join-Path $repo 'backend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'api.out') -RedirectStandardError (Join-Path $state 'api.err') -PassThru
+$reports = Start-Process -FilePath $python -ArgumentList '-B','manage.py','report_worker' -WorkingDirectory (Join-Path $repo 'backend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'reports.out') -RedirectStandardError (Join-Path $state 'reports.err') -PassThru
 $env:VITE_API_URL='http://127.0.0.1:58020/api/v1'
 $web = Start-Process -FilePath $node -ArgumentList 'node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','55193','--strictPort' -WorkingDirectory (Join-Path $repo 'frontend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'web.out') -RedirectStandardError (Join-Path $state 'web.err') -PassThru
-@{api=$api.Id;web=$web.Id;repo=$repo} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $state 'processes.json') -Encoding UTF8
+@{api=$api.Id;web=$web.Id;reports=$reports.Id;repo=$repo} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $state 'processes.json') -Encoding UTF8
 Write-Host 'Demo Sprint 3: http://127.0.0.1:55193/login'
 Write-Host "Cuentas Free y Pro: $state/demo_credentials.json (fuera de Git)."
