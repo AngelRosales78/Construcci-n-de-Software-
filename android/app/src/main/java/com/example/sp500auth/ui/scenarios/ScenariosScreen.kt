@@ -30,6 +30,7 @@ fun ScenariosScreen(nav: NavController,ticker: String,vm: ScenariosViewModel=hil
             is Resource.Error -> {Text(state.message.orEmpty());Button(onClick={vm.load(ticker)}){Text("Reintentar servicio de escenarios")}}
             is Resource.Success -> {
                 val d=state.successData
+                d.history_warning?.let { Text(it,color=MaterialTheme.colorScheme.error) }
                 Text("Retorno anual permitido: ${d.min_return!!*100} % a ${d.max_return!!*100} %")
                 OutlinedTextField(vm.returnText,{vm.returnText=it},label={Text("Retorno anual supuesto (%)")},singleLine=true)
                 if(d.min_return<d.max_return) Slider(value=(vm.returnText.toFloatOrNull() ?: (d.annual_return!!*100).toFloat()).coerceIn((d.min_return*100).toFloat(),(d.max_return*100).toFloat()),

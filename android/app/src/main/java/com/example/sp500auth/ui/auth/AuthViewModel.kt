@@ -38,13 +38,19 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         }
     }
     fun register(username: String, email: String, password: String, passwordConfirm: String, firstName: String, lastName: String) {
-        if (password != passwordConfirm) { registerState = Resource.Error("Las contraseñas no coinciden"); return }
+        registrationPasswordError(password, passwordConfirm)?.let { registerState = Resource.Error(it); return }
         viewModelScope.launch {
             logoutState = Resource.Empty()
             registerState = Resource.Loading()
             registerState = repository.register(username, email, password, passwordConfirm, firstName, lastName)
             if (registerState is Resource.Success) biometricEnabled = false
         }
+    }
+    fun registrationCompleted() {
+        registerState = Resource.Empty()
+        loginState = Resource.Empty()
+        sessionState = Resource.Empty()
+        userProfileState = Resource.Empty()
     }
     fun restoreSession() {
         viewModelScope.launch {

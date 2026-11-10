@@ -47,10 +47,9 @@ class AuthRepositoryTest {
         assertTrue(repository.login("user", "wrong") is Resource.Error)
         assertFalse(repository.isLoggedIn())
     }
-    @Test fun registrationStoresTokensBeforeOpeningDashboard() = runBlocking {
-        access = null; refresh = null
+    @Test fun registrationClearsPreviousAccountAndRequiresExplicitLogin() = runBlocking {
         assertTrue(repository.register("user", "u@example.test", "Password!1", "Password!1") is Resource.Success)
-        assertEquals("new-access", access); assertTrue(repository.isLoggedIn())
+        assertNull(access); assertNull(refresh); assertFalse(repository.isLoggedIn())
     }
     @Test fun expiredAccessRotatesRefreshAndRechecksProfile() = runBlocking {
         api.profiles.add(Response.error(401, "{}".toResponseBody()))

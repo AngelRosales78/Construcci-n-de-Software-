@@ -52,11 +52,9 @@ object NetworkModule {
                 chain.proceed(builder.build())
             }
             .addInterceptor(loggingInterceptor)
-            .addInterceptor { chain ->
-                // La inferencia local puede tardar más que una consulta de datos.
-                val effective = if (chain.request().url.encodedPath.endsWith("/analysis/"))
-                    chain.withReadTimeout(160, TimeUnit.SECONDS) else chain
-                effective.proceed(chain.request())
+            .addNetworkInterceptor { chain ->
+                com.example.sp500auth.data.repository.enforceFavoriteAccount(chain.request(), tokenManager.getAccessToken())
+                chain.proceed(chain.request())
             }
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)

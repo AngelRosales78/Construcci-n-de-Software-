@@ -31,11 +31,11 @@ class AuthRepository @Inject constructor(private val api: AuthApiService, privat
         val body = response.body()
         if (response.isSuccessful && body != null && body.accessToken.isNotBlank() && body.refreshToken.isNotBlank()) {
             tokens.clearTokens()
-            tokens.saveTokens(body.accessToken, body.refreshToken)
             Resource.Success(Unit)
-        } else Resource.Error("Revisa los datos, la contraseña y si la cuenta ya existe.")
+        } else if (!response.isSuccessful) Resource.Error(registrationHttpError(response.code(), response.errorBody()?.string()))
+        else Resource.Error("El servidor no devolvió una sesión válida. Intenta iniciar sesión con tu cuenta.")
     } catch (e: CancellationException) { throw e
-    } catch (_: Exception) { Resource.Error("No se pudo completar el registro. Inténtalo de nuevo.") }
+    } catch (e: Exception) { Resource.Error(registrationExceptionMessage(e)) }
 
     suspend fun getUserProfile(): Resource<UserProfile> = refreshMutex.withLock {
         if (!isLoggedIn()) return@withLock Resource.Empty()

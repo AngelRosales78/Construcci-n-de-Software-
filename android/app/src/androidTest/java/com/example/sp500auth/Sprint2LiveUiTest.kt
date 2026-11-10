@@ -2,6 +2,7 @@ package com.example.sp500auth
 
 import android.graphics.Bitmap
 import androidx.compose.material3.MaterialTheme
+import com.example.sp500auth.ui.theme.SP500AuthTheme
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.compose.*
@@ -56,7 +57,7 @@ class Sprint2LiveUiTest {
         val scenarios=ScenariosViewModel(SimulationRepository(retrofit))
         val analysis=AnalysisViewModel(AnalysisRepository(retrofit))
         compose.setContent {
-            MaterialTheme {
+            SP500AuthTheme {
                 val nav=rememberNavController()
                 NavHost(nav,startDestination="pillars") {
                     composable("pillars"){PillarScreen(nav,"all",pillars,"MSFT")}
@@ -69,12 +70,12 @@ class Sprint2LiveUiTest {
         compose.onNodeWithText("85,25 / 100").performScrollTo().assertIsDisplayed()
         screenshot("puntaje")
         for ((id,label) in pillarLabels) {
-            compose.onNode(hasText("$label: ",substring=true) and hasClickAction()).performScrollTo().performClick()
-            compose.onNodeWithText("Ver radar y puntaje").assertExists()
+            compose.onNode(hasText(label) and hasClickAction()).performScrollTo().performClick()
+            compose.onNodeWithText("Ver cálculo de la nota").assertExists()
             screenshot(id)
-            compose.onNodeWithText("Ver radar y puntaje").performScrollTo().performClick()
         }
-        compose.onNodeWithText("Escenarios a doce meses").performScrollTo().performClick()
+        compose.onNodeWithText("Resumen").performScrollTo().performClick()
+        compose.onNodeWithText("Escenarios").performScrollTo().performClick()
         compose.waitUntil(60000){scenarios.defaults is Resource.Success}
         compose.onNodeWithText("Recalcular").performScrollTo().performClick()
         compose.waitUntil(60000){scenarios.result is Resource.Success}
@@ -93,7 +94,7 @@ class Sprint2LiveUiTest {
         compose.waitUntil(60000){scenarios.result is Resource.Success}
         compose.runOnIdle{assertEquals(original.points,scenarios.result.data!!.points)}
         compose.onNodeWithText("Volver").performScrollTo().performClick()
-        compose.onNodeWithText("Explicación de IA").performScrollTo().performClick()
+        compose.onNodeWithText("Informe").performScrollTo().performClick()
         compose.waitUntil(180000){analysis.state is Resource.Success || analysis.state is Resource.Error}
         compose.runOnIdle{assertTrue("IA sencilla: ${analysis.state.message}",analysis.state is Resource.Success)}
         compose.onNodeWithText("Resumen").performScrollTo().assertIsDisplayed()
