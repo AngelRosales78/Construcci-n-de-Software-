@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useSearchParams } from 'react-router-dom'
 import { companyRepository } from '../models/companyRepository'
 
 export function usePriceChartViewModel() {
   const { ticker } = useParams()
-  const [period, setPeriod] = useState('1M')
+  const [params, setParams] = useSearchParams()
+  const period = params.get('range') || '1M'
+  const setPeriod = value => setParams(previous => { const next = new URLSearchParams(previous); next.set('range', value); return next }, { replace: true })
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

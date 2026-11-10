@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { useComparisonViewModel } from '../../viewmodels/useComparisonViewModel'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import CompanyPicker from './CompanyPicker'
+import ComparisonHistory from './ComparisonHistory'
+import ReportPanel from '../reports/ReportPanel'
 
 const labels = { liquidity: 'Liquidez', profitability: 'Rentabilidad', solvency: 'Solvencia', efficiency: 'Eficiencia', growth: 'Crecimiento' }
 const displayNote = note => note?.status === 'available' ? `${note.display_value} / 100` : 'No disponible'
@@ -16,6 +18,9 @@ export default function ComparisonPage() {
     {!vm.accessLoading && !vm.accessError && !vm.pro && <section className="comparison-access"><h2>Vista previa · Plan Free</h2>
       <p>Puedes preparar la selección. Consultar las dos empresas juntas requiere un plan Pro activo asignado por administración.</p>
       <p>Este avance no incluye contratación ni pagos.</p><button onClick={vm.refreshAccess}>Verificar mi plan</button></section>}
+    {!vm.pro && <details className="sprint3-panel"><summary>Ver plan Pro</summary><p>Free permite consultar fichas y favoritos. Pro añade el comparador y su reporte PDF. El plan lo asigna administración; esta pantalla no cobra ni activa una suscripción.</p>
+      <div aria-label="Ejemplo de estructura del comparador"><p>Vista previa ilustrativa, sin cifras de otras empresas:</p><p>Empresa A | Empresa B | Cinco pilares | Rendimiento histórico</p></div>
+    </details>}
     {vm.pro && <p className="comparison-access">Plan Pro activo · Acceso verificado por el servidor</p>}
     <div className="comparison-selectors">
       <CompanyPicker side="A" selected={vm.a} onSelect={ticker => vm.select('a', ticker)} onRemove={() => vm.remove('a')} />
@@ -47,6 +52,8 @@ export default function ComparisonPage() {
         </tr>)}</tbody>
       </table></div>
       <p>Las notas siguen reglas académicas del proyecto y no son una recomendación de inversión.</p>
+      <ComparisonHistory a={vm.a} b={vm.b} year={vm.year} />
+      <ReportPanel a={vm.a} b={vm.b} year={Number(vm.year)} />
     </section>}
   </div></WorkspaceLayout>
 }

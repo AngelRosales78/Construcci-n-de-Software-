@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { comparisonRepository } from '../models/comparisonRepository'
+import { subscribeSession } from '../services/sessionStore'
 
 export function useComparisonViewModel() {
   const [params, setParams] = useSearchParams()
@@ -23,6 +24,20 @@ export function useComparisonViewModel() {
   const valid = validSymbols && a !== b && validYear
 
   useEffect(() => {
+    const refresh = () => setAccessAttempt(n => n + 1)
+    const unsubscribe = subscribeSession(() => { sequence.current++; setData(null); setAccess(null); refresh() })
+    window.addEventListener('focus', refresh)
+    return () => { unsubscribe(); window.removeEventListener('focus', refresh) }
+  }, [])
+  useEffect(() => {
+    if (!access) return
+    const remaining = Math.max(0, Date.parse(access.valid_until) - Date.now())
+    const renew = remaining > 10000 ? setTimeout(() => setAccessAttempt(n => n + 1), remaining - 10000) : null
+    const expire = setTimeout(() => { setData(null); setAccess(null); setAccessAttempt(n => n + 1) }, remaining)
+    return () => { clearTimeout(renew); clearTimeout(expire) }
+  }, [access])
+
+  useEffect(() => {
     let alive = true
     setAccessLoading(true); setAccessError('')
     comparisonRepository.subscription().then(value => { if (alive) setAccess(value) })
@@ -34,7 +49,7 @@ export function useComparisonViewModel() {
   useEffect(() => {
     const id = ++sequence.current
     setData(null); setError(''); setLoading(false)
-    if (!valid || !pro || accessLoading) return
+    if (!valid || !pro) return
     setLoading(true)
     comparisonRepository.compare(a, b, year).then(result => { if (id === sequence.current) setData(result) })
       .catch(failure => {
@@ -46,7 +61,7 @@ export function useComparisonViewModel() {
       })
       .finally(() => { if (id === sequence.current) setLoading(false) })
     return () => { sequence.current++ }
-  }, [a, b, year, valid, pro, accessLoading, attempt])
+  }, [a, b, year, valid, pro, attempt])
 
   const update = useCallback(values => {
     sequence.current++
@@ -64,7 +79,7 @@ export function useComparisonViewModel() {
     if (ticker === (side === 'a' ? b : a)) { setSelectionError('Elige dos empresas distintas.'); return }
     update({ [side]: ticker, fiscal_year: year })
   }
-  return { a, b, year, data, loading, error, access, accessError, accessLoading, pro, validYear,
+  return { a, b, year, data: pro ? data : null, loading, error, access, accessError, accessLoading, pro, validYear,
     selectionError: selectionError || (a && b && a === b ? 'Elige dos empresas distintas.' : '')
       || (a && b && !validSymbols ? 'Selecciona símbolos válidos del catálogo.' : ''),
     select, remove: side => update({ [side]: '' }), swap: () => update({ a: b, b: a }),

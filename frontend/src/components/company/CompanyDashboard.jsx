@@ -11,11 +11,12 @@ import SimulationScenarios from './SimulationScenarios'
 import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
 import FavoriteButton from '../favorites/FavoriteButton'
+import ReportPanel from '../reports/ReportPanel'
 
 
 export default function CompanyDashboard() {
   const favorites = useFavoritesViewModel()
-  const { company, loading, error, navigate, returnTo } = useCompanyDashboardViewModel()
+  const { company, loading, error, navigate, returnTo, visitError, retryVisit } = useCompanyDashboardViewModel()
   const [section, setSection] = useState('overview')
   if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
   if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert"><p>{error}</p><button onClick={() => navigate(returnTo, { replace: true })}>Volver al explorador</button></div></WorkspaceLayout>
@@ -37,6 +38,8 @@ export default function CompanyDashboard() {
       </div>
 
       <div className="dashboard-content">
+        <ReportPanel a={company.ticker} />
+        {visitError && <p role="status">{visitError} <button onClick={retryVisit}>Reintentar registro de visita</button></p>}
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
         {favorites.message && <p role="status">{favorites.message}</p>}
         <div className="data-provenance" hidden={section === 'pillars' || section === 'analysis'}><span><small>Balance del resumen</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span><p>Datos históricos</p>{company.quote && <span><small>Precios hasta</small><strong>{company.quote.date} · {company.quote.currency}</strong></span>}</div>
@@ -44,8 +47,8 @@ export default function CompanyDashboard() {
           {[['overview', 'Resumen'], ['pillars', 'Salud financiera'], ['simulation', 'Simulaciones'], ['analysis', 'Explicación de IA']].map(([id, label]) =>
             <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}>{label}</button>)}
         </nav>
-        {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>La empresa figura en el catálogo. Puedes ver un caso con datos en Microsoft.</p><button onClick={() => navigate('/company/MSFT', { state: { searchReturn: returnTo } })}>Ver Microsoft</button></section>}
-        {company.is_demo && (hasIndicators(company) || company.quote) && <p role="status" className="data-notice">Datos de demostración o sin verificar.</p>}
+        {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>Revisa los balances disponibles en Salud financiera. Microsoft también tiene el resumen cargado.</p><button onClick={() => navigate('/company/MSFT', { state: { searchReturn: returnTo } })}>Ver Microsoft</button></section>}
+        {company.is_demo && (hasIndicators(company) || company.quote) && <p role="status" className="data-notice">Resumen financiero de demostración o sin verificar; los precios y balances anuales declaran sus propias fuentes.</p>}
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
