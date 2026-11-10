@@ -1,4 +1,4 @@
-"""Start Sprint 3 with its own database, retaining local accounts on first setup."""
+"""Start the local backend, retaining local accounts on first setup."""
 import argparse
 import os
 from pathlib import Path
@@ -9,6 +9,7 @@ project = Path(__file__).resolve().parent.parent
 parser = argparse.ArgumentParser()
 parser.add_argument('--port', type=int, default=8000)
 parser.add_argument('--base-project', type=Path, default=project.parent / 'Script 2')
+parser.add_argument('--data-source', type=Path, help='Existing SQLite database used only on first setup')
 parser.add_argument('--prepare-only', action='store_true')
 args = parser.parse_args()
 sys.path.insert(0, str(project / '.server-packages'))
@@ -23,9 +24,9 @@ for key in ('SECRET_KEY', 'LOCAL_AI_MODEL', 'LOCAL_AI_URL', 'ANDROID_REDIS_URL')
         os.environ.setdefault(key, str(value))
 database = project / 'android-local.sqlite3'
 if not database.exists() or database.stat().st_size == 0:
-    original = args.base_project / 'android-local.sqlite3'
+    original = (args.data_source or args.base_project / 'android-local.sqlite3').resolve()
     if not original.is_file() or original.stat().st_size == 0:
-        raise SystemExit('Falta la base preparada de Script 2. No se creará una base vacía silenciosamente.')
+        raise SystemExit('Falta la base local preparada. Indícala con --data-source.')
     with sqlite3.connect(original.as_uri() + '?mode=ro', uri=True) as source:
         with sqlite3.connect(database) as target:
             source.backup(target)

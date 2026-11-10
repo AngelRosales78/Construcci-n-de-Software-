@@ -1,6 +1,7 @@
 """Authenticated personal collections shared by Android and Web."""
 import re
 import unicodedata
+from django.conf import settings
 from django.db import transaction
 from django.db.models import F
 from django.shortcuts import get_object_or_404
@@ -22,6 +23,7 @@ class Conflict(APIException):
 @permission_classes([AllowAny])
 def service_health(request):
     return Response({'schema_version': 'android-services-v1', 'sprint': 3,
+                     'project': getattr(settings, 'ANDROID_PROJECT_NAME', None),
                      'services': ['favorites', 'tags', 'recent', 'compare', 'conclusion', 'subscription', 'reports']})
 
 

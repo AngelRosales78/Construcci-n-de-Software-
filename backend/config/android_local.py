@@ -1,5 +1,7 @@
 """Local Android development with a separate SQLite database, never Script 1's DB."""
 from .settings import *
+
+ANDROID_PROJECT_NAME = BASE_DIR.name
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3',
     'NAME': config('ANDROID_DATABASE_PATH', default=str(BASE_DIR / 'android-local.sqlite3'))}}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

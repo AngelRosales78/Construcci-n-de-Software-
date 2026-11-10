@@ -2,37 +2,41 @@ param(
     [string]$Serial,
     [string]$ServerProject,
     [ValidateRange(1, 65535)][int]$Port = 8000,
-    [string]$Adb
+    [string]$Adb,
+    [switch]$ServerOnly
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 if (!$ServerProject) { $ServerProject = $projectRoot }
-if (!$Adb) {
-    $localProperties = Join-Path $projectRoot 'android/local.properties'
-    $sdkEntry = if (Test-Path -LiteralPath $localProperties) {
-        Get-Content -LiteralPath $localProperties | Where-Object { $_ -match '^sdk\.dir\s*=' } | Select-Object -First 1
+if ($ServerOnly -and $Serial) { throw '-Serial requiere un teléfono conectado y no se usa con -ServerOnly.' }
+if (!$ServerOnly) {
+    if (!$Adb) {
+        $localProperties = Join-Path $projectRoot 'android/local.properties'
+        $sdkEntry = if (Test-Path -LiteralPath $localProperties) {
+            Get-Content -LiteralPath $localProperties | Where-Object { $_ -match '^sdk\.dir\s*=' } | Select-Object -First 1
+        }
+        $sdk = if ($sdkEntry) { ($sdkEntry -replace '^sdk\.dir\s*=\s*', '').Replace('\:', ':').Replace('\\', '\') }
+            elseif ($env:ANDROID_HOME) { $env:ANDROID_HOME }
+            else { Join-Path $env:LOCALAPPDATA 'Android/Sdk' }
+        $Adb = Join-Path $sdk 'platform-tools/adb.exe'
     }
-    $sdk = if ($sdkEntry) { ($sdkEntry -replace '^sdk\.dir\s*=\s*', '').Replace('\:', ':').Replace('\\', '\') }
-        elseif ($env:ANDROID_HOME) { $env:ANDROID_HOME }
-        else { Join-Path $env:LOCALAPPDATA 'Android/Sdk' }
-    $Adb = Join-Path $sdk 'platform-tools/adb.exe'
-}
-if (!(Test-Path -LiteralPath $Adb)) { throw 'No se encontró adb. Indica la ruta con -Adb o instala Platform Tools desde Android Studio.' }
-$rawDevices = & $Adb devices
-if ($LASTEXITCODE -ne 0) { throw 'No se pudo comunicar con Android. Revisa Platform Tools y vuelve a intentarlo.' }
-$devices = @($rawDevices | ForEach-Object {
-    if ($_ -match '^(\S+)\s+(device|unauthorized|offline)\s*$' -and $Matches[1] -notmatch '^emulator-') {
-        [pscustomobject]@{ Serial = $Matches[1]; State = $Matches[2] }
+    if (!(Test-Path -LiteralPath $Adb)) { throw 'No se encontró adb. Indica la ruta con -Adb o instala Platform Tools desde Android Studio.' }
+    $rawDevices = & $Adb devices
+    if ($LASTEXITCODE -ne 0) { throw 'No se pudo comunicar con Android. Revisa Platform Tools y vuelve a intentarlo.' }
+    $devices = @($rawDevices | ForEach-Object {
+        if ($_ -match '^(\S+)\s+(device|unauthorized|offline)\s*$' -and $Matches[1] -notmatch '^emulator-') {
+            [pscustomobject]@{ Serial = $Matches[1]; State = $Matches[2] }
+        }
+    })
+    if ($Serial) { $devices = @($devices | Where-Object Serial -eq $Serial) }
+    if ($devices.Count -eq 0) {
+        throw 'Conecta el teléfono con un cable de datos, activa Depuración USB en sus Opciones de desarrollador y acepta la autorización en el teléfono. Después repite este comando.'
     }
-})
-if ($Serial) { $devices = @($devices | Where-Object Serial -eq $Serial) }
-if ($devices.Count -eq 0) {
-    throw 'Conecta el teléfono con un cable de datos, activa Depuración USB en sus Opciones de desarrollador y acepta la autorización en el teléfono. Después repite este comando.'
+    if ($devices.Count -ne 1) { throw 'Hay varios dispositivos. Selecciona uno con -Serial (identificador mostrado por adb devices).' }
+    $device = $devices[0]
+    if ($device.State -eq 'unauthorized') { throw 'Desbloquea el teléfono y acepta la autorización de depuración USB; después repite el comando.' }
+    if ($device.State -ne 'device') { throw 'El teléfono está offline. Desconecta y conecta el cable y espera a que Android termine de iniciar.' }
 }
-if ($devices.Count -ne 1) { throw 'Hay varios dispositivos. Selecciona uno con -Serial (identificador mostrado por adb devices).' }
-$device = $devices[0]
-if ($device.State -eq 'unauthorized') { throw 'Desbloquea el teléfono y acepta la autorización de depuración USB; después repite el comando.' }
-if ($device.State -ne 'device') { throw 'El teléfono está offline. Desconecta y conecta el cable y espera a que Android termine de iniciar.' }
 
 # Reuse the already downloaded local model without copying several GB or any secrets.
 $aiRoot = Join-Path $ServerProject '.local-ai'
@@ -80,11 +84,26 @@ if (!(Test-Redis)) {
     if (!$redisReady) { throw 'Redis no respondió. Revisa el contenedor sp500_redis en Docker Desktop.' }
 }
 
-function Test-RegistrationApi {
+function Get-LocalHealth {
     try {
-        $health = Invoke-RestMethod -Uri "http://127.0.0.1:$Port/api/v1/health/" -TimeoutSec 3
-        if ($health.schema_version -ne 'android-services-v1') { return $false }
-    } catch { return $false }
+        Invoke-RestMethod -Uri "http://127.0.0.1:$Port/api/v1/health/" -TimeoutSec 3
+    } catch { $null }
+}
+
+$resolvedServerProject = (Resolve-Path -LiteralPath $ServerProject).Path
+$expectedProject = Split-Path -Leaf $resolvedServerProject
+$allowLegacyHealth = $PSBoundParameters.ContainsKey('ServerProject') -and $resolvedServerProject -ne $projectRoot
+function Test-ExpectedHealth($health) {
+    if (!$health -or $health.schema_version -ne 'android-services-v1') { return $false }
+    return $health.project -eq $expectedProject -or (!$health.project -and $allowLegacyHealth)
+}
+$existingHealth = Get-LocalHealth
+if ($existingHealth -and !(Test-ExpectedHealth $existingHealth)) {
+    throw "El puerto $Port ya responde desde otra instancia. Detén ese servidor antes de iniciar $expectedProject."
+}
+function Test-RegistrationApi {
+    $health = Get-LocalHealth
+    if (!(Test-ExpectedHealth $health)) { return $false }
     try {
         $reply = Invoke-WebRequest -Uri "http://127.0.0.1:$Port/api/v1/auth/register/" -Method Post -ContentType 'application/json' -Body '{}' -TimeoutSec 3 -UseBasicParsing
         return $false
@@ -116,6 +135,10 @@ if (!(Test-RegistrationApi)) {
         Start-Sleep -Seconds 1
     }
     if (!$ready) { throw "La API de registro no está disponible. Revisa $stderr. No se cambió la conexión USB." }
+}
+if ($ServerOnly) {
+    Write-Host "API de $expectedProject disponible en http://127.0.0.1:$Port/api/v1/."
+    return
 }
 & $Adb -s $device.Serial reverse "tcp:$Port" "tcp:$Port"
 if ($LASTEXITCODE -ne 0) { throw 'No se pudo abrir la conexión USB hacia el servidor.' }
