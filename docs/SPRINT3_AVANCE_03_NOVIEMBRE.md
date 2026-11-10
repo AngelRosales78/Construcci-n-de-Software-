@@ -28,6 +28,8 @@ funciones terminadas. Android requiere aún la prueba conjunta en emulador o equ
 3. Las dos cuentas de prueba están en `presentation_runtime_sprint3/demo_credentials.json`,
    en la carpeta superior al repositorio, fuera de Git. Usa la cuenta `pro`
    para el comparador y `free` para demostrar el bloqueo. No muestres contraseñas.
+   Las contraseñas elegidas en ese archivo se conservan al preparar nuevamente
+   la demo; no se cambian cada vez que la inicias.
 
 ## Demostración de 4 minutos
 

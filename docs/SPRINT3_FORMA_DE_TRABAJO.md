@@ -12,9 +12,10 @@ pantalla y pruebas. Respeta la separación Model / ViewModel / View. No inventes
 datos, fechas de trabajo, resultados de pruebas ni historias terminadas. Una
 pantalla con servicios simulados no equivale a integración completada.
 
-Haz un commit por tarea concreta, con su HU, código de tarea y descripción en
-español. Sube los commits reales del día a la rama de Diego y conserva su
-historial. No hagas cambios en la rama de Angel ni en la principal.
+Actualización autorizada el 9 de noviembre: agrupar las tareas relacionadas en
+cinco commits de cierre, con sus HU y códigos de tarea en el cuerpo. Esta decisión
+sustituye la regla anterior de un commit por tarea. Conservar las fechas reales y
+el historial publicado. No hacer cambios en la rama de Angel ni en la principal.
 
 Explica cada función con palabras sencillas: qué permite hacer, dónde probarla,
 qué debería ocurrir y qué falta. Entrega evidencia verificable, sin credenciales.

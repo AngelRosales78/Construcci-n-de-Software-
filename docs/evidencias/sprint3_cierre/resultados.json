@@ -1,0 +1,198 @@
+{
+  "fecha_revision_cliente": "2026-11-10",
+  "checked_at_utc": "2026-11-10T16:28:28.924998+00:00",
+  "branch": "magallanes-sprint3-primer-avance",
+  "backend": {
+    "tests": 390,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "passed": 389
+  },
+  "backend_reports_regression": {
+    "tests": 14,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 14
+  },
+  "web": {
+    "passed": 94,
+    "failures": 0,
+    "build": "passed",
+    "focused_regression_passed": 20
+  },
+  "android_jvm_http": {
+    "tests": 151,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 151
+  },
+  "android_device": {
+    "passed": 10,
+    "failures": 0,
+    "split": "9 recorridos + 1 ensayo interactivo de sincronización",
+    "storage_failure": "ENOSPC simulado mediante escritor inyectado; no se llenó el disco"
+  },
+  "pdf": {
+    "checked_at": "2026-11-10T03:49:27.289460+00:00",
+    "api": "http://127.0.0.1:58020/api/v1/",
+    "cases": [
+      "Pro, Free y anónimo en las tres rutas comparativas",
+      "Cinco filas, tres notas disponibles y dos ausentes sin inventar valores; rechazo de periodos diferentes",
+      "Histórico normalizado por servidor con fechas comunes y base cero",
+      "Qwen local real y caché sin alterar la fecha ni la versión del análisis",
+      "Favorito único, eliminación real y aislamiento de cuentas",
+      "Etiquetas privadas, asignación, conflicto 409 y eliminación sin borrar el favorito",
+      "Doce visitas conservan las diez empresas únicas más recientes",
+      "PDF individual conserva el análisis validado de Microsoft sin volver a ejecutar el modelo",
+      "PDFs reales vectoriales, sin imágenes, hash/longitud íntegros y reintento idempotente",
+      "Reporte comparativo horizontal de hasta dos páginas con la misma IA preparada",
+      "Descarga privada y revocación Pro comprobadas sobre un PDF ya generado"
+    ],
+    "pdf_trials": [
+      {
+        "kind": "company",
+        "range": "1M",
+        "cache_hit": false,
+        "acceptance_ms": 62.81,
+        "ready_ms": 230.53,
+        "full_download_ms": 260.8,
+        "size_bytes": 6858,
+        "pages": 3,
+        "generation_ms": 24.72
+      },
+      {
+        "kind": "company",
+        "range": "6M",
+        "cache_hit": false,
+        "acceptance_ms": 46.11,
+        "ready_ms": 122.59,
+        "full_download_ms": 155.97,
+        "size_bytes": 8170,
+        "pages": 3,
+        "generation_ms": 15.3
+      },
+      {
+        "kind": "company",
+        "range": "1Y",
+        "cache_hit": false,
+        "acceptance_ms": 55.59,
+        "ready_ms": 233.46,
+        "full_download_ms": 269.38,
+        "size_bytes": 9682,
+        "pages": 3,
+        "generation_ms": 17.85
+      },
+      {
+        "kind": "company",
+        "range": "5Y",
+        "cache_hit": false,
+        "acceptance_ms": 44.31,
+        "ready_ms": 272.41,
+        "full_download_ms": 307.59,
+        "size_bytes": 18867,
+        "pages": 3,
+        "generation_ms": 69.0
+      },
+      {
+        "kind": "company",
+        "range": "1Y",
+        "cache_hit": true,
+        "acceptance_ms": 52.47,
+        "ready_ms": 127.57,
+        "full_download_ms": 134.53,
+        "size_bytes": 9682,
+        "pages": 3,
+        "generation_ms": 3.91
+      },
+      {
+        "kind": "comparison",
+        "range": "1M",
+        "cache_hit": false,
+        "acceptance_ms": 79.6,
+        "ready_ms": 249.4,
+        "full_download_ms": 283.05,
+        "size_bytes": 5902,
+        "pages": 2,
+        "generation_ms": 14.52
+      },
+      {
+        "kind": "comparison",
+        "range": "6M",
+        "cache_hit": false,
+        "acceptance_ms": 61.56,
+        "ready_ms": 235.09,
+        "full_download_ms": 278.39,
+        "size_bytes": 8193,
+        "pages": 2,
+        "generation_ms": 11.31
+      },
+      {
+        "kind": "comparison",
+        "range": "1Y",
+        "cache_hit": false,
+        "acceptance_ms": 53.52,
+        "ready_ms": 238.7,
+        "full_download_ms": 275.76,
+        "size_bytes": 10978,
+        "pages": 2,
+        "generation_ms": 24.82
+      },
+      {
+        "kind": "comparison",
+        "range": "5Y",
+        "cache_hit": false,
+        "acceptance_ms": 109.68,
+        "ready_ms": 403.1,
+        "full_download_ms": 426.92,
+        "size_bytes": 30961,
+        "pages": 2,
+        "generation_ms": 24.71
+      },
+      {
+        "kind": "comparison",
+        "range": "1Y",
+        "cache_hit": true,
+        "acceptance_ms": 68.21,
+        "ready_ms": 222.48,
+        "full_download_ms": 246.75,
+        "size_bytes": 10978,
+        "pages": 2,
+        "generation_ms": 7.28
+      }
+    ],
+    "individual_ai_pdf": {
+      "kind": "company",
+      "range": "1Y",
+      "cache_hit": false,
+      "acceptance_ms": 60.92,
+      "ready_ms": 188.4,
+      "full_download_ms": 206.94,
+      "size_bytes": 10668,
+      "pages": 3,
+      "generation_ms": 26.88
+    },
+    "pdf_goal_3sec_2mb": true
+  },
+  "sync": {
+    "checked_at": "2026-11-10T04:14:14.668996+00:00",
+    "trials": 1,
+    "android_to_web_ms": 4125,
+    "web_to_android_ms": 640,
+    "method": "Botón real de alta Android; lista web actualizada sin recargar; confirmación de baja web; lista Android actualizada por polling. Relojes de host y emulador. Un ensayo local, no SLA."
+  },
+  "code_commits": [
+    "c20f220 2026-11-09T23:16:47-05:00 Se integró Android de Rosales con los servicios del Sprint 3",
+    "84b95cf 2026-11-09T23:12:54-05:00 Se incorporaron el rendimiento comparativo y los reportes PDF en la web",
+    "645ad2d 2026-11-09T23:12:54-05:00 Se completaron los favoritos, las etiquetas y las empresas recientes en la web",
+    "b85295e 2026-11-09T23:10:48-05:00 Se completaron los servicios compartidos del Sprint 3"
+  ],
+  "limitations": [
+    "Datos históricos importados, sin verificación nueva contra las fuentes en vivo",
+    "GOOGL/META FY2024: tres notas comparables; faltantes de solvencia/eficiencia permanecen ausentes",
+    "Aceptación formal de metodología y prueba en teléfono físico pendientes del equipo",
+    "Los tiempos son un ensayo local, no una garantía en otros entornos"
+  ]
+}
