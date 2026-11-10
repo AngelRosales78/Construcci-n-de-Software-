@@ -28,3 +28,15 @@ test('reemplaza una imagen fallida por el ticker visible', () => {
   expect(screen.queryByRole('img')).toBeNull()
   expect(screen.getByLabelText('Logo no disponible para Microsoft')).toBeTruthy()
 })
+
+test('distingue los balances anuales sin presentar ratios del resumen inexistentes', () => {
+  show({ ticker: 'GOOGL', name: 'Alphabet', has_annual_data: true, has_price_data: true })
+  expect(screen.getByText('Balances anuales disponibles')).toBeTruthy()
+  expect(screen.queryByText('Información financiera pendiente')).toBeNull()
+  expect(screen.queryByText('PER')).toBeNull()
+})
+
+test('identifica una empresa con precios pero sin resumen ni balances', () => {
+  show({ has_annual_data: false, has_price_data: true })
+  expect(screen.getByText('Solo precios históricos')).toBeTruthy()
+})

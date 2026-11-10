@@ -122,13 +122,13 @@ it('restaura consulta sector orden página y cobertura desde la URL', async () =
   await screen.findByText('Empresa AAA')
   expect(search.mock.lastCall[0]).toContain('ordering=market_cap&page=2&q=MSFT&sector=technology&with_data=true')
   expect(screen.getByRole('combobox', { name: 'Buscar empresas' }).value).toBe('MSFT')
-  expect(screen.getByRole('checkbox', { name: 'Solo empresas con indicadores cargados' }).checked).toBe(true)
+  expect(screen.getByRole('checkbox', { name: 'Solo con indicadores o balances cargados' }).checked).toBe(true)
 })
 
 it('el filtro de cobertura se pide al servidor y reinicia la página', async () => {
   mount()
   await screen.findByText('Empresa AAA')
-  fireEvent.click(screen.getByRole('checkbox', { name: 'Solo empresas con indicadores cargados' }))
+  fireEvent.click(screen.getByRole('checkbox', { name: 'Solo con indicadores o balances cargados' }))
   await waitFor(() => expect(search.mock.lastCall[0]).toContain('page=1&with_data=true'))
 })
 

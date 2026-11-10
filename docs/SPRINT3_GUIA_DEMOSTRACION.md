@@ -1,5 +1,7 @@
 # Demostración del Sprint 3 — guía breve
 
+Para demostrar cada tarea con su acción, resultado y archivo, usa el [guion por tarea](SPRINT3_DEMOSTRACION_POR_TAREA.md). Incluye las 30 tareas de Diego y un apartado separado para las 30 de Angel.
+
 Diego presenta la web y el servidor. Angel presenta Android y participa en la prueba cruzada. El alcance es de 15 HU / 60 tareas; cada integrante tiene 30. La matriz permite abrir el archivo de cada tarea sin afirmar que cada tarea necesita un commit diferente.
 
 ## Preparación

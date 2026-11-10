@@ -19,7 +19,7 @@ export default function CompanySearch() {
         <p className="section-description">Busca por nombre o símbolo. Filtra las fichas con indicadores cargados.</p>
         <SearchBar onSearch={handleSearch} onSubmitSearch={saveHistory} initialValue={params.q} />
       </div>
-      <div className="catalog-notice"><p><strong>Catálogo S&amp;P 500.</strong> Microsoft es el caso completo de esta demostración.</p><Link to="/company/MSFT" state={{ searchReturn: searchPath }}>Abrir Microsoft →</Link></div>
+      <div className="catalog-notice"><p><strong>Catálogo S&amp;P 500.</strong> Cada ficha indica los indicadores, balances y precios disponibles. No todas tienen la misma cobertura.</p><Link to="/company/MSFT" state={{ searchReturn: searchPath }}>Abrir Microsoft →</Link></div>
       <div className="search-content">
         <aside className="search-sidebar">
           <SearchHistory onSelectHistory={saveHistory} refreshKey={historyVersion} />
@@ -28,7 +28,7 @@ export default function CompanySearch() {
           <div className="results-heading"><h2>{params.q ? `Resultados para “${params.q}”` : 'Empresas del índice'}</h2><span>{loading ? 'Consultando…' : `${count} resultados`}</span></div>
           <CompanyFilters onFilterChange={handleFilterChange}
             initialSector={params.sector} initialOrdering={params.ordering} />
-          <label className="coverage-filter"><input type="checkbox" checked={params.withData} onChange={event => setWithData(event.target.checked)} /> Solo empresas con indicadores cargados</label>
+          <label className="coverage-filter"><input type="checkbox" checked={params.withData} onChange={event => setWithData(event.target.checked)} /> Solo con indicadores o balances cargados</label>
           {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
           {favorites.message && <p role="status">{favorites.message} <Link to="/favorites">Ver favoritos</Link></p>}
           {error ? <div className="search-error" role="alert"><p>{error}</p><button type="button" onClick={retry}>Reintentar</button></div> : <CompanyList companies={companies} loading={loading} favorites={favorites} />}

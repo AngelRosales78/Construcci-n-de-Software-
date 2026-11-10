@@ -48,7 +48,7 @@ export default function CompanyList({ companies, loading, favorites }) {
           </div>
           <h3 className="company-name">{company.name}</h3>
           <span className={`company-sector sector-${company.sector}`}>{sectorLabel(company.sector, company.sector_display)}</span>
-          <span className={`coverage-label ${hasIndicators(company) ? 'coverage-available' : ''}`}>{hasIndicators(company) ? 'Indicadores disponibles' : 'Información financiera pendiente'}</span>
+          <span className={`coverage-label ${hasIndicators(company) || company.has_annual_data ? 'coverage-available' : ''}`}>{hasIndicators(company) ? 'Indicadores disponibles' : company.has_annual_data ? 'Balances anuales disponibles' : company.has_price_data ? 'Solo precios históricos' : 'Información financiera pendiente'}</span>
           {hasIndicators(company) ? <div className="company-metrics">
             <div className="metric">
               <span className="metric-label">Capitalización</span>

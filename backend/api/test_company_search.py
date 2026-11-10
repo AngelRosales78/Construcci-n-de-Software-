@@ -125,6 +125,30 @@ def test_with_data_rejects_unrecognized_values(client):
     assert client.get(URL, {'with_data': 'maybe'}).status_code == 400
 
 
+def test_with_data_includes_annual_balances_once_without_inventing_summary_ratios(client):
+    from api.models import AnnualFinancialStatement, PriceHistory
+    annual = Company.objects.create(ticker='ANNUAL', name='Balances', sector='technology')
+    Company.objects.create(ticker='SUMMARY', name='Resumen', sector='technology', per=12)
+    prices = Company.objects.create(ticker='PRICES', name='Solo precios', sector='technology')
+    Company.objects.create(ticker='EMPTY', name='Sin datos', sector='technology')
+    for year in (2023, 2024):
+        AnnualFinancialStatement.objects.create(company=annual, fiscal_year=year,
+            period_start=f'{year}-01-01', period_end=f'{year}-12-31', filed=f'{year + 1}-02-01',
+            source_url='https://example.test/annual', accession=f'0000000001-{str(year)[-2:]}-000001',
+            snapshot_sha256='a' * 64, components={'current_assets': '120', 'current_liabilities': '60'})
+    PriceHistory.objects.create(company=prices, date='2024-01-02', adjusted_close=100,
+        source='https://example.test/prices', is_demo=True)
+    response = client.get(URL, {'with_data': 'true'})
+    assert response.status_code == 200 and response.data['count'] == 2
+    rows = {row['ticker']: row for row in response.data['results']}
+    assert set(rows) == {'ANNUAL', 'SUMMARY'}
+    assert rows['ANNUAL']['has_annual_data'] is True
+    assert rows['ANNUAL']['per'] is None and rows['ANNUAL']['roe'] is None
+    all_rows = {row['ticker']: row for row in client.get(URL).data['results']}
+    assert all_rows['PRICES']['has_price_data'] is True
+    assert all_rows['PRICES']['has_annual_data'] is False
+
+
 @pytest.mark.parametrize('ordering,expected', [
     ('name', ['SECOND', 'THIRD', 'FIRST']),
     ('-name', ['FIRST', 'THIRD', 'SECOND']),

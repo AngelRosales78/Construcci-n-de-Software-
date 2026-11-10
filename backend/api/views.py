@@ -23,7 +23,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.core.mail import send_mail
 from django.db import transaction
-from django.db.models import Q, F
+from django.db.models import Q, F, Exists, OuterRef
 from django.db.models.functions import Lower
 from django.utils.html import strip_tags
 from django.conf import settings
@@ -47,7 +47,7 @@ from .serializers import (
     SearchHistorySerializer,
 )
 from .redis_utils import blacklist_token, blacklist_jwt_token, get_autocomplete_suggestions
-from .models import Company, SearchHistory, FinancialMetrics, PriceHistory
+from .models import Company, SearchHistory, FinancialMetrics, PriceHistory, AnnualFinancialStatement
 
 User = get_user_model()
 logger = logging.getLogger(__name__)
@@ -455,7 +455,7 @@ class CompanySearchView(generics.ListAPIView):
         from .redis_utils import get_redis_connection
         identity = json.dumps([request.user.pk, request.build_absolute_uri('/') ,
                                sorted(request.query_params.items())], ensure_ascii=False)
-        key = 'sp500:search:' + hashlib.sha256(identity.encode()).hexdigest()
+        key = 'sp500:search:v2:' + hashlib.sha256(identity.encode()).hexdigest()
         from django.core.cache import caches
         local = caches['search_results']
         hit = local.get(key)
@@ -497,9 +497,11 @@ class CompanySearchView(generics.ListAPIView):
         if with_data not in ('', 'true', 'false'):
             raise ValidationError({'with_data': 'Use true o false.'})
 
-        queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
+        queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url').annotate(
+            has_annual_data=Exists(AnnualFinancialStatement.objects.filter(company_id=OuterRef('pk'))),
+            has_price_data=Exists(PriceHistory.objects.filter(company_id=OuterRef('pk'))))
         if with_data == 'true':
-            queryset = queryset.filter(Q(market_cap__isnull=False) | Q(per__isnull=False) | Q(roe__isnull=False))
+            queryset = queryset.filter(Q(market_cap__isnull=False) | Q(per__isnull=False) | Q(roe__isnull=False) | Q(has_annual_data=True))
         if query:
             from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
             vector = (SearchVector('name', weight='A', config='simple')

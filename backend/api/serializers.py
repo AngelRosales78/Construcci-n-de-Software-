@@ -157,12 +157,14 @@ class CompanySerializer(serializers.ModelSerializer):
     Serializer for S&P 500 company data.
     """
     sector_display = serializers.CharField(source='get_sector_display', read_only=True)
+    has_annual_data = serializers.BooleanField(read_only=True, default=False)
+    has_price_data = serializers.BooleanField(read_only=True, default=False)
 
     class Meta:
         model = Company
         fields = [
             'id', 'ticker', 'name', 'sector', 'sector_display', 'logo_url',
-            'market_cap', 'per', 'roe',
+            'market_cap', 'per', 'roe', 'has_annual_data', 'has_price_data',
         ]
 
 
