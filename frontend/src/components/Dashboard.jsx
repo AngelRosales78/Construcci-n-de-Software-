@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import WorkspaceLayout from './layout/WorkspaceLayout'
+import RecentCompanies from './RecentCompanies'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -16,5 +17,6 @@ export default function Dashboard() {
       <article><span className="step-number">02</span><h2>Lee sus indicadores</h2><p>Consulta PER, ROE, capitalización, beta y dividendo, junto con su fuente y fecha.</p></article>
       <article><span className="step-number">03</span><h2>Explora su evolución</h2><p>Revisa el perfil Altman-Z y amplía el gráfico de precios históricos.</p></article>
     </div>
+    <RecentCompanies />
   </WorkspaceLayout>
 }

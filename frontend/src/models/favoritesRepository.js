@@ -5,6 +5,10 @@ function validFavorite(row) {
 }
 
 export const favoritesRepository = {
+  async remove(id) {
+    const response = await api.delete(`/favorites/${id}/`)
+    if (response.status !== 204) throw new Error('La baja no fue confirmada.')
+  },
   async list() {
     const { data } = await api.get('/favorites/')
     if (data.schema_version !== 'favorites-v1' || !Array.isArray(data.results) || !data.results.every(validFavorite)) {

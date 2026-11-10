@@ -7,7 +7,7 @@ import FavoriteButton from './FavoriteButton'
 import FavoritesPage from './FavoritesPage'
 import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
 
-vi.mock('../../services/api', () => ({ default: { get: vi.fn(), post: vi.fn() } }))
+vi.mock('../../services/api', () => ({ default: { get: vi.fn(), post: vi.fn(), delete: vi.fn() } }))
 const favorite = { id: 8, ticker: 'MSFT', name: 'Microsoft' }
 const page = rows => ({ data: { schema_version: 'favorites-v1', owner_id: '1', results: rows } })
 function Control() {
@@ -16,6 +16,32 @@ function Control() {
 }
 beforeEach(() => { vi.resetAllMocks(); api.get.mockResolvedValue(page([])) })
 afterEach(cleanup)
+
+it('cancelar conserva el favorito y confirmar espera la baja del servidor', async () => {
+  api.get.mockResolvedValue(page([favorite]))
+  let finish
+  api.delete.mockImplementation(() => new Promise(resolve => { finish = resolve }))
+  render(<MemoryRouter><FavoritesPage /></MemoryRouter>)
+  fireEvent.click(await screen.findByRole('button', { name: 'Quitar MSFT' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+  expect(api.delete).not.toHaveBeenCalled()
+  fireEvent.click(screen.getByRole('button', { name: 'Quitar MSFT' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Confirmar eliminación' }))
+  expect(screen.getByText('Microsoft')).toBeTruthy()
+  expect(api.delete).toHaveBeenCalledWith('/favorites/8/')
+  await act(async () => finish({ status: 204 }))
+  expect(await screen.findByText(/Aún no guardaste empresas/)).toBeTruthy()
+})
+
+it('un fallo de red no se presenta como eliminación confirmada', async () => {
+  api.get.mockResolvedValue(page([favorite]))
+  api.delete.mockRejectedValue(new Error('offline'))
+  render(<MemoryRouter><FavoritesPage /></MemoryRouter>)
+  fireEvent.click(await screen.findByRole('button', { name: 'Quitar MSFT' }))
+  fireEvent.click(screen.getByRole('button', { name: 'Confirmar eliminación' }))
+  expect(await screen.findByText(/No se pudo confirmar la eliminación/)).toBeTruthy()
+  expect(screen.getByText('Microsoft')).toBeTruthy()
+})
 
 it('espera confirmación real, evita doble clic y conserva el guardado al volver a montar', async () => {
   let finish
@@ -28,7 +54,7 @@ it('espera confirmación real, evita doble clic y conserva el guardado al volver
   expect(api.post).toHaveBeenCalledWith('/favorites/', { ticker: 'MSFT' })
   expect(screen.queryByRole('button', { name: 'MSFT guardado en favoritos' })).toBeNull()
   await act(async () => finish({ data: { schema_version: 'favorites-v1', favorite } }))
-  expect(screen.getByRole('button', { name: 'MSFT guardado en favoritos' }).disabled).toBe(true)
+  expect(screen.getByRole('button', { name: 'MSFT guardado en favoritos' }).disabled).toBe(false)
   mounted.unmount()
   api.get.mockResolvedValue(page([favorite]))
   render(<MemoryRouter><FavoritesPage /></MemoryRouter>)
