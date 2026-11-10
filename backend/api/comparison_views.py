@@ -56,16 +56,31 @@ def comparison_data(a, b, year):
         raise ValidationError('Selecciona dos empresas distintas.')
     left = pillars_for(get_object_or_404(Company, ticker=a), year)
     right = pillars_for(get_object_or_404(Company, ticker=b), year)
+    shared_reasons = []
+    left_period, right_period = left['period'], right['period']
+    if not all(period and period.get('start') and period.get('end') for period in (left_period, right_period)):
+        shared_reasons.append('Faltan fechas del ejercicio.')
+    elif left_period != right_period:
+        shared_reasons.append('Los ejercicios tienen fechas de inicio o cierre distintas.')
+    if (left['methodology_version'] != right['methodology_version']
+            or left['scoring_policy']['version'] != right['scoring_policy']['version']):
+        shared_reasons.append('Las metodologías de puntuación son distintas.')
+
     decisions = []
     for p, q in zip(left['pillars'], right['pillars']):
         score_a, score_b = p['score'], q['score']
-        same = left['period'] is not None and left['period'] == right['period'] and left['methodology_version'] == right['methodology_version'] and left['scoring_policy']['version'] == right['scoring_policy']['version']
-        valid = same and score_a['status'] == score_b['status'] == 'available' and score_a['version'] == score_b['version']
+        reasons = shared_reasons.copy()
+        missing = [ticker for ticker, score in ((a, score_a), (b, score_b)) if score['status'] != 'available']
+        if missing:
+            reasons.append(f'Falta la nota en {" y ".join(missing)}.')
+        elif score_a['version'] != score_b['version']:
+            reasons.append('Las versiones de las notas son distintas.')
+        valid = not reasons
         delta = Decimal(score_a['value']) - Decimal(score_b['value']) if valid else None
         decisions.append({'id': p['id'], 'status': 'available' if valid else 'not_comparable',
                           'result': ('a' if delta > 0 else 'b' if delta < 0 else 'tie') if valid else 'not_comparable',
                           'delta': str(delta) if valid else None, 'unit': 'points',
-                          'reason': 'Diferencia de notas académicas con igual periodo y metodología.' if valid else 'Periodos distintos o indicadores insuficientes: no se asigna ganador.'})
+                          'reason': 'Diferencia de notas académicas con igual periodo y metodología.' if valid else ' '.join(reasons)})
     return {'schema_version': 'comparison-v1', 'fiscal_year': year, 'status': 'available',
             'a': left, 'b': right, 'comparisons': decisions}
 

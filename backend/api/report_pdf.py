@@ -72,12 +72,20 @@ def generate_pdf(request, analysis):
     for company, fact in zip(companies, facts):
         period = fact['period']
         story.append(para(f'{company.name}: {period["start"] or "sin fecha"} a {period["end"] or "sin fecha"}', 'ReportSmall'))
+    if comparison:
+        comparable = sum(decision['status'] == 'available' for decision in data['comparisons'])
+        story.append(para(f'Pilares comparables: {comparable} de {len(data["comparisons"])}.', 'ReportSmall'))
     table = [[para('Pilar')] + [para(c.ticker) for c in companies] + ([para('Comparabilidad')] if comparison else [])]
     for index, pillar in enumerate(facts[0]['pillars']):
         row = [para(pillar['label'])] + [para(fact['pillars'][index]['score']['display_value'] + (' / 100' if fact['pillars'][index]['score']['status'] == 'available' else '')) for fact in facts]
         if comparison:
             decision = data['comparisons'][index]
-            result = 'Mayor nota: ' + request[decision['result']] if decision['result'] in ('a', 'b') else 'Empate' if decision['result'] == 'tie' else 'No comparable: distinto periodo o datos insuficientes'
+            if decision['status'] != 'available':
+                result = 'No comparable. ' + decision['reason']
+            elif decision['result'] == 'tie':
+                result = 'Empate'
+            else:
+                result = f'Mayor nota: {request[decision["result"]]}'
             row.append(para(result, 'ReportSmall'))
         table.append(row)
     widths = [width*.22, width*.18, width*.18, width*.42] if comparison else [width*.55, width*.45]

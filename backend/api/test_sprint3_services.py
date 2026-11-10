@@ -178,7 +178,24 @@ class ReportServicesTests(ComparisonServicesTests):
         pdf = PdfReader(BytesIO(content))
         self.assertEqual(len(pdf.pages), 2)
         self.assertTrue(all(p.mediabox.width > p.mediabox.height for p in pdf.pages))
+        self.assertIn('Pilares comparables: 5 de 5.', pdf.pages[0].extract_text())
         self.assertIn(analysis['paragraphs'][0].split(':')[0], pdf.pages[1].extract_text())
+
+    def test_comparison_pdf_distinguishes_period_mismatch_and_missing_score(self):
+        statement = AnnualFinancialStatement.objects.get(company=self.b, fiscal_year=2024)
+        statement.period_start = date(2024, 2, 1)
+        statement.components.pop('interest_expense')
+        statement.save()
+
+        submitted = self.call('post', 'reports/jobs/', self.report_request(kind='comparison', b='MSFT'))
+        pk = submitted.data['id']
+        result = self.call('get', f'reports/jobs/{pk}/')
+        self.assertEqual(result.data['status'], 'ready', result.data)
+        pdf = PdfReader(BytesIO(self.call('get', f'reports/jobs/{pk}/file/').content))
+        text = ' '.join(pdf.pages[0].extract_text().split())
+        self.assertIn('Pilares comparables: 0 de 5.', text)
+        self.assertIn('Los ejercicios tienen fechas de inicio o cierre distintas.', text)
+        self.assertIn('Falta la nota en MSFT.', text)
 
     def test_idempotency_conflict_cancellation_and_cross_account_access(self):
         value = self.report_request()
