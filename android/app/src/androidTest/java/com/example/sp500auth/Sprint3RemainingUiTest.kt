@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.sp500auth.ui.sprint3.PlanPreview
 import com.example.sp500auth.ui.reports.ChartOptions
 import com.example.sp500auth.ui.compare.ComparisonConclusionCard
+import com.example.sp500auth.ui.compare.ComparisonRow
 import com.example.sp500auth.data.api.models.ComparisonConclusion
 import org.junit.Rule
 import org.junit.Test
@@ -30,9 +31,23 @@ import org.junit.runner.RunWith
         var selected="1Y"
         compose.setContent{MaterialTheme{Column(Modifier.verticalScroll(rememberScrollState())){
             ChartOptions(true,selected,true,{},{selected=it})
-            ComparisonConclusionCard(ComparisonConclusion(a="AAPL",b="MSFT",fiscal_year=2024,generation_mode="rules"))
+            ComparisonConclusionCard(
+                ComparisonConclusion(a = "AAPL", b = "MSFT", fiscal_year = 2024, generation_mode = "rules",
+                    paragraphs = listOf("Texto completo del informe de prueba.")),
+                rows = listOf(
+                    ComparisonRow("liquidity", "Liquidez", "90 / 100", "80 / 100",
+                        "Mayor nota: AAPL", "10", null, "a"),
+                    ComparisonRow("growth", "Crecimiento", "90 / 100", "90 / 100",
+                        "= Empate", "0", null, null)
+                )
+            )
         }}}
         compose.onNodeWithText("6M").performClick();compose.runOnIdle{assertEquals("6M",selected)}
         compose.onNodeWithText("Informe elaborado por reglas").assertExists()
+        compose.onNodeWithText("AAPL · 1").assertExists()
+        compose.onNodeWithText("1 empate").assertExists()
+        compose.onNodeWithText("Texto completo del informe de prueba.").assertDoesNotExist()
+        compose.onNodeWithText("Ver informe completo").performScrollTo().performClick()
+        compose.onNodeWithText("Texto completo del informe de prueba.").assertExists()
     }
 }

@@ -47,13 +47,19 @@ fun ComparisonScreen(nav: NavController, initialTicker: String = "", vm: Compari
                     TextButton(onClick = vm::compare) { Text("Reintentar comparación") }
                 }
                 is Resource.Success -> item {
-                    Text("${result.successData.a?.ticker} y ${result.successData.b?.ticker} · FY${result.successData.fiscal_year}", fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(12.dp))
                     ComparisonTable(result.successData)
                 }
                 else -> Unit
             }
-            item { ComparisonConclusionSection(vm.selection.a, vm.selection.b, vm.year) }
+            item {
+                ComparisonConclusionSection(
+                    vm.selection.a, vm.selection.b, vm.year,
+                    comparison = (vm.result as? Resource.Success)?.successData,
+                    onLoadComparison = {
+                        if (vm.result !is Resource.Success && vm.result !is Resource.Loading) vm.compare()
+                    }
+                )
+            }
             item {
                 OutlinedButton(onClick={nav.navigate("report?a=${vm.selection.a}&b=${vm.selection.b}&year=${vm.year}")}, enabled=vm.selection.canCompare && vm.year.toIntOrNull() in 2000..2100) { Text("Exportar comparación en PDF") }
             }

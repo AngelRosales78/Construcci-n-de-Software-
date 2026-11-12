@@ -1,14 +1,20 @@
 package com.example.sp500auth
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import com.example.sp500auth.data.api.models.*
 import com.example.sp500auth.ui.compare.ComparisonTable
 import org.junit.Rule
@@ -23,7 +29,7 @@ class ComparisonTableUiTest {
     @Test fun missingScoresAndUnavailableComparisonHaveExplicitLabels() {
         compose.setContent {
             MaterialTheme {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
+                Column(Modifier.width(280.dp).verticalScroll(rememberScrollState())) {
                     ComparisonTable(ComparisonResponse(fiscal_year = 2024,
                         a = PillarsResponse(ticker = "AAPL", fiscal_year = 2024),
                         b = PillarsResponse(ticker = "MSFT", fiscal_year = 2024),
@@ -34,7 +40,12 @@ class ComparisonTableUiTest {
         compose.onNodeWithText("Cinco pilares lado a lado").assertExists()
         compose.onNodeWithText("A · AAPL").assertExists()
         compose.onNodeWithText("B · MSFT").assertExists()
-        compose.onAllNodesWithText("— No comparable").assertCountEquals(5)
+        compose.onAllNodesWithText("No comparable").assertCountEquals(5)
         compose.onAllNodesWithText("No disponible").assertCountEquals(10)
+        compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.HorizontalScrollAxisRange))
+            .assertCountEquals(0)
+        compose.onNodeWithText("Fuentes de AAPL").assertDoesNotExist()
+        compose.onNodeWithText("Ver metodología y fuentes").performScrollTo().performClick()
+        compose.onNodeWithText("Fuentes de AAPL").assertExists()
     }
 }
