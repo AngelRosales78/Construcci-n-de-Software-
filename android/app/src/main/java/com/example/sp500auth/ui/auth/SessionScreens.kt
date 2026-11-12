@@ -2,13 +2,26 @@ package com.example.sp500auth.ui.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Fingerprint
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.sp500auth.data.api.models.UserProfile
 import com.example.sp500auth.util.Resource
 import com.example.sp500auth.util.biometric.BiometricAuthManager
 import com.example.sp500auth.ui.navigation.NavRoutes
@@ -28,41 +41,154 @@ fun ForgotPasswordScreen(navController: NavController, viewModel: AuthViewModel)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
     val context = LocalContext.current
     var biometricError by remember { mutableStateOf("") }
     val manager = remember { BiometricAuthManager() }
     LaunchedEffect(Unit) { viewModel.fetchUserProfile() }
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.Center) {
-        Text("Mi perfil", style = MaterialTheme.typography.headlineMedium)
-        val profile = viewModel.userProfileState
-        if (profile is Resource.Success) { Text(profile.successData.username); Text(profile.successData.email) }
-        if (profile is Resource.Error) Text(profile.message ?: "No se pudo cargar")
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text("Acceso por huella")
-            Switch(checked = viewModel.biometricEnabled, onCheckedChange = { enabled ->
-                biometricError = ""
-                if (!enabled) viewModel.updateBiometricPreference(false)
-                else if (!manager.isBiometricAvailable(context)) biometricError = manager.unavailableReason(context).orEmpty()
-                else manager.authenticate(context,
-                    onSuccess = { viewModel.updateBiometricPreference(true) },
-                    onError = { biometricError = it },
-                    onFailed = { biometricError = "Huella no reconocida. Inténtalo de nuevo." })
-            })
-        }
-        Text(if (viewModel.biometricEnabled) "Huella activada para esta cuenta en este teléfono." else "Activa la huella después de iniciar sesión con tu contraseña.")
-        Text("Android comprueba tu identidad. La app no recibe ni guarda tu huella.")
-        if (biometricError.isNotBlank()) Text(biometricError, color = MaterialTheme.colorScheme.error)
-        if (viewModel.biometricEnabled) {
-            Button(onClick = {
-                if (viewModel.lockSession()) {
-                    navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
+    val signingOut = viewModel.logoutState is Resource.Loading
+    val biometricEnabled = viewModel.biometricEnabled
+    val colors = MaterialTheme.colorScheme
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text("Mi cuenta", fontWeight = FontWeight.SemiBold) },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Volver")
                 }
-            }, enabled = viewModel.logoutState !is Resource.Loading) { Text("Bloquear y usar huella") }
-            Text("Puedes volver a entrar con huella al abrir la app. Si cierras sesión, deberás usar tu contraseña y activarla otra vez.")
+            },
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = colors.background)
+        )
+    }, containerColor = colors.background) { insets ->
+        Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.TopCenter) {
+            Column(
+                Modifier.widthIn(max = 520.dp).fillMaxWidth().fillMaxHeight()
+                    .verticalScroll(rememberScrollState()).padding(horizontal = 18.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp)
+            ) {
+                when (val profile = viewModel.userProfileState) {
+                    is Resource.Success -> ProfileIdentityCard(profile.successData)
+                    is Resource.Error -> Card(
+                        colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)
+                    ) {
+                        Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                            Text(profile.message ?: "No se pudo cargar el perfil.", color = colors.error)
+                            TextButton(onClick = viewModel::fetchUserProfile) { Text("Reintentar") }
+                        }
+                    }
+                    else -> LinearProgressIndicator(Modifier.fillMaxWidth())
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Seguridad", style = MaterialTheme.typography.titleMedium)
+                    Card(colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)) {
+                        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(Icons.Default.Fingerprint, contentDescription = null, tint = colors.primary)
+                                Column(Modifier.weight(1f)) {
+                                    Text("Acceso por huella", style = MaterialTheme.typography.titleSmall)
+                                    Text(
+                                        if (biometricEnabled) "Activado en este dispositivo" else "Desactivado",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = colors.onSurfaceVariant
+                                    )
+                                }
+                                Switch(
+                                    checked = biometricEnabled,
+                                    enabled = !signingOut,
+                                    modifier = Modifier.semantics { contentDescription = "Acceso por huella" },
+                                    onCheckedChange = { enabled ->
+                                        biometricError = ""
+                                        if (!enabled) viewModel.updateBiometricPreference(false)
+                                        else if (!manager.isBiometricAvailable(context)) {
+                                            biometricError = manager.unavailableReason(context).orEmpty()
+                                        } else manager.authenticate(
+                                            context,
+                                            onSuccess = { viewModel.updateBiometricPreference(true) },
+                                            onError = { biometricError = it },
+                                            onFailed = { biometricError = "Huella no reconocida. Inténtalo de nuevo." }
+                                        )
+                                    }
+                                )
+                            }
+                            Text(
+                                if (biometricEnabled) "Bloquea la app para volver a entrar con tu huella."
+                                else "Usa la huella registrada en Android para volver a entrar.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = colors.onSurfaceVariant
+                            )
+                            if (biometricError.isNotBlank()) {
+                                Text(biometricError, style = MaterialTheme.typography.bodySmall, color = colors.error)
+                            }
+                            if (biometricEnabled) {
+                                OutlinedButton(
+                                    onClick = {
+                                        if (viewModel.lockSession()) {
+                                            navController.navigate(NavRoutes.Login.route) { popUpTo(0) { inclusive = true } }
+                                        }
+                                    },
+                                    enabled = !signingOut,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Icon(Icons.Default.Lock, contentDescription = null, modifier = Modifier.size(18.dp))
+                                    Spacer(Modifier.width(8.dp))
+                                    Text("Bloquear y usar huella")
+                                }
+                            }
+                        }
+                    }
+                }
+
+                OutlinedButton(
+                    onClick = { viewModel.logout() },
+                    enabled = !signingOut,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.error)
+                ) {
+                    Icon(Icons.Default.Logout, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(if (signingOut) "Cerrando sesión…" else "Cerrar sesión")
+                }
+            }
         }
-        TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
-        Button(onClick = { viewModel.logout() }, enabled = viewModel.logoutState !is Resource.Loading) { Text("Cerrar sesión") }
+    }
+}
+
+@Composable
+private fun ProfileIdentityCard(profile: UserProfile) {
+    val colors = MaterialTheme.colorScheme
+    val username = profile.username.orEmpty()
+    val name = listOf(profile.first_name.orEmpty(), profile.last_name.orEmpty())
+        .map { it.trim() }.filter { it.isNotEmpty() }.joinToString(" ")
+    val title = name.ifBlank { username.ifBlank { "Perfil" } }
+    Card(colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)) {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
+                Surface(Modifier.size(52.dp), shape = CircleShape, color = colors.primary.copy(alpha = 0.14f)) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(Icons.Default.Person, contentDescription = null, tint = colors.primary)
+                    }
+                }
+                Column(Modifier.weight(1f)) {
+                    Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
+                    if (name.isNotBlank() && username.isNotBlank() && name != username) {
+                        Text("@$username", style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+                    }
+                }
+            }
+            HorizontalDivider(color = colors.outlineVariant)
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Default.Email, contentDescription = null, tint = colors.onSurfaceVariant)
+                Column(Modifier.weight(1f)) {
+                    Text("Correo electrónico", style = MaterialTheme.typography.labelMedium, color = colors.onSurfaceVariant)
+                    Text(profile.email.orEmpty().ifBlank { "Sin registrar" }, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+        }
     }
 }
