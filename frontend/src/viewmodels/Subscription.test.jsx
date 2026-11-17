@@ -1,6 +1,6 @@
 import React from 'react'
 import { afterEach, beforeEach, expect, it, vi } from 'vitest'
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import SubscriptionPage from '../components/subscription/SubscriptionPage'
 import { subscriptionRepository } from '../models/subscriptionRepository'
@@ -58,4 +58,27 @@ it('cambia a la cuenta actual y oculta historial de la anterior', async () => {
   window.dispatchEvent(new Event('sp500-session-changed'))
   await waitFor(() => expect(screen.queryByText('receipt-1')).toBeNull())
   await screen.findByText('Plan Free')
+})
+
+it('conserva el intento tras un error 500 y recupera el mismo comprobante', async () => {
+  subscriptionRepository.checkout.mockRejectedValueOnce({ response: { status: 500 } })
+    .mockResolvedValueOnce({ receipt, subscription: pro })
+  open()
+  fireEvent.click(await screen.findByText('Elegir Pro'))
+  fireEvent.click(screen.getByText('Simular aprobación'))
+  fireEvent.click(await screen.findByText('Reintentar la misma operación'))
+  await screen.findByText('receipt-1')
+  expect(subscriptionRepository.checkout.mock.calls[0][0]).toEqual(subscriptionRepository.checkout.mock.calls[1][0])
+})
+
+it('volver al navegador mientras se procesa el pago conserva su confirmación', async () => {
+  let finish
+  subscriptionRepository.checkout.mockImplementation(() => new Promise(resolve => { finish = resolve }))
+  open()
+  fireEvent.click(await screen.findByText('Elegir Pro'))
+  fireEvent.click(screen.getByText('Simular aprobación'))
+  await act(async () => { window.dispatchEvent(new Event('focus')) })
+  await act(async () => { finish({ receipt, subscription: pro }) })
+  await screen.findByText('receipt-1')
+  expect(screen.getByText('Simulación aprobada. Tu plan Pro está activo.')).toBeTruthy()
 })

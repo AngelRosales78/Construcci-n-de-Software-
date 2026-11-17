@@ -11,6 +11,9 @@ from django.test import override_settings
 from rest_framework.test import APIClient
 from .models import User, AccountPlan, SubscriptionTransaction
 from .subscription_views import deliver_receipt
+from .tests_smtp_support import smtp_receiver
+from email import policy
+from email.parser import BytesParser
 
 pytestmark = pytest.mark.django_db
 ROOT = '/api/v1/user/subscription/'
@@ -182,3 +185,29 @@ def test_concurrent_checkout_is_a_single_operation(account):
     assert sorted(status for status, _ in results) == [200, 201]
     assert len({identifier for _, identifier in results}) == 1
     assert SubscriptionTransaction.objects.count() == 1
+
+
+def test_complete_subscription_flow_and_actual_smtp_transport(account, django_capture_on_commit_callbacks):
+    client, user = account
+    assert client.get(ROOT).data['effective_plan'] == 'free'
+    assert checkout(client, 'declined').data['subscription']['features'] == []
+    with smtp_receiver() as receiver, override_settings(
+        EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend', EMAIL_HOST='127.0.0.1',
+        EMAIL_PORT=receiver.server_address[1], EMAIL_HOST_USER='', EMAIL_HOST_PASSWORD='',
+        EMAIL_USE_TLS=False, EMAIL_USE_SSL=False,
+    ), django_capture_on_commit_callbacks(execute=True):
+        response = checkout(client)
+    record = SubscriptionTransaction.objects.get(id=response.data['receipt']['id'])
+    assert len(receiver.messages) == 1
+    message = BytesParser(policy=policy.default).parsebytes(receiver.messages[0])
+    assert message['To'] == user.email
+    assert str(record.id) in message.get_body(preferencelist=('plain',)).get_content()
+    assert 'simulado' in message.get_body(preferencelist=('html',)).get_content()
+    assert record.email_status == 'sent'
+    assert client.get(ROOT).data['effective_plan'] == 'pro'
+    assert client.get(ROOT+'receipts/'+str(record.id)+'/').status_code == 200
+    assert len(client.get(ROOT+'history/').data['receipts']) == 2
+    assert client.post(ROOT+'cancel/', {}, format='json').data['features'] == ['compare']
+    with patch('api.access_views.timezone.now', return_value=record.ends_at + timedelta(seconds=1)):
+        assert client.get(ROOT).data['effective_plan'] == 'free'
+        assert client.get('/api/v1/compare/?a=MSFT&b=META&fiscal_year=2024').status_code == 403

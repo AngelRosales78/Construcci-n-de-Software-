@@ -51,3 +51,22 @@ históricas guardan su tarifa y periodo propios. El comando
 Para presentar, abrir `/profile/subscription` desde Mi suscripción. Una operación
 aprobada activa Pro por 30 días; la renovación posterior requiere confirmación
 manual. El Sprint 4 sigue pendiente de planificación e implementación.
+
+## Verificación del flujo y preparación de Gmail
+
+Se verificó el ciclo Free, rechazo, aprobación, comprobante, historial, cancelación
+y vencimiento en PostgreSQL. El comprobante también recorrió el transporte SMTP
+de Django hacia un receptor local, con sus versiones de texto y HTML.
+Se corrigieron el reintento después de un error 500 y la confirmación de la operación
+al volver al navegador mientras seguía en curso. Pasaron 45 pruebas de servidor y
+6 pruebas web de suscripción. La compilación de producción fue verificada.
+
+`tools/Set-DemoGmail.ps1 -Sender correo@gmail.com` solicita la contraseña de aplicación
+en la computadora, comprueba el envío a la misma cuenta y guarda una credencial
+cifrada por Windows en `../presentation_runtime_sprint3/gmail.credential.xml`.
+El arranque de la demo la carga únicamente en los procesos Django y restaura el
+entorno antes de iniciar el frontend. Se debe reiniciar la demo después de configurar
+Gmail. La recepción en la bandeja real sigue pendiente hasta que el propietario
+introduzca su contraseña de aplicación y confirme la llegada del mensaje.
+
+Referencia de configuración: https://support.google.com/mail/answer/185833?hl=es

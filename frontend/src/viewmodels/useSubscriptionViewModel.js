@@ -13,26 +13,29 @@ export function useSubscriptionViewModel() {
   const [cancelOpen, setCancelOpen] = useState(false)
   const [retryOutcome, setRetryOutcome] = useState(null)
   const generation = useRef(0)
+  const loadSequence = useRef(0)
   const pending = useRef(null)
   const working = useRef(false)
 
   const refresh = useCallback(async () => {
-    const id = ++generation.current
+    const session = generation.current
+    const id = ++loadSequence.current
     setLoading(true)
     setError('')
     try {
       const result = await subscriptionRepository.load()
-      if (id === generation.current) setData(result)
+      if (session === generation.current && id === loadSequence.current) setData(result)
     } catch {
-      if (id === generation.current) setError('No se pudo consultar tu suscripción. Reintenta.')
+      if (session === generation.current && id === loadSequence.current) setError('No se pudo consultar tu suscripción. Reintenta.')
     } finally {
-      if (id === generation.current) setLoading(false)
+      if (session === generation.current && id === loadSequence.current) setLoading(false)
     }
   }, [])
 
   useEffect(() => {
     refresh()
     const unsubscribe = subscribeSession(() => {
+      generation.current++
       setData(null); setReceipt(null); setNotice(''); pending.current = null
       setRetryOutcome(null)
       setCheckoutOpen(false); setCancelOpen(false)
@@ -76,7 +79,7 @@ export function useSubscriptionViewModel() {
     } catch (failure) {
       if (id !== generation.current) return
       const detail = failure.response?.data?.detail
-      if (failure.response && pending.current) pending.current = null
+      if (failure.response?.status >= 400 && failure.response.status < 500) pending.current = null
       setRetryOutcome(pending.current?.outcome || null)
       setError(detail || 'No se confirmó la operación. Reintenta para verificar el mismo intento.')
     } finally {

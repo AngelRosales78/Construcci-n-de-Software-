@@ -56,8 +56,26 @@ try {
     & $python -B manage.py prepare_sprint3_demo --credentials-file (Join-Path $state 'demo_credentials.json')
     if ($LASTEXITCODE -ne 0) { throw 'Fallaron las cuentas aisladas' }
 } finally { Pop-Location }
-$api = Start-Process -FilePath $python -ArgumentList '-B','-m','waitress','--listen=127.0.0.1:58020','--threads=4','config.wsgi:application' -WorkingDirectory (Join-Path $repo 'backend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'api.out') -RedirectStandardError (Join-Path $state 'api.err') -PassThru
-$reports = Start-Process -FilePath $python -ArgumentList '-B','manage.py','report_worker' -WorkingDirectory (Join-Path $repo 'backend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'reports.out') -RedirectStandardError (Join-Path $state 'reports.err') -PassThru
+$mailFile = Join-Path $state 'gmail.credential.xml'
+$previousMail = @{}
+try {
+    if (Test-Path -LiteralPath $mailFile) {
+        $gmail = Import-Clixml -LiteralPath $mailFile
+        $mailValues = @{EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'; EMAIL_HOST='smtp.gmail.com';
+            EMAIL_PORT='587'; EMAIL_USE_TLS='True'; EMAIL_HOST_USER=$gmail.UserName;
+            EMAIL_HOST_PASSWORD=$gmail.GetNetworkCredential().Password; DEFAULT_FROM_EMAIL=$gmail.UserName}
+        foreach ($name in $mailValues.Keys) {
+            $previousMail[$name] = [Environment]::GetEnvironmentVariable($name, 'Process')
+            [Environment]::SetEnvironmentVariable($name, $mailValues[$name], 'Process')
+        }
+    }
+    $api = Start-Process -FilePath $python -ArgumentList '-B','-m','waitress','--listen=127.0.0.1:58020','--threads=4','config.wsgi:application' -WorkingDirectory (Join-Path $repo 'backend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'api.out') -RedirectStandardError (Join-Path $state 'api.err') -PassThru
+    $reports = Start-Process -FilePath $python -ArgumentList '-B','manage.py','report_worker' -WorkingDirectory (Join-Path $repo 'backend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'reports.out') -RedirectStandardError (Join-Path $state 'reports.err') -PassThru
+} finally {
+    foreach ($name in $previousMail.Keys) { [Environment]::SetEnvironmentVariable($name, $previousMail[$name], 'Process') }
+    $mailValues = $null
+    $gmail = $null
+}
 $env:VITE_API_URL='http://127.0.0.1:58020/api/v1'
 $web = Start-Process -FilePath $node -ArgumentList 'node_modules/vite/bin/vite.js','--host','127.0.0.1','--port','55193','--strictPort' -WorkingDirectory (Join-Path $repo 'frontend') -WindowStyle Hidden -RedirectStandardOutput (Join-Path $state 'web.out') -RedirectStandardError (Join-Path $state 'web.err') -PassThru
 @{api=$api.Id;web=$web.Id;reports=$reports.Id;repo=$repo} | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $state 'processes.json') -Encoding UTF8
