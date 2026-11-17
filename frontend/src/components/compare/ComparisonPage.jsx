@@ -16,9 +16,9 @@ export default function ComparisonPage() {
     {vm.accessLoading && <p role="status">Verificando acceso…</p>}
     {vm.accessError && <div role="alert"><p>{vm.accessError}</p><button onClick={vm.refreshAccess}>Reintentar acceso</button></div>}
     {!vm.accessLoading && !vm.accessError && !vm.pro && <section className="comparison-access"><h2>Vista previa · Plan Free</h2>
-      <p>Puedes preparar la selección. Consultar las dos empresas juntas requiere un plan Pro activo asignado por administración.</p>
-      <p>Este avance no incluye contratación ni pagos.</p><button onClick={vm.refreshAccess}>Verificar mi plan</button></section>}
-    {!vm.pro && <details className="sprint3-panel"><summary>Ver plan Pro</summary><p>Free permite consultar fichas y favoritos. Pro añade el comparador y su reporte PDF. El plan lo asigna administración; esta pantalla no cobra ni activa una suscripción.</p>
+      <p>Puedes preparar la selección. Consultar las dos empresas juntas requiere un plan Pro activo.</p>
+      <Link to="/profile/subscription">Ver planes y simular Pro</Link><button onClick={vm.refreshAccess}>Verificar mi plan</button></section>}
+    {!vm.pro && <details className="sprint3-panel"><summary>Ver plan Pro</summary><p>Free permite consultar fichas y favoritos. Pro añade el comparador y su reporte PDF. Puedes activar Pro mediante una operación simulada desde Mi suscripción.</p>
       <div aria-label="Ejemplo de estructura del comparador"><p>Vista previa ilustrativa, sin cifras de otras empresas:</p><p>Empresa A | Empresa B | Cinco pilares | Rendimiento histórico</p></div>
     </details>}
     {vm.pro && <p className="comparison-access">Plan Pro activo · Acceso verificado por el servidor</p>}

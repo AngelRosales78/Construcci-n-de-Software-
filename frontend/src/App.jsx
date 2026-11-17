@@ -10,6 +10,7 @@ import AdminDashboard from './components/AdminDashboard'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import FavoritesPage from './components/favorites/FavoritesPage'
 import ComparisonPage from './components/compare/ComparisonPage'
+import SubscriptionPage from './components/subscription/SubscriptionPage'
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/search" element={<CompanySearch />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/compare" element={<ComparisonPage />} />
+          <Route path="/profile/subscription" element={<SubscriptionPage />} />
           <Route path="/company/:ticker" element={<CompanyDashboard />} />
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />

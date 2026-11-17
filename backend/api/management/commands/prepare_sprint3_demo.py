@@ -43,7 +43,7 @@ class Command(BaseCommand):
                     defaults={'email': f'sprint3_{plan}@example.test'})
                 user.set_password(account['password'])
                 user.save(update_fields=['password'])
-                AccountPlan.objects.update_or_create(user=user, defaults={'plan': plan, 'active': True, 'expires_at': None})
+                AccountPlan.objects.get_or_create(user=user, defaults={'plan': plan, 'active': True, 'expires_at': None})
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(credentials), encoding='utf-8')
         self.stdout.write('Cuentas Free y Pro preparadas; claves conservadas fuera de Git.')

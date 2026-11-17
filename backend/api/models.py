@@ -55,11 +55,31 @@ class User(AbstractUser):
 
 
 class AccountPlan(models.Model):
-    """Acceso asignado por administración; no representa cobros ni pagos."""
+    """Acceso administrativo o de suscripción simulada."""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='account_plan')
     plan = models.CharField(max_length=8, choices=[('free', 'Free'), ('pro', 'Pro')], default='free')
     active = models.BooleanField(default=True)
     expires_at = models.DateTimeField(null=True, blank=True)
+    auto_renew = models.BooleanField(default=False)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+
+
+class SubscriptionTransaction(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    request_id = models.UUIDField()
+    outcome = models.CharField(max_length=10, choices=[('approved', 'Aprobada'), ('declined', 'Rechazada')])
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3)
+    duration_days = models.PositiveIntegerField()
+    starts_at = models.DateTimeField(null=True)
+    ends_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    email_status = models.CharField(max_length=12, default='pending')
+
+    class Meta:
+        ordering = ['-created_at', '-id']
+        constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='subscription_operation_unique')]
 
 
 class PersonalState(models.Model):

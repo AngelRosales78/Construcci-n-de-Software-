@@ -19,6 +19,7 @@ from .pillar_views import CompanyPillarsView
 from .simulation_views import CompanySimulationView, SimulationDetailView, CompanySimulationDefaultsView
 from .analysis_views import CompanyAnalysisView
 from .access_views import SubscriptionView
+from .subscription_views import PlansView, CheckoutView, SubscriptionHistoryView, ReceiptView, CancelSubscriptionView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
 from .comparison_services import ComparisonHistoryView, ComparisonConclusionView
@@ -28,6 +29,11 @@ from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportC
 app_name = 'auth'
 
 urlpatterns = [
+    path('plans/', PlansView.as_view()),
+    path('user/subscription/checkout/', CheckoutView.as_view()),
+    path('user/subscription/history/', SubscriptionHistoryView.as_view()),
+    path('user/subscription/receipts/<uuid:receipt_id>/', ReceiptView.as_view()),
+    path('user/subscription/cancel/', CancelSubscriptionView.as_view()),
     path('reports/jobs/', ReportsView.as_view()),
     path('reports/jobs/<uuid:job_id>/', ReportStatusView.as_view()),
     path('reports/jobs/<uuid:job_id>/file/', ReportFileView.as_view()),

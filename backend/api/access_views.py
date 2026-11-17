@@ -17,6 +17,10 @@ def subscription(user):
     return {'schema_version': 'subscription-v1', 'owner_id': str(user.pk),
             'plan': plan, 'active': active,
             'features': ['compare'] if plan == 'pro' and active else [],
+            'effective_plan': 'pro' if plan == 'pro' and active else 'free',
+            'expires_at': account.expires_at.isoformat() if account and account.expires_at else None,
+            'auto_renew': bool(account and account.auto_renew and active),
+            'cancelled_at': account.cancelled_at.isoformat() if account and account.cancelled_at else None,
             'valid_until': valid_until.isoformat()}
 
 
