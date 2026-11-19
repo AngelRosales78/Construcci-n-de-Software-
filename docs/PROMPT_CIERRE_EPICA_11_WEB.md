@@ -70,3 +70,22 @@ Gmail. La recepción en la bandeja real sigue pendiente hasta que el propietario
 introduzca su contraseña de aplicación y confirme la llegada del mensaje.
 
 Referencia de configuración: https://support.google.com/mail/answer/185833?hl=es
+
+## Correo institucional verificado el 18 de noviembre de 2026
+
+La configuración admite cuentas de Google Workspace con dominio institucional.
+Google aceptó el mensaje inicial de configuración y se reinició la demo con el
+remitente institucional. La contraseña de aplicación se conserva cifrada para el
+usuario de Windows en el directorio de ejecución, fuera del repositorio.
+
+Se creó una cuenta exclusiva de demostración y se recorrieron por HTTP el inicio
+de sesión, la aprobación simulada y la consulta privada del comprobante. El servidor
+registró `email_status=sent` y acceso efectivo Pro. Un segundo POST con el mismo
+identificador devolvió el mismo comprobante. Se conservan las cuentas Free y Pro
+de presentación. El resultado local está en
+`../presentation_runtime_sprint3/smtp_verification_result.json`, sin la clave de Gmail.
+
+Quedó comprobada la aceptación SMTP del comprobante por Gmail. La recepción y
+ubicación en la bandeja de entrada o spam debe confirmarla el propietario del correo.
+Esta verificación actualiza los pendientes de transporte indicados en las revisiones
+anteriores. El Sprint 4 y el cliente Android continúan con su planificación propia.

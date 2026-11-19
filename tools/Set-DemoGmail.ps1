@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop'
 $project = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
 $state = Join-Path $project 'presentation_runtime_sprint3'
 if (!$Sender) { $Sender = Read-Host 'Direccion de Gmail remitente' }
-if ($Sender -notmatch '^[^\s@]+@(gmail\.com|googlemail\.com)$') { throw 'Indica una direccion personal de Gmail valida.' }
+if ($Sender -notmatch '^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$') { throw 'Indica una direccion de Gmail o Google Workspace valida.' }
 Write-Host 'Configurar Gmail para comprobantes de la demo'
 Write-Host 'Crea una contrasena de aplicacion en https://myaccount.google.com/apppasswords'
 Write-Host 'Google requiere verificacion en dos pasos para crearla.'
