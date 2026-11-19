@@ -19,6 +19,7 @@ from .pillar_views import CompanyPillarsView
 from .simulation_views import CompanySimulationView, SimulationDetailView, CompanySimulationDefaultsView
 from .analysis_views import CompanyAnalysisView
 from .access_views import SubscriptionView
+from .user_management import AdminUsersView, AdminUserView, UserAvatarView, DeleteOwnAccountView
 from .subscription_views import PlansView, CheckoutView, SubscriptionHistoryView, ReceiptView, CancelSubscriptionView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
@@ -29,6 +30,10 @@ from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportC
 app_name = 'auth'
 
 urlpatterns = [
+    path('admin/users/', AdminUsersView.as_view()),
+    path('admin/users/<int:user_id>/', AdminUserView.as_view()),
+    path('auth/profile/avatar/', UserAvatarView.as_view()),
+    path('auth/account/', DeleteOwnAccountView.as_view()),
     path('plans/', PlansView.as_view()),
     path('user/subscription/checkout/', CheckoutView.as_view()),
     path('user/subscription/history/', SubscriptionHistoryView.as_view()),

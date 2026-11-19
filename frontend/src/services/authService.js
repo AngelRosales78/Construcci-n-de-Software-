@@ -67,9 +67,13 @@ export const authService = {
    * Update user profile
    */
   async updateProfile(data) {
-    const response = await api.patch('/auth/profile/', data)
+    const owner = String(JSON.parse(localStorage.getItem('user') || '{}').id)
+    const options = data instanceof FormData ? { headers: { 'Content-Type': undefined } } : {}
+    const response = await api.patch('/auth/profile/', data, options)
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}')
+    if (String(currentUser.id) !== owner) throw new Error('La cuenta cambió durante la actualización.')
     localStorage.setItem('user', JSON.stringify({ ...currentUser, ...response.data }))
+    window.dispatchEvent(new Event('sp500-profile-updated'))
     return response.data
   },
 
@@ -83,7 +87,12 @@ export const authService = {
   subscribeSession,
 
   getSessionIdentity() {
-    return hasSession() ? (localStorage.getItem('user') || 'authenticated') : ''
+    if (!hasSession()) return ''
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}')
+      return String(user.id || user.username || 'authenticated')
+    }
+    catch { return 'authenticated' }
   },
 
   /**

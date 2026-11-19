@@ -12,6 +12,7 @@ export default function AdminDashboard() {
         ? <p>{summary.users} usuarios registrados · {summary.companies} empresas en el catálogo.</p>
         : <p role="status">Consultando el resumen…</p>}
       <Link to="/search">Explorar empresas</Link>
+      <Link to="/admin-panel/users">Administrar usuarios</Link>
     </section>
   </WorkspaceLayout>
 }

@@ -43,6 +43,8 @@ class User(AbstractUser):
     last_login_ip = models.GenericIPAddressField(_('last login IP'), blank=True, null=True)
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
+    session_version = models.PositiveBigIntegerField(default=0)
+    blocked_reason = models.CharField(max_length=240, blank=True, default='')
 
     class Meta:
         db_table = 'auth_user'
@@ -62,6 +64,22 @@ class AccountPlan(models.Model):
     expires_at = models.DateTimeField(null=True, blank=True)
     auto_renew = models.BooleanField(default=False)
     cancelled_at = models.DateTimeField(null=True, blank=True)
+
+
+class UserAvatar(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='avatar')
+    url = models.CharField(max_length=250, default='/api/v1/auth/profile/avatar/')
+    content = models.BinaryField()
+    sha256 = models.CharField(max_length=64)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class AdministrationEvent(models.Model):
+    actor = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='administration_actions')
+    subject = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='administration_events')
+    action = models.CharField(max_length=40)
+    changes = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class SubscriptionTransaction(models.Model):

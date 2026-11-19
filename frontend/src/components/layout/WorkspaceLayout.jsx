@@ -3,7 +3,7 @@ import { useSessionViewModel } from '../../viewmodels/useSessionViewModel'
 
 export default function WorkspaceLayout({ children }) {
   const { pathname } = useLocation()
-  const { name, leaving, logout } = useSessionViewModel()
+  const { name, role, avatarUrl, leaving, logout } = useSessionViewModel()
   return <div className="workspace-shell">
     <a className="skip-link" href="#workspace-content">Ir al contenido</a>
     <header className="workspace-header">
@@ -17,9 +17,11 @@ export default function WorkspaceLayout({ children }) {
         <Link to="/favorites" aria-current={pathname === '/favorites' ? 'page' : undefined}>Favoritos</Link>
         <Link to="/compare" aria-current={pathname === '/compare' ? 'page' : undefined}>Comparar</Link>
         <Link to="/profile/subscription" aria-current={pathname === '/profile/subscription' ? 'page' : undefined}>Mi suscripción</Link>
+        <Link to="/profile" aria-current={pathname === '/profile' ? 'page' : undefined}>Mi perfil</Link>
+        {role === 'admin' && <Link to="/admin-panel">Administración</Link>}
         {pathname.startsWith('/company/') && <span className="workspace-current">Ficha financiera</span>}
       </nav>
-      <div className="workspace-account"><span className="terminal-status">Datos importados</span><span className="account-avatar" aria-hidden="true">{name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span>
+      <div className="workspace-account"><span className="terminal-status">Datos importados</span><span className="account-avatar" aria-hidden="true">{avatarUrl ? <img src={avatarUrl} alt="" style={{width:36,height:36,borderRadius:'50%',objectFit:'cover'}} /> : name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span>
         <button className="logout-button" onClick={logout} disabled={leaving}>{leaving ? 'Cerrando…' : 'Cerrar Sesión'}</button>
       </div>
     </header>

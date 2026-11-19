@@ -351,6 +351,9 @@ class CustomTokenRefreshView(TokenRefreshView):
         try:
             from .redis_utils import get_redis_connection
             token = RefreshToken(refresh_token)
+            user = User.objects.filter(pk=token.get('user_id')).first()
+            if not user or not user.is_active or token.get('sv', 0) != user.session_version:
+                return Response({'error': 'La sesión fue revocada. Inicia sesión nuevamente.'}, status=401)
             if token.get('sid') and get_redis_connection().exists(f"blacklist:session:{token['sid']}"):
                 return Response({'error': 'Session has been invalidated.'}, status=401)
             # Blacklist old refresh token

@@ -11,6 +11,8 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import FavoritesPage from './components/favorites/FavoritesPage'
 import ComparisonPage from './components/compare/ComparisonPage'
 import SubscriptionPage from './components/subscription/SubscriptionPage'
+import ProfilePage from './components/account/ProfilePage'
+import AdminUsersPage from './components/account/AdminUsersPage'
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin-panel" element={<AdminDashboard />} />
+          <Route path="/admin-panel/users" element={<AdminUsersPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search" element={<CompanySearch />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/compare" element={<ComparisonPage />} />
