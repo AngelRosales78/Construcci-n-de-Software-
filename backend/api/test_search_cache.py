@@ -14,7 +14,8 @@ def test_cached_search_is_validated_and_isolated(monkeypatch,django_assert_num_q
     Company.objects.create(ticker='AAA',name='Alpha',sector='technology')
     url=reverse('auth:company-search')
     first=client.get(url,{'sector':'technology'})
-    with django_assert_num_queries(0):second=client.get(url,{'sector':'technology'})
+    # La versión compartida consulta PostgreSQL incluso cuando la respuesta está en caché.
+    with django_assert_num_queries(1):second=client.get(url,{'sector':'technology'})
     assert first.json()==second.json()
     assert client.get(url,{'ordering':'invalid'}).status_code==400
     assert len(redis.keys('sp500:search:*'))==1

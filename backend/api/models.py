@@ -178,6 +178,11 @@ class Company(models.Model):
     )
 
     logo_url = models.URLField(blank=True, default='')
+    is_active = models.BooleanField(default=True, db_index=True)
+    is_pilot = models.BooleanField(default=False, db_index=True)
+    description = models.TextField(max_length=3000, blank=True, default='')
+    website_url = models.URLField(max_length=500, blank=True, default='')
+    sector_overridden = models.BooleanField(default=False)
     latest_price = models.ForeignKey('PriceHistory', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     ticker = models.CharField(_('ticker'), max_length=10, unique=True, db_index=True)
     name = models.CharField(_('name'), max_length=200, db_index=True)
@@ -210,6 +215,11 @@ class Company(models.Model):
 
     def __str__(self):
         return f"{self.ticker} - {self.name}"
+
+
+class CatalogRevision(models.Model):
+    """Versión compartida por procesos para no reutilizar búsquedas desactualizadas."""
+    revision = models.PositiveBigIntegerField(default=0)
 
 
 class Favorite(models.Model):

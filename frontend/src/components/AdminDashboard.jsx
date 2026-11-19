@@ -13,6 +13,7 @@ export default function AdminDashboard() {
         : <p role="status">Consultando el resumen…</p>}
       <Link to="/search">Explorar empresas</Link>
       <Link to="/admin-panel/users">Administrar usuarios</Link>
+      <Link to="/admin-panel/companies">Administrar empresas y datos</Link>
     </section>
   </WorkspaceLayout>
 }

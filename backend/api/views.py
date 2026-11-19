@@ -456,8 +456,9 @@ class CompanySearchView(generics.ListAPIView):
         import json
         from redis.exceptions import RedisError
         from .redis_utils import get_redis_connection
+        from .catalog_services import catalog_revision
         identity = json.dumps([request.user.pk, request.build_absolute_uri('/') ,
-                               sorted(request.query_params.items())], ensure_ascii=False)
+                               sorted(request.query_params.items()), catalog_revision()], ensure_ascii=False)
         key = 'sp500:search:v2:' + hashlib.sha256(identity.encode()).hexdigest()
         from django.core.cache import caches
         local = caches['search_results']
@@ -500,7 +501,7 @@ class CompanySearchView(generics.ListAPIView):
         if with_data not in ('', 'true', 'false'):
             raise ValidationError({'with_data': 'Use true o false.'})
 
-        queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url').annotate(
+        queryset = Company.objects.filter(is_active=True).only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url').annotate(
             has_annual_data=Exists(AnnualFinancialStatement.objects.filter(company_id=OuterRef('pk'))),
             has_price_data=Exists(PriceHistory.objects.filter(company_id=OuterRef('pk'))))
         if with_data == 'true':
@@ -679,6 +680,7 @@ def company_financial_data(company):
     result = {
         'id': company.pk, 'ticker': company.ticker, 'name': company.name,
         'sector': company.sector, 'sector_display': company.get_sector_display(),
+        'is_active': company.is_active, 'description': company.description, 'website_url': company.website_url,
         'logo_url': company.logo_url, 'altman_z': score, 'profile': financial_profile(score),
         'as_of': metrics.as_of if metrics else None,
         'source': metrics.source if metrics else 'Datos heredados sin verificar',
@@ -759,4 +761,7 @@ class CompanyAutocompleteView(generics.GenericAPIView):
             suggestions = autocomplete(prefix)
         except RedisError:
             return Response({'error': 'El autocompletado no está disponible.'}, status=503)
-        return Response({'suggestions': suggestions})
+        # Una caché antigua nunca vuelve a publicar una empresa desactivada.
+        active = set(Company.objects.filter(is_active=True,
+            ticker__in=[item['ticker'] for item in suggestions]).values_list('ticker', flat=True))
+        return Response({'suggestions': [item for item in suggestions if item['ticker'] in active]})

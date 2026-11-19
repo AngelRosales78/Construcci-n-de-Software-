@@ -23,6 +23,11 @@ originales se mantienen; una variante Android consume el mismo contrato y no se
 cuenta como otra historia terminada. Las tareas de interfaz, servidor, datos, UX
 y pruebas se cierran juntas cuando el flujo real cumple sus criterios.
 
+El PDF detallado solicitado con el formato del Sprint 3 reorganiza esos requisitos
+en cuatro entregables por HU: dos Android y dos Web/API. Son ochenta tareas de
+ejecución, cuarenta por integrante, con códigos S4-T y referencia al rango original.
+Los bloques anteriores de Android a cargo de Diego se mantienen como anexo.
+
 | Historia | Tareas originales | Resultado verificable |
 |---|---|---|
 | HU12_01 | T12.1.1 a T12.1.5 | Cambio válido de categoría en favoritos genera una alerta privada, fechada, con enlace y sin duplicados. |
@@ -88,8 +93,13 @@ Rosales conserva autoría de su Android del Sprint 4 y sus propios commits reale
   demostración y contrato Android en `SPRINT4_HU13_EVIDENCIAS.md`.
 - Pruebas completas de este bloque, 423 del servidor y 109 de la web aprobadas.
   Una prueba optativa de Redis quedó omitida; la compilación web fue correcta.
-- HU12, HU14 y HU15, Android anterior de épica 11 y la integración final siguen
-  pendientes. El Android del Sprint 4 de Rosales requiere su propia evidencia.
+- HU14_01, HU14_02 y HU14_04 implementadas en Web/API el 19, antes de su fecha
+  objetivo del 20: seis tareas de ejecución adicionales. El detalle y contrato están
+  en `SPRINT4_HU14_CATALOGO_EVIDENCIAS.md`. Seguimiento Web/API del PDF: 16/40.
+- Tras el bloque de catálogo pasaron 435 pruebas del servidor y 113 de Web,
+  con una prueba optativa de Redis omitida y compilación correcta.
+- HU14_03 y HU14_05, HU12 y HU15, Android anterior de épica 11 y la integración
+  final siguen pendientes. El Android del Sprint 4 de Rosales requiere su evidencia.
 - Este cronograma organiza el trabajo, no programa ejecuciones automáticas en
   días futuros ni acredita tareas aún sin implementar.
 

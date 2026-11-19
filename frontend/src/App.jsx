@@ -13,6 +13,7 @@ import ComparisonPage from './components/compare/ComparisonPage'
 import SubscriptionPage from './components/subscription/SubscriptionPage'
 import ProfilePage from './components/account/ProfilePage'
 import AdminUsersPage from './components/account/AdminUsersPage'
+import AdminCompaniesPage from './components/account/AdminCompaniesPage'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin-panel" element={<AdminDashboard />} />
           <Route path="/admin-panel/users" element={<AdminUsersPage />} />
+          <Route path="/admin-panel/companies" element={<AdminCompaniesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/search" element={<CompanySearch />} />
           <Route path="/favorites" element={<FavoritesPage />} />

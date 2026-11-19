@@ -12,6 +12,7 @@ import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
 import FavoriteButton from '../favorites/FavoriteButton'
 import ReportPanel from '../reports/ReportPanel'
+import CompanyAbout from './CompanyAbout'
 
 
 export default function CompanyDashboard() {
@@ -38,6 +39,7 @@ export default function CompanyDashboard() {
       </div>
 
       <div className="dashboard-content">
+        <CompanyAbout company={company} />
         <ReportPanel a={company.ticker} />
         {visitError && <p role="status">{visitError} <button onClick={retryVisit}>Reintentar registro de visita</button></p>}
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
