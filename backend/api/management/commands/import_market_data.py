@@ -9,7 +9,7 @@ from django.core.validators import URLValidator
 from django.db import transaction
 from django.db.models import DecimalField
 from django.utils import timezone
-from api.models import Company, FinancialMetrics, PriceHistory
+from api.models import Company, FinancialMetrics, MarketDataOperation, PriceHistory
 
 class Command(BaseCommand):
     help = 'Importar balances y cierres ajustados CSV con fuente y fecha documentadas'
@@ -18,11 +18,15 @@ class Command(BaseCommand):
         parser.add_argument('--prices')
         parser.add_argument('--source', required=True)
         parser.add_argument('--demo', action='store_true')
+        parser.add_argument('--preserve-refreshed', action='store_true',
+                            help='Conservar precios actualizados desde el panel al preparar la demostración.')
     def handle(self, *args, **options):
         source=options['source'].strip()
         if not source or len(source)>250 or not (options['metrics'] or options['prices']):
             raise CommandError('Se requieren una fuente y al menos un archivo CSV.')
         companies={c.ticker:c for c in Company.objects.all()}
+        preserved = set(MarketDataOperation.objects.filter(kind='refresh', status='succeeded')
+                        .values_list('company__ticker', flat=True)) if options['preserve_refreshed'] else set()
         metrics=[];prices=[];logos={};seen=set();currencies={}
         for kind in ('metrics','prices'):
             if not options[kind]:continue
@@ -34,6 +38,8 @@ class Command(BaseCommand):
                     for number,row in enumerate(reader,start=2):
                         ticker=row['ticker'].strip().upper()
                         if ticker not in companies:raise ValueError(f'Ticker desconocido: {ticker}')
+                        if kind == 'prices' and ticker in preserved:
+                            continue
                         company=companies[ticker]
                         raw_date=row['as_of'] if kind=='metrics' else row['date']
                         when=date.fromisoformat(raw_date.strip())

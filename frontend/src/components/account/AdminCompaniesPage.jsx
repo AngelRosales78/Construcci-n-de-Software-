@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import ConfirmationDialog from './ConfirmationDialog'
 import { useAdminCompaniesViewModel } from '../../viewmodels/useAdminCompaniesViewModel'
+import { useMarketDataViewModel } from '../../viewmodels/useMarketDataViewModel'
+import MarketDataControls from './MarketDataControls'
 import { sectorLabel } from '../../utils/financialPresentation'
 import './account.css'
 
 const metricNames = { market_cap: 'Capitalización', per: 'PER', roe: 'ROE', beta: 'Beta', dividend_yield: 'Rendimiento por dividendo' }
+const updateStates = { succeeded: 'Completada', running: 'En curso', failed: 'Fallida' }
 
 export default function AdminCompaniesPage() {
   const vm = useAdminCompaniesViewModel()
+  const market = useMarketDataViewModel(vm.resource.owner, vm.resource.reload)
   const appliedQuery = vm.params.get('q') || ''
   const [query, setQuery] = useState(appliedQuery)
   useEffect(() => setQuery(appliedQuery), [appliedQuery])
@@ -17,6 +21,8 @@ export default function AdminCompaniesPage() {
   return <WorkspaceLayout><div className="account-page">
     <Link to="/admin-panel">Volver a administración</Link><h1>Empresas y datos</h1>
     <p>Administra el catálogo y comprueba qué datos tiene cada empresa.</p>
+    <MarketDataControls market={market} sectors={sectors} usage={vm.resource.data?.market_provider} />
+    {vm.sectors.error && <p role="alert">{vm.sectors.error} <button type="button" onClick={vm.sectors.reload}>Reintentar sectores disponibles</button></p>}
     <form className="account-filters" onSubmit={event => { event.preventDefault(); vm.update({ q: query }) }}>
       <label>Empresa o ticker<input value={query} maxLength={120} onChange={event => setQuery(event.target.value)} /></label><button>Buscar</button>
       <label>Listado<select value={vm.params.get('scope') || 'all'} onChange={event => vm.update({ scope: event.target.value })}>
@@ -40,13 +46,17 @@ export default function AdminCompaniesPage() {
           <td><div>Resumen: {company.coverage.summary_fields}/{company.coverage.summary_total} indicadores · {company.coverage.summary_as_of || 'Sin balance de resumen'}</div>
             <div>Ejercicios: {company.coverage.fiscal_years.join(', ') || 'Sin estados anuales'}</div>
             <div>Precios hasta: {company.coverage.price_as_of || 'Sin precios'}</div>
+            {company.is_index_member === false && <small>Alta manual · pertenencia al índice sin verificar.</small>}
+            {company.last_update && <small>Última consulta: {company.last_update.finished_at ? new Date(company.last_update.finished_at).toLocaleString('es-PE') : 'En curso'} · {updateStates[company.last_update.status] || company.last_update.status}
+              {company.last_update.status === 'failed' && <> · {company.last_update.message}</>}</small>}
             <details><summary>Ver fuentes y fechas</summary>
               {!company.coverage.sources.length && <p>Sin fuentes importadas.</p>}
               {company.coverage.sources.map(source => <p className="catalog-source" key={source}>{source}</p>)}
               {Object.entries(company.coverage.field_sources).map(([field, value]) => <p key={field}>{metricNames[field] || field} · {value.as_of} · {value.method}<br /><a href={value.source} target="_blank" rel="noopener noreferrer">Consultar fuente del indicador</a></p>)}
             </details></td>
-          <td><button disabled={vm.busy} onClick={() => vm.choose(company,true)}>Editar {company.ticker}</button>
-            <button disabled={vm.busy} onClick={() => vm.choose(company)}>{company.is_active ? 'Desactivar' : 'Activar'} {company.ticker}</button></td>
+          <td><button disabled={vm.busy || market.busy} onClick={() => vm.choose(company,true)}>Editar {company.ticker}</button>
+            <button disabled={vm.busy || market.busy} onClick={() => vm.choose(company)}>{company.is_active ? 'Desactivar' : 'Activar'} {company.ticker}</button>
+            <button disabled={vm.busy || market.busy} onClick={() => market.chooseRefresh(company)}>Actualizar precios {company.ticker}</button></td>
         </tr>)}</tbody></table></div>
       {!vm.resource.data.results.length && <p>No hay empresas con esos filtros.</p>}
       <div className="account-actions"><button disabled={!vm.resource.data.previous || vm.resource.loading} onClick={() => vm.go(-1)}>Anterior</button>

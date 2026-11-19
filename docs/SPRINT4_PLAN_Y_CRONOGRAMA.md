@@ -98,8 +98,16 @@ Rosales conserva autoría de su Android del Sprint 4 y sus propios commits reale
   en `SPRINT4_HU14_CATALOGO_EVIDENCIAS.md`. Seguimiento Web/API del PDF: 16/40.
 - Tras el bloque de catálogo pasaron 435 pruebas del servidor y 113 de Web,
   con una prueba optativa de Redis omitida y compilación correcta.
-- HU14_03 y HU14_05, HU12 y HU15, Android anterior de épica 11 y la integración
-  final siguen pendientes. El Android del Sprint 4 de Rosales requiere su evidencia.
+- HU14_03 y HU14_05 implementadas y probadas en Web/API el 19: actualización
+  manual de precios y alta verificada, cuatro tareas adicionales. Seguimiento
+  Web/API del PDF: 20/40. Contrato y evidencia en `SPRINT4_HU14_ACTUALIZACION_Y_ALTA.md`.
+- Tras este bloque pasaron 464 pruebas del servidor y 116 de Web, con una optativa
+  de Redis omitida y compilación correcta. MSFT y AAPL tienen precios hasta el
+  18/11; HIMS se añadió como ensayo identificado como alta manual.
+- La actualización nueva se limita a precios. SEC devolvió 403; descargar balances
+  nuevos sigue pendiente. Los indicadores existentes conservan sus fechas y fuentes.
+- HU12 y HU15, Android anterior de épica 11 y la integración final siguen pendientes.
+  El Android del Sprint 4 de Rosales requiere su propia evidencia.
 - Este cronograma organiza el trabajo, no programa ejecuciones automáticas en
   días futuros ni acredita tareas aún sin implementar.
 

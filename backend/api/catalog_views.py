@@ -1,6 +1,6 @@
 """HU14_01, HU14_02 y HU14_04: catálogo, cobertura y datos descriptivos."""
 from django.db import transaction
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Exists, OuterRef, Prefetch, Q
 from django.db.models.functions import Lower
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError as DjangoValidationError
@@ -10,14 +10,17 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import AdministrationEvent, AnnualFinancialStatement, Company, PriceHistory
+from .models import AdministrationEvent, AnnualFinancialStatement, Company, MarketDataOperation, PriceHistory
+from .market_views import add_company
+from .market_updates import provider_usage, public_operation
 from .user_management import IsPlatformAdministrator, lock_administration
 from .catalog_services import PILOT_TICKERS, invalidate_catalog
 
 
 def catalog_query():
     return Company.objects.select_related('financial_metrics', 'latest_price').prefetch_related(
-        'annual_statements').annotate(
+        'annual_statements', Prefetch('market_updates', queryset=MarketDataOperation.objects.filter(kind='refresh')
+            .defer('raw_response').order_by('-started_at','-id')[:1], to_attr='latest_update')).annotate(
         has_annual=Exists(AnnualFinancialStatement.objects.filter(company_id=OuterRef('pk'))),
         has_prices=Exists(PriceHistory.objects.filter(company_id=OuterRef('pk'))))
 
@@ -35,6 +38,9 @@ def company_data(company):
             'sector': company.sector, 'sector_display': company.get_sector_display(),
             'is_active': company.is_active, 'is_pilot': company.is_pilot,
             'description': company.description, 'website_url': company.website_url,
+            'is_index_member': company.is_index_member, 'identity_source_url': company.identity_source_url,
+            'identity_verified_at': company.identity_verified_at,
+            'last_update': public_operation(company.latest_update[0]) if company.latest_update else None,
             'updated_at': company.updated_at,
             'coverage': {'summary_fields': summary_count, 'summary_total': 5,
                          'summary_as_of': summary.as_of if summary else None,
@@ -100,8 +106,12 @@ class AdminCompaniesView(APIView):
         response.data['pilot'] = {'selected': Company.objects.filter(is_pilot=True).count(),
                                   'target': len(PILOT_TICKERS), 'selection_status': 'proposal',
                                   'tickers': list(PILOT_TICKERS)}
+        response.data['market_provider'] = provider_usage()
         response['Cache-Control'] = 'private, no-store'
         return response
+
+    def post(self, request):
+        return add_company(request)
 
 
 class AdminCompanyView(APIView):

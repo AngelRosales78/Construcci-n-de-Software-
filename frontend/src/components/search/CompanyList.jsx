@@ -46,7 +46,7 @@ export default function CompanyList({ companies, loading, favorites }) {
             <CompanyLogo company={company} />
             <strong className="company-ticker">{company.ticker}</strong>
           </div>
-          <h3 className="company-name">{company.name}</h3>
+          <h3 className="company-name">{company.name}{company.is_index_member === false && <small className="company-membership">Alta manual · índice sin verificar</small>}</h3>
           <span className={`company-sector sector-${company.sector}`}>{sectorLabel(company.sector, company.sector_display)}</span>
           <span className={`coverage-label ${hasIndicators(company) || company.has_annual_data ? 'coverage-available' : ''}`}>{hasIndicators(company) ? 'Indicadores disponibles' : company.has_annual_data ? 'Balances anuales disponibles' : company.has_price_data ? 'Solo precios históricos' : 'Información financiera pendiente'}</span>
           {hasIndicators(company) ? <div className="company-metrics">

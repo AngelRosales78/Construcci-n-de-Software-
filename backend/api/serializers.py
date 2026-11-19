@@ -199,7 +199,7 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = [
-            'id', 'ticker', 'name', 'sector', 'sector_display', 'logo_url',
+            'id', 'ticker', 'name', 'sector', 'sector_display', 'logo_url', 'is_index_member',
             'market_cap', 'per', 'roe', 'has_annual_data', 'has_price_data',
         ]
 

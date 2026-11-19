@@ -129,6 +129,8 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@example.test'
 SIMULATED_PRO_PRICE = config('SIMULATED_PRO_PRICE', default='9.90')
 SIMULATED_PRO_CURRENCY = config('SIMULATED_PRO_CURRENCY', default='PEN')
 SIMULATED_PRO_DAYS = config('SIMULATED_PRO_DAYS', default=30, cast=int)
+MARKET_DATA_DAILY_LIMIT = config('MARKET_DATA_DAILY_LIMIT', default=100, cast=int)
+MARKET_DATA_MIN_INTERVAL = config('MARKET_DATA_MIN_INTERVAL', default=1.0, cast=float)
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:5173').rstrip('/')
 
 CORS_ALLOWED_ORIGINS = [

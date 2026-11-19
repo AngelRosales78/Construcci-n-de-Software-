@@ -501,7 +501,7 @@ class CompanySearchView(generics.ListAPIView):
         if with_data not in ('', 'true', 'false'):
             raise ValidationError({'with_data': 'Use true o false.'})
 
-        queryset = Company.objects.filter(is_active=True).only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url').annotate(
+        queryset = Company.objects.filter(is_active=True).only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url', 'is_index_member').annotate(
             has_annual_data=Exists(AnnualFinancialStatement.objects.filter(company_id=OuterRef('pk'))),
             has_price_data=Exists(PriceHistory.objects.filter(company_id=OuterRef('pk'))))
         if with_data == 'true':
@@ -681,6 +681,8 @@ def company_financial_data(company):
         'id': company.pk, 'ticker': company.ticker, 'name': company.name,
         'sector': company.sector, 'sector_display': company.get_sector_display(),
         'is_active': company.is_active, 'description': company.description, 'website_url': company.website_url,
+        'is_index_member': company.is_index_member, 'identity_source_url': company.identity_source_url,
+        'identity_verified_at': company.identity_verified_at,
         'logo_url': company.logo_url, 'altman_z': score, 'profile': financial_profile(score),
         'as_of': metrics.as_of if metrics else None,
         'source': metrics.source if metrics else 'Datos heredados sin verificar',

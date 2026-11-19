@@ -44,7 +44,7 @@ try {
         & $python -B manage.py import_company_metrics "../docs/datos/sprint3/$ticker-metrics.json"
         if ($LASTEXITCODE -ne 0) { throw "Falló el resumen $ticker" }
     }
-    & $python -B manage.py import_market_data --prices ../docs/datos/MSFT_cierres_5y.csv --source 'Yahoo Finance; cierres ajustados MSFT; snapshot 12-10-2026'
+    & $python -B manage.py import_market_data --prices ../docs/datos/MSFT_cierres_5y.csv --source 'Yahoo Finance; cierres ajustados MSFT; snapshot 12-10-2026' --preserve-refreshed
     if ($LASTEXITCODE -ne 0) { throw 'Fallaron los precios' }
     foreach ($inventory in @('../docs/datos/sprint2_disponibilidad_MSFT.json','../docs/datos/sprint3/GOOGL-annual.json','../docs/datos/sprint3/META-annual.json')) {
         & $python -B manage.py import_annual_financials $inventory
@@ -52,7 +52,7 @@ try {
     }
     foreach ($ticker in @('MSFT','GOOGL','META')) {
         $provenance = Get-Content -LiteralPath "../docs/datos/sprint3/$ticker-prices-source.json" -Raw | ConvertFrom-Json
-        & $python -B manage.py import_market_data --prices "../docs/datos/sprint3/$ticker-prices.csv" --source $provenance.source
+        & $python -B manage.py import_market_data --prices "../docs/datos/sprint3/$ticker-prices.csv" --source $provenance.source --preserve-refreshed
         if ($LASTEXITCODE -ne 0) { throw "Falló el histórico $ticker" }
     }
     & $python -B manage.py preload_search

@@ -21,6 +21,7 @@ from .analysis_views import CompanyAnalysisView
 from .access_views import SubscriptionView
 from .user_management import AdminUsersView, AdminUserView, UserAvatarView, DeleteOwnAccountView
 from .catalog_views import AdminCompaniesView, AdminCompanyView
+from .market_views import MarketOperationView, RefreshCompanyView, VerifyCompanyView
 from .subscription_views import PlansView, CheckoutView, SubscriptionHistoryView, ReceiptView, CancelSubscriptionView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
@@ -31,6 +32,9 @@ from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportC
 app_name = 'auth'
 
 urlpatterns = [
+    path('admin/companies/verify/', VerifyCompanyView.as_view()),
+    path('admin/companies/<int:company_id>/refresh/', RefreshCompanyView.as_view()),
+    path('admin/market-operations/<uuid:operation_id>/', MarketOperationView.as_view()),
     path('admin/companies/', AdminCompaniesView.as_view()),
     path('admin/companies/<int:company_id>/', AdminCompanyView.as_view()),
     path('admin/users/', AdminUsersView.as_view()),

@@ -183,6 +183,9 @@ class Company(models.Model):
     description = models.TextField(max_length=3000, blank=True, default='')
     website_url = models.URLField(max_length=500, blank=True, default='')
     sector_overridden = models.BooleanField(default=False)
+    is_index_member = models.BooleanField(default=True)
+    identity_source_url = models.URLField(max_length=500, blank=True, default='')
+    identity_verified_at = models.DateTimeField(null=True, blank=True)
     latest_price = models.ForeignKey('PriceHistory', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     ticker = models.CharField(_('ticker'), max_length=10, unique=True, db_index=True)
     name = models.CharField(_('name'), max_length=200, db_index=True)
@@ -220,6 +223,43 @@ class Company(models.Model):
 class CatalogRevision(models.Model):
     """Versión compartida por procesos para no reutilizar búsquedas desactualizadas."""
     revision = models.PositiveBigIntegerField(default=0)
+
+
+class ProviderDailyUsage(models.Model):
+    provider = models.CharField(max_length=30)
+    day = models.DateField()
+    calls = models.PositiveIntegerField(default=0)
+    limit = models.PositiveIntegerField()
+    last_called_at = models.DateTimeField(null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['provider', 'day'], name='provider_day_unique')]
+
+
+class MarketDataOperation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    actor = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    request_id = models.UUIDField()
+    company = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL, related_name='market_updates')
+    ticker = models.CharField(max_length=10)
+    kind = models.CharField(max_length=10, choices=[('verify', 'Verificar'), ('refresh', 'Actualizar')])
+    sector = models.CharField(max_length=50, blank=True)
+    status = models.CharField(max_length=12, default='running')
+    started_at = models.DateTimeField(auto_now_add=True)
+    finished_at = models.DateTimeField(null=True)
+    error_code = models.CharField(max_length=40, blank=True)
+    message = models.CharField(max_length=350, blank=True)
+    result = models.JSONField(default=dict)
+    source_url = models.URLField(max_length=500, blank=True)
+    response_sha256 = models.CharField(max_length=64, blank=True)
+    raw_response = models.BinaryField(null=True)
+
+    class Meta:
+        ordering = ['-started_at', '-id']
+        constraints = [
+            models.UniqueConstraint(fields=['actor', 'request_id'], name='market_actor_request_unique'),
+            models.UniqueConstraint(fields=['ticker'], condition=models.Q(status='running'), name='one_running_market_ticker'),
+        ]
 
 
 class Favorite(models.Model):
