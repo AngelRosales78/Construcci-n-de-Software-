@@ -51,10 +51,16 @@ def formula_label(formula):
     return formula
 
 
-def source(statement, tag):
-    return {'url': statement.source_url, 'tag': tag, 'accession': statement.accession,
+def source(statement, tag, component=None):
+    result = {'url': statement.source_url, 'tag': tag, 'accession': statement.accession,
             'filed': statement.filed.isoformat(), 'currency': statement.currency,
             'snapshot_sha256': statement.snapshot_sha256, 'is_demo': statement.is_demo}
+    evidence = (component or {}).get('source')
+    if evidence:
+        result.update(url=evidence['url'], accession=evidence['accession'], filed=evidence['filed'],
+                      snapshot_sha256=evidence['evidence_sha256'], locator=evidence['locator'],
+                      snapshot_kind='extracted_financial_facts')
+    return result
 
 
 def period(statement):
@@ -90,7 +96,7 @@ def metric(current, previous, ident, label, unit, formula, fields, calculate, de
             invalid = True
             continue
         result['components'].append({'id': name, 'label': field_label(name), 'value': str(decimal),
-                                     'period': period(statement), 'source': source(statement, item.get('tag'))})
+                                     'period': period(statement), 'source': source(statement, item.get('tag'), item)})
     if invalid:
         return result | unavailable('invalid_components')
     if result['missing_fields']:

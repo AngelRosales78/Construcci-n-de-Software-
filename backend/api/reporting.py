@@ -124,6 +124,8 @@ def render_report(snapshot, request):
         if quote:
             story.append(p(f"Último cierre ajustado importado: {quote['adjusted_close']} {quote['currency']} - {quote['date']}", 'Small'))
         story.append(p('Fuente del resumen: ' + str(summary.get('source') or 'Sin fuente disponible'), 'Small'))
+        for name, evidence in summary.get('field_sources', {}).items():
+            story.append(p(f"{name}: referencia {evidence['as_of']}. {evidence['method']} Fuente: {evidence['source']}", 'Small'))
         for pillar in row['pillars']['pillars']:
             story.append(p(pillar['label'] + ' - Nota: ' + (pillar['score'].get('display_value') or 'No disponible'), 'Heading2'))
             for metric in pillar['metrics']:

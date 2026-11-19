@@ -1,0 +1,43 @@
+{
+  "basis": "Hechos monetarios transcritos de tablas de informes 10-K consultados en SEC EDGAR. Este archivo contiene una selección de datos y no la respuesta HTTP ni el informe completo.",
+  "retrieved_on": "2026-11-19",
+  "conversion": "Los informes presentan millones de USD. Se multiplica por 1000000 y se conserva el gasto como componente positivo de la fórmula de cobertura.",
+  "facts": [
+    {
+      "ticker": "GOOGL",
+      "fiscal_year": 2024,
+      "value_usd": "268000000",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+      "accession": "0001652044-25-000014",
+      "filed": "2025-02-05",
+      "locator": "Other Income (Expense), Net, fila Interest expense, columna 2024. Gasto reconocido neto de intereses capitalizados."
+    },
+    {
+      "ticker": "GOOGL",
+      "fiscal_year": 2025,
+      "value_usd": "736000000",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+      "accession": "0001652044-26-000018",
+      "filed": "2026-02-05",
+      "locator": "Other Income (Expense), Net, fila Interest expense, columna 2025. Gasto reconocido neto de intereses capitalizados."
+    },
+    {
+      "ticker": "META",
+      "fiscal_year": 2024,
+      "value_usd": "715000000",
+      "url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm",
+      "accession": "0001326801-25-000017",
+      "filed": "2025-01-30",
+      "locator": "Interest and Other Income (Expense), Net, fila Interest expense, columna 2024. Gasto reconocido en resultados."
+    },
+    {
+      "ticker": "META",
+      "fiscal_year": 2025,
+      "value_usd": "1165000000",
+      "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm",
+      "accession": "0001628280-26-003942",
+      "filed": "2026-01-29",
+      "locator": "Interest and Other Income, Net, fila Interest expense, columna 2025. Gasto reconocido en resultados."
+    }
+  ]
+}

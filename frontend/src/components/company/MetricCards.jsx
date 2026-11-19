@@ -20,7 +20,11 @@ export default function MetricCards({ company }) {
     {indicators.map(([key, label, explanation]) => <article className="metric-card" key={key}>
       <abbr title={explanation} className="metric-label">{label}</abbr>
       <span className="metric-value">{format(key, company[key])}</span>
-      <details className="metric-help"><summary>Qué significa</summary><p className="metric-explanation">{explanation}</p></details>
+      {company.field_sources?.[key]?.as_of && <small>Referencia · {company.field_sources[key].as_of}</small>}
+      <details className="metric-help"><summary>Qué significa</summary><p className="metric-explanation">{explanation}</p>
+        {company.field_sources?.[key] && <><p>{company.field_sources[key].method}</p>
+          <a href={company.field_sources[key].source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a></>}
+      </details>
       {key === 'market_cap' && <small className="metric-unit-note">B: mil millones · T: un billón</small>}
     </article>)}
   </section>

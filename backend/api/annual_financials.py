@@ -3,6 +3,8 @@ import re
 from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.validators import URLValidator
+from datetime import date
 
 COMPONENTS = {
     'current_assets', 'current_liabilities', 'cash', 'short_term_investments',
@@ -37,6 +39,20 @@ def validate_statement(statement):
     for name, component in statement.components.items():
         if not isinstance(component, dict) or not isinstance(component.get('tag'), str) or not component['tag'].strip():
             raise ValidationError(f'Falta la etiqueta de procedencia de {name}.')
+        if 'source' in component:
+            evidence = component['source']
+            if not isinstance(evidence, dict) or set(evidence) != {'url', 'accession', 'filed', 'evidence_sha256', 'locator'}:
+                raise ValidationError('La procedencia complementaria está incompleta.')
+            try:
+                URLValidator(schemes=['https'])(evidence['url'])
+                published = date.fromisoformat(evidence['filed'])
+                if (not statement.period_end <= published <= timezone.localdate()
+                        or not re.fullmatch(r'\d{10}-\d{2}-\d{6}', evidence['accession'])
+                        or not re.fullmatch(r'[0-9a-f]{64}', evidence['evidence_sha256'])
+                        or not isinstance(evidence['locator'], str) or not evidence['locator'].strip()):
+                    raise ValueError('Procedencia complementaria inválida.')
+            except (ValueError, TypeError) as error:
+                raise ValidationError('La procedencia complementaria no es válida.') from error
         raw = component.get('value')
         if raw is None:
             continue

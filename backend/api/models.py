@@ -224,6 +224,7 @@ class SearchHistory(models.Model):
 
 
 class FinancialMetrics(models.Model):
+    field_sources = models.JSONField(default=dict, blank=True)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='financial_metrics')
     as_of = models.DateField()
     source = models.CharField(max_length=250)
@@ -240,6 +241,26 @@ class FinancialMetrics(models.Model):
     total_liabilities = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
     sales = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
     equity_value = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
+
+    def clean(self):
+        from datetime import date
+        from django.core.exceptions import ValidationError
+        from django.core.validators import URLValidator
+        from django.utils import timezone
+        if self.as_of and self.as_of > timezone.localdate():
+            raise ValidationError('La fecha del resumen no puede ser futura.')
+        if not isinstance(self.field_sources, dict):
+            raise ValidationError('Las fuentes de los indicadores deben ser un objeto.')
+        for field, evidence in self.field_sources.items():
+            if field not in {'market_cap', 'per', 'roe', 'beta', 'dividend_yield'} or not isinstance(evidence, dict):
+                raise ValidationError('Fuente de indicador no admitida.')
+            try:
+                when = date.fromisoformat(evidence['as_of'])
+                URLValidator(schemes=['https'])(evidence['source'])
+                if when > timezone.localdate() or not isinstance(evidence['method'], str) or not evidence['method'].strip():
+                    raise ValueError('Fecha futura o método ausente.')
+            except (KeyError, TypeError, ValueError) as error:
+                raise ValidationError('Indique fecha, fuente HTTPS y método de cada indicador.') from error
     class Meta:
         db_table = 'financial_metrics'
 

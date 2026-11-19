@@ -389,9 +389,16 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 268000000,
+          "available": true,
+          "tag": "Interest expense (fila del informe 10-K)",
+          "source": {
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204425000014/goog-20241231.htm",
+            "accession": "0001652044-25-000014",
+            "filed": "2025-02-05",
+            "locator": "Other Income (Expense), Net, fila Interest expense, columna 2024. Gasto reconocido neto de intereses capitalizados.",
+            "evidence_sha256": "923482812a31618062674f7bf95d4ee2008b2d1581dba9dafd613c366e87df0b"
+          }
         },
         "inventory": {
           "value": null,
@@ -469,9 +476,16 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 736000000,
+          "available": true,
+          "tag": "Interest expense (fila del informe 10-K)",
+          "source": {
+            "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000018/goog-20251231.htm",
+            "accession": "0001652044-26-000018",
+            "filed": "2026-02-05",
+            "locator": "Other Income (Expense), Net, fila Interest expense, columna 2025. Gasto reconocido neto de intereses capitalizados.",
+            "evidence_sha256": "923482812a31618062674f7bf95d4ee2008b2d1581dba9dafd613c366e87df0b"
+          }
         },
         "inventory": {
           "value": null,

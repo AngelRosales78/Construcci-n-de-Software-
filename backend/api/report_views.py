@@ -113,6 +113,8 @@ def create_snapshot(user, payload):
             raise Conflict('El origen solicitado no coincide con el análisis almacenado.')
     snapshot['sources'] = sorted({component['source']['url'] for row in companies for p in row['pillars']['pillars']
                                   for m in p['metrics'] for component in m.get('components', [])})
+    summary_sources = {source['source'] for row in companies for source in row['summary'].get('field_sources', {}).values()}
+    snapshot['sources'] = sorted(set(snapshot['sources']) | summary_sources)
     if payload['include_charts']:
         snapshot['sources'] = sorted(set(snapshot['sources']) | chart_sources)
     snapshot = json.loads(json.dumps(snapshot, default=str))

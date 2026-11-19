@@ -389,9 +389,16 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 715000000,
+          "available": true,
+          "tag": "Interest expense (fila del informe 10-K)",
+          "source": {
+            "url": "https://www.sec.gov/Archives/edgar/data/1326801/000132680125000017/meta-20241231.htm",
+            "accession": "0001326801-25-000017",
+            "filed": "2025-01-30",
+            "locator": "Interest and Other Income (Expense), Net, fila Interest expense, columna 2024. Gasto reconocido en resultados.",
+            "evidence_sha256": "923482812a31618062674f7bf95d4ee2008b2d1581dba9dafd613c366e87df0b"
+          }
         },
         "inventory": {
           "value": null,
@@ -469,9 +476,16 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 1165000000,
+          "available": true,
+          "tag": "Interest expense (fila del informe 10-K)",
+          "source": {
+            "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003942/meta-20251231.htm",
+            "accession": "0001628280-26-003942",
+            "filed": "2026-01-29",
+            "locator": "Interest and Other Income, Net, fila Interest expense, columna 2025. Gasto reconocido en resultados.",
+            "evidence_sha256": "923482812a31618062674f7bf95d4ee2008b2d1581dba9dafd613c366e87df0b"
+          }
         },
         "inventory": {
           "value": null,

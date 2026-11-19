@@ -10,6 +10,15 @@ vi.mock('../../services/api',()=>({default:{get:vi.fn()}}))
 vi.mock('highcharts/highstock',()=>({default:{}}))
 vi.mock('highcharts-react-official',()=>({default:({options})=><div data-testid="chart" data-points={options.series[0].data.length} data-crosshair={options.xAxis.crosshair} data-zoom={options.chart.zooming.type}/>}))
 afterEach(()=>{cleanup();vi.resetAllMocks()})
+it('conserva las fechas independientes de valoración bursátil y balance', () => {
+ render(<MetricCards company={{per:15.9,roe:35.7,field_sources:{
+  per:{as_of:'2026-10-26',source:'https://finance.yahoo.com/quote/GOOGL/',method:'Valoración reportada'},
+  roe:{as_of:'2025-12-31',source:'https://data.sec.gov/example',method:'Beneficio sobre patrimonio promedio'}
+ }}} />)
+ expect(screen.getByText('Referencia · 2026-10-26')).toBeTruthy()
+ expect(screen.getByText('Referencia · 2025-12-31')).toBeTruthy()
+ expect(screen.getAllByText('Consultar fuente del indicador')).toHaveLength(2)
+})
 it('muestra cinco métricas, conserva cero y describe los indicadores',()=>{
  render(<MetricCards company={{per:0,roe:-2,market_cap:100,beta:null,dividend_yield:0}}/> )
  expect(screen.getByTitle(/Precio de la acción/)).toBeTruthy()

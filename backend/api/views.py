@@ -680,6 +680,7 @@ def company_financial_data(company):
         'as_of': metrics.as_of if metrics else None,
         'source': metrics.source if metrics else 'Datos heredados sin verificar',
         'is_demo': metrics.is_demo if metrics else True,
+        'field_sources': metrics.field_sources if metrics else {},
     }
     for field in ('market_cap', 'per', 'roe', 'beta', 'dividend_yield'):
         value = getattr(balance, field, None)

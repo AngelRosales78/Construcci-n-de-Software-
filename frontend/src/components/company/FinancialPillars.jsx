@@ -32,7 +32,8 @@ export function PillarMetric({ metric }) {
       <ul>{metric.components?.map(component => <li key={component.id}>
         <strong>{component.label || component.id}:</strong> {component.value} {component.source.currency}
         <span> · Cierre: {component.period.end}</span>
-        <span> · Etiqueta SEC: {component.source.tag}</span>
+        <span> · {component.source.snapshot_kind === 'extracted_financial_facts' ? 'Referencia del informe' : 'Etiqueta SEC'}: {component.source.tag}</span>
+        {component.source.locator && <span> · {component.source.locator}</span>}
         <span> · Publicado: {component.source.filed} · Informe: {component.source.accession}</span>
         {component.source.is_demo && <strong> · Datos de prueba</strong>}
         <a href={component.source.url} target="_blank" rel="noreferrer">Consultar fuente</a>

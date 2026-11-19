@@ -43,6 +43,8 @@ class Command(BaseCommand):
                         raise ValueError('Booleano no monetario.')
                     components[name] = {'value': str(Decimal(str(value))) if value is not None else None,
                                         'tag': field['tag']}
+                    if 'source' in field:
+                        components[name]['source'] = field['source']
                 if row['unit'] != 'USD':
                     raise ValueError('Unidad monetaria no admitida.')
                 if row.get('inventory_applicable') is not None and type(row['inventory_applicable']) is not bool:
