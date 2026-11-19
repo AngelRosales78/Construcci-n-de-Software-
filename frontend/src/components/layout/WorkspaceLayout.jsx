@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useSessionViewModel } from '../../viewmodels/useSessionViewModel'
+import NotificationBell from '../notifications/NotificationBell'
 
 export default function WorkspaceLayout({ children }) {
   const { pathname } = useLocation()
@@ -22,6 +23,7 @@ export default function WorkspaceLayout({ children }) {
         {pathname.startsWith('/company/') && <span className="workspace-current">Ficha financiera</span>}
       </nav>
       <div className="workspace-account"><span className="terminal-status">Datos importados</span><span className="account-avatar" aria-hidden="true">{avatarUrl ? <img src={avatarUrl} alt="" style={{width:36,height:36,borderRadius:'50%',objectFit:'cover'}} /> : name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span>
+        <NotificationBell />
         <button className="logout-button" onClick={logout} disabled={leaving}>{leaving ? 'Cerrando…' : 'Cerrar Sesión'}</button>
       </div>
     </header>

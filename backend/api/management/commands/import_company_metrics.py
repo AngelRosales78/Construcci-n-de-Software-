@@ -8,6 +8,7 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.db.models import DecimalField
 from api.models import Company, FinancialMetrics
+from api.notification_services import observe_rating
 
 
 class Command(BaseCommand):
@@ -43,6 +44,7 @@ class Command(BaseCommand):
                 FinancialMetrics.objects.update_or_create(company=company, defaults=data)
                 Company.objects.filter(pk=company.pk).update(market_cap=candidate.market_cap,
                                                             per=candidate.per, roe=candidate.roe)
+                observe_rating(company)
         except (OSError, KeyError, TypeError, ValueError, ArithmeticError, ValidationError, Company.DoesNotExist) as error:
             raise CommandError(f'Instantánea de indicadores inválida: {error}') from error
         self.stdout.write(f'Se importó el resumen de {company.ticker} con sus fuentes por indicador.')

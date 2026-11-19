@@ -1,0 +1,19 @@
+.notification-bell { position: relative; color: #d8e5dc; }
+.notification-bell > summary { display: flex; gap: .3rem; cursor: pointer; padding: .6rem; list-style: none; align-items: center; }
+.notification-bell > summary::-webkit-details-marker { display: none; }
+.notification-bell > summary span { background: #75ff9e; color: #0a1b10; border-radius: 1rem; padding: .1rem .35rem; font-size: .75rem; }
+.notification-dropdown { position: absolute; top: 100%; right: 0; width: min(390px, calc(100vw - 2rem)); max-height: min(550px, calc(100dvh - 6rem)); overflow: auto; padding: 1rem; box-sizing: border-box; background: #141b19; border: 1px solid #536158; border-radius: .75rem; z-index: 100; box-shadow: 0 8px 30px #0008; }
+.notification-page { max-width: 850px; margin: auto; }
+.notification-items { list-style: none; margin: 1rem 0; padding: 0; }
+.notification-items li { padding: 1rem; margin: .7rem 0; background: #171e1b; border: 1px solid #46554b; border-radius: .65rem; overflow-wrap: anywhere; }
+.notification-items small { display: block; color: #b6c6bc; margin-top: .35rem; }
+.notification-unread { border-left: 3px solid #75ff9e !important; }
+.notification-read { opacity: .8; }
+.notification-demo { color: #f0d38e; }
+.notification-links { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin: .8rem 0; }
+.notification-page button, .notification-dropdown button { border: 1px solid #69756e; padding: .55rem .8rem; border-radius: .5rem; background: #252e29; color: #f1f4f2; cursor: pointer; }
+.notification-page button:disabled, .notification-dropdown button:disabled { opacity: .5; cursor: default; }
+.notification-preferences label { display: flex; gap: .7rem; align-items: center; padding: .5rem 0; }
+.notification-preferences p { color: #b6c6bc; font-size: .9rem; }
+.notification-page :focus-visible, .notification-bell :focus-visible { outline: 2px solid #75ff9e; outline-offset: 3px; }
+@media (max-width: 680px) { .notification-dropdown { position: fixed; left: 1rem; right: 1rem; top: 5.5rem; width: auto; max-height: calc(100dvh - 7rem); } }

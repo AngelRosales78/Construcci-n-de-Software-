@@ -22,6 +22,7 @@ from .access_views import SubscriptionView
 from .user_management import AdminUsersView, AdminUserView, UserAvatarView, DeleteOwnAccountView
 from .catalog_views import AdminCompaniesView, AdminCompanyView
 from .market_views import MarketOperationView, RefreshCompanyView, VerifyCompanyView
+from .notification_views import NotificationsView, MarkNotificationsReadView, NotificationPreferencesView
 from .subscription_views import PlansView, CheckoutView, SubscriptionHistoryView, ReceiptView, CancelSubscriptionView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
@@ -32,6 +33,9 @@ from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportC
 app_name = 'auth'
 
 urlpatterns = [
+    path('notifications/', NotificationsView.as_view()),
+    path('notifications/mark-read/', MarkNotificationsReadView.as_view()),
+    path('user/notification-preferences/', NotificationPreferencesView.as_view()),
     path('admin/companies/verify/', VerifyCompanyView.as_view()),
     path('admin/companies/<int:company_id>/refresh/', RefreshCompanyView.as_view()),
     path('admin/market-operations/<uuid:operation_id>/', MarketOperationView.as_view()),

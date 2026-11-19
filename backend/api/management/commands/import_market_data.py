@@ -10,6 +10,7 @@ from django.db import transaction
 from django.db.models import DecimalField
 from django.utils import timezone
 from api.models import Company, FinancialMetrics, MarketDataOperation, PriceHistory
+from api.notification_services import observe_rating
 
 class Command(BaseCommand):
     help = 'Importar balances y cierres ajustados CSV con fuente y fecha documentadas'
@@ -75,12 +76,14 @@ class Command(BaseCommand):
             except (OSError,ValueError,InvalidOperation,ValidationError) as exc:
                 raise CommandError(f'CSV {kind} inválido: {exc}') from exc
         with transaction.atomic():
+            list(Company.objects.select_for_update().filter(pk__in=[item.company_id for item in metrics]).order_by('pk'))
             for item in metrics:
                 values={f.name:getattr(item,f.name) for f in item._meta.fields if f.name not in ('id','company')}
                 FinancialMetrics.objects.update_or_create(company=item.company,defaults=values)
                 searchable = {'per': item.per, 'roe': item.roe}
                 if item.market_cap is not None: searchable['market_cap'] = item.market_cap
                 Company.objects.filter(pk=item.company.pk).update(**searchable)
+                observe_rating(item.company)
             for ticker,currency in currencies.items():
                 if PriceHistory.objects.filter(company=companies[ticker]).exclude(currency=currency).exists():
                     raise CommandError('La moneda no coincide con el historial existente.')

@@ -272,6 +272,47 @@ class Favorite(models.Model):
         constraints = [models.UniqueConstraint(fields=['user', 'company'], name='favorite_user_company_unique')]
 
 
+class NotificationPreferences(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='notification_preferences')
+    rating_changes = models.BooleanField(default=True)
+    web_enabled = models.BooleanField(default=True)
+    email_enabled = models.BooleanField(default=False)
+    push_enabled = models.BooleanField(default=False)
+    version = models.PositiveBigIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class CompanyRatingState(models.Model):
+    company = models.OneToOneField(Company, on_delete=models.CASCADE)
+    last_valid = models.JSONField(default=dict)
+    revision = models.PositiveBigIntegerField(default=0)
+
+
+class RatingChangeEvent(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    revision = models.PositiveBigIntegerField()
+    before = models.JSONField()
+    after = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True)
+    is_demo = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['company', 'revision', 'is_demo'], name='rating_company_revision_unique')]
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(RatingChangeEvent, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True)
+
+    class Meta:
+        ordering = ['-created_at', '-id']
+        constraints = [models.UniqueConstraint(fields=['user', 'event'], name='notification_user_event_unique')]
+        indexes = [models.Index(fields=['user', '-id'], name='notification_user_id_idx')]
+
+
 class SearchHistory(models.Model):
     """
     Stores user search history for quick access.

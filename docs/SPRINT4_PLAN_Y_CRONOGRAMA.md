@@ -106,8 +106,15 @@ Rosales conserva autoría de su Android del Sprint 4 y sus propios commits reale
   18/11; HIMS se añadió como ensayo identificado como alta manual.
 - La actualización nueva se limita a precios. SEC devolvió 403; descargar balances
   nuevos sigue pendiente. Los indicadores existentes conservan sus fechas y fuentes.
-- HU12 y HU15, Android anterior de épica 11 y la integración final siguen pendientes.
-  El Android del Sprint 4 de Rosales requiere su propia evidencia.
+- HU12_01, HU12_03 y HU12_05 implementadas y probadas en Web/API el 19: seis
+  tareas adicionales, seguimiento 26/40. HU12_04 es parcial por los canales de
+  correo de alertas y Push; esas dos tareas no se cuentan cerradas.
+- El usuario confirmó que Rosales aún no tiene Firebase. HU12_02 y Android Push
+  siguen pendientes. Detalle y contrato en `SPRINT4_HU12_AVISOS_WEB.md`.
+- Tras avisos pasaron 475 pruebas del servidor y 122 de Web, con una optativa de
+  Redis omitida. La demostración visual usó un aviso claramente etiquetado de prueba.
+- HU15, correo de alertas, Push, Android anterior de épica 11, balances nuevos y
+  la integración final siguen pendientes. El Android de Rosales requiere su evidencia.
 - Este cronograma organiza el trabajo, no programa ejecuciones automáticas en
   días futuros ni acredita tareas aún sin implementar.
 

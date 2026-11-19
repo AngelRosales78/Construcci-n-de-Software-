@@ -14,6 +14,8 @@ import SubscriptionPage from './components/subscription/SubscriptionPage'
 import ProfilePage from './components/account/ProfilePage'
 import AdminUsersPage from './components/account/AdminUsersPage'
 import AdminCompaniesPage from './components/account/AdminCompaniesPage'
+import NotificationsPage from './components/notifications/NotificationsPage'
+import NotificationPreferencesPage from './components/notifications/NotificationPreferencesPage'
 
 function App() {
   return (
@@ -24,6 +26,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
         <Route element={<ProtectedRoute />}>
+          <Route path="/notifications" element={<NotificationsPage />} />
+          <Route path="/profile/notifications" element={<NotificationPreferencesPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin-panel" element={<AdminDashboard />} />
           <Route path="/admin-panel/users" element={<AdminUsersPage />} />

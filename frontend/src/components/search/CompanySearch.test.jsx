@@ -14,6 +14,7 @@ beforeEach(() => {
   vi.clearAllMocks()
   search = vi.fn().mockResolvedValue(result([company('AAA')]))
   api.get.mockImplementation(url => {
+    if (url.startsWith('/notifications/')) return Promise.resolve({ data: { results: [], unread_count: 0, count: 0, read_through: 0 } })
     if (url === '/favorites/') return Promise.resolve({ data: { schema_version: 'favorites-v1', owner_id: '1', results: [] } })
     if (url.includes('/sectors/')) return Promise.resolve({ data: { sectors: [{ value: 'technology', label: 'Technology' }] } })
     if (url.includes('/autocomplete/')) return Promise.resolve({ data: { suggestions: [] } })
