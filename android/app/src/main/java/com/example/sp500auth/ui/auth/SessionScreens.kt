@@ -49,6 +49,7 @@ fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
             })
         }
         if (biometricError.isNotBlank()) Text(biometricError, color = MaterialTheme.colorScheme.error)
+        TextButton(onClick = { navController.navigate("account") }) { Text("Gestionar cuenta, avisos y suscripción") }
         TextButton(onClick = { navController.popBackStack() }) { Text("Volver") }
         Button(onClick = { viewModel.logout() }, enabled = viewModel.logoutState !is Resource.Loading) { Text("Cerrar sesión") }
     }

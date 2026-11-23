@@ -1,6 +1,10 @@
 package com.example.sp500auth.ui
 
 import android.os.Bundle
+import android.content.Intent
+import com.example.sp500auth.data.local.TokenManager
+import com.example.sp500auth.data.repository.favoritesOwner
+import javax.inject.Inject
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +18,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.foundation.layout.Column
 import com.example.sp500auth.util.Resource
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -35,8 +40,18 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+    @Inject lateinit var tokens:TokenManager
+    private var launchTicker by mutableStateOf("")
+    private fun acceptNotification(intent:Intent?) {
+        val owner=favoritesOwner(tokens.getAccessToken()) ?: return
+        val ticker=intent?.getStringExtra("ticker").orEmpty()
+        if(intent?.getStringExtra("owner_id")==owner && ticker.matches(Regex("[A-Z0-9.-]{1,10}")))launchTicker=ticker
+    }
+    override fun onNewIntent(intent:Intent){super.onNewIntent(intent);setIntent(intent);acceptNotification(intent)}
+    override fun onResume(){super.onResume();com.example.sp500auth.data.push.PushRegistration.sync(this)}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        acceptNotification(intent)
         enableEdgeToEdge()
         setContent {
             SP500AuthTheme {
@@ -44,7 +59,7 @@ class MainActivity : FragmentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    AppNavigation()
+                    AppNavigation(launchTicker)
                 }
             }
         }
@@ -52,13 +67,16 @@ class MainActivity : FragmentActivity() {
 }
 
 @Composable
-fun AppNavigation() {
+fun AppNavigation(launchTicker:String="") {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel = hiltViewModel()
     val favoritesViewModel: com.example.sp500auth.ui.favorites.FavoritesViewModel = hiltViewModel()
     val reportsViewModel: com.example.sp500auth.ui.reports.ReportsViewModel = hiltViewModel()
     val recentViewModel:com.example.sp500auth.ui.sprint3.RecentViewModel=hiltViewModel()
     LaunchedEffect(Unit) { authViewModel.restoreSession() }
+    LaunchedEffect(launchTicker,authViewModel.sessionState) {
+        if(launchTicker.isNotBlank() && authViewModel.sessionState is Resource.Success)navController.navigate("company/$launchTicker")
+    }
     LaunchedEffect(authViewModel.logoutState) {
         if (authViewModel.logoutState is Resource.Success || authViewModel.logoutState is Resource.Error) {
             favoritesViewModel.clear()
@@ -105,6 +123,14 @@ fun AppNavigation() {
         composable(NavRoutes.Profile.route) {
             ProfileScreen(navController = navController, viewModel = authViewModel)
         }
+        composable("account") { com.example.sp500auth.ui.operations.AccountHome(navController) }
+        composable("account/edit") { com.example.sp500auth.ui.operations.EditAccount(navController,onDeleted={authViewModel.logout()}) }
+        composable("subscription") { com.example.sp500auth.ui.operations.SubscriptionScreen(navController) }
+        composable("notifications") { com.example.sp500auth.ui.operations.NotificationsScreen(navController) }
+        composable("notification-preferences") { com.example.sp500auth.ui.operations.NotificationPreferencesScreen(navController) }
+        composable("admin/users") { com.example.sp500auth.ui.operations.AdminUsersScreen(navController) }
+        composable("admin/companies") { com.example.sp500auth.ui.operations.AdminCompaniesScreen(navController) }
+        composable("admin/monitoring") { com.example.sp500auth.ui.operations.MonitoringScreen(navController) }
         composable("compare?ticker={ticker}", arguments = listOf(androidx.navigation.navArgument("ticker") { defaultValue = "" })) { entry ->
             com.example.sp500auth.ui.sprint3.ComparisonAccessGate(navController) {
                 com.example.sp500auth.ui.compare.ComparisonScreen(navController, entry.arguments?.getString("ticker").orEmpty())

@@ -1,4 +1,14 @@
-// app/build.gradle.kts
+import groovy.json.JsonSlurper
+
+// La configuración pública de Firebase se suministra localmente y queda fuera de Git.
+val firebaseFile = rootProject.file("app/google-services.json")
+val firebaseConfig = if (firebaseFile.exists()) JsonSlurper().parse(firebaseFile) as Map<*, *> else emptyMap<Any, Any>()
+val firebaseProject = firebaseConfig["project_info"] as? Map<*, *> ?: emptyMap<Any, Any>()
+val firebaseClient = (firebaseConfig["client"] as? List<*>)?.mapNotNull { it as? Map<*, *> }?.firstOrNull {
+    val info = it["client_info"] as? Map<*, *>
+    (info?.get("android_client_info") as? Map<*, *>)?.get("package_name") == "com.example.sp500auth"
+} ?: emptyMap<Any, Any>()
+fun firebaseValue(value: Any?): String = "\"" + (value?.toString().orEmpty().replace("\\", "\\\\").replace("\"", "\\\"")) + "\""
 
 val composeBom = rootProject.extra["composeBom"] as String
 val navigationVersion = rootProject.extra["navigationVersion"] as String
@@ -25,12 +35,17 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = 1
-        versionName = "2.0"
+        versionName = "4.0"
         val baseUrl = providers.gradleProperty("apiBaseUrl").getOrElse("http://10.0.2.2:8000/api/v1/")
         require(baseUrl.matches(Regex("https?://[a-zA-Z0-9.:_-]+/api/v1/"))) { "apiBaseUrl debe terminar en /api/v1/" }
         buildConfigField("String", "API_BASE_URL", "\"$baseUrl\"")
+        buildConfigField("String", "FCM_PROJECT_ID", firebaseValue(firebaseProject["project_id"]))
+        buildConfigField("String", "FCM_SENDER_ID", firebaseValue(firebaseProject["project_number"]))
+        buildConfigField("String", "FCM_APP_ID", firebaseValue((firebaseClient["client_info"] as? Map<*, *>)?.get("mobilesdk_app_id")))
+        buildConfigField("String", "FCM_API_KEY", firebaseValue(((firebaseClient["api_key"] as? List<*>)?.firstOrNull() as? Map<*, *>)?.get("current_key")))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["cleartextTrafficPermitted"] = "false"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -47,6 +62,7 @@ android {
         }
         debug {
             isMinifyEnabled = false
+            manifestPlaceholders["cleartextTrafficPermitted"] = "true"
         }
     }
 
@@ -76,6 +92,9 @@ android {
 }
 
 dependencies {
+    testImplementation("com.squareup.okhttp3:mockwebserver:$okhttpVersion")
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-messaging")
     // AndroidX Core
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

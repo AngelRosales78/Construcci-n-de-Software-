@@ -60,6 +60,7 @@ class TokenManager @Inject constructor(
     }
 
     override fun clearTokens() {
+        com.example.sp500auth.data.push.PushRegistration.clear(context)
         sharedPreferences.edit().clear().apply()
     }
 }

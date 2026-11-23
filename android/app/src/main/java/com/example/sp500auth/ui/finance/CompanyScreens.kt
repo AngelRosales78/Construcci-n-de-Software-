@@ -102,6 +102,7 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) { Text("MERCADOS", color = Muted, style = MaterialTheme.typography.labelSmall); Text("Explorar", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold) }
                     FilledTonalIconButton(onClick = { nav.navigate("profile") }) { Icon(Icons.Default.Person, "Mi perfil") }
+                    FilledTonalIconButton(onClick = { nav.navigate("notifications") }) { Icon(Icons.Default.Notifications, "Mis avisos") }
                 }
             }
             item {
