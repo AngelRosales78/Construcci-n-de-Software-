@@ -1,0 +1,128 @@
+{
+  "verified_at": "2026-11-23T17:23:33.906498+00:00",
+  "branch": "magallanes-sprint4",
+  "reviewed_rosales_head": "93e5ea3",
+  "backend": {
+    "passed": 494,
+    "skipped": 1,
+    "receipt_after_copy_change_passed": 15
+  },
+  "web": {
+    "passed": 125,
+    "files": 27,
+    "production_build": "passed"
+  },
+  "android_unit": {
+    "tests": 154,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 10,
+    "passed": 144
+  },
+  "android_live": {
+    "passed": 3,
+    "log": "sprint4_android_device_clean.log",
+    "scope": [
+      "administration_totals_catalog",
+      "preferences_save_and_restore",
+      "subscription_server_term_history"
+    ]
+  },
+  "ai_live": {
+    "http_status": 200,
+    "status": "available",
+    "first_cache_hit": false,
+    "second_status": 200,
+    "second_cache_hit": true,
+    "calls_before": 0,
+    "calls_after_first": 1,
+    "calls_after_second": 1,
+    "breakdown": [
+      {
+        "provider": "local_ai",
+        "model": "sp500-local-qwen3",
+        "calls": 1,
+        "errors": 0,
+        "unreported_tokens": 0,
+        "input_tokens": 1153,
+        "output_tokens": 383
+      }
+    ],
+    "estimated_costs": [],
+    "unpriced_calls": 1
+  },
+  "browser": {
+    "verified_at": "2026-11-23T16:53:48.246Z",
+    "checks": [
+      "Acceso Pro, inicio y búsqueda real sin textos internos de demostración",
+      "Comparador Pro y navegación móvil por menú accesible, sin desbordamiento",
+      "Free mantiene vista previa y no muestra resultados protegidos",
+      "Administración real de usuarios, catálogo y las cinco secciones del monitoreo",
+      "Preferencias persistidas; correo disponible: false"
+    ],
+    "page_errors": []
+  },
+  "sec": {
+    "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json",
+    "http_status": 403,
+    "content_type": "text/html",
+    "bytes": 4818
+  },
+  "market": {
+    "ticker": "MSFT",
+    "status": "succeeded",
+    "message": "Precios históricos actualizados. Los indicadores y balances conservan sus fechas y fuentes anteriores.",
+    "finished_at": "2026-11-23T17:12:00.187127Z",
+    "result": {
+      "name": "Microsoft Corporation",
+      "currency": "USD",
+      "exchange": "NMS",
+      "price_count": 1254,
+      "first_price_date": "2021-11-23",
+      "price_as_of": "2026-11-20",
+      "adjusted_close": "484.519989",
+      "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/MSFT?range=5y&interval=1d&events=div%2Csplits",
+      "response_sha256": "4bb8d9886ca3feebebbc9b79fac5beec22b86be9034c3ed4aeab35358366cb4e",
+      "new_dates": 2
+    },
+    "budgets": [
+      {
+        "provider": "local_ai",
+        "limit": 1000,
+        "used": 1,
+        "version": 0,
+        "percentage": "0.10",
+        "window_start": "2026-11-23T00:00:00-05:00",
+        "resets_at": "2026-11-24T00:00:00-05:00",
+        "timezone": "America/Lima",
+        "status": "normal",
+        "warned_at": null,
+        "kind": "internal_budget"
+      },
+      {
+        "provider": "yahoo_chart",
+        "limit": 1000,
+        "used": 1,
+        "version": 0,
+        "percentage": "0.10",
+        "window_start": "2026-11-23T00:00:00-05:00",
+        "resets_at": "2026-11-24T00:00:00-05:00",
+        "timezone": "America/Lima",
+        "status": "normal",
+        "warned_at": null,
+        "kind": "internal_budget"
+      }
+    ]
+  },
+  "smtp": {
+    "server_accepted": true,
+    "recipient_scope": "authorized_own_account_only",
+    "inbox_reception_observed": false
+  },
+  "firebase": {
+    "configured": false,
+    "actual_push_reception_verified": false,
+    "console_access": "tool_initialization_failed"
+  },
+  "android_final_ui_smoke": "monitoring_opened_after_system_bar_contrast_change"
+}

@@ -1,5 +1,12 @@
 # Plataforma de Análisis Financiero S&P 500 con IA
 
+Entrega del Sprint 4: [estado y evidencias](docs/SPRINT4_ESTADO_Y_EVIDENCIAS.md),
+[guía breve para presentar](docs/SPRINT4_COMO_PRESENTAR.md) y
+[arranque/configuración](docs/SPRINT4_CONFIGURACION_Y_VERIFICACION.md).
+En esta computadora, abrir `Iniciar Plataforma.cmd` inicia los servicios locales.
+La recepción Push y la descarga nueva de balances conservan las dependencias
+externas indicadas en el informe; no se declara el sprint cerrado al 100 %.
+
 ## Descripción
 
 Plataforma de análisis financiero del S&P 500 con inteligencia artificial. Incluye autenticación de usuarios, búsqueda de empresas, análisis financiero y dashboard interactivo.

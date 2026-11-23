@@ -1,5 +1,9 @@
 # Sprint 4: plan, fechas y reparto
 
+Seguimiento vigente del 23 de noviembre: [estado y evidencias](SPRINT4_ESTADO_Y_EVIDENCIAS.md).
+Los avances fechados del 19 que se conservan abajo son históricos; no representan
+el estado posterior de la implementación ni cierran las dependencias externas.
+
 Ventana acordada: miércoles 18 a martes 24 de noviembre de 2026. La revisión comenzó
 el 18; las implementaciones y los commits llevan la fecha real de su ejecución.
 El 19 se confirmó el reparto. El martes se reserva para pruebas, integración y entrega.
