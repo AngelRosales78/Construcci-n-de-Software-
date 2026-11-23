@@ -156,7 +156,7 @@ def test_failed_delivery_does_not_lose_event_or_undo_balance(notices,monkeypatch
     change(company)
     with monkeypatch.context() as scoped:
         def fail(*args,**kwargs): raise IntegrityError('Simulación de cuenta eliminada concurrentemente')
-        scoped.setattr(Notification.objects,'bulk_create',fail)
+        scoped.setattr(Notification.objects,'get_or_create',fail)
         assert not process_notification_event()
     assert RatingChangeEvent.objects.get().processed_at is None
     assert process_notification_event() and Notification.objects.count()==1

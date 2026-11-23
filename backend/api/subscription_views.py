@@ -32,7 +32,9 @@ def receipt_data(record):
 def deliver_receipt(record_id):
     # El recibo persiste aunque el transporte de correo falle. Un comando permite reintentar.
     with transaction.atomic():
-        record = SubscriptionTransaction.objects.select_for_update().select_related('user').get(pk=record_id)
+        record = SubscriptionTransaction.objects.select_for_update(of=('self',)).select_related('user').get(pk=record_id)
+        if record.user_id is None:
+            return
         if record.outcome != 'approved' or record.email_status in ('sent', 'local'):
             return
         message = (f'Comprobante SIMULADO {record.id}\nPlan Pro\n'

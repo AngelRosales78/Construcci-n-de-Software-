@@ -1,12 +1,17 @@
 from pathlib import Path
 from datetime import timedelta
 from decouple import config
+import secrets
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+TIME_ZONE = config('TIME_ZONE', default='America/Lima')
 
-SECRET_KEY = config('SECRET_KEY', default='django-insecure-sprint1-dev-key-change-in-production')
-DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = ['*']
+SECRET_KEY = config('SECRET_KEY', default=secrets.token_urlsafe(64))
+DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = [host.strip() for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,10.0.2.2,testserver').split(',') if host.strip()]
+FCM_CREDENTIALS_FILE = config('FCM_CREDENTIALS_FILE', default='')
+NOTIFICATION_EMAIL_ENABLED = config('NOTIFICATION_EMAIL_ENABLED', default=False, cast=bool)
+NOTIFICATION_ALLOWED_RECIPIENTS = [value.strip().lower() for value in config('NOTIFICATION_ALLOWED_RECIPIENTS', default='').split(',') if value.strip()]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,6 +61,7 @@ if not USE_POSTGRES:
     DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'api.observability.exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'api.authentication.SessionJWTAuthentication',
     ),

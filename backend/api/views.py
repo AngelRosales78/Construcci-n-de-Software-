@@ -317,7 +317,12 @@ class LogoutView(generics.GenericAPIView):
             if bearer.startswith('Bearer '):
                 blacklist_token(bearer.split(' ', 1)[1])
 
-            logger.info(f"User {request.user.username} logged out successfully.")
+            from .models import PushInstallation
+            installations=PushInstallation.objects.filter(user=request.user)
+            if token.get('sid'):
+                installations=installations.filter(session_id=str(token['sid']))
+            installations.update(active=False)
+            logger.info('User session closed successfully.')
 
             return Response(
                 {'message': 'Logout successful. Session has been invalidated.'},

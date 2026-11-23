@@ -23,6 +23,8 @@ from .user_management import AdminUsersView, AdminUserView, UserAvatarView, Dele
 from .catalog_views import AdminCompaniesView, AdminCompanyView
 from .market_views import MarketOperationView, RefreshCompanyView, VerifyCompanyView
 from .notification_views import NotificationsView, MarkNotificationsReadView, NotificationPreferencesView
+from .monitoring_views import AIUsageView, TariffView, PlanDistributionView, BudgetView, MonthlyRevenueView, ErrorLogsView
+from .push_views import PushInstallationsView
 from .subscription_views import PlansView, CheckoutView, SubscriptionHistoryView, ReceiptView, CancelSubscriptionView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
@@ -33,6 +35,16 @@ from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportC
 app_name = 'auth'
 
 urlpatterns = [
+    path('user/push-installations/', PushInstallationsView.as_view()),
+    path('user/push-installations/<uuid:installation_id>/', PushInstallationsView.as_view()),
+    path('admin/monitoring/ai/', AIUsageView.as_view()),
+    path('admin/monitoring/ai/tariffs/', TariffView.as_view()),
+    path('admin/monitoring/plans/', PlanDistributionView.as_view()),
+    path('admin/monitoring/budgets/', BudgetView.as_view()),
+    path('admin/monitoring/budgets/<str:provider>/', BudgetView.as_view()),
+    path('admin/monitoring/subscriptions/', MonthlyRevenueView.as_view()),
+    path('admin/monitoring/errors/', ErrorLogsView.as_view()),
+    path('admin/monitoring/errors/<int:log_id>/', ErrorLogsView.as_view()),
     path('notifications/', NotificationsView.as_view()),
     path('notifications/mark-read/', MarkNotificationsReadView.as_view()),
     path('user/notification-preferences/', NotificationPreferencesView.as_view()),

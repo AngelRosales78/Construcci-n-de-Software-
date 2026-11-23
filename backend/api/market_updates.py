@@ -10,6 +10,7 @@ from .catalog_services import invalidate_catalog
 from .market_provider import PROVIDER, SourceError, download, normalize_ticker, parse_prices
 from .personal_views import Conflict
 from .user_management import is_administrator
+from .monitoring_services import reserve_call as reserve_budget_call, BudgetExceeded, record_error
 
 
 def provider_usage():
@@ -31,6 +32,10 @@ def reserve_call():
             raise SourceError('internal_quota', 'Se agotó el límite interno de consultas de hoy. Los datos guardados siguen disponibles.', 429)
         if row.last_called_at and (now-row.last_called_at).total_seconds() < settings.MARKET_DATA_MIN_INTERVAL:
             raise SourceError('internal_rate', 'Espera un momento antes de consultar otra empresa.', 429)
+        try:
+            reserve_budget_call(PROVIDER)
+        except BudgetExceeded as error:
+            raise SourceError('internal_quota', str(error.detail), 429) from error
         row.calls += 1
         row.last_called_at = now
         row.save(update_fields=['calls', 'last_called_at'])
@@ -106,6 +111,8 @@ def apply_prices(company, payload):
 
 
 def fail(operation, error):
+    if error.status >= 500:
+        record_error('provider_unavailable', PROVIDER, http_status=error.status)
     MarketDataOperation.objects.filter(pk=operation.pk, status='running').update(
         status='failed', error_code=error.code, message=error.message, finished_at=timezone.now(),
         result={'http_status': error.status})

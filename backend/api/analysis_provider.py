@@ -1,6 +1,9 @@
 """Proveedor local llama.cpp. No hay respuesta financiera simulada de respaldo."""
 import json
 import urllib.request
+import time
+from django.utils import timezone
+from .monitoring_services import reserve_call, record_ai
 from .analysis_knowledge import explanation_options
 
 MODEL = 'sp500-local-qwen3'
@@ -44,11 +47,18 @@ def generate(context, level):
     # URL fijada a loopback: no admite destinos enviados por el usuario ni expone credenciales.
     request = urllib.request.Request('http://127.0.0.1:58110/completion',
         data=json.dumps(payload).encode(), headers={'Content-Type': 'application/json'})
-    with urllib.request.urlopen(request, timeout=150) as response:
-        raw = response.read(100_001)
-    if len(raw) > 100_000:
-        raise ValueError('provider_response_too_large')
-    content = json.loads(raw)['content']
+    reserve_call('local_ai')
+    started, clock, observed, outcome = timezone.now(), time.monotonic(), {}, 'error'
+    try:
+        with urllib.request.urlopen(request, timeout=150) as response:
+            raw = response.read(100_001)
+        if len(raw) > 100_000:
+            raise ValueError('provider_response_too_large')
+        observed = json.loads(raw)
+        content = observed['content']
+        outcome = 'success'
+    finally:
+        record_ai(started, time.monotonic()-clock, outcome, observed if isinstance(observed, dict) else {})
     texts = json.loads(content)
     if set(texts) != set(choices) or any(texts[key] not in choices[key] for key in choices):
         raise ValueError('unsupported_claim')

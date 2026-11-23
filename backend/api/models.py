@@ -8,6 +8,8 @@ authentication backend.
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 import uuid
+from django.utils import timezone
+from .monitoring_models import AITariff, AIUsage, ProviderBudget, BudgetWindow, SystemErrorLog
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 from django.contrib.postgres.indexes import GinIndex
@@ -84,7 +86,7 @@ class AdministrationEvent(models.Model):
 
 class SubscriptionTransaction(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     request_id = models.UUIDField()
     outcome = models.CharField(max_length=10, choices=[('approved', 'Aprobada'), ('declined', 'Rechazada')])
     amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -296,6 +298,7 @@ class RatingChangeEvent(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     processed_at = models.DateTimeField(null=True)
     is_demo = models.BooleanField(default=False)
+    favorite_through_id = models.PositiveBigIntegerField(null=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['company', 'revision', 'is_demo'], name='rating_company_revision_unique')]
@@ -306,11 +309,38 @@ class Notification(models.Model):
     event = models.ForeignKey(RatingChangeEvent, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     read_at = models.DateTimeField(null=True)
+    web_visible = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-created_at', '-id']
         constraints = [models.UniqueConstraint(fields=['user', 'event'], name='notification_user_event_unique')]
         indexes = [models.Index(fields=['user', '-id'], name='notification_user_id_idx')]
+
+
+class PushInstallation(models.Model):
+    installation_id = models.UUIDField(unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='push_installations')
+    token = models.TextField(unique=True)
+    active = models.BooleanField(default=True)
+    permission_granted = models.BooleanField(default=True)
+    session_id = models.CharField(max_length=64, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class NotificationDelivery(models.Model):
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='deliveries')
+    channel = models.CharField(max_length=8)
+    installation = models.ForeignKey(PushInstallation, null=True, on_delete=models.CASCADE)
+    status = models.CharField(max_length=12, default='pending')
+    attempts = models.PositiveSmallIntegerField(default=0)
+    next_attempt = models.DateTimeField(default=timezone.now)
+    lease_until = models.DateTimeField(null=True)
+    sent_at = models.DateTimeField(null=True)
+    error_code = models.CharField(max_length=40, blank=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['notification', 'channel', 'installation'], name='notification_channel_device_unique'),
+                       models.UniqueConstraint(fields=['notification', 'channel'], condition=models.Q(channel='email'), name='notification_email_unique')]
 
 
 class SearchHistory(models.Model):

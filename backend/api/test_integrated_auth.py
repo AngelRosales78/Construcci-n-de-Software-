@@ -109,3 +109,20 @@ def test_logout_does_not_accept_an_access_token_as_refresh():
     client.credentials(HTTP_AUTHORIZATION=f"Bearer {initial['access']}")
     assert client.post('/api/v1/auth/logout/', {'refresh_token': initial['access']}, format='json').status_code == 400
     assert client.get('/api/v1/auth/profile/').status_code == 200
+
+
+def test_logout_unlinks_only_the_devices_of_that_session():
+    import uuid
+    from rest_framework_simplejwt.tokens import AccessToken
+    from .models import PushInstallation
+    client=APIClient()
+    first=register(client,'pushowner')
+    second=APIClient().post('/api/v1/auth/token/',{'username':'pushowner','password':PASSWORD},format='json').data
+    user=User.objects.get(username='pushowner')
+    devices=[]
+    for session in (first,second):
+        devices.append(PushInstallation.objects.create(user=user,installation_id=uuid.uuid4(),token=str(uuid.uuid4()),session_id=AccessToken(session['access'])['sid']))
+    client.credentials(HTTP_AUTHORIZATION=f"Bearer {first['access']}")
+    assert client.post('/api/v1/auth/logout/',{'refresh_token':first['refresh']},format='json').status_code==200
+    for device in devices: device.refresh_from_db()
+    assert not devices[0].active and devices[1].active

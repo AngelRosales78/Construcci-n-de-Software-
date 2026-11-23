@@ -12,10 +12,10 @@ from django.utils import timezone
 from .market_views import ExactSerializer
 from .models import Notification, NotificationPreferences, User
 from .personal_views import Conflict
+from .delivery_services import available_channels
 
-CHANNELS = {'web': True, 'email': False, 'push': False}
 CHANNEL_MESSAGES = {'email': 'El canal de correo para alertas aún no está habilitado.',
-                    'push': 'Pendiente de configurar Firebase y verificar Android con Rosales.'}
+                    'push': 'Activa este canal cuando los avisos móviles estén disponibles en tu dispositivo.'}
 
 
 def private(data, status=200):
@@ -42,7 +42,7 @@ class NotificationsView(APIView):
 
     def get(self,request):
         form=NotificationFilters(data=request.query_params); form.is_valid(raise_exception=True)
-        base=Notification.objects.filter(user=request.user)
+        base=Notification.objects.filter(user=request.user,web_visible=True,event__is_demo=False)
         anchor=form.validated_data.get('through_id')
         if anchor is None:
             anchor=base.aggregate(last=Max('id'))['last'] or 0
@@ -76,7 +76,7 @@ class MarkNotificationsReadView(APIView):
         form=ReadRequest(data=request.data); form.is_valid(raise_exception=True)
         with transaction.atomic():
             get_object_or_404(User.objects.select_for_update(),pk=request.user.pk)
-            rows=Notification.objects.filter(user=request.user)
+            rows=Notification.objects.filter(user=request.user,web_visible=True,event__is_demo=False)
             target=rows.filter(id__lte=form.validated_data['through_id']) if form.validated_data['all'] else rows.filter(id__in=form.validated_data['ids'])
             if not form.validated_data['all'] and target.count()!=len(set(form.validated_data['ids'])):
                 return private({'detail':'Aviso no encontrado.'},404)
@@ -88,7 +88,7 @@ def preferences_data(user,row=None):
     return {'owner_id':str(user.pk),'version':row.version if row else 0,
         'rating_changes':row.rating_changes if row else True,
         'channels':{'web':row.web_enabled if row else True,'email':row.email_enabled if row else False,'push':row.push_enabled if row else False},
-        'available_channels':CHANNELS,'channel_messages':CHANNEL_MESSAGES,
+        'available_channels':available_channels(user),'channel_messages':CHANNEL_MESSAGES,
         'updated_at':row.updated_at if row else None}
 
 
@@ -99,7 +99,8 @@ class Channels(ExactSerializer):
 
     def validate(self,data):
         for channel,enabled in data.items():
-            if enabled and not CHANNELS[channel]: raise ValidationError({channel:CHANNEL_MESSAGES[channel]})
+            user=getattr(self.context.get('request'),'user',None)
+            if enabled and not available_channels(user)[channel]: raise ValidationError({channel:CHANNEL_MESSAGES[channel]})
         return data
 
 
@@ -116,7 +117,7 @@ class NotificationPreferencesView(APIView):
         return private(preferences_data(request.user,NotificationPreferences.objects.filter(user=request.user).first()))
 
     def put(self,request):
-        form=PreferenceRequest(data=request.data); form.is_valid(raise_exception=True)
+        form=PreferenceRequest(data=request.data,context={'request':request}); form.is_valid(raise_exception=True)
         data=form.validated_data
         with transaction.atomic():
             get_object_or_404(User.objects.select_for_update(),pk=request.user.pk)

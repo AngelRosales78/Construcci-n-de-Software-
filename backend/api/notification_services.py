@@ -1,7 +1,9 @@
-"""Cambios reales del perfil Altman-Z; el worker distribuye únicamente avisos web."""
+"""Cambios observados y distribución por los canales elegidos por cada cuenta."""
 from django.db import IntegrityError, transaction
+from django.db.models import Max
 from django.utils import timezone
 from .models import Company, CompanyRatingState, Favorite, FinancialMetrics, Notification, RatingChangeEvent
+from .delivery_services import queue_deliveries
 
 
 def observe_rating(company):
@@ -23,7 +25,8 @@ def observe_rating(company):
         return
     if previous and previous['methodology'] == current['methodology'] and previous['category'] != current['category']:
         state.revision += 1
-        RatingChangeEvent.objects.create(company=company, revision=state.revision, before=previous, after=current)
+        through=Favorite.objects.filter(company=company).aggregate(last=Max('id'))['last'] or 0
+        RatingChangeEvent.objects.create(company=company, revision=state.revision, before=previous, after=current,favorite_through_id=through)
     state.last_valid = current
     state.save(update_fields=['last_valid','revision'])
 
@@ -45,10 +48,17 @@ def process_notification_event():
                 processed_at__isnull=True,is_demo=False).order_by('created_at','id').first()
             if not event:
                 return False
-            users = Favorite.objects.filter(company=event.company, created_at__lte=event.created_at,
-                user__is_active=True).exclude(user__notification_preferences__rating_changes=False).exclude(
-                user__notification_preferences__web_enabled=False).values_list('user_id', flat=True)
-            Notification.objects.bulk_create([Notification(user_id=user_id,event=event) for user_id in users], ignore_conflicts=True)
+            favorites = Favorite.objects.filter(company=event.company, created_at__lte=event.created_at,
+                user__is_active=True).select_related('user__notification_preferences')
+            if event.favorite_through_id is not None:
+                favorites=favorites.filter(pk__lte=event.favorite_through_id)
+            for favorite in favorites:
+                preference=getattr(favorite.user,'notification_preferences',None)
+                if preference and (not preference.rating_changes or not any((preference.web_enabled,preference.email_enabled,preference.push_enabled))):
+                    continue
+                notification,_=Notification.objects.get_or_create(user=favorite.user,event=event,
+                    defaults={'web_visible':preference.web_enabled if preference else True})
+                queue_deliveries(notification,preference)
             event.processed_at = timezone.now()
             event.save(update_fields=['processed_at'])
             return True

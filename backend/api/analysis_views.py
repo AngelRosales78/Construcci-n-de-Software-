@@ -10,6 +10,7 @@ from .pillar_views import CompanyPillarsView
 from .models import AnalysisRecord, Company
 from .analysis_validation import context_from_pillars, validate_analysis, VERSION
 from .analysis_provider import generate, MODEL, MODEL_SHA256
+from .monitoring_services import usage_owner, BudgetExceeded, record_error
 
 
 class AnalysisThrottle(UserRateThrottle):
@@ -77,10 +78,14 @@ class CompanyAnalysisView(CompanyPillarsView):
             created_at__gte=timezone.now() - timedelta(hours=24)).order_by('-created_at').first()
         if cached:
             return Response(cached.response | {'cache_hit': True, 'metrics_version': context['methodology_version'], 'generation_mode': 'ai', 'summary_origin': 'ai'})
+        owner_token = usage_owner.set(getattr(getattr(self, 'request', None), 'user', None).pk if getattr(getattr(self, 'request', None), 'user', None) else None)
         try:
             content = generate(context, level)
             validate_analysis(content, context)
+        except BudgetExceeded:
+            raise
         except Exception as exc:
+            record_error('invalid_provider_response', 'local_ai')
             reason = str(exc) if isinstance(exc, ValueError) and str(exc) in {
                 'unsupported_number', 'unsupported_claim', 'missing_pillars', 'invalid_structure',
                 'invalid_list', 'invalid_claim', 'invalid_text', 'invalid_references', 'invalid_number'} else 'provider_unavailable_or_invalid'
@@ -88,6 +93,8 @@ class CompanyAnalysisView(CompanyPillarsView):
                 response={}, validated=False, validation_reason=reason)
             return Response({'status': 'unavailable', 'reason': reason,
                 'message': 'El análisis no está disponible: el proveedor falló o la respuesta no superó la validación. Puedes reintentar.'}, status=503)
+        finally:
+            usage_owner.reset(owner_token)
         result = {'status': 'available', 'schema_version': VERSION, 'ticker': context['ticker'],
             'generation_mode': 'ai', 'summary_origin': 'ai',
             'metrics_version': context['methodology_version'],

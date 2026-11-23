@@ -4,6 +4,7 @@ from types import SimpleNamespace
 import json
 import pytest
 from .analysis_provider import generate
+pytestmark = pytest.mark.django_db
 
 
 def context():
