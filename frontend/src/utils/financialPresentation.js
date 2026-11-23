@@ -1,5 +1,10 @@
-export const hasIndicators = company => ['market_cap', 'per', 'roe', 'beta', 'dividend_yield']
-  .some(key => company[key] != null && Number.isFinite(Number(company[key])))
+export const hasIndicatorValue = value =>
+  (typeof value === 'number' || (typeof value === 'string' && value.trim() !== '')) && Number.isFinite(Number(value))
+
+export const countAvailableIndicators = company => ['market_cap', 'per', 'roe', 'beta', 'dividend_yield']
+  .filter(key => hasIndicatorValue(company[key])).length
+
+export const hasIndicators = company => countAvailableIndicators(company) > 0
 
 const sectorNames = {
   technology: 'Tecnología', healthcare: 'Salud', financials: 'Finanzas', energy: 'Energía',

@@ -1,0 +1,59 @@
+.company-dashboard .data-provenance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  gap: 16px 24px;
+  padding: 20px 22px;
+  border: 1px solid var(--terminal-line);
+  border-radius: 14px;
+  background: var(--terminal-panel);
+}
+
+.company-dashboard .data-provenance > span {
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.company-dashboard .data-provenance > p {
+  flex: 1 1 100%;
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--terminal-line);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.company-section-guide {
+  margin: -8px 0 24px;
+  max-width: 80ch;
+  color: var(--terminal-muted);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.terminal-fundamentals .metric-explanation,
+.terminal-fundamentals .metric-reference,
+.terminal-fundamentals .metric-help {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.terminal-fundamentals .metric-explanation {
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.terminal-fundamentals .metric-reference {
+  color: var(--terminal-muted);
+  font-size: 11px;
+}
+
+.terminal-fundamentals .metric-help summary {
+  color: var(--primary);
+  padding: 4px 0;
+}
+
+.terminal-fundamentals .metric-help a {
+  display: inline-block;
+  margin-top: 8px;
+}

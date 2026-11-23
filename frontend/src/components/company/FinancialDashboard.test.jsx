@@ -6,6 +6,7 @@ import MetricCards from './MetricCards'
 import FinancialHealthIndicator from './FinancialHealthIndicator'
 import PriceChart from './PriceChart'
 import api from '../../services/api'
+import { countAvailableIndicators, hasIndicators } from '../../utils/financialPresentation'
 vi.mock('../../services/api',()=>({default:{get:vi.fn()}}))
 vi.mock('highcharts/highstock',()=>({default:{}}))
 vi.mock('highcharts-react-official',()=>({default:({options})=><div data-testid="chart" data-points={options.series[0].data.length} data-crosshair={options.xAxis.crosshair} data-zoom={options.chart.zooming.type}/>}))
@@ -30,6 +31,15 @@ it('muestra una clasificación explícita en color semántico',()=>{
  render(<FinancialHealthIndicator altmanZ={{zone:'grey',score:1.81}}/> )
  expect(screen.getByText('Zona intermedia según Altman-Z')).toBeTruthy()
  expect(screen.getByLabelText('Perfil financiero').className).toContain('orange')
+})
+it('distingue un cero real de indicadores vacíos, booleanos o no numéricos',()=>{
+ const company={per:'',roe:0,market_cap:null,beta:'NaN',dividend_yield:false}
+ render(<MetricCards company={company}/> )
+ expect(countAvailableIndicators(company)).toBe(1)
+ expect(hasIndicators(company)).toBe(true)
+ expect(screen.getByText('0%')).toBeTruthy()
+ expect(screen.getAllByText('Sin datos')).toHaveLength(4)
+ expect(hasIndicators({...company,roe:'  '})).toBe(false)
 })
 it('cambia el rango y entrega más de mil puntos a Highcharts con zoom y crosshair',async()=>{
  const history=Array.from({length:1200},(_,i)=>({date:new Date(Date.UTC(2023,0,i+1)).toISOString().slice(0,10),price:10}))

@@ -13,8 +13,13 @@ function Port-Open([int]$port) {
 foreach ($port in @(58020,55193)) { if (Port-Open $port) { throw "Puerto $port ocupado; no se altera el servicio existente." } }
 New-Item -ItemType Directory -Force -Path $state | Out-Null
 if (!(Port-Open 55432)) {
-    & "$pg/pgsql/bin/pg_ctl.exe" -D "$pg/data" -l "$pg/presentation.log" -o '-h 127.0.0.1 -p 55432' -w start
-    if ($LASTEXITCODE -ne 0) { throw 'No inició PostgreSQL aislado' }
+    # No capturar la salida del proceso que deja el servidor en segundo plano:
+    # PowerShell puede esperar indefinidamente a que se cierre esa salida heredada.
+    $pgArguments = @('-D',('"' + "$pg/data" + '"'),'-l',('"' + "$pg/presentation.log" + '"'),
+        '-o','"-h 127.0.0.1 -p 55432"','-w','start')
+    $pgStarter = Start-Process -FilePath "$pg/pgsql/bin/pg_ctl.exe" -ArgumentList $pgArguments -WindowStyle Hidden -PassThru
+    if (!$pgStarter.WaitForExit(45000)) { throw 'PostgreSQL no confirmó el arranque dentro del tiempo esperado.' }
+    if ($pgStarter.ExitCode -ne 0) { throw 'No inició PostgreSQL aislado' }
 }
 if (!(Port-Open 56379)) {
     Start-Process -FilePath "$redis/redis-server.exe" -ArgumentList 'validation.conf' -WorkingDirectory $redis -WindowStyle Hidden | Out-Null

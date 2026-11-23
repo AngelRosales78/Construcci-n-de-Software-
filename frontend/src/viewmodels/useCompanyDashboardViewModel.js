@@ -7,6 +7,17 @@ export function useCompanyDashboardViewModel() {
   const { ticker } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
+  const [params, setParams] = useSearchParams()
+  const sections = ['overview', 'pillars', 'simulation', 'analysis']
+  const section = sections.includes(params.get('section')) ? params.get('section') : 'overview'
+  const setSection = value => {
+    if (!sections.includes(value) || value === section) return
+    setParams(previous => {
+      const next = new URLSearchParams(previous)
+      value === 'overview' ? next.delete('section') : next.set('section', value)
+      return next
+    }, { state: location.state })
+  }
   const previousSearch = location.state?.searchReturn
   const returnTo = typeof previousSearch === 'string' && (previousSearch === '/favorites' || previousSearch === '/search' || previousSearch.startsWith('/search?')) ? previousSearch : '/search'
   const [company, setCompany] = useState(null)
@@ -41,15 +52,17 @@ export function useCompanyDashboardViewModel() {
     return () => { active = false }
   }, [ticker, visitAttempt])
 
-  return { company, loading, error, navigate, returnTo, visitError, retryVisit: () => setVisitAttempt(n => n + 1) }
+  const reload = () => setVisitAttempt(n => n + 1)
+  return { company, loading, error, navigate, returnTo, section, setSection, visitError, retryVisit: reload, retryCompany: reload }
 }
 
 export function useFinancialPillarsViewModel() {
   const { ticker } = useParams()
+  const location = useLocation()
   const [data, setData] = useState(null)
   const [params, setParams] = useSearchParams()
   const year = params.get('fiscal_year') || ''
-  const setYear = value => setParams(previous => { const next = new URLSearchParams(previous); value ? next.set('fiscal_year', value) : next.delete('fiscal_year'); return next }, { replace: true })
+  const setYear = value => setParams(previous => { const next = new URLSearchParams(previous); value ? next.set('fiscal_year', value) : next.delete('fiscal_year'); return next }, { replace: true, state: location.state })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [attempt, setAttempt] = useState(0)

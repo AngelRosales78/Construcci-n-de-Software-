@@ -1,3 +1,5 @@
+import { hasIndicatorValue } from '../../utils/financialPresentation'
+
 const indicators = [
   ['per', 'PER', 'Precio de la acción dividido entre beneficio por acción.'],
   ['roe', 'ROE', 'Rentabilidad del patrimonio, expresada en porcentaje.'],
@@ -7,7 +9,7 @@ const indicators = [
 ]
 export default function MetricCards({ company }) {
   const format = (key, value) => {
-    if (value == null || !Number.isFinite(Number(value))) return 'Sin datos'
+    if (!hasIndicatorValue(value)) return 'Sin datos'
     if (key === 'market_cap') {
       const number = Number(value)
       const unit = number >= 1e12 ? 'T' : number >= 1e9 ? 'B' : ''
@@ -20,11 +22,13 @@ export default function MetricCards({ company }) {
     {indicators.map(([key, label, explanation]) => <article className="metric-card" key={key}>
       <abbr title={explanation} className="metric-label">{label}</abbr>
       <span className="metric-value">{format(key, company[key])}</span>
-      {company.field_sources?.[key]?.as_of && <small>Referencia · {company.field_sources[key].as_of}</small>}
-      <details className="metric-help"><summary>Qué significa</summary><p className="metric-explanation">{explanation}</p>
-        {company.field_sources?.[key] && <><p>{company.field_sources[key].method}</p>
-          <a href={company.field_sources[key].source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a></>}
-      </details>
+      <p className="metric-explanation">{explanation}</p>
+      {company.field_sources?.[key]?.as_of ? <small className="metric-reference">Referencia · {company.field_sources[key].as_of}</small>
+        : <small className="metric-reference">Fecha de referencia no informada.</small>}
+      {company.field_sources?.[key] && <details className="metric-help"><summary>Ver cálculo y fuente</summary>
+        <p>{company.field_sources[key].method}</p>
+          <a href={company.field_sources[key].source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a>
+      </details>}
       {key === 'market_cap' && <small className="metric-unit-note">B: mil millones · T: un billón</small>}
     </article>)}
   </section>

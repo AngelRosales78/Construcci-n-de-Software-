@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useCompanyDashboardViewModel } from '../../viewmodels/useCompanyDashboardViewModel'
 import AltmanZGauge from './AltmanZGauge'
 import PriceChart from './PriceChart'
@@ -8,19 +7,25 @@ import WorkspaceLayout from '../layout/WorkspaceLayout'
 import DataSources from './DataSources'
 import FinancialPillars from './FinancialPillars'
 import SimulationScenarios from './SimulationScenarios'
-import { hasIndicators, sectorLabel } from '../../utils/financialPresentation'
+import { countAvailableIndicators, hasIndicators, sectorLabel } from '../../utils/financialPresentation'
 import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
 import FavoriteButton from '../favorites/FavoriteButton'
 import ReportPanel from '../reports/ReportPanel'
 import CompanyAbout from './CompanyAbout'
+import './company-reading.css'
 
+const sections = [
+  { id: 'overview', label: 'Resumen', description: 'Consulta el precio histórico y los cinco indicadores del resumen. Cada dato conserva su fecha de referencia.' },
+  { id: 'pillars', label: 'Salud financiera', description: 'Revisa los cinco pilares del balance anual. Elige un ejercicio y abre cada pilar para consultar sus indicadores, fórmulas y fuentes.' },
+  { id: 'simulation', label: 'Simulaciones', description: 'Explora escenarios cambiando sus supuestos. Los resultados de un escenario no modifican los datos históricos de la empresa.' },
+  { id: 'analysis', label: 'Explicación de IA', description: 'Consulta una explicación de los indicadores del ejercicio seleccionado, junto con sus referencias y fecha de generación.' },
+]
 
 export default function CompanyDashboard() {
   const favorites = useFavoritesViewModel()
-  const { company, loading, error, navigate, returnTo, visitError, retryVisit } = useCompanyDashboardViewModel()
-  const [section, setSection] = useState('overview')
+  const { company, loading, error, navigate, returnTo, section, setSection, visitError, retryVisit, retryCompany } = useCompanyDashboardViewModel()
   if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
-  if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert"><p>{error}</p><button onClick={() => navigate(returnTo, { replace: true })}>Volver al explorador</button></div></WorkspaceLayout>
+  if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert"><h1>No se pudo abrir la ficha</h1><p>{error}</p><button onClick={retryCompany}>Reintentar ficha</button><button onClick={() => navigate(returnTo, { replace: true })}>Volver al explorador</button></div></WorkspaceLayout>
   if (!company) return null
 
   return (
@@ -44,14 +49,20 @@ export default function CompanyDashboard() {
         {visitError && <p role="status">{visitError} <button onClick={retryVisit}>Reintentar registro de visita</button></p>}
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
         {favorites.message && <p role="status">{favorites.message}</p>}
-        <div className="data-provenance" hidden={section === 'pillars' || section === 'analysis'}><span><small>Balance del resumen</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span><p>Datos históricos</p>{company.quote && <span><small>Precios hasta</small><strong>{company.quote.date} · {company.quote.currency}</strong></span>}</div>
+        <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
+          <span><small>Indicadores del resumen</small><strong>{countAvailableIndicators(company)} de 5 disponibles</strong></span>
+          <span><small>Balance de referencia</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
+          <span><small>Último cierre importado</small><strong>{company.quote ? `${company.quote.date} · ${company.quote.currency}` : 'Sin precios cargados'}</strong></span>
+          <p>Las fechas del balance, los precios y cada indicador pueden ser diferentes.</p>
+        </div>
         <nav className="company-sections" aria-label="Secciones de la empresa">
-          {[['overview', 'Resumen'], ['pillars', 'Salud financiera'], ['simulation', 'Simulaciones'], ['analysis', 'Explicación de IA']].map(([id, label]) =>
+          {sections.map(({ id, label }) =>
             <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}>{label}</button>)}
         </nav>
+        <p className="company-section-guide">{sections.find(item => item.id === section).description}</p>
         {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>Revisa los balances disponibles en Salud financiera. Microsoft también tiene el resumen cargado.</p><button onClick={() => navigate('/company/MSFT', { state: { searchReturn: returnTo } })}>Ver Microsoft</button></section>}
         {company.is_demo && hasIndicators(company) && <p role="status" className="data-notice">Resumen financiero pendiente de verificar. Consulta la procedencia de los precios y de los balances anuales.</p>}
-        <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
+        <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars key={company.ticker} view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
         {(hasIndicators(company) || company.quote) && <>

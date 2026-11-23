@@ -1,0 +1,73 @@
+const fs = require('node:fs')
+const path = require('node:path')
+const assert = require('node:assert/strict')
+const repo = path.resolve(__dirname, '..')
+const { chromium } = require(require.resolve('playwright', { paths: [path.join(repo, 'frontend')] }))
+const output = path.resolve(repo, '../output/web_ficha')
+const web = 'http://127.0.0.1:55193'
+
+;(async () => {
+  const accounts = JSON.parse(fs.readFileSync(path.resolve(repo, '../presentation_runtime_sprint3/demo_credentials.json'), 'utf8').replace(/^\uFEFF/, ''))
+  fs.mkdirSync(output, { recursive: true })
+  const browser = await chromium.launch({ channel: 'msedge', headless: true })
+  const errors = []
+  const checks = []
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
+    page.on('pageerror', error => errors.push(error.message))
+    await page.goto(web + '/login')
+    await page.locator('#username').fill(accounts.free.username)
+    await page.locator('#password').fill(accounts.free.password)
+    await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
+    await page.waitForURL('**/dashboard')
+    await page.goto(web + '/search?q=MSFT&sector=technology&ordering=-market_cap&page=1&with_data=true')
+    const returnSearch = new URL(page.url()).searchParams
+    const response = page.waitForResponse(r => r.url().includes('/companies/MSFT/summary/') && r.status() === 200)
+    await page.getByRole('link', { name: 'Abrir Microsoft →', exact: true }).click()
+    const company = await (await response).json()
+    await page.getByRole('heading', { name: company.name, exact: true }).waitFor()
+    const count = ['per', 'roe', 'market_cap', 'beta', 'dividend_yield'].filter(key => company[key] != null && company[key] !== '' && Number.isFinite(Number(company[key]))).length
+    await page.locator('.data-provenance').getByText(`${count} de 5 disponibles`, { exact: true }).waitFor()
+    assert.equal(await page.locator('.metric-explanation:visible').count(), 5)
+    assert.equal(await page.locator('.metric-help[open]').count(), 0)
+    await page.screenshot({ path: path.join(output, '01-ficha-resumen.png'), fullPage: true })
+    checks.push('La ficha muestra cobertura y cinco definiciones sin abrir desplegables.')
+
+    await page.getByRole('button', { name: 'Salud financiera', exact: true }).click()
+    await page.getByLabel('Ejercicio fiscal', { exact: true }).selectOption('2024')
+    assert.equal(new URL(page.url()).searchParams.get('section'), 'pillars')
+    assert.equal(new URL(page.url()).searchParams.get('fiscal_year'), '2024')
+    const linkedSection = page.url()
+    await page.reload()
+    await page.getByRole('button', { name: 'Salud financiera', exact: true }).and(page.locator('[aria-pressed="true"]')).waitFor()
+    assert.equal(await page.getByLabel('Ejercicio fiscal', { exact: true }).inputValue(), '2024')
+    await page.getByRole('heading', { name: 'Salud financiera', exact: true }).waitFor()
+    await page.screenshot({ path: path.join(output, '02-ficha-salud.png'), fullPage: true })
+    checks.push('Recargar conserva Salud financiera y el ejercicio seleccionado.')
+
+    await page.getByRole('button', { name: 'Resumen', exact: true }).click()
+    await page.getByRole('button', { name: '5 años', exact: true }).click()
+    assert.equal(new URL(page.url()).searchParams.get('range'), '5Y')
+    assert.equal(new URL(page.url()).searchParams.get('fiscal_year'), '2024')
+    await page.reload()
+    await page.locator('.back-button').waitFor()
+    await page.locator('.back-button').click()
+    await page.waitForURL('**/search?**')
+    assert.deepEqual([...new URL(page.url()).searchParams].sort(), [...returnSearch].sort())
+    checks.push('Cambiar ejercicio, rango y recargar conserva los filtros al volver al explorador.')
+
+    await page.goto(linkedSection)
+    await page.getByRole('button', { name: 'Salud financiera', exact: true }).and(page.locator('[aria-pressed="true"]')).waitFor()
+    await page.getByRole('button', { name: 'Explicación de IA', exact: true }).click()
+    assert.equal(new URL(page.url()).searchParams.get('section'), 'analysis')
+    await page.goBack()
+    await page.getByRole('button', { name: 'Salud financiera', exact: true }).and(page.locator('[aria-pressed="true"]')).waitFor()
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false)
+    assert.deepEqual(errors, [])
+    checks.push('Los enlaces directos y el botón Atrás recuperan la sección sin errores de página.')
+    fs.writeFileSync(path.join(output, 'resultado.json'), JSON.stringify({ verified_at: new Date().toISOString(), checks, page_errors: errors, android_changed: false }, null, 2))
+    checks.forEach(check => process.stdout.write(check + '\n'))
+  } finally {
+    await browser.close()
+  }
+})().catch(error => { process.stderr.write(error.stack + '\n'); process.exitCode = 1 })
