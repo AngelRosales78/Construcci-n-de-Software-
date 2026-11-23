@@ -47,7 +47,7 @@ def test_approval_uses_configured_tariff_preserves_role_and_sends_receipt(accoun
     assert record.ends_at - record.starts_at == timedelta(days=40)
     assert record.email_status == 'sent'
     assert len(mail.outbox) == 1 and str(record.id) in mail.outbox[0].body
-    assert mail.outbox[0].alternatives and 'SIMULADO' in mail.outbox[0].body
+    assert mail.outbox[0].alternatives and 'SIN CARGO MONETARIO' in mail.outbox[0].body
     user.refresh_from_db()
     assert not user.is_staff and not user.is_superuser
 
@@ -202,7 +202,7 @@ def test_complete_subscription_flow_and_actual_smtp_transport(account, django_ca
     message = BytesParser(policy=policy.default).parsebytes(receiver.messages[0])
     assert message['To'] == user.email
     assert str(record.id) in message.get_body(preferencelist=('plain',)).get_content()
-    assert 'simulado' in message.get_body(preferencelist=('html',)).get_content()
+    assert 'SIN CARGO MONETARIO' in message.get_body(preferencelist=('html',)).get_content()
     assert record.email_status == 'sent'
     assert client.get(ROOT).data['effective_plan'] == 'pro'
     assert client.get(ROOT+'receipts/'+str(record.id)+'/').status_code == 200

@@ -42,7 +42,7 @@ export default function SimulationScenarios() {
         <p>{data.assumptions}</p><p>Histórico: {data.historical_start} a {data.as_of} ({data.observations} cierres). Fuente: {data.sources.join(', ')}.</p>
         <p>Tasa anual continua: {(data.parameters.annual_return * 100).toFixed(2)} % · Volatilidad anual: {(data.parameters.annual_volatility * 100).toFixed(2)} %.</p>
         <p>Semilla: {data.seed} · Modelo: {data.model_version} · Ejecución: {data.simulation_id}</p>
-        <p>Huella del histórico: {data.source_sha256}. {data.is_demo ? 'Serie de prueba identificada.' : 'Histórico importado; no es una cotización actual.'}</p>
+        <p>Huella del histórico: {data.source_sha256}. {data.is_demo ? 'Serie pendiente de verificar identificada.' : 'Histórico importado; no es una cotización actual.'}</p>
       </div></details>
     </>}
   </section>

@@ -37,17 +37,17 @@ def deliver_receipt(record_id):
             return
         if record.outcome != 'approved' or record.email_status in ('sent', 'local'):
             return
-        message = (f'Comprobante SIMULADO {record.id}\nPlan Pro\n'
-                   f'Importe simulado: {record.currency} {record.amount}\n'
+        message = (f'Comprobante de activación {record.id}\nPlan Pro\n'
+                   f'Valor de referencia: {record.currency} {record.amount}\n'
                    f'Vigencia: {record.starts_at.isoformat()} a {record.ends_at.isoformat()}\n'
-                   'Operación de demostración sin cobro real. Renovación mediante nueva confirmación manual.')
+                   'Activación SIN CARGO MONETARIO. Renovación mediante nueva confirmación manual.')
         try:
             if not record.user.email:
                 raise ValueError('La cuenta no tiene correo.')
-            email = EmailMultiAlternatives('Comprobante de suscripción simulada', message,
+            email = EmailMultiAlternatives('Confirmación de acceso Pro', message,
                                           settings.DEFAULT_FROM_EMAIL, [record.user.email],
                                           connection=get_connection(timeout=5))
-            email.attach_alternative('<h1>Comprobante simulado</h1><pre>' + escape(message) + '</pre>', 'text/html')
+            email.attach_alternative('<h1>Tu acceso Pro</h1><pre>' + escape(message) + '</pre>', 'text/html')
             if email.send() != 1:
                 raise ValueError('El transporte no confirmó el envío.')
             record.email_status = 'local' if 'console.' in settings.EMAIL_BACKEND or 'filebased.' in settings.EMAIL_BACKEND else 'sent'

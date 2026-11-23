@@ -22,7 +22,7 @@ export default function ProfilePage() {
         <button disabled={vm.busy || vm.profile.loading} type="submit">{vm.busy ? 'Guardando…' : 'Guardar perfil'}</button>
       </form>
       <section className="sprint3-panel account-danger"><h2>Eliminar mi cuenta</h2>
-        <p>Se borrarán tu perfil, foto, sesiones, favoritos, etiquetas, historial, simulaciones, reportes y operaciones de suscripción simulada. Los eventos administrativos retenidos quedarán sin referencias a tu cuenta.</p>
+        <p>Se borrarán tu perfil, foto, sesiones, favoritos, etiquetas, historial, escenarios y reportes. Los registros administrativos y de suscripción que se conserven quedarán sin referencias a tu cuenta.</p>
         <button disabled={vm.busy} onClick={() => vm.setDeleting(true)}>Solicitar eliminación</button>
       </section>
     </>}

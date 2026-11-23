@@ -42,7 +42,7 @@ export default function ComparisonPage() {
       </div>)}</div>
       {vm.data.reason && <p className="data-notice" role="status">{vm.data.reason}</p>}
       <p className="comparison-table-hint">Desliza la tabla hacia los lados para ver las dos notas y el resultado.</p>
-      <div className="scenario-table" tabIndex="0" role="region" aria-label="Tabla de notas, desplazable horizontalmente"><table><caption>Notas académicas por pilar · Solo se comparan períodos y versiones compatibles</caption>
+      <div className="scenario-table" tabIndex="0" role="region" aria-label="Tabla de notas, desplazable horizontalmente"><table><caption>Puntuaciones por pilar · Solo se comparan períodos y versiones compatibles</caption>
         <thead><tr><th scope="col">Pilar</th><th scope="col">{vm.data.a.ticker}</th><th scope="col">{vm.data.b.ticker}</th><th scope="col">Resultado</th></tr></thead>
         <tbody>{vm.data.comparisons.map(row => <tr key={row.id}><th scope="row">{labels[row.id] || row.id}</th>
           <td>{displayNote(vm.data.a.pillars.find(p => p.id === row.id)?.score)}</td>
@@ -51,7 +51,7 @@ export default function ComparisonPage() {
             : <>No comparable<small>{row.reason}</small></>}</td>
         </tr>)}</tbody>
       </table></div>
-      <p>Las notas siguen reglas académicas del proyecto y no son una recomendación de inversión.</p>
+      <p>Las puntuaciones siguen la metodología documentada y no son una recomendación de inversión.</p>
       <ComparisonHistory a={vm.a} b={vm.b} year={vm.year} />
       <ReportPanel a={vm.a} b={vm.b} year={Number(vm.year)} />
     </section>}

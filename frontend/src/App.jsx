@@ -1,25 +1,28 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import ForgotPassword from './components/auth/ForgotPassword'
 import ResetPassword from './components/auth/ResetPassword'
 import Dashboard from './components/Dashboard'
 import CompanySearch from './components/search/CompanySearch'
-import CompanyDashboard from './components/company/CompanyDashboard'
 import AdminDashboard from './components/AdminDashboard'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import FavoritesPage from './components/favorites/FavoritesPage'
-import ComparisonPage from './components/compare/ComparisonPage'
 import SubscriptionPage from './components/subscription/SubscriptionPage'
 import ProfilePage from './components/account/ProfilePage'
 import AdminUsersPage from './components/account/AdminUsersPage'
 import AdminCompaniesPage from './components/account/AdminCompaniesPage'
 import NotificationsPage from './components/notifications/NotificationsPage'
 import NotificationPreferencesPage from './components/notifications/NotificationPreferencesPage'
+const CompanyDashboard = lazy(() => import('./components/company/CompanyDashboard'))
+const ComparisonPage = lazy(() => import('./components/compare/ComparisonPage'))
+const AdminMonitoringPage = lazy(() => import('./components/account/AdminMonitoringPage'))
 
 function App() {
   return (
     <BrowserRouter>
+      <Suspense fallback={<div className="product-loading" role="status">Preparando tu espacio…</div>}>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -30,6 +33,7 @@ function App() {
           <Route path="/profile/notifications" element={<NotificationPreferencesPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin-panel" element={<AdminDashboard />} />
+          <Route path="/admin-panel/monitoring" element={<AdminMonitoringPage />} />
           <Route path="/admin-panel/users" element={<AdminUsersPage />} />
           <Route path="/admin-panel/companies" element={<AdminCompaniesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
@@ -41,6 +45,7 @@ function App() {
         </Route>
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }

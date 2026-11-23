@@ -14,6 +14,7 @@ export default function AdminDashboard() {
       <Link to="/search">Explorar empresas</Link>
       <Link to="/admin-panel/users">Administrar usuarios</Link>
       <Link to="/admin-panel/companies">Administrar empresas y datos</Link>
+      <Link to="/admin-panel/monitoring">Consultar uso y operación</Link>
     </section>
   </WorkspaceLayout>
 }

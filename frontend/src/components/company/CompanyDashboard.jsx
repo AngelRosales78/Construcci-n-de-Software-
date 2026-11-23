@@ -50,7 +50,7 @@ export default function CompanyDashboard() {
             <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}>{label}</button>)}
         </nav>
         {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>Revisa los balances disponibles en Salud financiera. Microsoft también tiene el resumen cargado.</p><button onClick={() => navigate('/company/MSFT', { state: { searchReturn: returnTo } })}>Ver Microsoft</button></section>}
-        {company.is_demo && hasIndicators(company) && <p role="status" className="data-notice">Resumen financiero de demostración o sin verificar; los precios y balances anuales declaran sus propias fuentes.</p>}
+        {company.is_demo && hasIndicators(company) && <p role="status" className="data-notice">Resumen financiero pendiente de verificar. Consulta la procedencia de los precios y de los balances anuales.</p>}
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>

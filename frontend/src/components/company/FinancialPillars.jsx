@@ -35,7 +35,7 @@ export function PillarMetric({ metric }) {
         <span> · {component.source.snapshot_kind === 'extracted_financial_facts' ? 'Referencia del informe' : 'Etiqueta SEC'}: {component.source.tag}</span>
         {component.source.locator && <span> · {component.source.locator}</span>}
         <span> · Publicado: {component.source.filed} · Informe: {component.source.accession}</span>
-        {component.source.is_demo && <strong> · Datos de prueba</strong>}
+        {component.source.is_demo && <strong> · Fuente pendiente de verificar</strong>}
         <a href={component.source.url} target="_blank" rel="noreferrer">Consultar fuente</a>
       </li>)}</ul>
       {policy && <p>Umbrales {policy.version}: {policy.lower} y {policy.upper} {UNITS[metric.unit]}. {policy.direction === 'higher' ? 'Atención por debajo del primer límite; intermedio hasta el segundo; favorable desde el segundo.' : 'Favorable hasta el primer límite; intermedio hasta el segundo; atención por encima del segundo.'} {policy.explanation}</p>}

@@ -5,6 +5,7 @@ import { useRemoteResource } from './useRemoteResource'
 
 export function useNotificationPreferencesViewModel() {
   const resource=useRemoteResource('/user/notification-preferences/')
+  const devices=useRemoteResource('/user/push-installations/')
   const [draft,setDraft]=useState(null)
   const [busy,setBusy]=useState(false)
   const [error,setError]=useState('')
@@ -27,6 +28,6 @@ export function useNotificationPreferencesViewModel() {
     const next=channel==='rating_changes'?{...form,rating_changes:value}:{...form,channels:{...form.channels,[channel]:value}}
     setDraft(next);return save(next)
   }
-  return {resource,form,busy,error,message,change,retry:()=>save(form),
+  return {resource,devices,form,busy,error,message,change,retry:()=>save(form),
     reload:()=>{setDraft(null);setError('');setMessage('');resource.reload()}}
 }

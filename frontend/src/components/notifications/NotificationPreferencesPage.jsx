@@ -18,6 +18,10 @@ export default function NotificationPreferencesPage() {
         {!vm.form.available_channels[channel]&&<p>{vm.form.channel_messages[channel]}</p>}
       </div>)}
     </div>}
+    {vm.devices.data && <section className="sprint3-panel"><h2>Avisos en el teléfono</h2>
+      <p>{vm.devices.data.configured ? 'Canal móvil disponible.' : 'El canal móvil todavía no está disponible.'}</p>
+      {(vm.devices.data.installations || []).length ? <ul>{vm.devices.data.installations.map(device => <li key={device.installation_id}>{device.permission_granted ? 'Notificaciones permitidas' : 'Permiso pendiente en el teléfono'} · Última conexión: {new Date(device.updated_at).toLocaleString('es-PE')}</li>)}</ul> : <p>No hay teléfonos vinculados a esta cuenta. Vincula tu aplicación Android para recibir avisos en el dispositivo.</p>}
+    </section>}
     {vm.error&&<button disabled={vm.busy} onClick={vm.retry}>Reintentar guardado</button>}
     <button disabled={vm.busy} onClick={vm.reload}>Recargar preferencias</button>
   </section></WorkspaceLayout>

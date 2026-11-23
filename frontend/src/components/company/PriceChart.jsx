@@ -28,7 +28,7 @@ export default function PriceChart() {
       : <>
         <p className="chart-date-range">Periodo disponible: {data.history[0].date} → {data.history[data.history.length - 1].date} · {data.history.length} sesiones</p>
         <HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={options} />
-        <div className="chart-caption"><p>Arrastra para ampliar; usa el navegador inferior para cambiar el intervalo.</p><p>Fuente: {data.sources.join(', ')} · {data.is_demo ? 'Datos de demostración' : 'Datos importados'}</p></div>
+        <div className="chart-caption"><p>Arrastra para ampliar; usa el navegador inferior para cambiar el intervalo.</p><p>Fuente: {data.sources.join(', ')} · {data.is_demo ? 'Datos pendientes de verificar' : 'Datos importados'}</p></div>
       </>}
   </section>
 }

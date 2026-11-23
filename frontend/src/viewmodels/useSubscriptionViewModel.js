@@ -68,7 +68,7 @@ export function useSubscriptionViewModel() {
         setReceipt(result.receipt)
         setCheckoutOpen(false)
         setNotice(result.receipt.outcome === 'approved'
-          ? 'Simulación aprobada. Tu plan Pro está activo.' : 'Simulación rechazada. Puedes intentar otra operación ficticia.')
+          ? 'Tu acceso Pro está activo.' : 'No se confirmó la activación. Puedes volver a intentarlo.')
       } else {
         await subscriptionRepository.cancel()
         if (id !== generation.current) return
