@@ -3,7 +3,7 @@
   "entity": "BIO-TECHNE Corp",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000842023.json",
   "snapshot_sha256": "5f064cd631289049236c7ddafd76f1bc2824b0b55936587bf5e0bb2cc7a0f677",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 646397000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 276477000,
@@ -139,9 +139,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 691723000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 148175000,
@@ -189,9 +189,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 74462000,
+          "tag": "AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+          "available": true
         },
         "receivables": {
           "value": 194548000,
@@ -219,9 +219,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 593794000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 301386000,
@@ -299,9 +299,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 672176000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 338659000,
@@ -379,9 +379,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 635017000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 185689000,
@@ -389,9 +389,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 15736000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 179731000,
@@ -429,9 +429,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 206876000,
@@ -459,9 +459,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 639060000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 98463000,
@@ -469,9 +469,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 8509000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 189446000,
@@ -509,9 +509,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 216585000,
@@ -539,9 +539,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 478505000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 240680000,
@@ -549,9 +549,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 9630000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 195744000,

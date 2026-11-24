@@ -3,7 +3,7 @@
   "entity": "DEVON ENERGY CORP/DE",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001090012.json",
   "snapshot_sha256": "7ccaf0b7dc92d898ebca44247d00321a5af90be6df04208f46a9a7db977b9b20",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 601000000,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 6893000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": -3090000000,
@@ -69,9 +69,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 259000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": null,
@@ -83,7 +83,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2021,
@@ -109,9 +111,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 1543000000,
@@ -139,9 +141,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 11626000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": null,
@@ -149,9 +151,9 @@
           "available": false
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 388000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": null,
@@ -163,7 +165,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2022,
@@ -189,9 +193,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 1767000000,
@@ -219,9 +223,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 12425000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 7775000000,
@@ -229,9 +233,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 370000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 201000000,
@@ -269,9 +273,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 1573000000,
@@ -299,9 +303,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 12273000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 4623000000,
@@ -309,9 +313,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 369000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 249000000,
@@ -349,9 +353,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 1972000000,
@@ -379,9 +383,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 15785000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 3712000000,
@@ -389,9 +393,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 401000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 294000000,
@@ -429,9 +433,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 1792000000,
@@ -459,9 +463,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 16071000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 3466000000,
@@ -469,9 +473,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 497000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 336000000,

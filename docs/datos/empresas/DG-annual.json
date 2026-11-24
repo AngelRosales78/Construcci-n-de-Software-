@@ -3,7 +3,7 @@
   "entity": "DOLLAR GENERAL CORP",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000029534.json",
   "snapshot_sha256": "16157a14c6c91f04a8b3e89ccedfc91ee0d5ea6978f8c6ed1d25d8cfe73541cf",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": null,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 16122584000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 2201730000,
@@ -109,9 +109,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": null,
@@ -139,9 +139,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 19201386000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 3404380000,
@@ -189,9 +189,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": null,
@@ -219,9 +219,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 20065385000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 3063149000,
@@ -269,9 +269,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": null,
@@ -299,9 +299,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 23541595000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 3116614000,
@@ -349,9 +349,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": null,
@@ -379,9 +379,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 24046472000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 2119519000,
@@ -429,9 +429,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": null,

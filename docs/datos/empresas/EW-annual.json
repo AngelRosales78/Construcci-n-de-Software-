@@ -3,7 +3,7 @@
   "entity": "Edwards Lifesciences Corporation",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001099800.json",
   "snapshot_sha256": "5e8f751fbec9a0a1ff653c4d2070ea46d6cde3f7ccf35f9c1d7367a126bc76c1",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 2662800000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 916700000,
@@ -389,9 +389,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 19800000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 1086700000,
@@ -469,9 +469,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 20400000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 1126200000,

@@ -3,7 +3,7 @@
   "entity": "HEWLETT PACKARD ENTERPRISE COMPANY",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001645590.json",
   "snapshot_sha256": "e2800dcac4b3530c289f7494e3fcf9be38378fba1ef9172483f50976ae0568d1",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3386000000,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 37919000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": -442000000,
@@ -109,9 +109,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3979000000,
@@ -139,9 +139,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 37682000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 3587000000,
@@ -189,9 +189,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 4101000000,
@@ -219,9 +219,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 37214000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 876000000,
@@ -269,9 +269,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3481000000,
@@ -299,9 +299,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 35915000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 2230000000,
@@ -349,9 +349,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3550000000,
@@ -379,9 +379,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 46382000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": 2953000000,
@@ -429,9 +429,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 5290000000,
@@ -459,9 +459,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 51152000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest",
+          "available": true
         },
         "income_before_tax": {
           "value": -285000000,

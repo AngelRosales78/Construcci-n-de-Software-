@@ -3,7 +3,7 @@
   "entity": "SBA COMMUNICATIONS CORPORATION",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001034054.json",
   "snapshot_sha256": "1e388b35b987ffb53f980311ded96ffdab64001e55877fe613e46cdad6e576e5",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 74088000,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 13982400000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": -17749000,
@@ -83,7 +83,9 @@
           "tag": "CostOfRevenue",
           "available": true
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2021,
@@ -109,9 +111,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 101950000,
@@ -139,9 +141,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 15085103000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 252564000,
@@ -163,7 +165,9 @@
           "tag": "CostOfRevenue",
           "available": true
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2022,
@@ -219,9 +223,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 15861356000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 525843000,
@@ -243,7 +247,9 @@
           "tag": "CostOfRevenue",
           "available": true
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2023,
@@ -299,9 +305,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 15349323000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 548503000,
@@ -323,7 +329,9 @@
           "tag": "CostOfRevenue",
           "available": true
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2024,
@@ -379,9 +387,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 16527274000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 772666000,
@@ -403,7 +411,9 @@
           "tag": "CostOfRevenue",
           "available": true
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2025,
@@ -459,9 +469,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 16428531000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 1242038000,
@@ -483,7 +493,9 @@
           "tag": "CostOfRevenue",
           "available": true
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     }
   ]
 }

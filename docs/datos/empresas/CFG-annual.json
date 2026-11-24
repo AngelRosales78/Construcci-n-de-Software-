@@ -3,7 +3,7 @@
   "entity": "CITIZENS FINANCIAL GROUP INC/RI",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000759944.json",
   "snapshot_sha256": "ebad6963190bd16d700d51420dec0436ac5bae1e294ceec16970098b94c01ad7",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -24,9 +24,9 @@
           "available": false
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 12733000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
@@ -83,7 +83,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2021,
@@ -104,9 +106,9 @@
           "available": false
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 9158000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
@@ -163,7 +165,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2022,
@@ -184,9 +188,9 @@
           "available": false
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 10547000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
@@ -243,7 +247,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2023,
@@ -264,9 +270,9 @@
           "available": false
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 11628000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
@@ -323,7 +329,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2024,
@@ -344,9 +352,9 @@
           "available": false
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 10601000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
@@ -389,9 +397,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 4553000000,
+          "tag": "InterestExpenseOperating",
+          "available": true
         },
         "inventory": {
           "value": null,
@@ -403,7 +411,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2025,
@@ -424,9 +434,9 @@
           "available": false
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 12727000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
@@ -469,9 +479,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 3810000000,
+          "tag": "InterestExpenseOperating",
+          "available": true
         },
         "inventory": {
           "value": null,
@@ -483,7 +493,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     }
   ]
 }

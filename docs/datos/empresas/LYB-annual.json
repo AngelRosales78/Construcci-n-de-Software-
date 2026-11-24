@@ -3,7 +3,7 @@
   "entity": "LYONDELLBASELL INDUSTRIES N.V.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001489393.json",
   "snapshot_sha256": "27ee253a4417f5bbb0d9ed46ca8570aa39ac15267850cd2b7cf39f4cb7524c92",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -59,9 +59,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 27299000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest-TemporaryEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 1386000000,
@@ -139,9 +139,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 24754000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest-TemporaryEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 6786000000,
@@ -219,9 +219,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 23622000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest-TemporaryEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 4776000000,
@@ -299,9 +299,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 23942000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest-TemporaryEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 2627000000,
@@ -379,9 +379,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 23158000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest-TemporaryEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": 1603000000,
@@ -389,9 +389,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 481000000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 4658000000,
@@ -459,9 +459,9 @@
           "available": true
         },
         "total_liabilities": {
-          "value": null,
-          "tag": "Liabilities",
-          "available": false
+          "value": 23796000000,
+          "tag": "derived:LiabilitiesAndStockholdersEquity-StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest-TemporaryEquity",
+          "available": true
         },
         "income_before_tax": {
           "value": -715000000,
@@ -469,9 +469,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 487000000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 3533000000,

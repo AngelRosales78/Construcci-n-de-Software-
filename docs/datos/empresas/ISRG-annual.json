@@ -3,7 +3,7 @@
   "entity": "Intuitive Surgical, Inc.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001035267.json",
   "snapshot_sha256": "3419d6820891488e2d57eb100dd14e3a3cd21f7eae1564b8307540b2c91f5953",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,

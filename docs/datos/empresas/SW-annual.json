@@ -3,7 +3,7 @@
   "entity": "Smurfit Westrock plc",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002005951.json",
   "snapshot_sha256": "b1d85073de8a95feb0b32ab09708963ad8f42a37134416206cc1e024e2d1728a",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2024,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 4117000000,
@@ -69,9 +69,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 525000000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 3550000000,
@@ -109,9 +109,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 4268000000,
@@ -149,9 +149,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 840000000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 3693000000,

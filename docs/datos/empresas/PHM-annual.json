@@ -3,7 +3,7 @@
   "entity": "PULTEGROUP, INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000822416.json",
   "snapshot_sha256": "17025e7329aa829a6e793d63006b00178e179b40e818afd2934a8e68f4a2c063",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,

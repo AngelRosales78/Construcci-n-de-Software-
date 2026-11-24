@@ -3,7 +3,7 @@
   "entity": "Mettler-Toledo International Inc.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001037646.json",
   "snapshot_sha256": "96802dbb20a5201bd0b672df752020b95041823f06bb80399a4ee58971f0933d",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 593809000,
@@ -109,9 +109,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 647335000,
@@ -189,9 +189,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 709321000,
@@ -269,9 +269,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 663893000,
@@ -344,14 +344,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 59362000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 687112000,
@@ -424,14 +424,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 66888000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 778243000,

@@ -3,7 +3,7 @@
   "entity": "HUBBELL INC",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000048898.json",
   "snapshot_sha256": "cbad7cc261333e5397faf635864ab61db830df38d6e5540afb19bc8e2b60cfc2",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -34,9 +34,9 @@
           "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 634700000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 351200000,
@@ -114,9 +114,9 @@
           "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 675300000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 399500000,
@@ -194,9 +194,9 @@
           "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 741600000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 545900000,
@@ -274,9 +274,9 @@
           "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 785400000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 759800000,
@@ -354,9 +354,9 @@
           "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 756000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 777800000,
@@ -434,9 +434,9 @@
           "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 856900000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 887100000,

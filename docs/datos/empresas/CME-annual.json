@@ -3,7 +3,7 @@
   "entity": "CME GROUP INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001156375.json",
   "snapshot_sha256": "8b12c0ae5c33f2d035d7d0c0c17a2fd1f23849c155f69f9e1fc6d98e19f62914",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -83,7 +83,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2021,
@@ -163,7 +165,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2022,
@@ -243,7 +247,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2023,
@@ -323,7 +329,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2024,
@@ -403,7 +411,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2025,
@@ -483,7 +493,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     }
   ]
 }

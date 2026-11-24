@@ -3,7 +3,7 @@
   "entity": "Mondelez International, Inc.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001103982.json",
   "snapshot_sha256": "c66054b213ead15f0a177910e8d265dc12e917fa82b51c99c2eb5b20c6acf8df",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -24,14 +24,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 3650000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 2297000000,
@@ -69,9 +69,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 423000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 2647000000,
@@ -104,14 +104,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 3553000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 2337000000,
@@ -149,9 +149,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 365000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 2708000000,
@@ -184,14 +184,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 1948000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3088000000,
@@ -229,9 +229,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 428000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 3381000000,
@@ -264,14 +264,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 1884000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3634000000,
@@ -309,9 +309,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 550000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 3615000000,
@@ -344,14 +344,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 1400000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3874000000,
@@ -389,9 +389,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 508000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 3827000000,
@@ -424,14 +424,14 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 2195000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 3903000000,
@@ -469,9 +469,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 599000000,
+          "tag": "InterestExpenseDebt",
+          "available": true
         },
         "inventory": {
           "value": 4419000000,

@@ -3,7 +3,7 @@
   "entity": "CONSTELLATION BRANDS, INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000016918.json",
   "snapshot_sha256": "353e727136ceadadc684b9c5e2a2a452acd9ee01b6e0b6a48a6afe74f90d7a1c",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -34,9 +34,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 864800000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": -11800000,
@@ -114,9 +114,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 785300000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1998000000,
@@ -194,9 +194,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 899000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": -40400000,
@@ -274,9 +274,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 901600000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": -71000000,
@@ -349,14 +349,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 832800000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1727400000,
@@ -434,9 +434,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 736500000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": -81400000,
@@ -470,7 +470,7 @@
         },
         "interest_expense": {
           "value": null,
-          "tag": "InterestExpense",
+          "tag": "InterestExpenseNonoperating",
           "available": false
         },
         "inventory": {
@@ -514,9 +514,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 658200000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1686700000,
@@ -549,9 +549,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 361600000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 1433900000,

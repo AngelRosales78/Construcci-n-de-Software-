@@ -3,7 +3,7 @@
   "entity": "WILLIAMS-SONOMA, INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000719955.json",
   "snapshot_sha256": "16afd59c6d21ea7be1f7cbaa84e26fbc0ab5d9ea9a4938decf2f3f7077618d5c",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,14 +29,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 111737000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 356062000,
@@ -109,14 +109,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 143728000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 680714000,
@@ -189,14 +189,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 131683000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1126337000,
@@ -269,14 +269,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 115685000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1127904000,
@@ -349,14 +349,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 122914000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 949762000,
@@ -429,14 +429,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 117678000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1125251000,

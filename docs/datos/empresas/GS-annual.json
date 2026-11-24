@@ -3,7 +3,7 @@
   "entity": "The Goldman Sachs Group, Inc.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000886982.json",
   "snapshot_sha256": "7346f56348ce227635720aebe503a6e216723ed2a953ed170b4ed670e078f0ee",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -54,9 +54,9 @@
           "available": true
         },
         "revenue": {
-          "value": null,
-          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
-          "available": false
+          "value": 44560000000,
+          "tag": "RevenuesNetOfInterestExpense",
+          "available": true
         },
         "total_liabilities": {
           "value": 1067096000000,
@@ -83,7 +83,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2021,
@@ -134,9 +136,9 @@
           "available": true
         },
         "revenue": {
-          "value": null,
-          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
-          "available": false
+          "value": 59339000000,
+          "tag": "RevenuesNetOfInterestExpense",
+          "available": true
         },
         "total_liabilities": {
           "value": 1354062000000,
@@ -163,7 +165,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2022,
@@ -214,9 +218,9 @@
           "available": true
         },
         "revenue": {
-          "value": null,
-          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
-          "available": false
+          "value": 47365000000,
+          "tag": "RevenuesNetOfInterestExpense",
+          "available": true
         },
         "total_liabilities": {
           "value": 1324610000000,
@@ -243,7 +247,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2023,
@@ -294,9 +300,9 @@
           "available": true
         },
         "revenue": {
-          "value": null,
-          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
-          "available": false
+          "value": 46254000000,
+          "tag": "RevenuesNetOfInterestExpense",
+          "available": true
         },
         "total_liabilities": {
           "value": 1524689000000,
@@ -323,7 +329,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2024,
@@ -374,9 +382,9 @@
           "available": true
         },
         "revenue": {
-          "value": null,
-          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
-          "available": false
+          "value": 53512000000,
+          "tag": "RevenuesNetOfInterestExpense",
+          "available": true
         },
         "total_liabilities": {
           "value": 1553976000000,
@@ -403,7 +411,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     },
     {
       "fiscal_year": 2025,
@@ -454,9 +464,9 @@
           "available": true
         },
         "revenue": {
-          "value": null,
-          "tag": "RevenueFromContractWithCustomerExcludingAssessedTax",
-          "available": false
+          "value": 58283000000,
+          "tag": "RevenuesNetOfInterestExpense",
+          "available": true
         },
         "total_liabilities": {
           "value": 1684348000000,
@@ -483,7 +493,9 @@
           "tag": "CostOfRevenue",
           "available": false
         }
-      }
+      },
+      "inventory_applicable": false,
+      "inventory_applicability_note": "El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); los días de inventario no aplican y se excluyen de la nota de Eficiencia."
     }
   ]
 }

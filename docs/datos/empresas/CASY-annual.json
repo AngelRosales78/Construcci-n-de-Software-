@@ -3,7 +3,7 @@
   "entity": "CASEY’S GENERAL STORES, INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000726958.json",
   "snapshot_sha256": "a80c69a562fedc9e79672d3b2a22718517aa87ec757510374778eb95e8b1d505",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,14 +29,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 48500000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 263846000,
@@ -109,14 +109,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 79698000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 312900000,
@@ -189,14 +189,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 108028000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 339790000,
@@ -269,14 +269,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 120547000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 446691000,
@@ -349,14 +349,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 151793000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 501972000,
@@ -429,14 +429,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 180746000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 546520000,
@@ -509,14 +509,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 243502000,
+          "tag": "AccountsAndOtherReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 714448000,

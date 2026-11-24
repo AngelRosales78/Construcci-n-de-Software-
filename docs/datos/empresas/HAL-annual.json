@@ -3,7 +3,7 @@
   "entity": "HALLIBURTON COMPANY",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000045012.json",
   "snapshot_sha256": "ab1e3695455db5eff9863c3bc49deb01932753b1ddec1d00cbacd4d129f0f13e",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,14 +29,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 3071000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": -2945000000,
@@ -109,14 +109,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 3666000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1457000000,
@@ -189,14 +189,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 4627000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1572000000,
@@ -269,14 +269,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 4860000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 2638000000,
@@ -349,14 +349,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 5117000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 2501000000,
@@ -429,14 +429,14 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 4942000000,
+          "tag": "ReceivablesNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1283000000,

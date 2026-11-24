@@ -3,7 +3,7 @@
   "entity": "CUMMINS INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000026172.json",
   "snapshot_sha256": "febe85c161aed592fcb06cca2a6f2446a3769ee07fc12eefec882dd3044db19e",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -34,9 +34,9 @@
           "available": false
         },
         "receivables": {
-          "value": null,
-          "tag": "AccountsReceivableNetCurrent",
-          "available": false
+          "value": 3440000000,
+          "tag": "AccountsNotesAndLoansReceivableNetCurrent",
+          "available": true
         },
         "net_income": {
           "value": 1811000000,
@@ -264,9 +264,9 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 2179000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": 562000000,
@@ -344,9 +344,9 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 1671000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": 593000000,
@@ -424,9 +424,9 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 2845000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": 764000000,

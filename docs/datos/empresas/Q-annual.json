@@ -3,7 +3,7 @@
   "entity": "QNITY ELECTRONICS, INC.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0002058873.json",
   "snapshot_sha256": "57e52a0690411ce3e2401a272b17f47bc37a04e8fa7ad457b7a2cfbcf2fd0847",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2025,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 0,
+          "tag": "not_reported:ShortTermInvestments",
+          "available": true
         },
         "receivables": {
           "value": 656000000,

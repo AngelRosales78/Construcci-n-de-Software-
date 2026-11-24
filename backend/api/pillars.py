@@ -3,7 +3,8 @@ from datetime import timedelta
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP, localcontext
 from .pillar_scoring import score_pillar, policy, overall_score
 
-METHODOLOGY_VERSION = 'annual-ratios-v2'
+# v3: partidas que el 10-K no publica (inversiones de corto plazo = 0, inventario = no aplica), siempre señaladas.
+METHODOLOGY_VERSION = 'annual-ratios-v3'
 THRESHOLD_VERSION = 'academic-thresholds-v1'
 THRESHOLDS = {
     'current_ratio': {'lower': '1', 'upper': '2', 'direction': 'higher'},
@@ -91,6 +92,9 @@ def metric(current, previous, ident, label, unit, formula, fields, calculate, de
             continue
         result['components'].append({'id': name, 'label': field_label(name), 'value': str(decimal),
                                      'period': period(statement), 'source': source(statement, item.get('tag'))})
+        if str(item.get('tag', '')).startswith('not_reported:'):
+            result.setdefault('assumptions', []).append(
+                f'{field_label(field)}: la empresa no informa esta partida en su 10-K; se considera 0.')
     if invalid:
         return result | unavailable('invalid_components')
     if result['missing_fields']:

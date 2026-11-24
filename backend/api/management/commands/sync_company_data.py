@@ -4,6 +4,7 @@ import hashlib
 import json
 import math
 import os
+import re
 import time
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -14,15 +15,69 @@ from django.conf import settings
 
 TAGS = {
     'current_assets': ['AssetsCurrent'], 'current_liabilities': ['LiabilitiesCurrent'],
-    'cash': ['CashAndCashEquivalentsAtCarryingValue'], 'short_term_investments': ['ShortTermInvestments', 'MarketableSecuritiesCurrent'],
-    'receivables': ['AccountsReceivableNetCurrent'], 'net_income': ['NetIncomeLoss', 'ProfitLoss'],
+    # Alternatives are tried in order; the tag actually used is stored with each value.
+    'cash': ['CashAndCashEquivalentsAtCarryingValue', 'CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents', 'Cash'],
+    'short_term_investments': ['ShortTermInvestments', 'MarketableSecuritiesCurrent', 'AvailableForSaleSecuritiesDebtSecuritiesCurrent',
+                               'DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent', 'OtherShortTermInvestments'],
+    'receivables': ['AccountsReceivableNetCurrent', 'ReceivablesNetCurrent', 'AccountsNotesAndLoansReceivableNetCurrent', 'AccountsAndOtherReceivablesNetCurrent'],
+    'net_income': ['NetIncomeLoss', 'ProfitLoss'],
     'total_assets': ['Assets'], 'book_equity': ['StockholdersEquity', 'StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest'],
-    'revenue': ['RevenueFromContractWithCustomerExcludingAssessedTax', 'Revenues', 'SalesRevenueNet', 'RevenueFromContractWithCustomerIncludingAssessedTax'],
+    'revenue': ['RevenueFromContractWithCustomerExcludingAssessedTax', 'Revenues', 'SalesRevenueNet', 'RevenueFromContractWithCustomerIncludingAssessedTax', 'RevenuesNetOfInterestExpense'],
     'total_liabilities': ['Liabilities'], 'income_before_tax': ['IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest', 'IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments'],
-    'interest_expense': ['InterestExpense', 'InterestAndDebtExpense', 'InterestExpenseNonOperating'],
+    # SEC spells it InterestExpenseNonoperating (lower-case o); the old spelling never matched.
+    'interest_expense': ['InterestExpense', 'InterestAndDebtExpense', 'InterestExpenseNonoperating', 'InterestExpenseDebt', 'InterestExpenseOperating', 'InterestExpenseBorrowings'],
     'inventory': ['InventoryNet'], 'cost_of_sales': ['CostOfRevenue', 'CostOfGoodsAndServicesSold', 'CostOfGoodsSold'],
 }
 INSTANT = {'current_assets', 'current_liabilities', 'cash', 'short_term_investments', 'receivables', 'total_assets', 'book_equity', 'total_liabilities', 'inventory'}
+
+# Any balance-sheet line that could hold short-term investments or inventory. When none of these
+# appears in the 10-K, the company does not report the item; when one appears but was not chosen,
+# the value stays null because it is ambiguous.
+SHORT_TERM_INVESTMENT_LINES = re.compile(r'^(ShortTermInvestments|MarketableSecurities|AvailableForSale\w*Current|DebtSecuritiesAvailableForSale\w*Current|'
+                                         r'OtherShortTermInvestments|TradingSecurities|HeldToMaturitySecurities\w*Current|CashCashEquivalentsAndShortTermInvestments)')
+INVENTORY_LINES = re.compile(r'^Inventor')
+NOT_REPORTED_STI = 'not_reported:ShortTermInvestments'
+INVENTORY_NOT_REPORTED_NOTE = ('El 10-K de este ejercicio no informa ninguna partida de inventario (etiquetas us-gaap Inventory*); '
+                               'los días de inventario no aplican y se excluyen de la nota de Eficiencia.')
+
+
+def filing_reports(facts, pattern, anchor):
+    """True when the same 10-K reports a balance-sheet value for any tag matching `pattern` at the closing date."""
+    return any(pattern.search(tag) and any(r.get('accn') == anchor['accn'] and r.get('end') == anchor['end'] and not r.get('start')
+                                           for r in data.get('units', {}).get('USD', []))
+               for tag, data in facts.items())
+
+
+def instant_value(facts, tag, anchor):
+    """Single unambiguous balance-sheet value of `tag` in the same 10-K and closing date, or None."""
+    rows = [r for r in facts.get(tag, {}).get('units', {}).get('USD', [])
+            if r.get('accn') == anchor['accn'] and r.get('end') == anchor['end'] and not r.get('start')]
+    distinct = {str(r['val']) for r in rows}
+    return rows[0]['val'] if len(distinct) == 1 else None
+
+
+def derived_liabilities(facts, anchor):
+    """Many filers omit the 'Liabilities' subtotal. Total liabilities = (liabilities + equity) - total equity,
+    using equity including non-controlling interests so they are not counted as liabilities.
+    Temporary (mezzanine) equity, when reported, is also excluded from liabilities."""
+    total = instant_value(facts, 'LiabilitiesAndStockholdersEquity', anchor)
+    if total is None:
+        return None
+    equity_tag = 'StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest'
+    equity = instant_value(facts, equity_tag, anchor)
+    if equity is None:
+        parent = instant_value(facts, 'StockholdersEquity', anchor)
+        if parent is None:
+            return None
+        minority = instant_value(facts, 'MinorityInterest', anchor) or 0
+        equity, equity_tag = parent + minority, 'StockholdersEquity+MinorityInterest' if minority else 'StockholdersEquity'
+    temporary = instant_value(facts, 'TemporaryEquityCarryingAmountIncludingPortionAttributableToNoncontrollingInterests', anchor) or 0
+    value = total - equity - temporary
+    if value < 0:
+        return None
+    tag = f'derived:LiabilitiesAndStockholdersEquity-{equity_tag}' + ('-TemporaryEquity' if temporary else '')
+    return {'value': value, 'tag': tag, 'available': True}
+
 
 def annual_inventory(payload, ticker, cik, raw):
     facts = payload['facts'].get('us-gaap', {})
@@ -53,10 +108,21 @@ def annual_inventory(payload, ticker, cik, raw):
             if chosen is not None and component not in {'net_income', 'book_equity', 'income_before_tax'} and chosen < 0:
                 chosen = None
             values[component] = {'value': chosen, 'tag': selected, 'available': chosen is not None}
-        records.append({'fiscal_year': year, 'start': anchor['start'], 'end': anchor['end'], 'filed': anchor['filed'],
-                        'accession': anchor['accn'], 'unit': 'USD', 'values': values})
+        if values['total_liabilities']['value'] is None:
+            values['total_liabilities'] = derived_liabilities(facts, anchor) or values['total_liabilities']
+        record = {'fiscal_year': year, 'start': anchor['start'], 'end': anchor['end'], 'filed': anchor['filed'],
+                  'accession': anchor['accn'], 'unit': 'USD', 'values': values}
+        # A company that publishes a classified balance sheet but no short-term investment line holds none: 0, labelled as such.
+        if (values['short_term_investments']['value'] is None and values['cash']['value'] is not None
+                and values['current_assets']['value'] is not None and not filing_reports(facts, SHORT_TERM_INVESTMENT_LINES, anchor)):
+            values['short_term_investments'] = {'value': 0, 'tag': NOT_REPORTED_STI, 'available': True}
+        # No inventory line at all (banks, software, services): the inventory indicator does not apply.
+        if values['inventory']['value'] is None and not filing_reports(facts, INVENTORY_LINES, anchor):
+            record['inventory_applicable'] = False
+            record['inventory_applicability_note'] = INVENTORY_NOT_REPORTED_NOTE
+        records.append(record)
     return {'ticker': ticker, 'entity': payload['entityName'], 'source': f'https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json',
-            'snapshot_sha256': hashlib.sha256(raw).hexdigest(), 'selection': 'Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.',
+            'snapshot_sha256': hashlib.sha256(raw).hexdigest(), 'selection': 'Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.',
             'annual_records': records}
 
 class Command(BaseCommand):

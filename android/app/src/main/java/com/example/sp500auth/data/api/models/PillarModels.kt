@@ -28,6 +28,8 @@ data class PillarMetric(
     val unit: String? = null,
     val reason: String? = null,
     val missing_fields: List<String>? = null,
+    /** Server notes when an item the 10-K does not publish was taken as 0 (methodology annual-ratios-v3). */
+    val assumptions: List<String>? = null,
     val formula: String? = null,
     val formula_display: String? = null,
     val explanation: String? = null,

@@ -149,6 +149,12 @@ fun MetricDetails(label: String, metric: PillarMetric?, showSector: Boolean = fa
             else {
                 if(metric.status!="available") Text(metric.explanation ?: reasonLabel(metric.reason))
                 if(!metric.missing_fields.isNullOrEmpty()) Text("Faltan: ${metric.missing_fields.joinToString()}")
+                metric.assumptions.orEmpty().forEach { note ->
+                    Surface(color = Color(0xFFE0C34D).copy(alpha = .14f), shape = RoundedCornerShape(10.dp)) {
+                        Text("Supuesto: $note", color = Color(0xFFE0C34D), style = MaterialTheme.typography.bodySmall,
+                            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp))
+                    }
+                }
                 Text("Fórmula: ${metric.formula_display ?: metric.formula ?: "No informada"}")
                 Text("Periodo: ${metric.period?.start ?: "—"} — ${metric.period?.end ?: "—"}")
                 metric.thresholds?.let {

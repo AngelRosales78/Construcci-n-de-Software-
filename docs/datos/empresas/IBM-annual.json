@@ -3,7 +3,7 @@
   "entity": "INTERNATIONAL BUSINESS MACHINES CORPORATION",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000051143.json",
   "snapshot_sha256": "10fa1fafa25440b2159e2054dfe47628ba4ed353a258f526704cf9beda432bb8",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 600000000,
+          "tag": "AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+          "available": true
         },
         "receivables": {
           "value": 7132000000,
@@ -109,9 +109,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 600000000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 6754000000,
@@ -189,9 +189,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 852000000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 6541000000,
@@ -269,9 +269,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 373000000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 7214000000,
@@ -349,9 +349,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 644000000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 6804000000,
@@ -429,9 +429,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 830000000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 8112000000,

@@ -3,7 +3,7 @@
   "entity": "Everpure, Inc.",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001474432.json",
   "snapshot_sha256": "ca3fa3e8251fe0c670cbe836be5a3965e36a75cba5ecc28e1a923793a07083d3",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -29,9 +29,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 936518000,
+          "tag": "AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+          "available": true
         },
         "receivables": {
           "value": 458643000,
@@ -109,9 +109,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 916388000,
+          "tag": "AvailableForSaleSecuritiesDebtSecuritiesCurrent",
+          "available": true
         },
         "receivables": {
           "value": 460879000,
@@ -189,9 +189,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 947073000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 542144000,
@@ -269,9 +269,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 1001352000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 612491000,
@@ -349,9 +349,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 828557000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 662179000,
@@ -429,9 +429,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 798237000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 680862000,
@@ -469,9 +469,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 7813000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 42810000,
@@ -509,9 +509,9 @@
           "available": true
         },
         "short_term_investments": {
-          "value": null,
-          "tag": "ShortTermInvestments",
-          "available": false
+          "value": 692446000,
+          "tag": "DebtSecuritiesAvailableForSaleExcludingAccruedInterestCurrent",
+          "available": true
         },
         "receivables": {
           "value": 944844000,
@@ -549,9 +549,9 @@
           "available": true
         },
         "interest_expense": {
-          "value": null,
-          "tag": "InterestExpense",
-          "available": false
+          "value": 3375000,
+          "tag": "InterestExpenseNonoperating",
+          "available": true
         },
         "inventory": {
           "value": 75935000,

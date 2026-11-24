@@ -3,7 +3,7 @@
   "entity": "NORTHROP GRUMMAN CORP /DE/",
   "source": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001133421.json",
   "snapshot_sha256": "4b2d23018cc5e052fe2453ec6c8607d0bf198997ee6a77cf1fd7eaf4b361cd2f",
-  "selection": "Mismo 10-K original por ejercicio; etiquetas ausentes o ambiguas permanecen nulas.",
+  "selection": "Mismo 10-K original por ejercicio; se prueban etiquetas alternativas en orden y el pasivo total se deriva de pasivo+patrimonio menos patrimonio total cuando falta; etiquetas ausentes o ambiguas permanecen nulas.",
   "annual_records": [
     {
       "fiscal_year": 2020,
@@ -344,9 +344,9 @@
           "available": true
         },
         "cash": {
-          "value": null,
-          "tag": "CashAndCashEquivalentsAtCarryingValue",
-          "available": false
+          "value": 4353000000,
+          "tag": "CashCashEquivalentsRestrictedCashAndRestrictedCashEquivalents",
+          "available": true
         },
         "short_term_investments": {
           "value": null,
