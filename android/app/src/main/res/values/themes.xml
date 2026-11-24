@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.SP500Auth" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- La app es siempre oscura: el arranque usa el mismo fondo y no destella en blanco. -->
+    <style name="Theme.SP500Auth" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/app_background</item>
+    </style>
 </resources>

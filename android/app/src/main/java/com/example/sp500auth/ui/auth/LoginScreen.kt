@@ -2,6 +2,10 @@ package com.example.sp500auth.ui.auth
 
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.background
+import com.example.sp500auth.R
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.scale
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -96,28 +100,9 @@ fun LoginScreen(
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF21262D)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "S&P\n500",
-                    color = TextWhite,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 12.sp
-                )
-                Box(
-                    modifier = Modifier
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(PrimaryGreen)
-                        .align(Alignment.BottomEnd)
-                )
+            Box(Modifier.size(80.dp).clip(RoundedCornerShape(22.dp)), contentAlignment = Alignment.Center) {
+                Image(painterResource(R.drawable.ic_launcher_background), null, Modifier.fillMaxSize())
+                Image(painterResource(R.drawable.ic_launcher_foreground), "S&P 500 Finance", Modifier.fillMaxSize().scale(1.35f))
             }
 
             Spacer(modifier = Modifier.height(12.dp))
