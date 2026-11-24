@@ -21,6 +21,7 @@ ROOT = '/api/v1/user/subscription/'
 
 @pytest.fixture
 def account(settings):
+    settings.PAYMENT_PROVIDER = 'legacy_demo'
     with override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
                            SIMULATED_PRO_PRICE='9.90', SIMULATED_PRO_DAYS=30):
         user = User.objects.create_user(username='subscription', email='demo@example.test')

@@ -66,6 +66,7 @@ class AccountPlan(models.Model):
     expires_at = models.DateTimeField(null=True, blank=True)
     auto_renew = models.BooleanField(default=False)
     cancelled_at = models.DateTimeField(null=True, blank=True)
+    source_transaction = models.ForeignKey('SubscriptionTransaction', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
 
 
 class UserAvatar(models.Model):
@@ -100,6 +101,30 @@ class SubscriptionTransaction(models.Model):
     class Meta:
         ordering = ['-created_at', '-id']
         constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='subscription_operation_unique')]
+
+
+class PaymentOrder(models.Model):
+    """Checkout Pro de prueba; no almacena tarjetas ni respuestas completas del proveedor."""
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    request_id = models.UUIDField()
+    status = models.CharField(max_length=20, default='new')
+    provider_id = models.CharField(max_length=80, null=True, blank=True, unique=True)
+    checkout_url = models.URLField(max_length=500, blank=True)
+    seller_id = models.CharField(max_length=40)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, default='PEN')
+    duration_days = models.PositiveIntegerField()
+    checkout_payload = models.JSONField(default=dict)
+    notification_verified_at = models.DateTimeField(null=True, blank=True)
+    receipt = models.OneToOneField(SubscriptionTransaction, null=True, blank=True, on_delete=models.SET_NULL, related_name='payment_order')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user','request_id'], name='payment_request_unique'),
+            models.UniqueConstraint(fields=['user'], condition=models.Q(status__in=['new','ready','pending','review']), name='payment_open_user_unique')]
+        ordering = ['-created_at','-id']
 
 
 class PersonalState(models.Model):

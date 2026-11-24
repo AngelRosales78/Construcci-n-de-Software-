@@ -19,3 +19,7 @@
   .subscription-receipt { position: absolute; inset: 0; border: 0; margin: 0; padding: 1.5cm; }
   .subscription-receipt button { display: none; }
 }
+
+.payment-test-badge { display: inline-block; background: #e8eddf; color: #243d2d; border: 1px solid #aebca4; padding: 10px 14px; border-radius: 4px; font-size: 13px; }
+.payment-current .primary-action { display: inline-block; padding: 12px 18px; background: #20372b; color: #fff9ed; margin: 0 12px 12px 0; border-radius: 4px; }
+.payment-current p, .payment-setup p { max-width: 65ch; line-height: 1.7; }

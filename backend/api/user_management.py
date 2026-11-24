@@ -150,6 +150,7 @@ class AdminUserView(APIView):
                 plan, _ = AccountPlan.objects.get_or_create(user=user)
                 plan.plan, plan.active = changes['plan'], True
                 plan.auto_renew, plan.cancelled_at, plan.expires_at = False, None, None
+                plan.source_transaction = None
                 plan.save()
             after = user_data(User.objects.select_related('account_plan').get(pk=user.pk))
             # El registro conserva estados, sin correo, nombre ni motivo libre tras una eliminación.

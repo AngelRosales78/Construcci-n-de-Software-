@@ -16,6 +16,8 @@ export function useSubscriptionViewModel() {
   const loadSequence = useRef(0)
   const pending = useRef(null)
   const working = useRef(false)
+  const external = data?.plans?.payment_provider === 'mercadopago_test'
+  const currentPayment = data?.payment_orders?.[0] || null
 
   const refresh = useCallback(async () => {
     const session = generation.current
@@ -60,11 +62,17 @@ export function useSubscriptionViewModel() {
     try {
       if (outcome) {
         // Un reintento de red conserva el identificador y resultado originales.
-        pending.current ??= { request_id: crypto.randomUUID(), outcome }
+        pending.current ??= external ? { request_id: currentPayment?.status === 'new' ? currentPayment.request_id : crypto.randomUUID() } : { request_id: crypto.randomUUID(), outcome }
         const result = await subscriptionRepository.checkout(pending.current)
         if (id !== generation.current) return
         pending.current = null
         setRetryOutcome(null)
+        if (result.payment) {
+          setCheckoutOpen(false)
+          setNotice('Tu operación está preparada. Continúa en Mercado Pago para completar el pago de prueba.')
+          await refresh()
+          return
+        }
         setReceipt(result.receipt)
         setCheckoutOpen(false)
         setNotice(result.receipt.outcome === 'approved'
@@ -80,7 +88,7 @@ export function useSubscriptionViewModel() {
       if (id !== generation.current) return
       const detail = failure.response?.data?.detail
       if (failure.response?.status >= 400 && failure.response.status < 500) pending.current = null
-      setRetryOutcome(pending.current?.outcome || null)
+      setRetryOutcome(pending.current ? external ? 'mercadopago' : pending.current.outcome : null)
       setError(detail || 'No se confirmó la operación. Reintenta para verificar el mismo intento.')
     } finally {
       working.current = false
@@ -89,7 +97,21 @@ export function useSubscriptionViewModel() {
   }
 
   const pro = data?.subscription.effective_plan === 'pro'
+  const checkPayment = async () => {
+    if (working.current || !currentPayment) return
+    working.current=true;setBusy(true);setError('')
+    const id=generation.current
+    try {
+      const result=await subscriptionRepository.refreshPayment(currentPayment.id)
+      if(id!==generation.current)return
+      setNotice(result.payment.status === 'approved' ? result.subscription?.effective_plan === 'pro' ? 'Tu pago de prueba fue confirmado. Pro está activo.' : 'El pago ya fue confirmado. Consulta la vigencia de tu plan.' : result.payment.status_label)
+      await refresh()
+    } catch(failure) {
+      if(id===generation.current)setError(failure.response?.data?.detail || 'No se pudo verificar el pago. Tu acceso no cambia hasta confirmar el resultado.')
+    } finally {working.current=false;setBusy(false)}
+  }
   return { data, pro, loading, busy, error, notice, receipt, setReceipt,
+    external, currentPayment, checkPayment,
     checkoutOpen, setCheckoutOpen, cancelOpen, setCancelOpen, retryOutcome, refresh,
     checkout: outcome => perform(outcome), cancel: () => perform(null) }
 }

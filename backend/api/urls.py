@@ -26,6 +26,7 @@ from .notification_views import NotificationsView, MarkNotificationsReadView, No
 from .monitoring_views import AIUsageView, TariffView, PlanDistributionView, BudgetView, MonthlyRevenueView, ErrorLogsView
 from .push_views import PushInstallationsView
 from .subscription_views import PlansView, CheckoutView, SubscriptionHistoryView, ReceiptView, CancelSubscriptionView
+from .payment_views import PaymentCheckoutView, PaymentStatusView, MercadoPagoWebhookView, MercadoPagoReturnView
 from .favorite_views import FavoriteDetailView, FavoritesView
 from .comparison_views import ComparisonView
 from .comparison_services import ComparisonHistoryView, ComparisonConclusionView
@@ -58,6 +59,10 @@ urlpatterns = [
     path('auth/profile/avatar/', UserAvatarView.as_view()),
     path('auth/account/', DeleteOwnAccountView.as_view()),
     path('plans/', PlansView.as_view()),
+    path('user/subscription/payment-orders/', PaymentCheckoutView.as_view()),
+    path('user/subscription/payment-orders/<uuid:order_id>/', PaymentStatusView.as_view()),
+    path('payments/mercadopago/webhook/', MercadoPagoWebhookView.as_view()),
+    path('payments/mercadopago/return/', MercadoPagoReturnView.as_view()),
     path('user/subscription/checkout/', CheckoutView.as_view()),
     path('user/subscription/history/', SubscriptionHistoryView.as_view()),
     path('user/subscription/receipts/<uuid:receipt_id>/', ReceiptView.as_view()),

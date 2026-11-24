@@ -13,4 +13,8 @@ export const subscriptionRepository = {
     const { data } = await api.post('/user/subscription/cancel/', {})
     return data
   },
+  async refreshPayment(id) {
+    const { data } = await api.post('/user/subscription/payment-orders/' + encodeURIComponent(id) + '/', {})
+    return data
+  },
 }

@@ -22,7 +22,9 @@ class SubscriptionConflict(APIException):
 
 
 def receipt_data(record):
+    external = getattr(record, 'payment_order', None)
     return {'id': str(record.id), 'request_id': str(record.request_id), 'plan': 'pro',
+            'provider': 'mercadopago_test' if external else 'legacy_demo',
             'simulated': True, 'outcome': record.outcome, 'amount': str(record.amount),
             'currency': record.currency, 'duration_days': record.duration_days,
             'starts_at': record.starts_at, 'ends_at': record.ends_at,
@@ -77,7 +79,10 @@ class PrivateSubscriptionView(APIView):
 
 class PlansView(PrivateSubscriptionView):
     def get(self, request):
+        from .payments import setup_status
         return Response({'simulated': True, 'amount': str(Decimal(settings.SIMULATED_PRO_PRICE)),
+                         'payment_provider': settings.PAYMENT_PROVIDER,
+                         'payment': setup_status() if settings.PAYMENT_PROVIDER == 'mercadopago_test' else None,
                          'currency': settings.SIMULATED_PRO_CURRENCY, 'duration_days': settings.SIMULATED_PRO_DAYS,
                          'features': [
                              {'label': 'Fichas, gráficos y análisis individual', 'free': True, 'pro': True},
@@ -88,7 +93,17 @@ class PlansView(PrivateSubscriptionView):
 
 
 class CheckoutView(PrivateSubscriptionView):
+    def get_throttles(self):
+        if settings.PAYMENT_PROVIDER == 'mercadopago_test':
+            from .payment_views import PaymentThrottle
+            return [PaymentThrottle()]
+        return super().get_throttles()
     def post(self, request):
+        if settings.PAYMENT_PROVIDER == 'mercadopago_test':
+            from .payment_views import PaymentCheckoutView
+            return PaymentCheckoutView().post(request)
+        if settings.PAYMENT_PROVIDER != 'legacy_demo':
+            raise SubscriptionConflict('No hay un método de pago habilitado.')
         form = CheckoutInput(data=request.data)
         form.is_valid(raise_exception=True)
         values = form.validated_data
@@ -113,7 +128,8 @@ class CheckoutView(PrivateSubscriptionView):
             if approved:
                 account.plan, account.active, account.expires_at = 'pro', True, end
                 account.auto_renew, account.cancelled_at = True, None
-                account.save(update_fields=['plan', 'active', 'expires_at', 'auto_renew', 'cancelled_at'])
+                account.source_transaction = None
+                account.save(update_fields=['plan', 'active', 'expires_at', 'auto_renew', 'cancelled_at','source_transaction'])
                 transaction.on_commit(lambda: deliver_receipt(record.id), robust=True)
         record.refresh_from_db()
         return Response({'receipt': receipt_data(record), 'subscription': subscription(user)}, status=201)
@@ -121,8 +137,12 @@ class CheckoutView(PrivateSubscriptionView):
 
 class SubscriptionHistoryView(PrivateSubscriptionView):
     def get(self, request):
-        records = SubscriptionTransaction.objects.filter(user=request.user)
-        return Response({'subscription': subscription(request.user), 'receipts': [receipt_data(r) for r in records]})
+        records = SubscriptionTransaction.objects.select_related('payment_order').filter(user=request.user)
+        from .models import PaymentOrder
+        from .payments import order_data
+        orders = PaymentOrder.objects.filter(user=request.user)[:20]
+        return Response({'subscription': subscription(request.user), 'receipts': [receipt_data(r) for r in records],
+                         'payment_orders': [order_data(order) for order in orders]})
 
 
 class ReceiptView(PrivateSubscriptionView):
