@@ -283,6 +283,10 @@ a{color:var(--primary)}
 .company-profile-sources{margin-top:24px;font-size:11px;color:var(--ink-soft);line-height:1.8}
 .company-profile-sources summary{color:var(--oxide);cursor:pointer}
 .company-profile-sources p{margin-top:12px}
+.provider-period-note{background:#efe9d8;color:#65491f;border-left:3px solid #99753b;padding:14px 16px;margin:18px 0;font-size:12px;line-height:1.85}
+.workspace-content .data-provenance .provider-reference-inline{color:#785824;font-size:11px}
+.altman-reference-note{grid-column:1/-1;font-size:12px;color:var(--ink-soft);line-height:1.8}
+.annual-statement table{min-width:550px}.annual-statement td{font-variant-numeric:tabular-nums}
 .workspace-content .empty-financial-notice{background:#efe9d8;border:1px solid #d9c9a8;border-left:3px solid #99753b;border-radius:3px;color:var(--ink)}
 .workspace-content .empty-financial-notice h2{color:#785824}
 .workspace-content :is(.account-page,.monitoring-page) :is(input,select,textarea){background:var(--paper-white);border-color:#aebaa8;color:var(--ink);border-radius:2px}

@@ -367,6 +367,8 @@ class FinancialMetrics(models.Model):
     field_sources = models.JSONField(default=dict, blank=True)
     company = models.OneToOneField(Company, on_delete=models.CASCADE, related_name='financial_metrics')
     as_of = models.DateField()
+    reference_basis = models.CharField(max_length=24, default='reported')
+    source_snapshot_sha256 = models.CharField(max_length=64, blank=True, default='')
     source = models.CharField(max_length=250)
     is_demo = models.BooleanField(default=False)
     market_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
@@ -387,6 +389,11 @@ class FinancialMetrics(models.Model):
         from django.core.exceptions import ValidationError
         from django.core.validators import URLValidator
         from django.utils import timezone
+        import re
+        if self.reference_basis not in ('reported', 'provider_normalized', 'market_date'):
+            raise ValidationError('Base de fecha del resumen no admitida.')
+        if self.source_snapshot_sha256 and not re.fullmatch(r'[0-9a-f]{64}', self.source_snapshot_sha256):
+            raise ValidationError('Huella del resumen financiero inválida.')
         if self.as_of and self.as_of > timezone.localdate():
             raise ValidationError('La fecha del resumen no puede ser futura.')
         if not isinstance(self.field_sources, dict):
@@ -450,12 +457,14 @@ class AnnualFinancialStatement(models.Model):
     """Componentes anuales separados de la ficha heredada de una sola fecha."""
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='annual_statements')
     fiscal_year = models.PositiveSmallIntegerField()
-    period_start = models.DateField()
+    period_start = models.DateField(null=True, blank=True)
     period_end = models.DateField()
     currency = models.CharField(max_length=3, default='USD')
     source_url = models.URLField(max_length=500)
-    accession = models.CharField(max_length=40)
-    filed = models.DateField()
+    accession = models.CharField(max_length=40, blank=True, default='')
+    filed = models.DateField(null=True, blank=True)
+    source_kind = models.CharField(max_length=20, default='sec')
+    provenance = models.JSONField(default=dict, blank=True)
     is_demo = models.BooleanField(default=False)
     snapshot_sha256 = models.CharField(max_length=64)
     components = models.JSONField(default=dict)

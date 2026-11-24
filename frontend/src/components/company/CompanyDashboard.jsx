@@ -51,9 +51,10 @@ export default function CompanyDashboard() {
         {favorites.message && <p role="status">{favorites.message}</p>}
         <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
           <span><small>Indicadores del resumen</small><strong>{countAvailableIndicators(company)} de 5 disponibles</strong></span>
-          <span><small>Balance de referencia</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
+          <span><small>{company.reference_basis === 'provider_normalized' ? 'Referencia anual del proveedor' : 'Balance de referencia'}</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
           <span><small>Último cierre importado</small><strong>{company.quote ? `${company.quote.date} · ${company.quote.currency}` : 'Sin precios cargados'}</strong></span>
           <p>Las fechas del balance, los precios y cada indicador pueden ser diferentes.</p>
+          {company.reference_basis === 'provider_normalized' && <p className="provider-reference-inline">La fecha anual del proveedor está normalizada; no acredita el cierre contable exacto. Cada indicador conserva su propia referencia.</p>}
         </div>
         <nav className="company-sections" aria-label="Secciones de la empresa">
           {sections.map(({ id, label }) =>
@@ -69,10 +70,11 @@ export default function CompanyDashboard() {
         <div className="overview-intro"><div><h2>La empresa, de un vistazo</h2><p>Precio histórico e indicadores del balance.</p></div><DataSources company={company} /></div>
         <div className="terminal-financial-grid">
           <PriceChart />
-          <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span>{company.as_of ? `Balance: ${company.as_of}` : 'Balance pendiente'}</span></div><p className="metrics-period-note">Cambiar el rango del gráfico no modifica estos indicadores.</p><MetricCards company={company} /></section>
+          <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span>{company.as_of ? `${company.reference_basis === 'provider_normalized' ? 'Referencia' : 'Balance'}: ${company.as_of}` : 'Balance pendiente'}</span></div><p className="metrics-period-note">Cambiar el rango del gráfico no modifica estos indicadores.</p><MetricCards company={company} /></section>
           <div className="dashboard-charts">
             <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} />
             <FinancialHealthIndicator altmanZ={company.altman_z} profile={company.profile} />
+            {company.reference_basis === 'provider_normalized' && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
           </div>
         </div>
         </>}

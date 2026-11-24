@@ -17,3 +17,11 @@ La cobertura descrita arriba corresponde a la primera instantánea de octubre. L
 El arranque carga estas copias sin volver a descargar el catálogo completo. Las importaciones no sustituyen ediciones descriptivas posteriores del equipo. Las empresas y precios sintéticos del benchmark anterior permanecen en `sprint_validation`, separados de esta presentación.
 
 Los PNG se decodificaron también en navegador para identificar las marcas con más del 90 % de sus píxeles visibles claros. `frontend/src/data/lightLogos.json` registra 56 símbolos que necesitan fondo oscuro; se aplica por CSS, conservando las imágenes originales.
+
+## Ampliación financiera del 24 de noviembre
+
+`catalog_financials.json.gz` conserva 504 respuestas de las series financieras públicas de Yahoo Finance, sus URLs, momentos de consulta y SHA-256, además del histórico de referencia del S&P 500. La copia está vinculada al hash de `catalog_prices.json.gz`; no contiene credenciales. Se restaura con `import_provider_financials` después de los precios, también durante el arranque habitual.
+
+La cobertura final es de 504 fichas con referencias anuales y resumen, 2.015 registros anuales en total (1.998 Yahoo y 17 SEC conservados), capitalización en 504, PER en 502, ROE en 467, beta en 500 y dividendo en 390. Los campos ausentes no se convierten en cero y las fechas normalizadas no se presentan como períodos contables oficiales. La captura no añade una actualización financiera automática.
+
+La guía de exposición, las fórmulas, las comprobaciones puntuales contra informes originales y las instrucciones de reproducción están en [DATOS_FINANCIEROS_CATALOGO.md](../DATOS_FINANCIEROS_CATALOGO.md).

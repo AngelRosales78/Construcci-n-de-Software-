@@ -53,8 +53,12 @@ def formula_label(formula):
 
 def source(statement, tag, component=None):
     result = {'url': statement.source_url, 'tag': tag, 'accession': statement.accession,
-            'filed': statement.filed.isoformat(), 'currency': statement.currency,
+            'filed': statement.filed.isoformat() if statement.filed else None, 'currency': statement.currency,
             'snapshot_sha256': statement.snapshot_sha256, 'is_demo': statement.is_demo}
+    if statement.source_kind == 'yahoo':
+        result.update(source_kind='yahoo', period_basis='provider_normalized',
+                      retrieved_at=statement.provenance.get('retrieved_at'),
+                      publication_status='not_provided')
     evidence = (component or {}).get('source')
     if evidence:
         result.update(url=evidence['url'], accession=evidence['accession'], filed=evidence['filed'],
@@ -64,7 +68,8 @@ def source(statement, tag, component=None):
 
 
 def period(statement):
-    return {'start': statement.period_start.isoformat(), 'end': statement.period_end.isoformat()} if statement else {'start': None, 'end': None}
+    return {'start': statement.period_start.isoformat() if statement.period_start else None,
+            'end': statement.period_end.isoformat()} if statement else {'start': None, 'end': None}
 
 
 def unavailable(reason):
@@ -75,7 +80,8 @@ def unavailable(reason):
 def metric(current, previous, ident, label, unit, formula, fields, calculate, denominator,
            equity_check=False, history=None, postprocess=None):
     result = {'id': ident, 'label': label, 'unit': unit, 'formula': formula, 'formula_display': formula_label(formula),
-              'period': period(current), 'components': [], 'missing_fields': [], 'thresholds': None}
+              'period': period(current), 'components': [], 'missing_fields': [], 'thresholds': None,
+              'period_basis': 'provider_normalized' if current and current.source_kind == 'yahoo' else 'reported'}
     values = {}
     invalid = False
     for name in fields:
@@ -196,6 +202,12 @@ def efficiency(current, previous):
 
 
 def comparable_previous(current, candidate):
+    if (current and candidate and getattr(current, 'source_kind', 'sec') == 'yahoo'
+            and getattr(candidate, 'source_kind', 'sec') == 'yahoo'):
+        return candidate if (current.currency == candidate.currency
+            and candidate.fiscal_year + 1 == current.fiscal_year
+            and candidate.period_end.month == current.period_end.month
+            and current.snapshot_sha256 == candidate.snapshot_sha256) else None
     return candidate if current and candidate and current.currency == candidate.currency and (
         candidate.period_end + timedelta(days=1) == current.period_start) else None
 
@@ -246,5 +258,11 @@ def build_pillars(company, current, previous, fiscal_year, available_years, stat
             'methodology_status': 'implementation_pending_team_review',
             'ticker': company.ticker, 'fiscal_year': fiscal_year, 'period': period(current),
             'currency': current.currency if current else None, 'available_years': available_years,
+            'period_basis': 'provider_normalized' if current and current.source_kind == 'yahoo' else 'reported',
+            'period_note': ('Referencia anual normalizada por Yahoo Finance. El inicio contable exacto y la fecha de publicación no se proporcionan; no se usan estas referencias para declarar períodos contables idénticos entre empresas.'
+                            if current and current.source_kind == 'yahoo' else None),
+            'annual_components': [{'id': name, 'label': field_label(name), 'value': item.get('value'),
+                                   'source': source(current, item.get('tag'), item)}
+                                  for name, item in (current.components.items() if current else [])],
             'pillars': pillars, 'scoring_policy': policy(),
             'overall_score': overall_score(pillars) | {'period': period(current)}}

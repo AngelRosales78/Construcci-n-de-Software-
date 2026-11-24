@@ -23,7 +23,9 @@ def comparison_rows(a, b):
         right = next(p for p in b['pillars'] if p['id'] == ident)['score']
         reason = None
         if not periods_match:
-            reason = 'Los períodos completos deben coincidir; el mismo año fiscal no garantiza las mismas fechas.'
+            reason = ('Las fechas normalizadas del proveedor no acreditan períodos contables completos e idénticos.'
+                      if 'provider_normalized' in (a.get('period_basis'), b.get('period_basis')) else
+                      'Los períodos completos deben coincidir; el mismo año fiscal no garantiza las mismas fechas.')
         elif not methods_match or left.get('version') != right.get('version'):
             reason = 'Las metodologías y versiones de puntuación deben coincidir.'
         elif (left.get('period') != a['period'] or right.get('period') != b['period']):

@@ -99,6 +99,7 @@ class CompanyAnalysisView(CompanyPillarsView):
             'generation_mode': 'ai', 'summary_origin': 'ai',
             'metrics_version': context['methodology_version'],
             'fiscal_year': context['fiscal_year'], 'period': context['period'], 'level': level,
+            'period_basis': pillars.get('period_basis', 'reported'), 'period_note': pillars.get('period_note'),
             'model': MODEL, 'model_sha256': MODEL_SHA256, 'provider': 'llama.cpp local · Qwen3 1.7B', 'validated': True,
             'validation_scope': 'Estructura, referencias y cifras contrastadas; no certifica todas las interpretaciones del modelo.',
             'context_hash': digest, 'metrics': context['metrics'], 'analysis': content,

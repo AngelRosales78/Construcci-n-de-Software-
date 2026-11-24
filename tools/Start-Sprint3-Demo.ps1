@@ -68,6 +68,10 @@ try {
         & $python -B manage.py import_catalog_prices ../docs/datos/catalog_prices.json.gz
         if ($LASTEXITCODE -ne 0) { throw 'Falló la copia de históricos del catálogo' }
     }
+    if (Test-Path -LiteralPath '../docs/datos/catalog_financials.json.gz') {
+        & $python -B manage.py import_provider_financials ../docs/datos/catalog_financials.json.gz --prices ../docs/datos/catalog_prices.json.gz
+        if ($LASTEXITCODE -ne 0) { throw 'Falló la copia de estados financieros' }
+    }
     & $python -B manage.py preload_search
     if ($LASTEXITCODE -ne 0) { throw 'Falló la precarga de búsqueda' }
     & $python -B manage.py prepare_sprint3_demo --credentials-file (Join-Path $state 'demo_credentials.json')

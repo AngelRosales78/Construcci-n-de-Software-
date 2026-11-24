@@ -36,7 +36,8 @@ export default function ComparisonPage() {
     {vm.data && <section aria-label="Resultado de la selección" className="comparison-result">
       <h2>{vm.data.a.ticker} y {vm.data.b.ticker} · FY{vm.data.fiscal_year}</h2>
       <div className="comparison-periods">{['a', 'b'].map(side => <div key={side}><h3>{side.toUpperCase()} · {vm.data[side].ticker}</h3>
-        <p>{vm.data[side].period?.start && vm.data[side].period?.end ? `${vm.data[side].period.start} → ${vm.data[side].period.end}` : 'Sin balance para este ejercicio'}</p>
+        <p>{vm.data[side].period_basis === 'provider_normalized' ? `Referencia anual del proveedor: ${vm.data[side].period.end}` : vm.data[side].period?.start && vm.data[side].period?.end ? `${vm.data[side].period.start} → ${vm.data[side].period.end}` : 'Sin balance para este ejercicio'}</p>
+        {vm.data[side].period_note && <p>{vm.data[side].period_note}</p>}
         <Link to={`/company/${vm.data[side].ticker}`}>Ver ficha de {vm.data[side].ticker}</Link>
         <p>Ejercicios disponibles: {vm.data[side].available_years.join(', ') || 'ninguno'}</p>
       </div>)}</div>

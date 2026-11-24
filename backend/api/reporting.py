@@ -102,7 +102,11 @@ def render_report(snapshot, request):
               p('Datos históricos importados. Notas académicas; no constituyen una recomendación de inversión.', 'Small')]
     for row in companies:
         period = row['pillars']['period']
-        story.append(p(f"{row['ticker']}: {period.get('start') or 'Sin inicio'} a {period.get('end') or 'Sin cierre'}; {row['pillars'].get('currency', 'USD')}"))
+        if row['pillars'].get('period_basis') == 'provider_normalized':
+            story.append(p(f"{row['ticker']}: referencia anual del proveedor {period.get('end')}; {row['pillars'].get('currency', 'USD')}"))
+            story.append(p(row['pillars']['period_note'], 'Small'))
+        else:
+            story.append(p(f"{row['ticker']}: {period.get('start') or 'Sin inicio'} a {period.get('end') or 'Sin cierre'}; {row['pillars'].get('currency', 'USD')}"))
     if comparison:
         pair = snapshot['comparison']
         rows = [['Pilar', companies[0]['ticker'], companies[1]['ticker'], 'Resultado de la comparación']]
@@ -119,7 +123,7 @@ def render_report(snapshot, request):
                ('beta', 'Beta'), ('dividend_yield', 'Dividendo (%)')]],
             ['Altman-Z', (summary.get('altman_z') or {}).get('score')],
             ['Perfil Altman-Z', (summary.get('profile') or {}).get('label')],
-            ['Sector', summary.get('sector_display')], ['Balance del resumen', summary.get('as_of')]], [180, width - 180])]
+            ['Sector', summary.get('sector_display')], ['Referencia del resumen', summary.get('as_of')]], [180, width - 180])]
         quote = summary.get('quote')
         if quote:
             story.append(p(f"Último cierre ajustado importado: {quote['adjusted_close']} {quote['currency']} - {quote['date']}", 'Small'))
@@ -133,7 +137,10 @@ def render_report(snapshot, request):
                 story.append(p(f"{metric['label']}: {metric.get('display_value') or 'No disponible'} {unit}"))
                 story.append(p(metric.get('formula_display') or metric.get('formula') or metric.get('reason') or '', 'Small'))
                 for component in metric.get('components', []):
-                    story.append(p(f"{component['label']}: {component['value']} {component.get('unit', '')}; {component['period']['start']} a {component['period']['end']}", 'Small'))
+                    component_period = component['period']
+                    period_text = (f"referencia anual del proveedor {component_period['end']}" if component['source'].get('period_basis') == 'provider_normalized'
+                                   else f"{component_period['start']} a {component_period['end']}")
+                    story.append(p(f"{component['label']}: {component['value']} {component.get('unit', '')}; {period_text}", 'Small'))
     if request['include_charts']:
         if comparison:
             story.append(PageBreak())

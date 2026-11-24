@@ -26,15 +26,15 @@ export function PillarMetric({ metric }) {
     {ready && policy && <p className={`pillar-band pillar-band-${policy.band}`}>{BANDS[policy.band]} según regla académica</p>}
     <details className="pillar-details">
       <summary>Ver fórmula, componentes y fuente</summary>
-      <p>Periodo: {metric.period?.start || 'Sin datos'} a {metric.period?.end || 'Sin datos'}</p>
+      <p>{metric.period_basis === 'provider_normalized' ? `Referencia anual del proveedor: ${metric.period?.end}` : `Periodo: ${metric.period?.start || 'Sin datos'} a ${metric.period?.end || 'Sin datos'}`}</p>
       <p>Fórmula: <code>{metric.formula_display || metric.formula}</code></p>
       {metric.applicability_source && <a href={metric.applicability_source.url} target="_blank" rel="noreferrer">Consultar procedencia de la clasificación</a>}
       <ul>{metric.components?.map(component => <li key={component.id}>
         <strong>{component.label || component.id}:</strong> {component.value} {component.source.currency}
-        <span> · Cierre: {component.period.end}</span>
-        <span> · {component.source.snapshot_kind === 'extracted_financial_facts' ? 'Referencia del informe' : 'Etiqueta SEC'}: {component.source.tag}</span>
+        <span> · {component.source.period_basis === 'provider_normalized' ? 'Referencia anual' : 'Cierre'}: {component.period.end}</span>
+        <span> · {component.source.source_kind === 'yahoo' ? 'Campo del proveedor' : component.source.snapshot_kind === 'extracted_financial_facts' ? 'Referencia del informe' : 'Etiqueta SEC'}: {component.source.tag}</span>
         {component.source.locator && <span> · {component.source.locator}</span>}
-        <span> · Publicado: {component.source.filed} · Informe: {component.source.accession}</span>
+        <span>{component.source.filed ? ` · Publicado: ${component.source.filed}` : ' · Publicación no proporcionada por el proveedor'}{component.source.accession ? ` · Informe: ${component.source.accession}` : ''}</span>
         {component.source.is_demo && <strong> · Fuente pendiente de verificar</strong>}
         <a href={component.source.url} target="_blank" rel="noreferrer">Consultar fuente</a>
       </li>)}</ul>
@@ -72,10 +72,17 @@ export default function FinancialPillars({ view = 'pillars' }) {
           {years.map(value => <option key={value} value={value}>{value}</option>)}
         </select>
       </div>
-      <p className="pillar-muted">Ejercicio: {data.fiscal_year || 'Sin datos'} · {data.period.start || 'Sin fecha inicial'} a {data.period.end || 'Sin fecha final'}</p>
+      <p className="pillar-muted">{data.period_basis === 'provider_normalized' ? `Referencia anual: ${data.period.end} · ${data.fiscal_year}` : `Ejercicio: ${data.fiscal_year || 'Sin datos'} · ${data.period.start || 'Sin fecha inicial'} a ${data.period.end || 'Sin fecha final'}`}</p>
+      {data.period_note && <p className="provider-period-note" role="note">{data.period_note}</p>}
+      {!!data.annual_components?.length && <details className="financial-help annual-statement"><summary>Ver estados anuales importados</summary><div className="help-content">
+        <p>Importes completos en {data.currency}; no están expresados en millones. Los valores ausentes permanecen sin dato.</p>
+        <div className="scenario-table"><table><caption>Componentes anuales · {data.fiscal_year} · {data.currency}</caption><thead><tr><th scope="col">Concepto</th><th scope="col">Importe</th><th scope="col">Procedencia</th></tr></thead>
+          <tbody>{data.annual_components.map(component => <tr key={component.id}><th scope="row">{component.label}</th><td>{component.value == null ? 'Sin dato' : Number(component.value).toLocaleString('es-PE', { maximumFractionDigits: 2 })}</td><td>{component.value != null && <a href={component.source.url} target="_blank" rel="noreferrer">Consultar fuente</a>}</td></tr>)}</tbody>
+        </table></div>
+      </div></details>}
       {!years.length && <p>No hay balances anuales importados para esta empresa.</p>}
       <div hidden={view === 'analysis'} onClick={openLinkedPillar}>
-      {data.overall_score && <OverallScore score={data.overall_score} fiscalYear={data.fiscal_year} />}
+      {data.overall_score && <OverallScore score={data.overall_score} fiscalYear={data.fiscal_year} periodBasis={data.period_basis} />}
       {data.pillars.length === 5 && <PillarRadar data={data} />}
       {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" id={`pillar-${pillar.id}`} tabIndex={-1} key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
         <h3><button className="pillar-toggle" type="button" aria-label={`Mostrar ${pillar.label}`} aria-expanded={activePillar === pillar.id} aria-controls={`detail-${pillar.id}`} onClick={() => setActivePillar(previous => previous === pillar.id ? null : pillar.id)}><span>{pillar.label}</span><small>{pillar.score?.status === 'available' ? `${pillar.score.display_value} / 100` : 'Ver indicadores'} · {activePillar === pillar.id ? '−' : '+'}</small></button></h3>

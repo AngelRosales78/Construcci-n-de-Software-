@@ -6,6 +6,8 @@ Se completaron el monitoreo del servidor y la web, los canales de avisos, las pa
 
 **El sprint no debe declararse aceptado al 100 %:** falta configurar y comprobar la recepción real de Firebase/FCM. La actualización automática nueva sigue limitada a precios; la fuente oficial de balances volvió a responder HTTP 403 el 23 de noviembre. Las preferencias de Push dependen de esa misma configuración pendiente.
 
+**Actualización de datos del 24 de noviembre:** las 504 fichas cuentan ahora con referencias financieras anuales de una captura pública alternativa, conservando los registros SEC y distinguiendo fechas normalizadas. Esto amplía la cobertura almacenada; la actualización manual de administración continúa limitada a precios. Fuentes, límites y comprobaciones nuevas: [DATOS_FINANCIEROS_CATALOGO.md](DATOS_FINANCIEROS_CATALOGO.md). Esta ejecución no modificó Android.
+
 La rama de trabajo sigue siendo `magallanes-sprint4`; no se crearon ramas adicionales. Se volvió a consultar `origin/Rosales`: permanece en `93e5ea3`, correspondiente al cierre Android del Sprint 3. Se conserva ese trabajo anterior; las incorporaciones móviles de esta ejecución no se atribuyen a Angel.
 
 ## Correspondencia con la tabla original

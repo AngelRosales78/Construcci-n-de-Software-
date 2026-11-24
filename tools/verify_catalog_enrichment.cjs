@@ -53,8 +53,9 @@ const output = path.resolve(repo, '../output/catalog_enrichment')
       if (ticker !== 'HIMS') {
         assert.ok(company.catalog_details.headquarters && company.catalog_details.founded)
       }
-      assert.equal(company.per, null)
-      assert.equal(company.roe, null)
+      for (const field of ['per', 'roe']) {
+        if (company[field] != null) assert.ok(company.field_sources[field]?.as_of && company.field_sources[field]?.source)
+      }
       assert.equal(company.altman_z.zone, 'unknown')
       for (const width of [1440, 390]) {
         await page.setViewportSize({ width, height: 1000 })
@@ -73,7 +74,7 @@ const output = path.resolve(repo, '../output/catalog_enrichment')
       await page.setViewportSize({ width: 1440, height: 1000 })
     }
     checks.push('Apple, 3M, ExxonMobil, Zoetis y Hims: perfiles, fuentes, gráfico y lectura en ventanas pequeñas verificados.')
-    checks.push('PER, ROE y Altman-Z siguen ausentes cuando no hay balances válidos; no se rellenan con cero ni con estimaciones.')
+    checks.push('PER y ROE disponibles conservan sus fuentes; Altman-Z no mezcla las fechas normalizadas con una capitalización actual.')
     assert.deepEqual(errors, [])
     await context.request.post(api + '/auth/logout/', { data: { refresh_token: session.refresh }, headers })
     fs.writeFileSync(path.join(output, 'resultado.json'), JSON.stringify({ verified_at: new Date().toISOString(),

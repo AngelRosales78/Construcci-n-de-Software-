@@ -20,7 +20,7 @@ Los perfiles se cruzaron primero por [CIK de Wikidata](https://www.wikidata.org/
 
 Los históricos proceden del endpoint público de gráficos de Yahoo Finance, con URL individual en cada registro. Se excluye la sesión actual incluso cuando el proveedor ya publica una vela. No se presentan como precios en tiempo real.
 
-**Los balances e indicadores fundamentales siguen disponibles para MSFT, GOOGL y META.** La nueva carga de precios no crea PER, ROE, capitalización, dividendo, balances ni puntuaciones para las demás empresas. La consulta nueva a SEC volvió a responder HTTP 403. Las fichas indican la falta de estos datos y mantienen los históricos y la información descriptiva utilizables.
+**Estado histórico al 23 de noviembre:** los balances e indicadores fundamentales estaban disponibles para MSFT, GOOGL y META. La carga de precios no creó datos fundamentales para las demás empresas y SEC respondió HTTP 403. **Actualización del 24 de noviembre:** una carga independiente amplió las referencias financieras anuales a las 504 fichas, conservando los datos originales; su cobertura, fuentes y límites se describen en [DATOS_FINANCIEROS_CATALOGO.md](DATOS_FINANCIEROS_CATALOGO.md).
 
 ## Reproducción y conservación
 
@@ -36,6 +36,6 @@ La ejecución completa del servidor aprobó 504 pruebas y omitió una optativa. 
 
 La web aprobó 133 pruebas en 29 archivos y compiló correctamente. `tools/verify_catalog_enrichment.cjs` comprueba la cobertura completa mediante la API y recorre Apple, 3M, ExxonMobil, Zoetis y HIMS en escritorio y ventana estrecha. También comprueba una simulación de Apple y que los indicadores desconocidos no aparezcan como cifras válidas.
 
-El recorrido real confirmó 504 reseñas, 504 sitios y 504 empresas con precios, sin símbolos repetidos ni errores de página. Los resúmenes y balances siguen siendo tres. Volver a cargar la copia comprimida conservó las 504 series existentes sin sustituirlas ni hacer nuevas llamadas al proveedor.
+El recorrido del 23 de noviembre confirmó 504 reseñas, 504 sitios y 504 empresas con precios, sin símbolos repetidos ni errores de página. En ese momento los resúmenes y balances cubrían tres fichas; la ampliación financiera posterior figura en el documento enlazado arriba. Volver a cargar la copia comprimida conservó las 504 series existentes sin sustituirlas ni hacer nuevas llamadas al proveedor.
 
 Los resultados y capturas locales quedan en `../output/catalog_enrichment/`; el lote conserva su informe en `../output/catalog_prices_backfill.json`. No se incluyen credenciales en estas evidencias ni en Git.
