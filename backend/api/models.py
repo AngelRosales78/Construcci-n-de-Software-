@@ -184,6 +184,7 @@ class Company(models.Model):
     is_pilot = models.BooleanField(default=False, db_index=True)
     description = models.TextField(max_length=3000, blank=True, default='')
     website_url = models.URLField(max_length=500, blank=True, default='')
+    catalog_details = models.JSONField(default=dict, blank=True)
     sector_overridden = models.BooleanField(default=False)
     is_index_member = models.BooleanField(default=True)
     identity_source_url = models.URLField(max_length=500, blank=True, default='')

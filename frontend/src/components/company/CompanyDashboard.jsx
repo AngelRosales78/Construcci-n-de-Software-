@@ -60,7 +60,7 @@ export default function CompanyDashboard() {
             <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}>{label}</button>)}
         </nav>
         <p className="company-section-guide">{sections.find(item => item.id === section).description}</p>
-        {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>Revisa los balances disponibles en Salud financiera. Microsoft también tiene el resumen cargado.</p><button onClick={() => navigate('/company/MSFT', { state: { searchReturn: returnTo } })}>Ver Microsoft</button></section>}
+        {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>{company.quote ? 'Ya puedes consultar su histórico de precios. ' : ''}Los cinco indicadores del resumen todavía no están cargados. La disponibilidad de balances se muestra en Salud financiera.</p><button onClick={() => setSection('pillars')}>Ver salud financiera</button></section>}
         {company.is_demo && hasIndicators(company) && <p role="status" className="data-notice">Resumen financiero pendiente de verificar. Consulta la procedencia de los precios y de los balances anuales.</p>}
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars key={company.ticker} view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>

@@ -43,6 +43,10 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Falló la migración aislada' }
     & $python -B manage.py import_company_catalog ../docs/datos/catalogo_sp500.csv
     if ($LASTEXITCODE -ne 0) { throw 'Falló el catálogo' }
+    if (Test-Path -LiteralPath '../docs/datos/company_profiles.json') {
+        & $python -B manage.py import_company_profiles ../docs/datos/company_profiles.json
+        if ($LASTEXITCODE -ne 0) { throw 'Fallaron los perfiles de empresa' }
+    }
     & $python -B manage.py import_market_data --metrics ../docs/datos/MSFT_balance_2024.csv --source 'SEC FY2024 y métricas históricas derivadas'
     if ($LASTEXITCODE -ne 0) { throw 'Falló el balance' }
     foreach ($ticker in @('GOOGL','META')) {
@@ -59,6 +63,10 @@ try {
         $provenance = Get-Content -LiteralPath "../docs/datos/sprint3/$ticker-prices-source.json" -Raw | ConvertFrom-Json
         & $python -B manage.py import_market_data --prices "../docs/datos/sprint3/$ticker-prices.csv" --source $provenance.source --preserve-refreshed
         if ($LASTEXITCODE -ne 0) { throw "Falló el histórico $ticker" }
+    }
+    if (Test-Path -LiteralPath '../docs/datos/catalog_prices.json.gz') {
+        & $python -B manage.py import_catalog_prices ../docs/datos/catalog_prices.json.gz
+        if ($LASTEXITCODE -ne 0) { throw 'Falló la copia de históricos del catálogo' }
     }
     & $python -B manage.py preload_search
     if ($LASTEXITCODE -ne 0) { throw 'Falló la precarga de búsqueda' }

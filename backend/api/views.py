@@ -686,6 +686,7 @@ def company_financial_data(company):
         'id': company.pk, 'ticker': company.ticker, 'name': company.name,
         'sector': company.sector, 'sector_display': company.get_sector_display(),
         'is_active': company.is_active, 'description': company.description, 'website_url': company.website_url,
+        'catalog_details': company.catalog_details,
         'is_index_member': company.is_index_member, 'identity_source_url': company.identity_source_url,
         'identity_verified_at': company.identity_verified_at,
         'logo_url': company.logo_url, 'altman_z': score, 'profile': financial_profile(score),

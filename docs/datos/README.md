@@ -10,6 +10,10 @@ Snapshot preparado el lunes 12 de octubre de 2026. No es un servicio de cotizaci
 
 Los JSON completos de las fuentes se conservan fuera de Git en el directorio local `data_sources`. Para reproducir la transformación sin red: `python tools/prepare_real_data.py <snapshots> docs/datos` desde la raíz del repositorio. Para cargar, usar `import_company_catalog`, `import_market_data` y `preload_search`; `tools/Start-Presentation.ps1` los ejecuta exclusivamente en la base aislada `sprint_delivery_validation`.
 
-La cobertura financiera real es **una empresa: MSFT**. Las otras 502 no tienen balances ni precios importados; muestran datos ausentes. La importación es repetible y conserva balances existentes. Las empresas y precios sintéticos del benchmark previo permanecen en `sprint_validation`, separados de esta presentación.
+La cobertura descrita arriba corresponde a la primera instantánea de octubre. La ampliación de noviembre añade perfiles públicos y sitios web a las 503 empresas del catálogo de referencia y a HIMS, añadida mediante el flujo administrativo. `company_profiles.json` conserva actividad, sede y fundación de la referencia, reseñas breves de Wikidata o la clasificación de actividad, enlaces oficiales revisados y fuentes por empresa. Los campos no encontrados permanecen ausentes.
+
+`catalog_prices.json.gz` conserva las respuestas públicas verificadas del lote de históricos, con ticker, fecha de consulta, fuente y SHA-256 de cada respuesta. El número de sesiones depende de la antigüedad de cada símbolo. El importador excluye la sesión actual y conserva datos posteriores que ya estén guardados. No convierte precios en PER, ROE ni balances. La cobertura comprobada al terminar la carga se documenta en [CATALOGO_COMPLETADO.md](../CATALOGO_COMPLETADO.md).
+
+El arranque carga estas copias sin volver a descargar el catálogo completo. Las importaciones no sustituyen ediciones descriptivas posteriores del equipo. Las empresas y precios sintéticos del benchmark anterior permanecen en `sprint_validation`, separados de esta presentación.
 
 Los PNG se decodificaron también en navegador para identificar las marcas con más del 90 % de sus píxeles visibles claros. `frontend/src/data/lightLogos.json` registra 56 símbolos que necesitan fondo oscuro; se aplica por CSS, conservando las imágenes originales.

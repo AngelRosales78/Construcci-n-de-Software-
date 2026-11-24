@@ -195,12 +195,16 @@ class CompanySerializer(serializers.ModelSerializer):
     sector_display = serializers.CharField(source='get_sector_display', read_only=True)
     has_annual_data = serializers.BooleanField(read_only=True, default=False)
     has_price_data = serializers.BooleanField(read_only=True, default=False)
+    industry = serializers.SerializerMethodField()
+
+    def get_industry(self, company):
+        return company.catalog_details.get('industry_label') or company.catalog_details.get('industry', '')
 
     class Meta:
         model = Company
         fields = [
             'id', 'ticker', 'name', 'sector', 'sector_display', 'logo_url', 'is_index_member',
-            'market_cap', 'per', 'roe', 'has_annual_data', 'has_price_data',
+            'market_cap', 'per', 'roe', 'has_annual_data', 'has_price_data', 'industry',
         ]
 
 
