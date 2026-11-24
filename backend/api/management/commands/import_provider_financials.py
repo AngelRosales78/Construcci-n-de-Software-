@@ -107,7 +107,7 @@ class Command(BaseCommand):
                     if summary:
                         existing = FinancialMetrics.objects.filter(company=company).first()
                         if existing and existing.reference_basis == 'reported': continue
-                        fields = {field.name: getattr(summary, field.name) for field in summary._meta.fields if field.name not in ('id','company','altman_reference')}
+                        fields = {field.name: getattr(summary, field.name) for field in summary._meta.fields if field.name not in ('id','company','altman_reference','data_diagnostics')}
                         FinancialMetrics.objects.update_or_create(company=company, defaults=fields)
                         Company.objects.filter(pk=company.pk).update(market_cap=summary.market_cap, per=summary.per, roe=summary.roe)
                 if counters['annual_rows'] or counters['summaries']: invalidate_catalog()

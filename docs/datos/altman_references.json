@@ -3,6 +3,60 @@
   "price_snapshot_sha256": "b7242547debfada921b4faa7e3622d5711ee7b33dd2fff09b9823cd7de6b2cf1",
   "companies": [
     {
+      "ticker": "CAT",
+      "reference": {
+        "version": 1,
+        "currency": "USD",
+        "period_start": "2025-01-01",
+        "period_end": "2025-12-31",
+        "price_date": "2025-12-31",
+        "unadjusted_close": "572.8699951171875",
+        "shares_outstanding": "465287332",
+        "inputs": {
+          "working_capital": "15927000000",
+          "total_assets": "98585000000",
+          "retained_earnings": "65448000000",
+          "ebit": "11151000000",
+          "total_liabilities": "77267000000",
+          "sales": "67589000000",
+          "equity_value": "266549151610.9291992187500"
+        },
+        "report_url": "https://www.sec.gov/Archives/edgar/data/18230/000001823026000008/cat-20251231.htm",
+        "locator": "10-K 2025: portada (acciones al 31/12/2025) y estados consolidados 1 y 3.",
+        "price_url": "https://finance.yahoo.com/quote/CAT/history/",
+        "price_sha256": "05758a7478d3fa42d0cfdae6810c06441fb2d7be34d2e4bcf0d01f28df355f53",
+        "reviewed_at": "2026-11-24",
+        "method": "EBIT operativo: beneficio de explotación consolidado publicado. Ventas e ingresos consolidados, incluidos Productos Financieros; su coste financiero forma parte de los costes operativos. Uso académico, sin validación predictiva para el grupo. Valor bursátil: acciones al cierre × último cierre sin ajustar de la sesión del cierre contable o inmediatamente anterior. Fórmula original de cinco factores, uso académico; no validada como predictor para esta empresa."
+      }
+    },
+    {
+      "ticker": "KO",
+      "reference": {
+        "version": 1,
+        "currency": "USD",
+        "period_start": "2025-01-01",
+        "period_end": "2025-12-31",
+        "price_date": "2025-12-31",
+        "unadjusted_close": "69.91000366210938",
+        "shares_outstanding": "4302000000",
+        "inputs": {
+          "working_capital": "9763000000",
+          "total_assets": "104816000000",
+          "retained_earnings": "80382000000",
+          "ebit": "17652000000",
+          "total_liabilities": "70541000000",
+          "sales": "47941000000",
+          "equity_value": "300752835754.39455276000000"
+        },
+        "report_url": "https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k/content/0001628280-26-010047/ko-20251231.htm",
+        "locator": "10-K 2025: estados consolidados de resultados y balance, columna 2025; importes y acciones en millones.",
+        "price_url": "https://finance.yahoo.com/quote/KO/history/",
+        "price_sha256": "ce248ebf69096630c877c5556930ce86a1ba622bc9ec5798992ca1ae87ce1951",
+        "reviewed_at": "2026-11-24",
+        "method": "EBIT: resultado antes de impuestos más gasto por intereses. Pasivos: activos menos patrimonio total. Acciones al cierre estimadas: 7.040 millones emitidas menos 2.738 millones en tesorería, con la precisión redondeada del balance; no se utiliza la cifra de la portada de una fecha posterior. Valor bursátil: acciones al cierre × último cierre sin ajustar de la sesión del cierre contable o inmediatamente anterior. Fórmula original de cinco factores, uso académico; no validada como predictor para esta empresa."
+      }
+    },
+    {
       "ticker": "AAPL",
       "reference": {
         "version": 1,

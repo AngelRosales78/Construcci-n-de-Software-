@@ -125,6 +125,12 @@ def render_report(snapshot, request):
             ['Perfil Altman-Z', (summary.get('profile') or {}).get('label')],
             ['Sector', summary.get('sector_display')], ['Referencia del resumen', summary.get('as_of')]], [180, width - 180])]
         quote = summary.get('quote')
+        for key, availability in summary.get('indicator_availability', {}).items():
+            if availability['status'] == 'unavailable':
+                story.append(p(f"{key}: {availability['label']}. {availability['explanation']}", 'Small'))
+        altman_availability = (summary.get('altman_z') or {}).get('availability', {})
+        if altman_availability.get('status') == 'unavailable':
+            story.append(p('Altman-Z: ' + altman_availability['explanation'], 'Small'))
         altman_reference = (summary.get('altman_z') or {}).get('reference')
         if altman_reference:
             story.append(p(f"Altman-Z: período contable {altman_reference['period_start']} a {altman_reference['period_end']}; precio sin ajustar de {altman_reference['price_date']}: {altman_reference['unadjusted_close']} USD. Acciones al cierre: {altman_reference['shares_outstanding']}.", 'Small'))

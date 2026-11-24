@@ -40,7 +40,7 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       await page.screenshot({path:path.join(output,name+'.png'),fullPage:true})
     }
     await signIn(accounts.free)
-    for(const ticker of ['AAPL','AMZN','JPM','WMT','MCD','FDXF','VYLR','HIMS']) {
+    for(const ticker of ['AAPL','AMZN','JPM','WMT','CAT','KO','MCD','FDXF','VYLR','HIMS']) {
       const resource = page.waitForResponse(response=>response.url().includes(`/companies/${ticker}/summary/`)&&response.status()===200)
       await page.goto(web+'/company/'+ticker)
       const summary = await (await resource).json()
@@ -49,11 +49,21 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       for(const field of ['market_cap','per','roe','beta','dividend_yield']) {
         if(summary[field]!=null) assert.ok(summary.field_sources[field]?.as_of && /^https:\/\//.test(summary.field_sources[field].source))
       }
-      if (['AAPL','AMZN','WMT'].includes(ticker)) {
+      if (['AAPL','AMZN','WMT','CAT','KO'].includes(ticker)) {
         assert.ok(summary.altman_z.score > 0)
         assert.ok(summary.altman_z.reference.period_start && summary.altman_z.reference.price_date)
       } else assert.equal(summary.altman_z.score,null)
+      for (const key of ['market_cap','per','roe','beta','dividend_yield']) {
+        assert.ok(summary.indicator_availability[key]?.status)
+        if(summary[key]==null) assert.ok(summary.indicator_availability[key].explanation)
+      }
+      if(summary.altman_z.score==null) assert.ok(summary.altman_z.availability.explanation)
       await page.getByText('Referencia anual del proveedor',{exact:true}).waitFor()
+      const absenceLabels=await page.locator('.metric-unavailable').allTextContents()
+      for(const key of ['market_cap','per','roe','beta','dividend_yield']) {
+        if(summary[key]==null) assert.ok(absenceLabels.includes(summary.indicator_availability[key].label),'Falta motivo visible de '+key)
+      }
+      if(summary.altman_z.score==null) assert.equal(await page.locator('.financial-health>strong').textContent(),summary.altman_z.availability.label)
       if(ticker==='AAPL') {
         await screenshot('01-apple-indicadores')
         await page.getByRole('button',{name:'Salud financiera',exact:true}).click()
@@ -91,8 +101,8 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
         checks.push('PDF individual de Apple generado y descargado con las nuevas referencias.')
       }
     }
-    checks.push('504 empresas con estados anuales e indicadores; ocho fichas de distintos sectores revisadas en escritorio y ventana estrecha.')
-    checks.push('Las referencias normalizadas conservan fechas ausentes; Altman-Z usa referencias fiscales independientes en Apple, Amazon y Walmart, con acciones y precio histórico del cierre.')
+    checks.push('504 empresas con estados anuales e indicadores; diez fichas revisadas en escritorio y ventana estrecha, con diagnóstico de los valores ausentes.')
+    checks.push('Las referencias normalizadas conservan fechas ausentes; Altman-Z usa referencias fiscales independientes en Apple, Amazon, Walmart, Caterpillar y Coca-Cola.')
     await page.getByRole('button',{name:'Cerrar Sesión',exact:true}).click(); await page.waitForURL('**/login')
     await signIn(accounts.pro)
     let response = page.waitForResponse(response=>new URL(response.url()).pathname==='/api/v1/compare/'&&response.status()===200)

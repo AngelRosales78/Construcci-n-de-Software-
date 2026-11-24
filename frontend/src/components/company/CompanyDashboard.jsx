@@ -80,7 +80,7 @@ export default function CompanyDashboard() {
         </div>
         </>}
         </div>
-        <div className="altman-detail" hidden={section !== 'pillars'}><AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} />
+        <div className="altman-detail" hidden={section !== 'pillars'}><AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} availability={company.altman_z.availability} />
           {company.reference_basis === 'provider_normalized' && company.altman_z.score == null && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
         </div>
         <div className="overview-report"><ReportPanel a={company.ticker} /></div>

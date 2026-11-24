@@ -27,3 +27,5 @@ La cobertura final es de 504 fichas con referencias anuales y resumen, 2.015 reg
 La guía de exposición, las fórmulas, las comprobaciones puntuales contra informes originales y las instrucciones de reproducción están en [DATOS_FINANCIEROS_CATALOGO.md](../DATOS_FINANCIEROS_CATALOGO.md).
 
 `altman_references.json` incorpora referencias independientes de cierre para AAPL, AMZN y WMT: componentes revisados en sus informes oficiales y valor bursátil estimado con acciones al cierre y precio histórico sin ajustar. La importación verifica la copia original de precios y conserva los otros indicadores. Fechas, métodos, límites y recorrido para mostrarlo: [ALTMAN_REFERENCIAS_VERIFICADAS.md](../ALTMAN_REFERENCIAS_VERIFICADAS.md).
+
+La ampliación siguiente incorpora CAT y KO a esa copia y guarda `diagnostico_financiero.csv`, una fila por cada una de las 504 fichas con estados y siguientes pasos. Motivos, límites de la verificación y reproducción: [DIAGNOSTICO_FINANCIERO.md](../DIAGNOSTICO_FINANCIERO.md).

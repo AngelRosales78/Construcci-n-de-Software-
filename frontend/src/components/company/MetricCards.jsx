@@ -21,8 +21,8 @@ export default function MetricCards({ company }) {
   return <section className="dashboard-metrics beginner-metrics" aria-label="Ficha técnica">
     {indicators.map(([key, label, explanation]) => <article className="metric-card" key={key}>
       <span className="metric-label">{label}</span>
-      <span className="metric-value">{format(key, company[key])}</span>
-      <p className="metric-meaning">{hasIndicatorValue(company[key]) ? explanation : 'No hay información suficiente para mostrar esta cifra. No equivale a cero.'}</p>
+      <span className={`metric-value${hasIndicatorValue(company[key]) ? '' : ' metric-unavailable'}`}>{hasIndicatorValue(company[key]) ? format(key, company[key]) : company.indicator_availability?.[key]?.label || 'Sin datos'}</span>
+      <p className="metric-meaning">{hasIndicatorValue(company[key]) ? explanation : company.indicator_availability?.[key]?.explanation || 'No hay información suficiente para mostrar esta cifra. No equivale a cero.'}</p>
       {company.field_sources?.[key]?.as_of ? <small className="metric-reference">Referencia · {company.field_sources[key].as_of}</small>
         : <small className="metric-reference">Fecha de referencia no informada.</small>}
     </article>)}

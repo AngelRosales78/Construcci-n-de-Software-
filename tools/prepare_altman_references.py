@@ -11,6 +11,18 @@ ROOT = Path(__file__).resolve().parents[1]
 # Amounts below are USD millions; shares are actual outstanding units,
 # not weighted-average or diluted shares used for earnings per share.
 REVIEWED = [
+    dict(ticker='CAT', start='2025-01-01', end='2025-12-31', shares=465287332,
+         current_assets=52485, current_liabilities=36558, assets=98585, retained=65448,
+         ebit=11151, liabilities=77267, sales=67589,
+         report='https://www.sec.gov/Archives/edgar/data/18230/000001823026000008/cat-20251231.htm',
+         locator='10-K 2025: portada (acciones al 31/12/2025) y estados consolidados 1 y 3.',
+         method='EBIT operativo: beneficio de explotación consolidado publicado. Ventas e ingresos consolidados, incluidos Productos Financieros; su coste financiero forma parte de los costes operativos. Uso académico, sin validación predictiva para el grupo.'),
+    dict(ticker='KO', start='2025-01-01', end='2025-12-31', shares=(7040-2738)*1000000,
+         current_assets=31044, current_liabilities=21281, assets=104816, retained=80382,
+         ebit=15998+1654, liabilities=104816-34275, sales=47941,
+         report='https://investors.coca-colacompany.com/filings-reports/annual-filings-10-k/content/0001628280-26-010047/ko-20251231.htm',
+         locator='10-K 2025: estados consolidados de resultados y balance, columna 2025; importes y acciones en millones.',
+         method='EBIT: resultado antes de impuestos más gasto por intereses. Pasivos: activos menos patrimonio total. Acciones al cierre estimadas: 7.040 millones emitidas menos 2.738 millones en tesorería, con la precisión redondeada del balance; no se utiliza la cifra de la portada de una fecha posterior.'),
     dict(ticker='AAPL', start='2025-09-28', end='2026-09-26', shares=14532259000,
          current_assets=173857, current_liabilities=169915, assets=404548, retained=13700,
          ebit=158063, liabilities=292455, sales=478834,

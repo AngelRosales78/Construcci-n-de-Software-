@@ -687,6 +687,8 @@ def company_financial_data(company):
     metrics = getattr(company, 'financial_metrics', None)
     balance = metrics if metrics is not None else company
     score = calculate_altman_z(balance)
+    from .financial_availability import public_indicators, altman_status
+    score['availability'] = altman_status(balance, score)
     if score['score'] is not None and getattr(balance, 'altman_reference', None):
         score['reference'] = balance.altman_reference
     result = {
@@ -702,6 +704,7 @@ def company_financial_data(company):
         'source': metrics.source if metrics else 'Datos heredados sin verificar',
         'is_demo': metrics.is_demo if metrics else True,
         'field_sources': metrics.field_sources if metrics else {},
+        'indicator_availability': public_indicators(balance),
     }
     for field in ('market_cap', 'per', 'roe', 'beta', 'dividend_yield'):
         value = getattr(balance, field, None)

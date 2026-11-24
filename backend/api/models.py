@@ -370,6 +370,7 @@ class FinancialMetrics(models.Model):
     reference_basis = models.CharField(max_length=24, default='reported')
     source_snapshot_sha256 = models.CharField(max_length=64, blank=True, default='')
     altman_reference = models.JSONField(default=dict, blank=True)
+    data_diagnostics = models.JSONField(default=dict, blank=True)
     source = models.CharField(max_length=250)
     is_demo = models.BooleanField(default=False)
     market_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])

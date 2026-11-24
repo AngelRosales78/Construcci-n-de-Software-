@@ -4,19 +4,21 @@ Actualización: 24 de noviembre de 2026.
 
 ## Resultado para la exposición
 
-Se añadieron referencias independientes para calcular Altman-Z en tres fichas que antes aparecían sin datos. Los datos financieros anteriores se conservan.
+Se añadieron referencias independientes para calcular Altman-Z en cinco fichas que antes aparecían sin datos. Con Microsoft, son seis resultados disponibles. Los datos financieros anteriores se conservan. El diagnóstico del resto del catálogo está en [DIAGNOSTICO_FINANCIERO.md](DIAGNOSTICO_FINANCIERO.md).
 
 | Empresa | Ejercicio contable | Última sesión al cierre | Puntaje |
 |---|---|---|---:|
 | Apple (AAPL) | 28/09/2025–26/09/2026 | 25/09/2026 | 12,70 |
 | Amazon (AMZN) | 01/01/2025–31/12/2025 | 31/12/2025 | 5,37 |
 | Walmart (WMT) | 01/02/2025–31/01/2026 | 30/01/2026 | 6,47 |
+| Caterpillar (CAT) | 01/01/2025–31/12/2025 | 31/12/2025 | 4,25 |
+| Coca-Cola (KO) | 01/01/2025–31/12/2025 | 31/12/2025 | 4,76 |
 
-Los tres resultados corresponden a la zona favorable de la fórmula académica existente. No constituyen probabilidades de quiebra ni acreditan que el modelo original sea válido para cada sector. Se conservó la fórmula de cinco factores y sus umbrales; no se sustituyó por otra variante para obtener puntajes.
+Los cinco resultados corresponden a la zona favorable de la fórmula académica existente. No constituyen probabilidades de quiebra ni acreditan que el modelo original sea válido para cada sector. Se conservó la fórmula de cinco factores y sus umbrales; no se sustituyó por otra variante para obtener puntajes.
 
 Para mostrarlo:
 
-1. Abre Apple y desplázate hasta **Altman-Z Score** en Resumen.
+1. Abre Apple y entra en **Salud financiera → Altman-Z Score**. El Resumen conserva la clasificación breve.
 2. Muestra el puntaje y el perfil financiero.
 3. Abre **Ver datos y fuentes de Altman-Z**: aparecen el ejercicio, la sesión del precio, las acciones y los siete importes utilizados.
 4. Abre el informe oficial desde ese panel o descarga el PDF de la ficha.
@@ -52,7 +54,7 @@ python manage.py import_altman_references ../docs/datos/altman_references.json -
 
 La migración 0025 añade un campo independiente al resumen. La carga valida el lote antes de escribir y repetirla no cambia los datos. Las restauraciones financieras generales conservan esta referencia; el arranque habitual la restaura después del resto de los datos.
 
-**Esta ampliación añade tres fichas, no completa Altman-Z para todo el catálogo.** Las demás mantienen sus resultados anteriores o el estado sin datos cuando falten componentes compatibles. Los bancos no reciben un resultado artificial por tener activos y patrimonio disponibles. Los resúmenes de MSFT, GOOGL y META se conservan.
+**Estas ampliaciones añaden cinco fichas, no completan Altman-Z para todo el catálogo.** Las demás mantienen sus resultados anteriores o el estado sin datos cuando falten componentes compatibles. Los bancos no reciben un resultado artificial por tener activos y patrimonio disponibles. Los resúmenes de MSFT, GOOGL y META se conservan. Los métodos adicionales de CAT y KO, incluida la precisión redondeada de sus acciones, figuran en el diagnóstico enlazado al inicio.
 
 ## Comprobaciones
 
