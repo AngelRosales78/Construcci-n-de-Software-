@@ -8,7 +8,10 @@ import java.time.Instant
 import javax.inject.Inject
 
 data class AccessInfo(val schema_version: String? = null, val owner_id: String? = null, val plan: String? = null,
-    val active: Boolean? = null, val features: List<String?>? = null, val valid_until: String? = null)
+    val active: Boolean? = null, val features: List<String?>? = null, val valid_until: String? = null,
+    // HU11_04: billing period of a paid plan. valid_until only says how long this answer may be trusted.
+    val grant_origin: String? = null, val period_start: String? = null, val period_end: String? = null,
+    val auto_renew: Boolean? = null, val cancelled_at: String? = null, val price: String? = null, val currency: String? = null)
 fun accessFresh(info: AccessInfo): Boolean = try { Instant.parse(info.valid_until).isAfter(Instant.now()) } catch (_: Exception) { false }
 fun canCompare(info: AccessInfo) = accessFresh(info) && info.plan == "pro" && info.active == true && "compare" in info.features.orEmpty()
 interface AccessApi { @GET("user/subscription/") suspend fun get(@Header("Authorization") token: String, @Tag account: AccountBinding): Response<AccessInfo> }

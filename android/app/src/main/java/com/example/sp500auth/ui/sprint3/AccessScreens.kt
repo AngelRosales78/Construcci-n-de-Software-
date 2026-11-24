@@ -33,14 +33,3 @@ import kotlinx.coroutines.delay
     if (vm.state is com.example.sp500auth.util.Resource.Error) TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }
     }
 }
-@Composable fun PlansScreen(nav: NavController, vm: AccessViewModel = hiltViewModel()) {
-    AccessObserver(vm)
-    Column(Modifier.fillMaxSize().padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        TextButton(onClick = { nav.popBackStack() }) { Text("Volver") }; Text("Mi plan", style = MaterialTheme.typography.headlineMedium)
-        RemoteContent(vm.state, vm::load) { info ->
-            Text("Plan: ${if(info.plan=="pro")"Pro" else "Gratis"} · ${if (info.active == true) "Activo" else "Inactivo"}")
-            Text("Funciones habilitadas: ${info.features.orEmpty().filterNotNull().map{when(it){"compare"->"Comparador de empresas";"company_pdf"->"Reporte de ficha";"comparison_pdf"->"Reporte comparativo";else->"Función adicional del plan"}}.distinct().joinToString()}")
-        }
-        Text("Pro habilita la comparación avanzada cuando el servidor confirma el acceso. La contratación o cambio de plan corresponde al módulo de suscripciones; todavía no está disponible aquí.")
-    }
-}
