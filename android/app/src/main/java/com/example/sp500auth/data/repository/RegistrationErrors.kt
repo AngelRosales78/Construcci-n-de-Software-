@@ -9,7 +9,7 @@ internal fun registrationHttpError(code: Int, body: String?): String {
     if (code == 429) return "Demasiados intentos. Espera unos minutos antes de registrarte."
     if (code == 404) return "No se encontró el servicio de registro. Revisa la dirección del servidor."
     val labels = linkedMapOf("username" to "Usuario", "email" to "Correo", "password" to "Contraseña",
-        "password_confirm" to "Confirmación", "non_field_errors" to "Registro", "detail" to "Registro")
+        "password_confirm" to "Confirmación", "phone_number" to "Teléfono", "non_field_errors" to "Registro", "detail" to "Registro")
     val messages = runCatching {
         val json = JsonParser.parseString(body ?: "").asJsonObject
         labels.flatMap { (field, label) ->
@@ -31,3 +31,6 @@ internal fun registrationExceptionMessage(error: Exception): String = when (erro
     is IOException -> "No se pudo conectar con el servidor. Comprueba que esté iniciado y que la dirección de la API sea correcta."
     else -> "No se pudo procesar la respuesta del registro. Intenta iniciar sesión antes de volver a registrarte."
 }
+
+/** HU02_03: the server stores phones without spaces, hyphens or parentheses. */
+internal fun normalizedPhone(phone: String): String = phone.filterNot { it.isWhitespace() || it in "()-" }
