@@ -56,7 +56,8 @@ const output = path.resolve(repo, '../output/catalog_enrichment')
       for (const field of ['per', 'roe']) {
         if (company[field] != null) assert.ok(company.field_sources[field]?.as_of && company.field_sources[field]?.source)
       }
-      assert.equal(company.altman_z.zone, 'unknown')
+      if (company.altman_z.reference) assert.ok(company.altman_z.reference.period_end && company.altman_z.reference.price_date)
+      else assert.equal(company.altman_z.zone, 'unknown')
       for (const width of [1440, 390]) {
         await page.setViewportSize({ width, height: 1000 })
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false)

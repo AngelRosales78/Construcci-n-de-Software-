@@ -59,7 +59,7 @@ Estas comprobaciones no constituyen una auditoría de las 504 fichas ni certific
 - **Beta:** covarianza de 252 retornos diarios ajustados comunes de la acción y el S&P 500, dividida entre la varianza del índice. Requiere 253 observaciones comunes y no interpola sesiones.
 - **Rendimiento por dividendo:** dividendos en efectivo registrados durante 365 días divididos entre el cierre sin ajustar de esa referencia, multiplicado por 100. Se omite si faltan eventos, historia suficiente o una base por acción verificable ante un desdoblamiento reciente.
 - **Ratios de salud financiera:** utilizan los componentes presentes. Los cálculos con historia anual exigen referencias consecutivas, misma moneda y la misma captura; no mezclan ejercicios SEC con referencias Yahoo.
-- **Altman-Z:** permanece sin calcular en los resúmenes nuevos porque no se verificó la capitalización correspondiente al cierre contable exacto.
+- **Altman-Z:** los resúmenes normalizados por sí solos no proporcionan una capitalización del cierre contable exacto. Una ampliación posterior del mismo día añadió referencias fiscales independientes para Apple, Amazon y Walmart; véase [ALTMAN_REFERENCIAS_VERIFICADAS.md](ALTMAN_REFERENCIAS_VERIFICADAS.md). Las demás fichas conservan el estado que permita su cobertura.
 
 Las referencias normalizadas no permiten declarar que dos empresas tienen períodos contables idénticos. La comparación no asigna ganadores en esos casos. GOOGL/META de 2024 conserva la comparación con períodos oficiales completos. Una puntuación global requiere la cobertura definida por la metodología existente; no se reemplaza por la media de los pocos indicadores disponibles.
 

@@ -72,9 +72,9 @@ export default function CompanyDashboard() {
           <PriceChart />
           <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span>{company.as_of ? `${company.reference_basis === 'provider_normalized' ? 'Referencia' : 'Balance'}: ${company.as_of}` : 'Balance pendiente'}</span></div><p className="metrics-period-note">Cambiar el rango del gráfico no modifica estos indicadores.</p><MetricCards company={company} /></section>
           <div className="dashboard-charts">
-            <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} />
+            <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} />
             <FinancialHealthIndicator altmanZ={company.altman_z} profile={company.profile} />
-            {company.reference_basis === 'provider_normalized' && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
+            {company.reference_basis === 'provider_normalized' && company.altman_z.score == null && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
           </div>
         </div>
         </>}

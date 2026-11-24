@@ -125,6 +125,10 @@ def render_report(snapshot, request):
             ['Perfil Altman-Z', (summary.get('profile') or {}).get('label')],
             ['Sector', summary.get('sector_display')], ['Referencia del resumen', summary.get('as_of')]], [180, width - 180])]
         quote = summary.get('quote')
+        altman_reference = (summary.get('altman_z') or {}).get('reference')
+        if altman_reference:
+            story.append(p(f"Altman-Z: período contable {altman_reference['period_start']} a {altman_reference['period_end']}; precio sin ajustar de {altman_reference['price_date']}: {altman_reference['unadjusted_close']} USD. Acciones al cierre: {altman_reference['shares_outstanding']}.", 'Small'))
+            story.append(p(altman_reference['method'] + ' Fuente: ' + altman_reference['report_url'], 'Small'))
         if quote:
             story.append(p(f"Último cierre ajustado importado: {quote['adjusted_close']} {quote['currency']} - {quote['date']}", 'Small'))
         story.append(p('Fuente del resumen: ' + str(summary.get('source') or 'Sin fuente disponible'), 'Small'))

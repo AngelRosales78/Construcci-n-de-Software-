@@ -369,6 +369,7 @@ class FinancialMetrics(models.Model):
     as_of = models.DateField()
     reference_basis = models.CharField(max_length=24, default='reported')
     source_snapshot_sha256 = models.CharField(max_length=64, blank=True, default='')
+    altman_reference = models.JSONField(default=dict, blank=True)
     source = models.CharField(max_length=250)
     is_demo = models.BooleanField(default=False)
     market_cap = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True, validators=[MinValueValidator(0)])
@@ -390,6 +391,12 @@ class FinancialMetrics(models.Model):
         from django.core.validators import URLValidator
         from django.utils import timezone
         import re
+        if self.altman_reference:
+            from .altman_reference import validate_reference
+            try:
+                validate_reference(self.altman_reference)
+            except (ValueError, TypeError, KeyError, ArithmeticError) as error:
+                raise ValidationError('Referencia Altman inválida.') from error
         if self.reference_basis not in ('reported', 'provider_normalized', 'market_date'):
             raise ValidationError('Base de fecha del resumen no admitida.')
         if self.source_snapshot_sha256 and not re.fullmatch(r'[0-9a-f]{64}', self.source_snapshot_sha256):

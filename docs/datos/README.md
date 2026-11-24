@@ -25,3 +25,5 @@ Los PNG se decodificaron también en navegador para identificar las marcas con m
 La cobertura final es de 504 fichas con referencias anuales y resumen, 2.015 registros anuales en total (1.998 Yahoo y 17 SEC conservados), capitalización en 504, PER en 502, ROE en 467, beta en 500 y dividendo en 390. Los campos ausentes no se convierten en cero y las fechas normalizadas no se presentan como períodos contables oficiales. La captura no añade una actualización financiera automática.
 
 La guía de exposición, las fórmulas, las comprobaciones puntuales contra informes originales y las instrucciones de reproducción están en [DATOS_FINANCIEROS_CATALOGO.md](../DATOS_FINANCIEROS_CATALOGO.md).
+
+`altman_references.json` incorpora referencias independientes de cierre para AAPL, AMZN y WMT: componentes revisados en sus informes oficiales y valor bursátil estimado con acciones al cierre y precio histórico sin ajustar. La importación verifica la copia original de precios y conserva los otros indicadores. Fechas, métodos, límites y recorrido para mostrarlo: [ALTMAN_REFERENCIAS_VERIFICADAS.md](../ALTMAN_REFERENCIAS_VERIFICADAS.md).

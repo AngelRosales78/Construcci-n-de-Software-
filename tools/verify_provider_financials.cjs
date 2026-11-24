@@ -49,9 +49,16 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       for(const field of ['market_cap','per','roe','beta','dividend_yield']) {
         if(summary[field]!=null) assert.ok(summary.field_sources[field]?.as_of && /^https:\/\//.test(summary.field_sources[field].source))
       }
-      assert.equal(summary.altman_z.score,null)
+      if (['AAPL','AMZN','WMT'].includes(ticker)) {
+        assert.ok(summary.altman_z.score > 0)
+        assert.ok(summary.altman_z.reference.period_start && summary.altman_z.reference.price_date)
+      } else assert.equal(summary.altman_z.score,null)
       await page.getByText('Referencia anual del proveedor',{exact:true}).waitFor()
-      if(ticker==='AAPL') await screenshot('01-apple-indicadores')
+      if(ticker==='AAPL') {
+        await page.getByText('Ver datos y fuentes de Altman-Z',{exact:true}).click()
+        await page.getByRole('link',{name:'Consultar informe oficial',exact:true}).waitFor()
+        await screenshot('01-apple-indicadores')
+      }
       await page.getByRole('button',{name:'Salud financiera',exact:true}).click()
       await page.locator('.financial-pillars>.provider-period-note').waitFor()
       const annualResponse = await context.request.get(api+`/companies/${ticker}/pillars/`,{headers})
@@ -84,7 +91,7 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       }
     }
     checks.push('504 empresas con estados anuales e indicadores; ocho fichas de distintos sectores revisadas en escritorio y ventana estrecha.')
-    checks.push('Ninguna referencia normalizada inventa inicio fiscal, fecha de publicación ni identificador SEC; Altman-Z no mezcla capitalización actual con un cierre no verificado.')
+    checks.push('Las referencias normalizadas conservan fechas ausentes; Altman-Z usa referencias fiscales independientes en Apple, Amazon y Walmart, con acciones y precio histórico del cierre.')
     await page.getByRole('button',{name:'Cerrar Sesión',exact:true}).click(); await page.waitForURL('**/login')
     await signIn(accounts.pro)
     let response = page.waitForResponse(response=>new URL(response.url()).pathname==='/api/v1/compare/'&&response.status()===200)

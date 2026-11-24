@@ -72,6 +72,10 @@ try {
         & $python -B manage.py import_provider_financials ../docs/datos/catalog_financials.json.gz --prices ../docs/datos/catalog_prices.json.gz
         if ($LASTEXITCODE -ne 0) { throw 'Falló la copia de estados financieros' }
     }
+    if (Test-Path -LiteralPath '../docs/datos/altman_references.json') {
+        & $python -B manage.py import_altman_references ../docs/datos/altman_references.json --prices ../docs/datos/catalog_prices.json.gz
+        if ($LASTEXITCODE -ne 0) { throw 'Falló la copia de referencias Altman' }
+    }
     & $python -B manage.py preload_search
     if ($LASTEXITCODE -ne 0) { throw 'Falló la precarga de búsqueda' }
     & $python -B manage.py prepare_sprint3_demo --credentials-file (Join-Path $state 'demo_credentials.json')

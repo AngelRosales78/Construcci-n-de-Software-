@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "price_snapshot_sha256": "b7242547debfada921b4faa7e3622d5711ee7b33dd2fff09b9823cd7de6b2cf1",
+  "companies": [
+    {
+      "ticker": "AAPL",
+      "reference": {
+        "version": 1,
+        "currency": "USD",
+        "period_start": "2025-09-28",
+        "period_end": "2026-09-26",
+        "price_date": "2026-09-25",
+        "unadjusted_close": "341.07000732421875",
+        "shares_outstanding": "14532259000",
+        "inputs": {
+          "working_capital": "3942000000",
+          "total_assets": "404548000000",
+          "retained_earnings": "13700000000",
+          "ebit": "158063000000",
+          "total_liabilities": "292455000000",
+          "sales": "478834000000",
+          "equity_value": "4956517683567.44384765625000"
+        },
+        "report_url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000026/aapl-20260926.htm",
+        "locator": "10-K 2026: balances y operaciones, páginas 32 y 34; acciones en miles.",
+        "price_url": "https://finance.yahoo.com/quote/AAPL/history/",
+        "price_sha256": "46d75a198e4e6f60306150229aeab91134c3c216a3b1912469e4cf058c063f09",
+        "reviewed_at": "2026-11-24",
+        "method": "EBIT operativo: resultado de explotación publicado; no incluye otros ingresos netos. Valor bursátil: acciones al cierre × último cierre sin ajustar de la sesión del cierre contable o inmediatamente anterior. Fórmula original de cinco factores, uso académico; no validada como predictor para esta empresa."
+      }
+    },
+    {
+      "ticker": "AMZN",
+      "reference": {
+        "version": 1,
+        "currency": "USD",
+        "period_start": "2025-01-01",
+        "period_end": "2025-12-31",
+        "price_date": "2025-12-31",
+        "unadjusted_close": "230.82000732421875",
+        "shares_outstanding": "10731000000",
+        "inputs": {
+          "working_capital": "11078000000",
+          "total_assets": "818042000000",
+          "retained_earnings": "250536000000",
+          "ebit": "99585000000",
+          "total_liabilities": "406977000000",
+          "sales": "716924000000",
+          "equity_value": "2476929498596.19140625000000"
+        },
+        "report_url": "https://s2.q4cdn.com/299287126/files/doc_financials/2026/ar/Amazon-2025-Annual-Report.pdf",
+        "locator": "Informe 2025: operaciones y balance, páginas impresas 37 y 39.",
+        "price_url": "https://finance.yahoo.com/quote/AMZN/history/",
+        "price_sha256": "85cdf4645b03bb9590b43527c45b944a611ae4ab2b1d49050c3a0b83c1080b78",
+        "reviewed_at": "2026-11-24",
+        "method": "EBIT: resultado antes de impuestos más gasto por intereses. Pasivos: activos menos patrimonio. Valor bursátil: acciones al cierre × último cierre sin ajustar de la sesión del cierre contable o inmediatamente anterior. Fórmula original de cinco factores, uso académico; no validada como predictor para esta empresa."
+      }
+    },
+    {
+      "ticker": "WMT",
+      "reference": {
+        "version": 1,
+        "currency": "USD",
+        "period_start": "2025-02-01",
+        "period_end": "2026-01-31",
+        "price_date": "2026-01-30",
+        "unadjusted_close": "119.13999938964844",
+        "shares_outstanding": "7969000000",
+        "inputs": {
+          "working_capital": "-22595000000",
+          "total_assets": "284668000000",
+          "retained_earnings": "104774000000",
+          "ebit": "32268000000",
+          "total_liabilities": "178488000000",
+          "sales": "706413000000",
+          "equity_value": "949426655136.10841836000000"
+        },
+        "report_url": "https://stock.walmart.com/sec-filings/all-sec-filings/content/0000104169-26-000055/0000104169-26-000055.pdf",
+        "locator": "10-K 2026: operaciones, balance y cambios patrimoniales, páginas impresas 52, 54 y 55.",
+        "price_url": "https://finance.yahoo.com/quote/WMT/history/",
+        "price_sha256": "a8bf339971c549ac43598f055af6a3ff085427fa293739d607fb6a86dab6aa3d",
+        "reviewed_at": "2026-11-24",
+        "method": "EBIT: resultado antes de impuestos más intereses de deuda y arrendamiento financiero. Ventas netas, sin cuotas ni otros ingresos. Pasivos: suma de sus partidas; excluye interés no controlador rescatable. Valor bursátil: acciones al cierre × último cierre sin ajustar de la sesión del cierre contable o inmediatamente anterior. Fórmula original de cinco factores, uso académico; no validada como predictor para esta empresa."
+      }
+    }
+  ]
+}

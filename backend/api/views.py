@@ -626,7 +626,12 @@ def calculate_altman_z(company):
     fields = ('working_capital', 'total_assets', 'retained_earnings', 'ebit',
               'equity_value', 'total_liabilities', 'sales')
     try:
-        values = {field: Decimal(str(getattr(company, field))) for field in fields}
+        reference = getattr(company, 'altman_reference', None)
+        if reference:
+            from .altman_reference import validate_reference
+            values = validate_reference(reference)
+        else:
+            values = {field: Decimal(str(getattr(company, field))) for field in fields}
         if not all(value.is_finite() for value in values.values()):
             return unknown
         if values['total_assets'] <= 0 or values['total_liabilities'] <= 0:
@@ -658,7 +663,7 @@ def calculate_altman_z(company):
                 'components': {f'x{i}': float(round(ratio, 4))
                                for i, ratio in enumerate(ratios, start=1)},
             }
-    except (ArithmeticError, TypeError, ValueError):
+    except (ArithmeticError, TypeError, ValueError, KeyError):
         return unknown
 
 
@@ -682,6 +687,8 @@ def company_financial_data(company):
     metrics = getattr(company, 'financial_metrics', None)
     balance = metrics if metrics is not None else company
     score = calculate_altman_z(balance)
+    if score['score'] is not None and getattr(balance, 'altman_reference', None):
+        score['reference'] = balance.altman_reference
     result = {
         'id': company.pk, 'ticker': company.ticker, 'name': company.name,
         'sector': company.sector, 'sector_display': company.get_sector_display(),
