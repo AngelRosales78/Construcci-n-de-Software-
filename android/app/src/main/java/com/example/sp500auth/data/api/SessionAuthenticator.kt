@@ -17,7 +17,8 @@ interface SessionRefreshApi {
 }
 
 /** A single synchronized refresh; the refresh client has no authenticator of its own. */
-class SessionAuthenticator(private val store: SessionTokenStore, private val api: SessionRefreshApi) : Authenticator {
+class SessionAuthenticator(private val store: SessionTokenStore, private val api: SessionRefreshApi,
+                           private val onRevoked: () -> Unit = {}) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.priorResponse != null || response.request.header("Authorization") == null) return null
         return synchronized(store) {
@@ -29,7 +30,7 @@ class SessionAuthenticator(private val store: SessionTokenStore, private val api
                 val renewed = api.refresh(RefreshRequest(refresh)).execute()
                 val body = renewed.body()
                 if (!renewed.isSuccessful || body?.accessToken.isNullOrBlank() || body?.refreshToken.isNullOrBlank()) {
-                    if (renewed.code() == 401 || renewed.code() == 403) store.clearTokens()
+                    if (renewed.code() == 401 || renewed.code() == 403) { store.clearTokens(); onRevoked() }
                     return@synchronized null
                 }
                 store.saveTokens(body!!.accessToken, body.refreshToken)

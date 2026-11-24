@@ -34,12 +34,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenManager: TokenManager): OkHttpClient {
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenManager: TokenManager,
+                            sessionEvents: com.example.sp500auth.data.ops.SessionEvents): OkHttpClient {
         val refreshApi = Retrofit.Builder().baseUrl(BASE_URL)
             .client(OkHttpClient.Builder().callTimeout(30, TimeUnit.SECONDS).build())
             .addConverterFactory(GsonConverterFactory.create()).build().create(SessionRefreshApi::class.java)
         return OkHttpClient.Builder()
-            .authenticator(SessionAuthenticator(tokenManager, refreshApi))
+            .authenticator(SessionAuthenticator(tokenManager, refreshApi, sessionEvents::notifyRevoked))
             .addInterceptor { chain ->
                 val request = chain.request()
                 val publicPaths = listOf("auth/token/", "auth/register/", "auth/refresh/", "auth/password/reset/", "auth/password/reset/confirm/")
