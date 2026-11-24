@@ -110,7 +110,8 @@ class ComparisonServicesTests(PersonalServicesTests):
         with override_settings(LOCAL_DEVELOPMENT_PRO=False):
             self.assertEqual(self.call('get', 'user/subscription/').data['plan'], 'free')
             self.assertEqual(self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=2024').status_code, 403)
-        UserSubscription.objects.create(user=self.user, plan='pro', active=True, valid_until=timezone.now()-timedelta(seconds=1))
+        UserSubscription.objects.create(user=self.user, plan='pro', active=True, auto_renew=False,
+                                        valid_until=timezone.now()-timedelta(seconds=1))
         self.assertEqual(self.call('get', 'compare/?a=AAPL&b=MSFT&fiscal_year=2024').status_code, 403)
 
     def test_equal_periods_compare_five_real_scores_and_reject_invalid_pairs(self):

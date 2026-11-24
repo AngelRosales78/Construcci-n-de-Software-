@@ -4,11 +4,25 @@ Authentication serializers for the S&P 500 platform.
 Uses DRF serializers with Yup-equivalent validation logic (pydantic-style
 schema validation in Python) for all auth endpoints.
 """
+import re
+
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 from .models import User, Company, SearchHistory
+
+
+def clean_phone_number(value, exclude_pk=None):
+    """HU02_03: optional international phone (+ and 7-15 digits), unique across accounts."""
+    phone = re.sub(r'[\s()-]', '', value or '')
+    if not phone:
+        return ''
+    if not re.fullmatch(r'\+?\d{7,15}', phone):
+        raise serializers.ValidationError(_('Enter a valid phone number.'))
+    if User.objects.filter(phone_number=phone).exclude(pk=exclude_pk).exists():
+        raise serializers.ValidationError(_('A user with this phone number already exists.'))
+    return phone
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -26,12 +40,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password', 'password_confirm', 'user_type', 'first_name', 'last_name']
+        fields = ['id', 'username', 'email', 'password', 'password_confirm', 'user_type', 'first_name', 'last_name',
+                  'phone_number']
         extra_kwargs = {
             'first_name': {'required': False, 'allow_blank': True},
             'last_name': {'required': False, 'allow_blank': True},
             'user_type': {'required': False},
+            'phone_number': {'required': False, 'allow_blank': True},
         }
+
+    def validate_phone_number(self, value):
+        return clean_phone_number(value)
 
     def validate_username(self, value):
         if len(value) < 3:
@@ -150,6 +169,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name',
                   'phone_number', 'user_type', 'is_verified', 'created_at', 'role']
         read_only_fields = ['id', 'is_verified', 'created_at']
+
+    def validate_phone_number(self, value):
+        return clean_phone_number(value, self.instance.pk if self.instance else None)
 
 
 class CompanySerializer(serializers.ModelSerializer):

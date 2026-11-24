@@ -21,6 +21,7 @@ from .analysis_views import CompanyAnalysisView
 from . import personal_views
 from . import comparison_views
 from . import report_views
+from . import subscription_views
 
 app_name = 'auth'
 
@@ -31,6 +32,11 @@ urlpatterns = [
     path('reports/jobs/<uuid:pk>/cancel/', report_views.cancel_report),
     path('reports/jobs/<uuid:pk>/file/', report_views.report_file),
     path('user/subscription/', comparison_views.subscription),
+    path('payments/plans/', subscription_views.plans),
+    path('payments/simulate/', subscription_views.simulate_payment),
+    path('payments/invoices/', subscription_views.invoices),
+    path('payments/invoices/<str:number>/', subscription_views.invoices),
+    path('subscription/cancel/', subscription_views.cancel_subscription),
     path('compare/', comparison_views.compare),
     path('compare/conclusion/', comparison_views.conclusion),
     path('favorites/', personal_views.favorites),

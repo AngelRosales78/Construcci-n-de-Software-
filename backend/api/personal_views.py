@@ -24,7 +24,7 @@ class Conflict(APIException):
 def service_health(request):
     return Response({'schema_version': 'android-services-v1', 'sprint': 3,
                      'project': getattr(settings, 'ANDROID_PROJECT_NAME', None),
-                     'services': ['favorites', 'tags', 'recent', 'compare', 'conclusion', 'subscription', 'reports']})
+                     'services': ['favorites', 'tags', 'recent', 'compare', 'conclusion', 'subscription', 'reports', 'payments']})
 
 
 def favorite_row(row):

@@ -49,6 +49,11 @@ class User(AbstractUser):
         verbose_name = _('user')
         verbose_name_plural = _('users')
         ordering = ['-created_at']
+        constraints = [
+            # HU02_03: a registered phone identifies one account; empty phones remain allowed.
+            models.UniqueConstraint(fields=['phone_number'], condition=~models.Q(phone_number=''),
+                                    name='unique_nonempty_phone_number'),
+        ]
 
     def __str__(self):
         return f"{self.username} ({self.get_user_type_display()})"
@@ -239,6 +244,34 @@ class UserSubscription(models.Model):
     plan = models.CharField(max_length=8, default='free', choices=[('free', 'Free'), ('pro', 'Pro')])
     active = models.BooleanField(default=True)
     valid_until = models.DateTimeField()
+    # HU11_04/HU11_05: simulated billing period and renewal state.
+    period_start = models.DateTimeField(null=True, blank=True)
+    auto_renew = models.BooleanField(default=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    cancel_reason = models.CharField(max_length=200, blank=True, default='')
+
+
+class Invoice(models.Model):
+    """HU11_03: receipt of a simulated payment. Card data is never stored beyond brand and last four digits."""
+    KIND_CHOICES = [('purchase', 'Compra'), ('renewal', 'Renovación')]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invoices')
+    number = models.CharField(max_length=32, unique=True)
+    transaction_id = models.CharField(max_length=40, unique=True)
+    request_id = models.CharField(max_length=64)
+    kind = models.CharField(max_length=10, choices=KIND_CHOICES, default='purchase')
+    plan = models.CharField(max_length=8, default='pro')
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    currency = models.CharField(max_length=3, default='USD')
+    card_brand = models.CharField(max_length=20, blank=True, default='')
+    card_last4 = models.CharField(max_length=4, blank=True, default='')
+    period_start = models.DateTimeField()
+    period_end = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    emailed_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at', '-id']
+        constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='invoice_user_request')]
 
 
 class AnalysisSnapshot(models.Model):

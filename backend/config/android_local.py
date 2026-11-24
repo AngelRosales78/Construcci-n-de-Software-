@@ -5,8 +5,9 @@ ANDROID_PROJECT_NAME = BASE_DIR.name
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3',
     'NAME': config('ANDROID_DATABASE_PATH', default=str(BASE_DIR / 'android-local.sqlite3'))}}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-# Academic local installation only. Production does not grant Pro implicitly.
-LOCAL_DEVELOPMENT_PRO = config('ANDROID_LOCAL_PRO', default=True, cast=bool)
+# Pro now comes from the simulated payment (Epic 11). ANDROID_LOCAL_PRO=true restores the old
+# implicit academic grant for accounts without a subscription. Production never grants it.
+LOCAL_DEVELOPMENT_PRO = config('ANDROID_LOCAL_PRO', default=False, cast=bool)
 ALLOWED_HOSTS = config('ANDROID_ALLOWED_HOSTS', default='localhost,127.0.0.1,10.0.2.2').split(',')
 
 # Fail quickly when optional search caching is unavailable. Session rotation/revocation still requires Redis.

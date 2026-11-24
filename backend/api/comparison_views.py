@@ -11,21 +11,29 @@ from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 from .models import Company, UserSubscription, AnalysisSnapshot
 from .pillars import build_pillars
+from .billing import settle, PRO_PRICE, CURRENCY
 
 
 def access_info(user):
-    subscription = UserSubscription.objects.filter(user=user).first()
+    subscription = settle(UserSubscription.objects.filter(user=user).first())
     local = bool(getattr(settings, 'LOCAL_DEVELOPMENT_PRO', False)) and subscription is None
     now = timezone.now()
     plan = subscription.plan if subscription else 'pro' if local else 'free'
-    active = subscription.active and subscription.valid_until > now if subscription else True
-    expiry = subscription.valid_until if subscription and subscription.valid_until > now else now + timedelta(minutes=5)
+    paid = subscription is not None and plan == 'pro'
+    active = (subscription.active and subscription.valid_until > now) if paid else True
+    # valid_until is how long this permission answer may be trusted; period_end is the billing date.
+    expiry = subscription.valid_until if paid and subscription.valid_until > now else now + timedelta(minutes=5)
     if local:
         expiry = now + timedelta(days=1)
     return {'schema_version': 'subscription-v1', 'owner_id': str(user.pk), 'plan': plan,
             'active': bool(active), 'features': ['compare', 'comparison_pdf'] if plan == 'pro' and active else [],
             'valid_until': expiry.isoformat(), 'grant_origin': 'local-development' if local else 'subscription',
-            'notice': 'Acceso Pro académico local, sin compra ni pago.' if local else None}
+            'notice': 'Acceso Pro académico local, sin compra ni pago.' if local else None,
+            'period_start': subscription.period_start.isoformat() if paid and subscription.period_start else None,
+            'period_end': subscription.valid_until.isoformat() if paid else None,
+            'auto_renew': bool(subscription.auto_renew) if paid else False,
+            'cancelled_at': subscription.cancelled_at.isoformat() if paid and subscription.cancelled_at else None,
+            'price': str(PRO_PRICE) if paid else None, 'currency': CURRENCY if paid else None}
 
 
 def require_pro(user):
