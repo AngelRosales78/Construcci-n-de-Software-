@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 export default function AuthHeader({ mode }) {
   return <>
     <div className="auth-header">
-      <span className="auth-logo" aria-hidden="true"><svg width="32" height="32" viewBox="0 0 36 36"><path d="m5 26 10-11 7 6 9-13m-9 0h9v9" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" /></svg></span>
-      <h1>S&amp;P 500 Finance</h1>
-      <p>Exploración de empresas e información financiera</p>
+      <p className="editorial-kicker">{mode === 'login' ? 'CONTINÚA TU INVESTIGACIÓN' : 'UN ESPACIO PARA TU CRITERIO'}</p>
+      <h1>{mode === 'login' ? 'Bienvenido a tu cuaderno.' : 'Comienza tu lectura.'}</h1>
+      <p>{mode === 'login' ? 'Ingresa a tu cuenta para explorar empresas y retomar tus análisis.' : 'Crea tu cuenta y organiza las empresas que quieres conocer mejor.'}</p>
     </div>
     <nav className="auth-tabs" aria-label="Acceso a la plataforma">
       <Link to="/login" aria-current={mode === 'login' ? 'page' : undefined}>Iniciar sesión</Link>

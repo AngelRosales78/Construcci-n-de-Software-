@@ -13,18 +13,18 @@ export default function AltmanZGauge({ score, zone }) {
   }
   const displayedValue = Math.min(5, Math.max(0, score))
   const getZoneColor = (z) => {
-    if (z === 'safe') return '#22c55e'
-    if (z === 'grey') return '#eab308'
-    if (z === 'distress') return '#ef4444'
+    if (z === 'safe') return '#8ec19d'
+    if (z === 'grey') return '#e4c480'
+    if (z === 'distress') return '#e29a80'
     return '#6b7280'
   }
 
   const color = getZoneColor(zone)
 
   const data = [
-    { name: 'Peligro', value: 1.81, color: '#ff6262' },
-    { name: 'Zona gris', value: 1.18, color: '#ffb95f' },
-    { name: 'Zona segura', value: 2.01, color: '#00e676' },
+    { name: 'Peligro', value: 1.81, color: '#c47a61' },
+    { name: 'Zona gris', value: 1.18, color: '#d5b575' },
+    { name: 'Zona segura', value: 2.01, color: '#72a986' },
   ]
   const angle = Math.PI * (1 - displayedValue / 5)
   const needle = { x: 100 + 68 * Math.cos(angle), y: 100 - 68 * Math.sin(angle) }

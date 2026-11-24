@@ -1,0 +1,135 @@
+const fs = require('node:fs')
+const path = require('node:path')
+const assert = require('node:assert/strict')
+const repo = path.resolve(__dirname, '..')
+const { chromium } = require(require.resolve('playwright', { paths: [path.join(repo, 'frontend')] }))
+const web = process.env.WEB_URL || 'http://127.0.0.1:55193'
+const output = path.resolve(repo, '../output/web_editorial')
+
+;(async () => {
+  fs.mkdirSync(output, { recursive: true })
+  const accounts = JSON.parse(fs.readFileSync(path.resolve(repo, '../presentation_runtime_sprint3/demo_credentials.json'), 'utf8').replace(/^\uFEFF/, ''))
+  const browser = await chromium.launch({ channel: 'msedge', headless: true })
+  const checks = [], contrast = [], errors = [], remoteFonts = []
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
+    page.on('pageerror', error => errors.push(error.message))
+    page.on('request', request => { if (/fonts\.(googleapis|gstatic)\.com/.test(request.url())) remoteFonts.push(request.url()) })
+    async function capture(name) {
+      await page.evaluate(() => document.fonts.ready)
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false, 'Desbordamiento: ' + name)
+      await page.screenshot({ path: path.join(output, name + '.png'), fullPage: true })
+    }
+    async function checkContrast(selector, label) {
+      const result = await page.locator(selector).first().evaluate(element => {
+        const rgb = value => value.match(/[\d.]+/g).map(Number)
+        const luminance = color => {
+          const channels = color.slice(0, 3).map(v => { const s = v / 255; return s <= .04045 ? s / 12.92 : ((s + .055) / 1.055) ** 2.4 })
+          return channels[0] * .2126 + channels[1] * .7152 + channels[2] * .0722
+        }
+        const layers = []
+        for (let parent = element; parent; parent = parent.parentElement) layers.push(rgb(getComputedStyle(parent).backgroundColor))
+        let background = [255, 255, 255]
+        for (const layer of layers.reverse()) {
+          const alpha = layer[3] ?? 1
+          background = background.map((channel, i) => layer[i] * alpha + channel * (1 - alpha))
+        }
+        const color = rgb(getComputedStyle(element).color)
+        const light = luminance(color), dark = luminance(background)
+        return { ratio: (Math.max(light, dark) + .05) / (Math.min(light, dark) + .05), foreground: color, background }
+      })
+      contrast.push({ label, ...result })
+      assert.ok(result.ratio >= 4.5, label + ': contraste ' + result.ratio.toFixed(2))
+    }
+    await page.goto(web + '/login')
+    await page.evaluate(() => Promise.all([
+      document.fonts.load('500 32px Newsreader'), document.fonts.load('italic 400 32px Newsreader'), document.fonts.load('500 14px Manrope'),
+    ]))
+    const fonts = await page.evaluate(() => [...document.fonts].filter(font => font.status === 'loaded').map(font => font.family + '/' + font.style))
+    assert.ok(fonts.some(font => font.includes('Manrope/normal')))
+    assert.ok(fonts.some(font => font.includes('Newsreader/normal')))
+    assert.ok(fonts.some(font => font.includes('Newsreader/italic')))
+    await checkContrast('.auth-header h1', 'Título de acceso')
+    await checkContrast('.auth-header>p:last-child', 'Descripción de acceso')
+    await checkContrast('.btn-primary', 'Botón de acceso')
+    await capture('01-acceso')
+    await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
+    await page.getByRole('alert').first().waitFor()
+    await checkContrast('.error-text', 'Validación de campos')
+    for (const [route, name] of [['/register', '02-registro'], ['/forgot-password', '03-recuperacion'], ['/reset-password/revision/visual', '04-nueva-contrasena']]) {
+      await page.goto(web + route)
+      await capture(name)
+    }
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto(web + '/login'); await capture('05-acceso-estrecho')
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.locator('#username').fill(accounts.pro.username)
+    await page.locator('#password').fill(accounts.pro.password)
+    await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
+    await page.waitForURL('**/dashboard')
+    await checkContrast('.editorial-cover h1', 'Titular de portada')
+    await checkContrast('.editorial-cover .section-description', 'Texto de portada')
+    await checkContrast('.editorial-cover .primary-action', 'Acción principal')
+    await checkContrast('.workspace-sidebar nav>a[aria-current]', 'Navegación activa')
+    await checkContrast('.workspace-header .notification-bell', 'Campana de avisos')
+    await capture('06-portada')
+    await page.goto(web + '/search')
+    await page.locator('.company-card').first().waitFor()
+    await page.locator('.company-card-wrapper>.favorite-button:not([disabled])').first().waitFor()
+    await checkContrast('.company-card .metric-label', 'Etiqueta del catálogo')
+    await capture('07-catalogo')
+    for (const width of [1024, 390]) {
+      await page.setViewportSize({ width, height: 1000 })
+      await capture('08-catalogo-' + width)
+    }
+    const toggle = page.locator('.navigation-toggle')
+    const originalOverflow = await page.evaluate(() => document.body.style.overflow)
+    await toggle.click()
+    const links = page.locator('#primary-sidebar a[href]')
+    assert.equal(await links.first().evaluate(element => element === document.activeElement), true)
+    await page.keyboard.press('Shift+Tab')
+    assert.equal(await links.last().evaluate(element => element === document.activeElement), true)
+    await page.keyboard.press('Tab')
+    assert.equal(await links.first().evaluate(element => element === document.activeElement), true)
+    await page.keyboard.press('Escape')
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'false')
+    assert.equal(await toggle.evaluate(element => element === document.activeElement), true)
+    assert.equal(await page.evaluate(() => document.body.style.overflow), originalOverflow)
+    await toggle.click()
+    await page.getByRole('link', { name: 'Inicio', exact: true }).click()
+    await page.waitForURL('**/dashboard')
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'false')
+    await capture('09-portada-estrecha')
+    await toggle.click()
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    assert.equal(await toggle.getAttribute('aria-expanded'), 'false')
+    assert.equal(await page.evaluate(() => document.body.style.overflow), originalOverflow)
+    checks.push('El menú contiene el foco, cierra con Escape, devuelve el foco y restaura el desplazamiento; cambiar de ruta o ampliar la ventana lo cierra.')
+    await page.goto(web + '/company/MSFT')
+    await page.locator('.metric-explanation').first().waitFor()
+    await page.locator('.highcharts-series').first().waitFor()
+    await checkContrast('.metric-explanation', 'Definición de indicador')
+    await checkContrast('.financial-health strong', 'Estado financiero favorable')
+    await checkContrast('.gauge-note', 'Nota de escala Altman-Z')
+    await capture('10-ficha')
+    await page.getByRole('button', { name: 'Salud financiera', exact: true }).click()
+    await page.locator('.pillar-radar-notes a').first().waitFor()
+    await checkContrast('.pillar-radar-notes a', 'Enlace sobre panel oscuro')
+    await checkContrast('.pillar-muted', 'Contexto sobre panel oscuro')
+    await capture('11-salud-financiera')
+    await page.goto(web + '/profile')
+    await page.getByRole('button', { name: 'Guardar perfil' }).waitFor()
+    await page.getByRole('button', { name: 'Solicitar eliminación' }).click()
+    await page.getByRole('dialog').waitFor()
+    await capture('12-dialogo-cuenta')
+    await page.getByRole('button', { name: 'Volver', exact: true }).click()
+    checks.push('Acceso, registro, recuperación, catálogo, portada, ficha y diálogo revisados sin enviar correos ni modificar cuentas.')
+    checks.push('Las tres fuentes se cargan localmente; no hay solicitudes a Google Fonts.')
+    checks.push('Sin desbordamiento general en 1440, 1024 y 390 píxeles en las vistas comprobadas.')
+    assert.deepEqual(errors, [])
+    assert.deepEqual(remoteFonts, [])
+    fs.writeFileSync(path.join(output, 'resultado.json'), JSON.stringify({ verified_at: new Date().toISOString(), checks, fonts, contrast, page_errors: errors, external_font_requests: remoteFonts, android_changed: false }, null, 2))
+    checks.forEach(check => process.stdout.write(check + '\n'))
+    process.stdout.write(contrast.length + ' comprobaciones de contraste de texto cumplen 4,5:1.\n')
+  } finally { await browser.close() }
+})().catch(error => { process.stderr.write(error.stack + '\n'); process.exitCode = 1 })

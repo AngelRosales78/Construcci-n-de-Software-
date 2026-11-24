@@ -84,7 +84,7 @@ it('conserva la URL ante un fallo y reintenta sin cambiar empresas', async () =>
 
 it('no sustituye un año inválido ni acepta datos de otra selección', async () => {
   mount('/compare?a=AAA&b=BBB&fiscal_year=3000')
-  await screen.findByText('Plan Pro activo · Acceso verificado por el servidor')
+  await screen.findByText('Plan Pro activo · Comparación disponible')
   expect((await screen.findByRole('alert')).textContent).toContain('fechas futuras')
   expect(api.get.mock.calls.some(([url]) => url.startsWith('/compare/'))).toBe(false)
   api.get.mockImplementation(url => Promise.resolve(url === '/user/subscription/' ? access('pro') : payload('WRONG', 'BBB')))

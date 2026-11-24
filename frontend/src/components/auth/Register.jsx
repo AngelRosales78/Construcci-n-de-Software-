@@ -2,13 +2,13 @@ import PasswordInput from './PasswordInput'
 import { useRegisterViewModel } from '../../viewmodels/useRegisterViewModel'
 import { Link } from 'react-router-dom'
 import AuthHeader from './AuthHeader'
+import AuthLayout from './AuthLayout'
 
 
 export default function Register() {
   const { register, handleSubmit, errors, isSubmitting, error, loading, onSubmit } = useRegisterViewModel()
   return (
-    <div className="auth-container">
-      <div className="auth-card auth-card--large">
+    <AuthLayout large>
         <AuthHeader mode="register" />
 
         {error && <div className="auth-error" role="alert">{error}</div>}
@@ -129,7 +129,6 @@ export default function Register() {
           <span>¿Ya tienes una cuenta? </span>
           <Link to="/login">Iniciar sesión</Link>
         </div>
-      </div>
-    </div>
+    </AuthLayout>
   )
 }

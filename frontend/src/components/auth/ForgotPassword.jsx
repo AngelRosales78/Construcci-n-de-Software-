@@ -1,11 +1,11 @@
 import { useForgotPasswordViewModel } from '../../viewmodels/useForgotPasswordViewModel'
+import AuthLayout from './AuthLayout'
 
 
 export default function ForgotPassword() {
   const { register, handleSubmit, errors, isSubmitting, error, success, loading, onSubmit, navigate } = useForgotPasswordViewModel()
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <AuthLayout>
         <div className="auth-header">
           <h1>Restablecer contraseña</h1>
           <p>Ingresa el correo asociado a tu cuenta para solicitar un enlace</p>
@@ -42,7 +42,6 @@ export default function ForgotPassword() {
           <span>¿Recuerdas tu contraseña? </span>
           <a href="/login">Iniciar sesión</a>
         </div>
-      </div>
-    </div>
+    </AuthLayout>
   )
 }

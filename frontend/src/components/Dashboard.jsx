@@ -1,17 +1,28 @@
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import WorkspaceLayout from './layout/WorkspaceLayout'
 import RecentCompanies from './RecentCompanies'
 
 export default function Dashboard() {
   const navigate = useNavigate()
   return <WorkspaceLayout>
-    <section className="welcome-dashboard">
-      <p className="section-eyebrow">TU ESPACIO DE ANÁLISIS</p>
-      <h1>Conoce la empresa.<br />Entiende sus números.</h1>
-      <p className="section-description">Explora el S&amp;P 500 y consulta indicadores financieros y precios históricos en un solo lugar.</p>
-      <button className="primary-action" onClick={() => navigate('/search')}>Buscar empresas y consultar fichas <span aria-hidden="true">→</span></button>
-      <div className="welcome-chart" aria-hidden="true"><svg viewBox="0 0 520 210"><path d="M0 185H520M0 135H520M0 85H520M0 35H520" stroke="#d9e5df" strokeWidth="1" /><path d="M20 170L65 148L110 155L155 122L200 137L245 96L290 109L335 67L380 78L425 42L485 20" fill="none" stroke="#158569" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" /></svg><span>Una lectura más clara de los datos</span></div>
+    <div className="desk-masthead"><span>EL CUADERNO</span><p>Empresas. Balances. Perspectiva.</p><span>INVESTIGACIÓN FINANCIERA</span></div>
+    <section className="welcome-dashboard editorial-cover">
+      <div className="cover-story">
+        <p className="section-eyebrow">EL PUNTO DE PARTIDA</p>
+        <h1>El criterio empieza<br /><em>por los datos.</em></h1>
+        <p className="section-description">Un espacio para leer empresas con profundidad. Consulta sus indicadores, encuentra sus fuentes y pon cada cifra en contexto.</p>
+        <button className="primary-action" onClick={() => navigate('/search')}>Buscar empresas y consultar fichas <span aria-hidden="true">↗</span></button>
+        <p className="cover-footnote">Datos históricos. Fuentes identificadas. Lecturas propias.</p>
+      </div>
+      <aside className="cover-index" aria-label="Rutas de análisis">
+        <div className="cover-index-heading"><span>EN TU MESA</span><span aria-hidden="true">↙</span></div>
+        <Link to="/search"><span className="index-number">01</span><span><strong>El universo de empresas</strong><small>Explora por nombre, símbolo o sector.</small></span><span aria-hidden="true">↗</span></Link>
+        <Link to="/company/MSFT?section=pillars"><span className="index-number">02</span><span><strong>Una lectura del balance</strong><small>Abre los cinco pilares de Microsoft.</small></span><span aria-hidden="true">↗</span></Link>
+        <Link to="/compare"><span className="index-number">03</span><span><strong>Dos perspectivas</strong><small>Prepara una comparación. Herramienta Pro.</small></span><span aria-hidden="true">↗</span></Link>
+        <p>Una cifra cobra sentido cuando conoces de dónde viene.</p>
+      </aside>
     </section>
+    <div className="reading-route-heading"><p className="section-eyebrow">UN MÉTODO PARA EXPLORAR</p><span>Del símbolo al contexto</span></div>
     <div className="onboarding-grid">
       <article><span className="step-number">01</span><h2>Encuentra una empresa</h2><p>Busca por nombre o símbolo, filtra por sector y ordena los resultados.</p></article>
       <article><span className="step-number">02</span><h2>Lee sus indicadores</h2><p>Consulta PER, ROE, capitalización, beta y dividendo, junto con su fuente y fecha.</p></article>

@@ -1,24 +1,22 @@
 import PasswordInput from './PasswordInput'
 import { Link } from 'react-router-dom'
 import { useResetPasswordViewModel } from '../../viewmodels/useResetPasswordViewModel'
+import AuthLayout from './AuthLayout'
 
 
 export default function ResetPassword() {
   const { register, handleSubmit, errors, isSubmitting, error, success, loading, token, uid, onSubmit, navigate } = useResetPasswordViewModel()
   if (!token || !uid) {
     return (
-      <div className="auth-container">
-        <div className="auth-card">
+      <AuthLayout>
           <h1>Enlace Inválido</h1>
           <p>El enlace de restablecimiento no es válido o ha expirado.</p>
-        </div>
-      </div>
+      </AuthLayout>
     )
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <AuthLayout>
         <div className="auth-header">
           <h1>Nueva Contraseña</h1>
           <p>Ingresa tu nueva contraseña</p>
@@ -68,7 +66,6 @@ export default function ResetPassword() {
           </form>
         )}
         {!success && <div className="auth-footer"><Link to="/forgot-password">Solicitar otro enlace</Link><span> · </span><Link to="/login">Volver al acceso</Link></div>}
-      </div>
-    </div>
+    </AuthLayout>
   )
 }

@@ -2,13 +2,13 @@ import PasswordInput from './PasswordInput'
 import { useLoginViewModel } from '../../viewmodels/useLoginViewModel'
 import { Link } from 'react-router-dom'
 import AuthHeader from './AuthHeader'
+import AuthLayout from './AuthLayout'
 
 
 export default function Login() {
   const { register, handleSubmit, errors, isSubmitting, error, loading, onSubmit } = useLoginViewModel()
   return (
-    <div className="auth-container">
-      <div className="auth-card">
+    <AuthLayout>
         <AuthHeader mode="login" />
 
         {error && <div className="auth-error" role="alert">{error}</div>}
@@ -56,7 +56,6 @@ export default function Login() {
           <span> | </span>
           <Link to="/register">Crear cuenta</Link>
         </div>
-      </div>
-    </div>
+    </AuthLayout>
   )
 }
