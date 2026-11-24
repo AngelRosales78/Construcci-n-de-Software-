@@ -18,6 +18,8 @@ import javax.inject.Inject
 interface ComparisonDataSource {
     suspend fun search(query: String): Resource<List<CompanyItem>>
     suspend fun compare(a: String, b: String, fiscalYear: Int): Resource<ComparisonResponse>
+    suspend fun candidates(a: String, fiscalYear: Int): Resource<com.example.sp500auth.data.api.models.CompareCandidates> =
+        Resource.Error("Sugerencias no disponibles.")
 }
 
 class ComparisonRepository internal constructor(retrofit: Retrofit, private val accessToken: () -> String?) : ComparisonDataSource {
@@ -61,6 +63,21 @@ class ComparisonRepository internal constructor(retrofit: Retrofit, private val 
             Resource.Error("No se pudo conectar con el servidor. Conservamos tu selección; puedes reintentar.")
         } catch (_: Exception) {
             Resource.Error("La respuesta del comparador no se pudo interpretar.")
+        }
+    }
+
+    override suspend fun candidates(a: String, fiscalYear: Int): Resource<com.example.sp500auth.data.api.models.CompareCandidates> {
+        if (!validTicker(a) || fiscalYear !in 2000..2100) return Resource.Error("Empresa o ejercicio no válidos.")
+        val token = accessToken() ?: return Resource.Error("Inicia sesión para ver sugerencias.")
+        return when (val result = remoteCall { comparison.candidates(a, fiscalYear, "Bearer $token") }) {
+            is Resource.Success -> {
+                val body = result.successData
+                if (body.schema_version != "compare-candidates-v1" || body.a != a || body.fiscal_year != fiscalYear ||
+                    body.results.orEmpty().any { it.ticker == a || it.comparable_pillars == null })
+                    Resource.Error("Las sugerencias no corresponden a la empresa y ejercicio elegidos.")
+                else result
+            }
+            else -> result
         }
     }
 

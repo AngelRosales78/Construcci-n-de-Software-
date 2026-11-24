@@ -34,7 +34,37 @@ class ComparisonViewModel internal constructor(
     var year by mutableStateOf(saved.get<String>("year") ?: (LocalDate.now().year - 1).toString()); private set
     var result by mutableStateOf<Resource<ComparisonResponse>>(Resource.Empty()); private set
     private var comparisonJob: Job? = null
+
+    /** Companies with the same fiscal dates as the selected one, ranked by comparable pillars. */
+    var candidates by mutableStateOf<Resource<com.example.sp500auth.data.api.models.CompareCandidates>>(Resource.Empty()); private set
+    private var candidatesKey: String? = null
+    private var candidatesJob: Job? = null
+    /** The company the suggestions are computed for: A, or B when only B is chosen. */
+    val anchor: String get() = when { validTicker(selection.a) -> selection.a; validTicker(selection.b) -> selection.b; else -> "" }
+
+    fun loadCandidates(force: Boolean = false) {
+        val fiscalYear = year.toIntOrNull(); val ticker = anchor
+        if (ticker.isBlank() || fiscalYear == null || fiscalYear !in 2000..2100) {
+            candidatesJob?.cancel(); candidatesKey = null; candidates = Resource.Empty(); return
+        }
+        val key = "$ticker/$fiscalYear"
+        if (!force && key == candidatesKey && candidates !is Resource.Error) return
+        candidatesKey = key; candidatesJob?.cancel(); candidates = Resource.Loading()
+        candidatesJob = viewModelScope.launch {
+            val value = source.candidates(ticker, fiscalYear)
+            coroutineContext.ensureActive()
+            if (candidatesKey == key) candidates = value
+        }
+    }
+
+    /** Puts a suggested company in the slot that is not the anchor. */
+    fun selectCandidate(candidate: com.example.sp500auth.data.api.models.CompareCandidate) {
+        val slot = if (anchor == selection.a) CompanySlot.B else CompanySlot.A
+        select(slot, CompanyItem(ticker = candidate.ticker, name = candidate.name))
+    }
     private val jobs = mutableMapOf<CompanySlot, Job>()
+
+    init { loadCandidates() }
 
     fun initialize(ticker: String) {
         if (saved.get<Boolean>("initial_applied") == true) return
@@ -77,11 +107,13 @@ class ComparisonViewModel internal constructor(
         selection = value; selectionError = null
         saved["a"] = value.a; saved["aName"] = value.aName
         saved["b"] = value.b; saved["bName"] = value.bName
+        loadCandidates()
     }
 
     fun changeYear(value: String) {
         clearResult()
         year = value.take(4); saved["year"] = year
+        loadCandidates()
     }
 
     private fun clearResult() {

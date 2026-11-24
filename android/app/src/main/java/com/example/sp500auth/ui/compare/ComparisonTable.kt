@@ -1,6 +1,8 @@
 package com.example.sp500auth.ui.compare
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
@@ -10,6 +12,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,42 +30,30 @@ fun ComparisonTable(data: ComparisonResponse) {
     val b = right?.ticker ?: "Empresa B"
     val leftPeriod = periodText(left)
     val rightPeriod = periodText(right)
-    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Cinco pilares lado a lado", style = MaterialTheme.typography.titleLarge)
-        Text("FY${data.fiscal_year ?: "—"} · Notas sobre 100", style = MaterialTheme.typography.labelMedium)
-        if (leftPeriod == rightPeriod) {
-            Text(leftPeriod, style = MaterialTheme.typography.bodySmall)
-        } else {
-            Text("$a · $leftPeriod", style = MaterialTheme.typography.bodySmall)
-            Text("$b · $rightPeriod", style = MaterialTheme.typography.bodySmall)
+    val winsA = rows.count { it.higher == "a" }
+    val winsB = rows.count { it.higher == "b" }
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text("Cinco pilares lado a lado", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text("FY${data.fiscal_year ?: "—"} · Notas sobre 100", style = MaterialTheme.typography.labelMedium, color = CompareMuted)
+            if (leftPeriod == rightPeriod) Text(leftPeriod, style = MaterialTheme.typography.bodySmall, color = CompareMuted)
+            else {
+                Text("$a · $leftPeriod", style = MaterialTheme.typography.bodySmall, color = CompareMuted)
+                Text("$b · $rightPeriod", style = MaterialTheme.typography.bodySmall, color = CompareMuted)
+            }
         }
         data.reason?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.tertiary) }
 
-        Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = ComparePanel)) {
-            Column {
-                Surface(color = MaterialTheme.colorScheme.surfaceVariant) {
-                    Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text("Pilar", Modifier.weight(1.5f), style = MaterialTheme.typography.labelLarge)
-                        Text("A · $a", Modifier.weight(1f), textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.labelLarge)
-                        Text("B · $b", Modifier.weight(1f), textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.labelLarge)
-                    }
+        Scoreboard(a, b, winsA, winsB, rows.size)
+
+        Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = ComparePanel), shape = RoundedCornerShape(18.dp)) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    LegendDot(CompareGreen, "A · $a"); LegendDot(CompareBlue, "B · $b")
                 }
-                rows.forEach { row ->
-                    HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-                    Row(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp),
-                        verticalAlignment = Alignment.CenterVertically) {
-                        Column(Modifier.weight(1.5f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(row.label, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                            Text(pillarOutcome(row, a, b), style = MaterialTheme.typography.bodySmall,
-                                color = if (row.higher != null) CompareGreen else MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        PillarCell(row.aValue, row.higher == "a", Modifier.weight(1f))
-                        PillarCell(row.bValue, row.higher == "b", Modifier.weight(1f))
-                    }
+                rows.forEachIndexed { index, row ->
+                    if (index > 0) HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .4f))
+                    PillarBars(row, a, b)
                 }
             }
         }
@@ -101,12 +93,78 @@ private fun pillarOutcome(row: ComparisonRow, a: String, b: String): String {
     else "$winner +${lead.toPlainString().replace('.', ',')} pts"
 }
 
+internal fun scoreValue(text: String): Float? =
+    text.removeSuffix(" / 100").trim().replace(',', '.').toFloatOrNull()?.takeIf { it.isFinite() }?.coerceIn(0f, 100f)
+
 @Composable
-private fun PillarCell(value: String, leading: Boolean, modifier: Modifier) {
-    Text(value.removeSuffix(" / 100"), modifier, textAlign = TextAlign.Center,
-        style = if (value == "No disponible") MaterialTheme.typography.bodySmall else MaterialTheme.typography.titleSmall,
-        color = if (leading) CompareGreen else MaterialTheme.colorScheme.onSurface,
-        fontWeight = if (leading) FontWeight.Bold else FontWeight.Normal)
+private fun Scoreboard(a: String, b: String, winsA: Int, winsB: Int, total: Int) {
+    val headline = when {
+        winsA > winsB -> "$a lidera $winsA de $total pilares"
+        winsB > winsA -> "$b lidera $winsB de $total pilares"
+        winsA == 0 -> "Sin un líder claro en los pilares"
+        else -> "Empate: $winsA pilares para cada una"
+    }
+    Card(Modifier.fillMaxWidth(), shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = ComparePanel)) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ScoreSide(a, winsA, CompareGreen, winsA > winsB, Modifier.weight(1f))
+                Text("vs", color = CompareMuted, style = MaterialTheme.typography.titleMedium)
+                ScoreSide(b, winsB, CompareBlue, winsB > winsA, Modifier.weight(1f))
+            }
+            if (winsA + winsB > 0) Row(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(50))) {
+                if (winsA > 0) Box(Modifier.weight(winsA.toFloat()).fillMaxHeight().background(CompareGreen))
+                if (winsB > 0) Box(Modifier.weight(winsB.toFloat()).fillMaxHeight().background(CompareBlue))
+            }
+            Text(headline, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        }
+    }
+}
+
+@Composable
+private fun ScoreSide(ticker: String, wins: Int, color: Color, leading: Boolean, modifier: Modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        com.example.sp500auth.ui.common.CompanyLogo(ticker, size = 40.dp, accent = color)
+        Text(ticker, color = color, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text("$wins", style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold,
+            color = if (leading) color else MaterialTheme.colorScheme.onSurface)
+        Text(if (wins == 1) "pilar ganado" else "pilares ganados", style = MaterialTheme.typography.labelSmall, color = CompareMuted)
+    }
+}
+
+@Composable
+private fun LegendDot(color: Color, label: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(10.dp).background(color, CircleShape)); Spacer(Modifier.width(6.dp))
+        Text(label, style = MaterialTheme.typography.labelLarge)
+    }
+}
+
+@Composable
+private fun PillarBars(row: ComparisonRow, a: String, b: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(row.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+            Text(pillarOutcome(row, a, b), style = MaterialTheme.typography.labelMedium,
+                color = when (row.higher) { "a" -> CompareGreen; "b" -> CompareBlue; else -> CompareMuted })
+        }
+        ScoreBar(row.aValue, CompareGreen, row.higher == "a")
+        ScoreBar(row.bValue, CompareBlue, row.higher == "b")
+    }
+}
+
+@Composable
+private fun ScoreBar(text: String, color: Color, leading: Boolean) {
+    val value = scoreValue(text)
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        Box(Modifier.weight(1f).height(10.dp).clip(RoundedCornerShape(50)).background(Color(0xFF2A3036))) {
+            if (value != null) Box(Modifier.fillMaxWidth(value / 100f).fillMaxHeight().clip(RoundedCornerShape(50))
+                .background(if (leading) color else color.copy(alpha = .55f)))
+        }
+        Text(if (value == null) "Sin dato" else text.removeSuffix(" / 100"), modifier = Modifier.widthIn(min = 52.dp), textAlign = TextAlign.End,
+            style = MaterialTheme.typography.labelLarge, fontWeight = if (leading) FontWeight.Bold else FontWeight.Normal,
+            color = if (value == null) CompareMuted else if (leading) color else MaterialTheme.colorScheme.onSurface)
+    }
 }
 
 @Composable

@@ -15,9 +15,10 @@ fun HistoryComparisonSection(a: String, b: String, vm: HistoryComparisonViewMode
     LaunchedEffect(a, b) { vm.load(a, b) }
     if (!validTicker(a) || !validTicker(b) || a == b) return
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text("Comparar evolución del precio", style = MaterialTheme.typography.titleLarge)
+        SectionHeader("Rendimiento del precio", "Evolución porcentual de ambas acciones en el mismo periodo")
         LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            items(historyRanges) { period -> FilterChip(selected = vm.range == period, onClick = { vm.load(a, b, period) }, label = { Text(period) }) }
+            items(historyRanges) { period -> FilterChip(selected = vm.range == period, onClick = { vm.load(a, b, period) }, label = { Text(period) },
+                colors = FilterChipDefaults.filterChipColors(selectedContainerColor = CompareGreen.copy(alpha = .18f), selectedLabelColor = CompareGreen)) }
         }
         when (val state = if (vm.a == a && vm.b == b) vm.state else Resource.Empty()) {
             is Resource.Loading -> LinearProgressIndicator(Modifier.fillMaxWidth())

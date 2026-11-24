@@ -41,7 +41,7 @@ class ComparisonTableUiTest {
         compose.onNodeWithText("A · AAPL").assertExists()
         compose.onNodeWithText("B · MSFT").assertExists()
         compose.onAllNodesWithText("No comparable").assertCountEquals(5)
-        compose.onAllNodesWithText("No disponible").assertCountEquals(10)
+        compose.onAllNodesWithText("Sin dato").assertCountEquals(10)
         compose.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsProperties.HorizontalScrollAxisRange))
             .assertCountEquals(0)
         compose.onNodeWithText("Fuentes de AAPL").assertDoesNotExist()

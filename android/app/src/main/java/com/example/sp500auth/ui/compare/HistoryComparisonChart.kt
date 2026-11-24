@@ -1,7 +1,7 @@
 package com.example.sp500auth.ui.compare
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -28,21 +28,21 @@ fun HistoryComparisonChart(data: AlignedHistory) {
     if (data.points.size < 2) { Text("No hay suficientes fechas comunes."); return }
     var index by rememberSaveable(data.a, data.b, data.range, data.points.first().date, data.points.last().date, data.points.size) { mutableStateOf(data.points.lastIndex) }
     val selected = data.points[index.coerceIn(0, data.points.lastIndex)]
-    val colorA = CompareGreen; val colorB = Color(0xFF60CDF9)
+    val colorA = CompareGreen; val colorB = CompareBlue
     val low = minOf(0.0, data.points.minOf { minOf(it.a, it.b) })
     val high = maxOf(0.0, data.points.maxOf { maxOf(it.a, it.b) }).let { if (it == low) it + 1 else it }
-    Card(colors = CardDefaults.cardColors(containerColor = ComparePanel)) {
+    Card(colors = CardDefaults.cardColors(containerColor = ComparePanel), shape = androidx.compose.foundation.shape.RoundedCornerShape(18.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Rendimiento histórico comparado", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            Text("A · ${data.a}: línea continua", color = colorA)
-            Text("B · ${data.b}: línea discontinua", color = colorB)
-            Text("${data.points.first().date} a ${data.points.last().date} · ${data.points.size} fechas comunes")
-            Text("Ambas series parten de 0 %. Variación = (precio / precio inicial − 1) × 100.", style = MaterialTheme.typography.bodySmall)
-            Text("Escala: ${number(low)} % a ${number(high)} %", style = MaterialTheme.typography.labelSmall)
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Text("A · ${data.a} (continua)", color = colorA, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+                Text("B · ${data.b} (discontinua)", color = colorB, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+            }
+            Text("${data.points.first().date} a ${data.points.last().date} · ${data.points.size} fechas comunes · ambas parten de 0 %",
+                style = MaterialTheme.typography.bodySmall, color = CompareMuted)
             Canvas(Modifier.fillMaxWidth().height(220.dp)
                 .semantics { contentDescription = "Rendimiento de ${data.a} y ${data.b}, rango ${data.range}. Toca o arrastra para consultar una fecha; también puedes usar Anterior y Siguiente." }
                 .pointerInput(data) { detectTapGestures { position -> index = nearestHistoryIndex(data.points, (position.x - 12.dp.toPx()) / (size.width - 24.dp.toPx()).coerceAtLeast(1f)) } }
-                .pointerInput(data, "drag") { detectDragGestures { change, _ -> change.consume(); index = nearestHistoryIndex(data.points, (change.position.x - 12.dp.toPx()) / (size.width - 24.dp.toPx()).coerceAtLeast(1f)) } }) {
+                .pointerInput(data, "drag") { detectHorizontalDragGestures { change, _ -> change.consume(); index = nearestHistoryIndex(data.points, (change.position.x - 12.dp.toPx()) / (size.width - 24.dp.toPx()).coerceAtLeast(1f)) } }) {
                 val inset = 12.dp.toPx(); val width = (size.width - 2 * inset).coerceAtLeast(1f); val height = size.height - 2 * inset
                 fun x(point: ReturnPoint) = inset + ((point.epochDay - data.points.first().epochDay).toDouble() / (data.points.last().epochDay - data.points.first().epochDay) * width).toFloat()
                 fun y(value: Double) = inset + height - ((value - low) / (high - low) * height).toFloat()
@@ -55,17 +55,34 @@ fun HistoryComparisonChart(data: AlignedHistory) {
                 drawCircle(colorA, 4.dp.toPx(), Offset(x(selected), y(selected.a)))
                 drawCircle(colorB, 4.dp.toPx(), Offset(x(selected), y(selected.b)))
             }
-            Text("Fecha consultada: ${selected.date}", fontWeight = FontWeight.Bold)
-            Text("${data.a}: ${number(selected.a)} % · Cierre ajustado ${number(selected.aPrice)} ${data.currenciesA.joinToString().ifBlank { "Moneda no informada" }}")
-            Text("${data.b}: ${number(selected.b)} % · Cierre ajustado ${number(selected.bPrice)} ${data.currenciesB.joinToString().ifBlank { "Moneda no informada" }}")
+            Text("Escala: ${number(low)} % a ${number(high)} % · toca o arrastra para consultar una fecha", style = MaterialTheme.typography.labelSmall, color = CompareMuted)
+            Text("Fecha consultada: ${selected.date}", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelLarge)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                ReturnTile(data.a, selected.a, selected.aPrice, data.currenciesA, colorA, Modifier.weight(1f))
+                ReturnTile(data.b, selected.b, selected.bPrice, data.currenciesB, colorB, Modifier.weight(1f))
+            }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedButton(onClick = { index-- }, enabled = index > 0) { Text("Anterior") }
-                OutlinedButton(onClick = { index++ }, enabled = index < data.points.lastIndex) { Text("Siguiente") }
+                OutlinedButton(onClick = { index-- }, enabled = index > 0, modifier = Modifier.weight(1f)) { Text("Anterior") }
+                OutlinedButton(onClick = { index++ }, enabled = index < data.points.lastIndex, modifier = Modifier.weight(1f)) { Text("Siguiente") }
             }
             data.warnings.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
-            Text("Normalización de visualización realizada en Android con cierres del servidor.", style = MaterialTheme.typography.labelSmall)
+            Text("Variación = (precio / precio inicial − 1) × 100, calculada en Android con cierres ajustados del servidor.",
+                style = MaterialTheme.typography.labelSmall, color = CompareMuted)
             data.sourcesA.forEach { SourceLink(it, "Fuente ${data.a}") }
             data.sourcesB.forEach { SourceLink(it, "Fuente ${data.b}") }
+        }
+    }
+}
+
+@Composable
+private fun ReturnTile(ticker: String, change: Double, price: Double, currencies: List<String>, color: Color, modifier: Modifier) {
+    Surface(modifier, color = color.copy(alpha = .10f), shape = androidx.compose.foundation.shape.RoundedCornerShape(14.dp)) {
+        Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(ticker, color = color, fontWeight = FontWeight.Bold)
+            Text("${if (change > 0) "+" else ""}${number(change)} %", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold,
+                color = if (change >= 0) CompareGreen else Color(0xFFFF8F8F))
+            Text("Cierre ${number(price)} ${currencies.joinToString().ifBlank { "Moneda no informada" }}",
+                style = MaterialTheme.typography.labelSmall, color = CompareMuted)
         }
     }
 }

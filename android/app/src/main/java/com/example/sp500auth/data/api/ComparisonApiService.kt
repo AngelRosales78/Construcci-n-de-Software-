@@ -10,4 +10,8 @@ interface ComparisonApiService {
     @GET("compare/")
     suspend fun compare(@Query("a") a: String, @Query("b") b: String,
         @Query("fiscal_year") fiscalYear: Int, @Header("Authorization") authorization: String): Response<ComparisonResponse>
+
+    @GET("compare/candidates/")
+    suspend fun candidates(@Query("a") a: String, @Query("fiscal_year") fiscalYear: Int,
+        @Header("Authorization") authorization: String): Response<com.example.sp500auth.data.api.models.CompareCandidates>
 }
