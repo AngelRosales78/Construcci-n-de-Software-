@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
+from api.catalog_services import PILOT_TICKERS, invalidate_catalog
 from api.models import Company
 
 SECTORS = {
@@ -43,5 +44,12 @@ class Command(BaseCommand):
             raise CommandError(str(exc)) from exc
         with transaction.atomic():
             for ticker, name, sector in entries:
-                Company.objects.update_or_create(ticker=ticker, defaults={'name': name, 'sector': sector})
+                company, created = Company.objects.select_for_update().get_or_create(ticker=ticker,
+                    defaults={'name': name, 'sector': sector, 'is_pilot': ticker in PILOT_TICKERS})
+                if not created:
+                    company.name = name
+                    if not company.sector_overridden:
+                        company.sector = sector
+                    company.save(update_fields=['name', 'sector'])
+            invalidate_catalog()
         self.stdout.write(self.style.SUCCESS(f'Se importaron {len(entries)} símbolos sin sustituir balances.'))

@@ -10,6 +10,8 @@ from django.db import models
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 import uuid
+from django.utils import timezone
+from .monitoring_models import AITariff, AIUsage, ProviderBudget, BudgetWindow, SystemErrorLog
 from django.contrib.postgres.indexes import GinIndex
 from django.contrib.postgres.search import SearchVector
 from django.utils.translation import gettext_lazy as _
@@ -40,6 +42,9 @@ class User(AbstractUser):
         default='retail'
     )
     is_verified = models.BooleanField(_('email verified'), default=False)
+    # HU13: cambia al bloquear o cambiar de rol; invalida los tokens anteriores.
+    session_version = models.PositiveBigIntegerField(default=0)
+    blocked_reason = models.CharField(max_length=240, blank=True, default='')
     last_login_ip = models.GenericIPAddressField(_('last login IP'), blank=True, null=True)
     created_at = models.DateTimeField(_('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(_('updated at'), auto_now=True)
@@ -85,6 +90,16 @@ class Company(models.Model):
     market_cap = models.DecimalField(_('market cap'), max_digits=20, decimal_places=2, null=True, blank=True)
     per = models.DecimalField(_('PER'), max_digits=10, decimal_places=2, null=True, blank=True)
     roe = models.DecimalField(_('ROE'), max_digits=10, decimal_places=2, null=True, blank=True)
+
+    # HU14: catálogo administrativo.
+    is_active = models.BooleanField(default=True, db_index=True)
+    is_pilot = models.BooleanField(default=False, db_index=True)
+    description = models.TextField(max_length=3000, blank=True, default='')
+    website_url = models.URLField(max_length=500, blank=True, default='')
+    sector_overridden = models.BooleanField(default=False)
+    is_index_member = models.BooleanField(default=True)
+    identity_source_url = models.URLField(max_length=500, blank=True, default='')
+    identity_verified_at = models.DateTimeField(null=True, blank=True)
 
     working_capital = models.DecimalField(_('working capital'), max_digits=20, decimal_places=2, default=0)
     total_assets = models.DecimalField(_('total assets'), max_digits=20, decimal_places=2, default=0)
@@ -249,12 +264,15 @@ class UserSubscription(models.Model):
     auto_renew = models.BooleanField(default=True)
     cancelled_at = models.DateTimeField(null=True, blank=True)
     cancel_reason = models.CharField(max_length=200, blank=True, default='')
+    # HU13_02: Pro asignado por un administrador; no tiene importe, vencimiento ni renovación.
+    granted = models.BooleanField(default=False)
 
 
 class Invoice(models.Model):
     """HU11_03: receipt of a simulated payment. Card data is never stored beyond brand and last four digits."""
     KIND_CHOICES = [('purchase', 'Compra'), ('renewal', 'Renovación')]
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='invoices')
+    # HU13_05: el comprobante simulado se conserva sin cuenta al eliminarla.
+    user = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='invoices')
     number = models.CharField(max_length=32, unique=True)
     transaction_id = models.CharField(max_length=40, unique=True)
     request_id = models.CharField(max_length=64)
@@ -304,3 +322,132 @@ class ReportJob(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'request_id'], name='report_user_request')]
+
+
+# Sprint 4: equivalentes locales de los modelos de la rama magallanes-sprint4.
+
+class UserAvatar(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='avatar')
+    url = models.CharField(max_length=250, default='/api/v1/auth/profile/avatar/')
+    content = models.BinaryField()
+    sha256 = models.CharField(max_length=64)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class AdministrationEvent(models.Model):
+    actor = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='administration_actions')
+    subject = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='administration_events')
+    action = models.CharField(max_length=40)
+    changes = models.JSONField(default=dict)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+class CatalogRevision(models.Model):
+    """Versión compartida por procesos para no reutilizar búsquedas desactualizadas."""
+    revision = models.PositiveBigIntegerField(default=0)
+
+
+class ProviderDailyUsage(models.Model):
+    provider = models.CharField(max_length=30)
+    day = models.DateField()
+    calls = models.PositiveIntegerField(default=0)
+    limit = models.PositiveIntegerField()
+    last_called_at = models.DateTimeField(null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['provider', 'day'], name='provider_day_unique')]
+
+
+class MarketDataOperation(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    actor = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    request_id = models.UUIDField()
+    company = models.ForeignKey(Company, null=True, on_delete=models.SET_NULL, related_name='market_updates')
+    ticker = models.CharField(max_length=10)
+    kind = models.CharField(max_length=10, choices=[('verify', 'Verificar'), ('refresh', 'Actualizar')])
+    sector = models.CharField(max_length=50, blank=True)
+    status = models.CharField(max_length=12, default='running')
+    started_at = models.DateTimeField(auto_now_add=True)
+    finished_at = models.DateTimeField(null=True)
+    error_code = models.CharField(max_length=40, blank=True)
+    message = models.CharField(max_length=350, blank=True)
+    result = models.JSONField(default=dict)
+    source_url = models.URLField(max_length=500, blank=True)
+    response_sha256 = models.CharField(max_length=64, blank=True)
+    raw_response = models.BinaryField(null=True)
+
+    class Meta:
+        ordering = ['-started_at', '-id']
+        constraints = [
+            models.UniqueConstraint(fields=['actor', 'request_id'], name='market_actor_request_unique'),
+            models.UniqueConstraint(fields=['ticker'], condition=models.Q(status='running'), name='one_running_market_ticker'),
+        ]
+
+
+class NotificationPreferences(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='notification_preferences')
+    rating_changes = models.BooleanField(default=True)
+    web_enabled = models.BooleanField(default=True)
+    email_enabled = models.BooleanField(default=False)
+    push_enabled = models.BooleanField(default=False)
+    version = models.PositiveBigIntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class CompanyRatingState(models.Model):
+    company = models.OneToOneField(Company, on_delete=models.CASCADE)
+    last_valid = models.JSONField(default=dict)
+    revision = models.PositiveBigIntegerField(default=0)
+
+
+class RatingChangeEvent(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    revision = models.PositiveBigIntegerField()
+    before = models.JSONField()
+    after = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    processed_at = models.DateTimeField(null=True)
+    is_demo = models.BooleanField(default=False)
+    favorite_through_id = models.PositiveBigIntegerField(null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['company', 'revision', 'is_demo'], name='rating_company_revision_unique')]
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(RatingChangeEvent, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True)
+    web_visible = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['-created_at', '-id']
+        constraints = [models.UniqueConstraint(fields=['user', 'event'], name='notification_user_event_unique')]
+        indexes = [models.Index(fields=['user', '-id'], name='notification_user_id_idx')]
+
+
+class PushInstallation(models.Model):
+    installation_id = models.UUIDField(unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='push_installations')
+    token = models.TextField(unique=True)
+    active = models.BooleanField(default=True)
+    permission_granted = models.BooleanField(default=True)
+    session_id = models.CharField(max_length=64, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+
+class NotificationDelivery(models.Model):
+    notification = models.ForeignKey(Notification, on_delete=models.CASCADE, related_name='deliveries')
+    channel = models.CharField(max_length=8)
+    installation = models.ForeignKey(PushInstallation, null=True, on_delete=models.CASCADE)
+    status = models.CharField(max_length=12, default='pending')
+    attempts = models.PositiveSmallIntegerField(default=0)
+    next_attempt = models.DateTimeField(default=timezone.now)
+    lease_until = models.DateTimeField(null=True)
+    sent_at = models.DateTimeField(null=True)
+    error_code = models.CharField(max_length=40, blank=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['notification', 'channel', 'installation'], name='notification_channel_device_unique'),
+                       models.UniqueConstraint(fields=['notification', 'channel'], condition=models.Q(channel='email'), name='notification_email_unique')]

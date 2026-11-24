@@ -2,8 +2,9 @@
 from .settings import *
 
 ANDROID_PROJECT_NAME = BASE_DIR.name
-DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': config('ANDROID_DATABASE_PATH', default=str(BASE_DIR / 'android-local.sqlite3'))}}
+DATABASES = {'default': {'ENGINE': 'config.sqlite_immediate',
+    'NAME': config('ANDROID_DATABASE_PATH', default=str(BASE_DIR / 'android-local.sqlite3')),
+    'OPTIONS': {'timeout': 20}}}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Pro now comes from the simulated payment (Epic 11). ANDROID_LOCAL_PRO=true restores the old
 # implicit academic grant for accounts without a subscription. Production never grants it.

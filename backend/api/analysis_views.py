@@ -67,7 +67,12 @@ class CompanyAnalysisView(generics.GenericAPIView):
         company = get_object_or_404(Company, ticker=ticker.upper())
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        report = optional_local_ai(company_report(company, serializer.validated_data['fiscal_year'], serializer.validated_data['level']))
+        from .monitoring_services import usage_owner
+        owner = usage_owner.set(request.user.pk)
+        try:
+            report = optional_local_ai(company_report(company, serializer.validated_data['fiscal_year'], serializer.validated_data['level']))
+        finally:
+            usage_owner.reset(owner)
         from .comparison_views import save_analysis
         save_analysis(request.user, report)
         return Response(report)

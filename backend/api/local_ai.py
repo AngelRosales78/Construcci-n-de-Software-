@@ -3,10 +3,12 @@ import json
 import logging
 import hashlib
 from django.core.cache import cache
-import os
 import re
+import time
 from decouple import config
+from django.utils import timezone
 from urllib.request import Request, urlopen
+from .monitoring_services import BudgetExceeded, record_ai, reserve_call
 
 logger = logging.getLogger(__name__)
 
@@ -25,6 +27,19 @@ IDS = {
     'efficiency': {'asset_turnover', 'inventory_days'},
     'growth': {'revenue_growth', 'revenue_cagr_3y'},
 }
+
+def observed_call(url, body):
+    """HU15_01 y HU15_03: cada llamada real consume presupuesto y queda contada; la caché no."""
+    reserve_call('local_ai')
+    started, clock, result = timezone.now(), time.monotonic(), None
+    try:
+        with urlopen(Request(url, data=body, headers={'Content-Type':'application/json'}),timeout=120) as response:
+            result = json.loads(response.read(100_000))
+        return result
+    finally:
+        done = isinstance(result, dict) and result.get('done') is True and result.get('done_reason') != 'length'
+        record_ai(started, time.monotonic()-clock, 'success' if done else 'error', result if isinstance(result, dict) else None)
+
 
 def optional_local_ai(report):
     model = config('LOCAL_AI_MODEL', default='').strip()
@@ -52,8 +67,7 @@ def optional_local_ai(report):
                 body = json.dumps({'model':model,'stream':False,'format':schema,
                     'options':{'temperature':0,'num_predict':180,'num_ctx':2048},
                     'messages':[{'role':'system','content':'Eres un editor en español. Parafrasea fielmente sin agregar información.'}, {'role':'user','content':prompt}]}).encode()
-                with urlopen(Request(url, data=body, headers={'Content-Type':'application/json'}),timeout=120) as response:
-                    result = json.loads(response.read(100_000))
+                result = observed_call(url, body)
                 if result.get('done') is not True or result.get('done_reason') == 'length':
                     raise ValueError('Incomplete response')
                 value = json.loads(result['message']['content'])['explanation']
@@ -75,6 +89,8 @@ def optional_local_ai(report):
         report['generation_notice'] = ('Explicaciones conceptuales generadas con IA local. Los indicadores numéricos se adjuntan desde el servidor. '
                                        'La comprobación automática de estructura y cifras no certifica la interpretación; requiere revisión humana.')
         report['validation']['scope'] = 'estructura, referencias y cifras del bloque de indicadores; no interpretación semántica'
+    except BudgetExceeded:
+        report['generation_notice'] = ('Se alcanzó el presupuesto interno de llamadas a la IA de hoy. Se muestra el informe basado en reglas, sin IA.')
     except (OSError, ValueError, KeyError, TypeError) as exc:
         logger.warning('IA local no disponible o respuesta rechazada: %s', str(exc) if isinstance(exc, ValueError) else type(exc).__name__)
         report['generation_notice'] = ('No se obtuvo una respuesta de IA local compatible. Se muestra el informe basado en reglas, sin IA.')

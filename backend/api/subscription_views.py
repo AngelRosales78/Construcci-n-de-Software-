@@ -62,8 +62,9 @@ def simulate_payment(request):
     if number == DECLINED_TEST_CARD:
         fail('Pago rechazado por el emisor (simulación). Prueba con otra tarjeta.')
     subscription = settle(UserSubscription.objects.filter(user=request.user).first())
-    if subscription and subscription.plan == 'pro' and subscription.active and subscription.valid_until > timezone.now():
-        fail('Tu plan Pro ya está activo. Podrás contratarlo de nuevo cuando termine el periodo actual.')
+    if subscription and subscription.plan == 'pro' and subscription.active and (subscription.granted or subscription.valid_until > timezone.now()):
+        fail('Tu plan Pro fue asignado por un administrador; no necesitas comprarlo.' if subscription.granted else
+             'Tu plan Pro ya está activo. Podrás contratarlo de nuevo cuando termine el periodo actual.')
     invoice, _ = purchase(request.user, request_id, number)
     return Response({'schema_version': 'payment-v1', 'owner_id': str(request.user.pk),
                      'invoice': invoice_payload(invoice), 'subscription': access_info(request.user)},
@@ -92,6 +93,8 @@ def cancel_subscription(request):
     subscription = settle(UserSubscription.objects.filter(user=request.user).first())
     if not subscription or subscription.plan != 'pro' or not subscription.active:
         fail('No tienes una suscripción Pro activa.')
+    if subscription.granted:
+        fail('Tu plan Pro fue asignado por un administrador; no hay una renovación que cancelar.')
     if subscription.auto_renew:
         subscription.auto_renew = False
         subscription.cancelled_at = timezone.now()

@@ -7,6 +7,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.db import transaction
+from django.db.models import Q
 from django.utils import timezone
 
 from .models import Invoice, UserSubscription
@@ -121,7 +122,7 @@ def purchase(user, request_id, number):
     end = now + timedelta(days=PERIOD_DAYS)
     UserSubscription.objects.update_or_create(user=user, defaults={
         'plan': 'pro', 'active': True, 'period_start': now, 'valid_until': end,
-        'auto_renew': True, 'cancelled_at': None, 'cancel_reason': ''})
+        'auto_renew': True, 'cancelled_at': None, 'cancel_reason': '', 'granted': False})
     invoice = _new_invoice(user, request_id, 'purchase', now, end, card_brand(number), number[-4:])
     transaction.on_commit(lambda: send_receipt(invoice))
     return invoice, True
@@ -129,14 +130,14 @@ def purchase(user, request_id, number):
 
 def settle(subscription):
     """Apply simulated renewals or the end of a cancelled period before reading the subscription."""
-    if subscription is None or subscription.plan != 'pro':
+    if subscription is None or subscription.plan != 'pro' or subscription.granted:
         return subscription
     now = timezone.now()
     if subscription.valid_until > now:
         return subscription
     with transaction.atomic():
         current = UserSubscription.objects.select_for_update().get(pk=subscription.pk)
-        if current.plan == 'pro' and current.valid_until <= now:
+        if current.plan == 'pro' and not current.granted and current.valid_until <= now:
             if current.auto_renew and current.active:
                 while current.valid_until <= now:
                     start, end = current.valid_until, current.valid_until + timedelta(days=PERIOD_DAYS)
@@ -146,3 +147,20 @@ def settle(subscription):
                 current.plan, current.active = 'free', False
             current.save()
     return current
+
+
+def assign_plan(user, plan):
+    """HU13_02: administrative assignment. It never creates a charge, a receipt or a renewal."""
+    UserSubscription.objects.update_or_create(user=user, defaults={
+        'plan': plan, 'active': True, 'granted': plan == 'pro', 'period_start': None, 'valid_until': timezone.now(),
+        'auto_renew': False, 'cancelled_at': None, 'cancel_reason': ''})
+
+
+def pro_filter(now=None):
+    """Same rule as access_info, for lists: paid and current, renewable, or assigned by an administrator."""
+    current = (Q(usersubscription__valid_until__gt=now or timezone.now()) | Q(usersubscription__auto_renew=True)
+               | Q(usersubscription__granted=True))
+    rule = Q(usersubscription__plan='pro', usersubscription__active=True) & current
+    if getattr(settings, 'LOCAL_DEVELOPMENT_PRO', False):
+        rule |= Q(usersubscription__isnull=True)
+    return rule

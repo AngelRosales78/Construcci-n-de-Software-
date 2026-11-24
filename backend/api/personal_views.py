@@ -22,9 +22,10 @@ class Conflict(APIException):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def service_health(request):
-    return Response({'schema_version': 'android-services-v1', 'sprint': 3,
+    return Response({'schema_version': 'android-services-v1', 'sprint': 4,
                      'project': getattr(settings, 'ANDROID_PROJECT_NAME', None),
-                     'services': ['favorites', 'tags', 'recent', 'compare', 'conclusion', 'subscription', 'reports', 'payments']})
+                     'services': ['favorites', 'tags', 'recent', 'compare', 'conclusion', 'subscription', 'reports', 'payments',
+                                  'users', 'catalog', 'notifications', 'monitoring']})
 
 
 def favorite_row(row):

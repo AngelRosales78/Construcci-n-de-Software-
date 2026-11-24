@@ -316,7 +316,12 @@ class LogoutView(generics.GenericAPIView):
             if bearer.startswith('Bearer '):
                 blacklist_token(bearer.split(' ', 1)[1])
 
-            logger.info(f"User {request.user.username} logged out successfully.")
+            from .models import PushInstallation
+            installations = PushInstallation.objects.filter(user=request.user)
+            if token.get('sid'):
+                installations = installations.filter(session_id=str(token['sid']))
+            installations.update(active=False)
+            logger.info('User session closed successfully.')
 
             return Response(
                 {'message': 'Logout successful. Session has been invalidated.'},
@@ -352,6 +357,9 @@ class CustomTokenRefreshView(TokenRefreshView):
             token = RefreshToken(refresh_token)
             if token.get('sid') and get_redis_connection().exists(f"blacklist:session:{token['sid']}"):
                 return Response({'error': 'Session has been invalidated.'}, status=401)
+            user = User.objects.filter(pk=token.get('user_id')).first()
+            if not user or not user.is_active or token.get('sv', 0) != user.session_version:
+                return Response({'error': 'La sesión fue revocada. Inicia sesión nuevamente.'}, status=401)
             # Blacklist old refresh token
             blacklist_token(refresh_token)
 
@@ -452,8 +460,9 @@ class CompanySearchView(generics.ListAPIView):
         import json
         from redis.exceptions import RedisError
         from .redis_utils import get_redis_connection
+        from .catalog_services import catalog_revision
         identity = json.dumps([request.user.pk, request.build_absolute_uri('/') ,
-                               sorted(request.query_params.items())], ensure_ascii=False)
+                               sorted(request.query_params.items()), catalog_revision()], ensure_ascii=False)
         key = 'sp500:search:' + hashlib.sha256(identity.encode()).hexdigest()
         from django.core.cache import caches
         local = caches['search_results']
@@ -493,7 +502,7 @@ class CompanySearchView(generics.ListAPIView):
         if len(query) > 200:
             raise ValidationError({'q': 'La búsqueda admite hasta 200 caracteres.'})
 
-        queryset = Company.objects.only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
+        queryset = Company.objects.filter(is_active=True).only('id', 'ticker', 'name', 'sector', 'market_cap', 'per', 'roe', 'logo_url')
         ready = self.request.query_params.get('ready', 'false').lower()
         if ready not in ('true', 'false'):
             raise ValidationError({'ready': 'Indique true o false.'})
@@ -675,6 +684,9 @@ def company_financial_data(company):
     result = {
         'id': company.pk, 'ticker': company.ticker, 'name': company.name,
         'sector': company.sector, 'sector_display': company.get_sector_display(),
+        'is_active': company.is_active, 'description': company.description, 'website_url': company.website_url,
+        'is_index_member': company.is_index_member, 'identity_source_url': company.identity_source_url,
+        'identity_verified_at': company.identity_verified_at,
         'logo_url': company.logo_url, 'altman_z': score, 'profile': financial_profile(score),
         'as_of': metrics.as_of if metrics else None,
         'source': metrics.source if metrics else 'Datos heredados sin verificar',
@@ -756,4 +768,7 @@ class CompanyAutocompleteView(generics.GenericAPIView):
             suggestions = autocomplete(prefix)
         except RedisError:
             return Response({'error': 'El autocompletado no está disponible.'}, status=503)
-        return Response({'suggestions': suggestions})
+        # Una caché antigua nunca vuelve a publicar una empresa desactivada.
+        active = set(Company.objects.filter(is_active=True,
+            ticker__in=[item['ticker'] for item in suggestions]).values_list('ticker', flat=True))
+        return Response({'suggestions': [item for item in suggestions if item['ticker'] in active]})

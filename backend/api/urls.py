@@ -22,10 +22,39 @@ from . import personal_views
 from . import comparison_views
 from . import report_views
 from . import subscription_views
+from .user_management import AdminUsersView, AdminUserView, UserAvatarView, DeleteOwnAccountView
+from .catalog_views import AdminCompaniesView, AdminCompanyView
+from .market_views import RefreshCompanyView, VerifyCompanyView, MarketOperationView
+from .notification_views import NotificationsView, MarkNotificationsReadView, NotificationPreferencesView
+from .push_views import PushInstallationsView
+from .monitoring_views import AIUsageView, TariffView, PlanDistributionView, BudgetView, MonthlyRevenueView, ErrorLogsView
 
 app_name = 'auth'
 
 urlpatterns = [
+    # Sprint 4: mismo contrato que la API de la rama magallanes-sprint4.
+    path('user/push-installations/', PushInstallationsView.as_view()),
+    path('user/push-installations/<uuid:installation_id>/', PushInstallationsView.as_view()),
+    path('user/notification-preferences/', NotificationPreferencesView.as_view()),
+    path('notifications/', NotificationsView.as_view()),
+    path('notifications/mark-read/', MarkNotificationsReadView.as_view()),
+    path('admin/monitoring/ai/', AIUsageView.as_view()),
+    path('admin/monitoring/ai/tariffs/', TariffView.as_view()),
+    path('admin/monitoring/plans/', PlanDistributionView.as_view()),
+    path('admin/monitoring/budgets/', BudgetView.as_view()),
+    path('admin/monitoring/budgets/<str:provider>/', BudgetView.as_view()),
+    path('admin/monitoring/subscriptions/', MonthlyRevenueView.as_view()),
+    path('admin/monitoring/errors/', ErrorLogsView.as_view()),
+    path('admin/monitoring/errors/<int:log_id>/', ErrorLogsView.as_view()),
+    path('admin/companies/', AdminCompaniesView.as_view()),
+    path('admin/companies/verify/', VerifyCompanyView.as_view()),
+    path('admin/companies/<int:company_id>/', AdminCompanyView.as_view()),
+    path('admin/companies/<int:company_id>/refresh/', RefreshCompanyView.as_view()),
+    path('admin/market-operations/<uuid:operation_id>/', MarketOperationView.as_view()),
+    path('admin/users/', AdminUsersView.as_view()),
+    path('admin/users/<int:user_id>/', AdminUserView.as_view()),
+    path('auth/profile/avatar/', UserAvatarView.as_view()),
+    path('auth/account/', DeleteOwnAccountView.as_view()),
     path('health/', personal_views.service_health),
     path('reports/jobs/', report_views.submit_report),
     path('reports/jobs/<uuid:pk>/', report_views.report_status),

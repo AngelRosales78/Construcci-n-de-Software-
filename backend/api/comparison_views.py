@@ -20,20 +20,22 @@ def access_info(user):
     now = timezone.now()
     plan = subscription.plan if subscription else 'pro' if local else 'free'
     paid = subscription is not None and plan == 'pro'
-    active = (subscription.active and subscription.valid_until > now) if paid else True
+    granted = paid and subscription.granted
+    active = (subscription.active and (granted or subscription.valid_until > now)) if paid else True
     # valid_until is how long this permission answer may be trusted; period_end is the billing date.
-    expiry = subscription.valid_until if paid and subscription.valid_until > now else now + timedelta(minutes=5)
+    expiry = subscription.valid_until if paid and not granted and subscription.valid_until > now else now + timedelta(minutes=5)
     if local:
         expiry = now + timedelta(days=1)
     return {'schema_version': 'subscription-v1', 'owner_id': str(user.pk), 'plan': plan,
             'active': bool(active), 'features': ['compare', 'comparison_pdf'] if plan == 'pro' and active else [],
-            'valid_until': expiry.isoformat(), 'grant_origin': 'local-development' if local else 'subscription',
-            'notice': 'Acceso Pro académico local, sin compra ni pago.' if local else None,
+            'valid_until': expiry.isoformat(), 'grant_origin': 'local-development' if local else 'administrator' if granted else 'subscription',
+            'notice': 'Acceso Pro académico local, sin compra ni pago.' if local else
+                      'Acceso Pro asignado por un administrador, sin compra ni vencimiento.' if granted else None,
             'period_start': subscription.period_start.isoformat() if paid and subscription.period_start else None,
-            'period_end': subscription.valid_until.isoformat() if paid else None,
-            'auto_renew': bool(subscription.auto_renew) if paid else False,
+            'period_end': subscription.valid_until.isoformat() if paid and not granted else None,
+            'auto_renew': bool(subscription.auto_renew) if paid and not granted else False,
             'cancelled_at': subscription.cancelled_at.isoformat() if paid and subscription.cancelled_at else None,
-            'price': str(PRO_PRICE) if paid else None, 'currency': CURRENCY if paid else None}
+            'price': str(PRO_PRICE) if paid and not granted else None, 'currency': CURRENCY if paid and not granted else None}
 
 
 def require_pro(user):
@@ -202,8 +204,9 @@ def candidates_data(ticker, year, limit=500):
     scores = _period_scores(year, statement.period_start, statement.period_end)
     own = scores.get(company.ticker, {})
     results = []
+    inactive = set(Company.objects.filter(is_active=False).values_list('ticker', flat=True))
     for other, info in scores.items():
-        if other == company.ticker or info['methodology'] != own.get('methodology') or info['scoring_policy'] != own.get('scoring_policy'):
+        if other == company.ticker or other in inactive or info['methodology'] != own.get('methodology') or info['scoring_policy'] != own.get('scoring_policy'):
             continue
         shared = [p for p, version in own.get('scores', {}).items() if info['scores'].get(p) == version]
         if shared:

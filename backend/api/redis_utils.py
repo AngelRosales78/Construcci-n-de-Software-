@@ -157,7 +157,7 @@ def get_autocomplete_suggestions(prefix, limit=10):
             return json.loads(cached)
 
         from .models import Company
-        companies = Company.objects.filter(
+        companies = Company.objects.filter(is_active=True).filter(
             models.Q(name__icontains=prefix) | models.Q(ticker__icontains=prefix)
         ).order_by('-market_cap')[:limit]
 

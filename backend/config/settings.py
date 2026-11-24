@@ -4,6 +4,7 @@ from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+TIME_ZONE = config('TIME_ZONE', default='America/Lima')
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-sprint1-dev-key-change-in-production')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = ['*']
@@ -56,8 +57,9 @@ if not USE_POSTGRES:
     DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DIR / 'db.sqlite3'}}
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'api.observability.exception_handler',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'api.authentication.SessionJWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -126,6 +128,12 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@example.test')
+# Sprint 4: avisos y precios. Los canales externos quedan desactivados sin configuración propia.
+FCM_CREDENTIALS_FILE = config('FCM_CREDENTIALS_FILE', default='')
+NOTIFICATION_EMAIL_ENABLED = config('NOTIFICATION_EMAIL_ENABLED', default=False, cast=bool)
+NOTIFICATION_ALLOWED_RECIPIENTS = [value.strip().lower() for value in config('NOTIFICATION_ALLOWED_RECIPIENTS', default='').split(',') if value.strip()]
+MARKET_DATA_DAILY_LIMIT = config('MARKET_DATA_DAILY_LIMIT', default=100, cast=int)
+MARKET_DATA_MIN_INTERVAL = config('MARKET_DATA_MIN_INTERVAL', default=1.0, cast=float)
 FRONTEND_URL = config('FRONTEND_URL', default='http://localhost:5173').rstrip('/')
 
 CORS_ALLOWED_ORIGINS = [

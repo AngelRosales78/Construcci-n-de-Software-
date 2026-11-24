@@ -91,6 +91,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['sid'] = token['jti']
+        token['sv'] = user.session_version
         return token
 
     def validate(self, attrs):
@@ -105,6 +106,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'is_verified': self.user.is_verified,
             'role': 'admin' if self.user.is_staff or self.user.is_superuser else 'user',
         }
+        profile = UserProfileSerializer(self.user).data
+        data['user'].update(avatar_url=profile['avatar_url'], avatar_version=profile['avatar_version'])
         data['message'] = _('Login successful.')
         return data
 
@@ -160,6 +163,38 @@ class UserProfileSerializer(serializers.ModelSerializer):
     Serializer for user profile retrieval and update.
     """
     role = serializers.SerializerMethodField()
+    avatar = serializers.FileField(write_only=True, required=False, allow_null=True)
+    avatar_url = serializers.SerializerMethodField()
+    avatar_version = serializers.SerializerMethodField()
+
+    def get_avatar_url(self, user):
+        avatar = getattr(user, 'avatar', None)
+        return avatar.url if avatar else None
+
+    def get_avatar_version(self, user):
+        avatar = getattr(user, 'avatar', None)
+        return avatar.sha256 if avatar else None
+
+    def validate_avatar(self, value):
+        if value is None:
+            return None
+        from .user_management import prepare_avatar
+        return prepare_avatar(value)
+
+    def update(self, instance, validated_data):
+        from django.db import transaction
+        from .models import UserAvatar
+        import hashlib
+        avatar = validated_data.pop('avatar', serializers.empty)
+        with transaction.atomic():
+            instance = User.objects.select_for_update().get(pk=instance.pk)
+            instance = super().update(instance, validated_data)
+            if avatar is None:
+                UserAvatar.objects.filter(user=instance).delete()
+            elif avatar is not serializers.empty:
+                UserAvatar.objects.update_or_create(user=instance,
+                    defaults={'content': avatar, 'sha256': hashlib.sha256(avatar).hexdigest()})
+        return instance
 
     def get_role(self, user):
         return 'admin' if user.is_staff or user.is_superuser else 'user'
@@ -167,7 +202,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name',
-                  'phone_number', 'user_type', 'is_verified', 'created_at', 'role']
+                  'phone_number', 'user_type', 'is_verified', 'created_at', 'role',
+                  'avatar', 'avatar_url', 'avatar_version']
         read_only_fields = ['id', 'is_verified', 'created_at']
 
     def validate_phone_number(self, value):
