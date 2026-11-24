@@ -3,11 +3,11 @@ import json
 import os
 import re
 from unittest.mock import patch
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.core.cache import cache
 from .local_ai import optional_local_ai, IDS
 
-class LocalAiTests(SimpleTestCase):
+class LocalAiTests(TestCase):
     def setUp(self): cache.clear()
     def tearDown(self): cache.clear()
     def report(self):
