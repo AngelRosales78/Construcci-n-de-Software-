@@ -11,7 +11,7 @@ const displayNote = note => note?.status === 'available' ? `${note.display_value
 export default function ComparisonPage() {
   const vm = useComparisonViewModel()
   return <WorkspaceLayout><div className="comparison-page">
-    <p className="section-eyebrow">COMPARADOR DE EMPRESAS</p><h1>Dos empresas, un mismo ejercicio</h1>
+    <p className="section-eyebrow">COMPARADOR DE EMPRESAS</p><h1>Compara dos empresas</h1>
     <p>Selecciona dos empresas distintas. Las fechas y los datos disponibles determinan qué se puede comparar.</p>
     {vm.accessLoading && <p role="status">Verificando acceso…</p>}
     {vm.accessError && <div role="alert"><p>{vm.accessError}</p><button onClick={vm.refreshAccess}>Reintentar acceso</button></div>}
@@ -35,13 +35,14 @@ export default function ComparisonPage() {
     {vm.error && <div role="alert"><p>{vm.error}</p><button onClick={vm.retry}>Reintentar consulta</button><button onClick={vm.refreshAccess}>Verificar mi plan</button></div>}
     {vm.data && <section aria-label="Resultado de la selección" className="comparison-result">
       <h2>{vm.data.a.ticker} y {vm.data.b.ticker} · FY{vm.data.fiscal_year}</h2>
+      <p className="comparison-coverage"><strong>{vm.data.comparisons.filter(row => row.status === 'available').length} de {vm.data.comparisons.length} pilares comparables</strong><span>Las notas son sobre 100; no indican cuánto ganarás.</span></p>
+      {vm.data.reason && <p className="data-notice" role="status">{vm.data.reason}</p>}
       <div className="comparison-periods">{['a', 'b'].map(side => <div key={side}><h3>{side.toUpperCase()} · {vm.data[side].ticker}</h3>
         <p>{vm.data[side].period_basis === 'provider_normalized' ? `Referencia anual del proveedor: ${vm.data[side].period.end}` : vm.data[side].period?.start && vm.data[side].period?.end ? `${vm.data[side].period.start} → ${vm.data[side].period.end}` : 'Sin balance para este ejercicio'}</p>
         {vm.data[side].period_note && <p>{vm.data[side].period_note}</p>}
         <Link to={`/company/${vm.data[side].ticker}`}>Ver ficha de {vm.data[side].ticker}</Link>
         <p>Ejercicios disponibles: {vm.data[side].available_years.join(', ') || 'ninguno'}</p>
       </div>)}</div>
-      {vm.data.reason && <p className="data-notice" role="status">{vm.data.reason}</p>}
       <p className="comparison-table-hint">Desliza la tabla hacia los lados para ver las dos notas y el resultado.</p>
       <div className="scenario-table" tabIndex="0" role="region" aria-label="Tabla de notas, desplazable horizontalmente"><table><caption>Puntuaciones por pilar · Solo se comparan períodos y versiones compatibles</caption>
         <thead><tr><th scope="col">Pilar</th><th scope="col">{vm.data.a.ticker}</th><th scope="col">{vm.data.b.ticker}</th><th scope="col">Resultado</th></tr></thead>

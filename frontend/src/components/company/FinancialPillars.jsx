@@ -61,7 +61,7 @@ export default function FinancialPillars({ view = 'pillars' }) {
     if (VISIBLE_PILLARS.includes(target)) setActivePillar(target)
   }
   return <section className="financial-pillars" aria-labelledby="financial-pillars-title">
-    <div className="section-title"><h2 id="financial-pillars-title">{view === 'analysis' ? 'Entiende los resultados' : 'Salud financiera'}</h2><span>Balance anual</span></div>
+    <div className="section-title"><h2 id="financial-pillars-title" tabIndex={-1}>{view === 'analysis' ? 'Entiende los resultados' : 'Salud financiera'}</h2><span>Balance anual</span></div>
     {loading && <p role="status">Cargando pilares financieros...</p>}
     {error && <div role="alert"><p>{error}</p><button onClick={retry}>Reintentar pilares</button></div>}
     {!loading && data && <>
@@ -87,7 +87,7 @@ export default function FinancialPillars({ view = 'pillars' }) {
       {data.pillars.filter(pillar => VISIBLE_PILLARS.includes(pillar.id)).map(pillar => <section className="pillar-section" id={`pillar-${pillar.id}`} tabIndex={-1} key={pillar.id} aria-label={`Pilar de ${pillar.label}`}>
         <h3><button className="pillar-toggle" type="button" aria-label={`Mostrar ${pillar.label}`} aria-expanded={activePillar === pillar.id} aria-controls={`detail-${pillar.id}`} onClick={() => setActivePillar(previous => previous === pillar.id ? null : pillar.id)}><span>{pillar.label}</span><small>{pillar.score?.status === 'available' ? `${pillar.score.display_value} / 100` : 'Ver indicadores'} · {activePillar === pillar.id ? '−' : '+'}</small></button></h3>
         <div id={`detail-${pillar.id}`} hidden={activePillar !== pillar.id}>
-        <details className="pillar-concept"><summary>Cómo interpretarlo</summary><p className="pillar-muted">{CONCEPTS[pillar.id]}</p></details>
+        <p className="pillar-concept pillar-meaning">{CONCEPTS[pillar.id]}</p>
         {pillar.score && <p className="pillar-note">Nota académica: {pillar.score.status === 'available' ? `${pillar.score.display_value} / 100` : 'No disponible'}</p>}
         {pillar.sector_reference?.status === 'unavailable' && <details className="pillar-concept"><summary>Referencia sectorial no disponible</summary><p className="pillar-muted">{pillar.sector_reference.explanation}</p></details>}
         <div className="pillar-metrics">{pillar.metrics.map(metric => <PillarMetric key={metric.id} metric={metric} />)}</div>

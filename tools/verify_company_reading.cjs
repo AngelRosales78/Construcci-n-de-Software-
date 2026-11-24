@@ -1,17 +1,99 @@
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const repo=path.resolve(__dirname,'..'),{chromium}=require(require.resolve('playwright',{paths:[path.join(repo,'frontend')]}));
-(async()=>{const out=path.resolve(repo,'../output/reading-design');fs.mkdirSync(out,{recursive:true});const creds=JSON.parse(fs.readFileSync(path.resolve(repo,'../presentation_runtime_sprint3/demo_credentials.json'),'utf8').replace(/^\uFEFF/,'')).free;
-const browser=await chromium.launch({channel:'msedge',headless:true});try{const page=await browser.newPage({viewport:{width:1440,height:1000}});
-await page.goto('http://127.0.0.1:55193/login');await page.locator('#username').fill(creds.username);await page.locator('#password').fill(creds.password);await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click();await page.waitForURL('**/dashboard');
-await page.goto('http://127.0.0.1:55193/company/AAPL');await page.locator('.metric-value').first().waitFor();await page.waitForTimeout(800);
-const desktop=await page.locator('.terminal-fundamentals').boundingBox();const action=await page.getByRole('button',{name:'Entender esta empresa'}).boundingBox();assert.ok(action.y<850,'La acción inicial debe estar en la primera pantalla');assert.ok(desktop.y<1100,'Las cifras deben seguir a la introducción');
-assert.equal(await page.locator('.company-context').evaluate(el=>el.open),false);
-assert.equal(await page.locator('.metric-help').count(),0);
-assert.equal(await page.locator('.metric-meaning').count(),5);
-await page.screenshot({path:path.join(out,'01-resumen-escritorio.png')});
-await page.getByRole('group',{name:'Rango de precios'}).getByRole('button',{name:'1 año',exact:true}).click();await page.waitForTimeout(300);
-await page.getByRole('button',{name:'Salud financiera',exact:true}).click();await page.locator('.provider-period-note').first().waitFor();await page.screenshot({path:path.join(out,'02-salud-financiera.png')});
-await page.getByRole('button',{name:'Resumen',exact:true}).click();await page.getByRole('button',{name:'Entender esta empresa'}).focus();await page.keyboard.press('Enter');await page.getByRole('heading',{name:'1. Conoce el negocio'}).waitFor();await page.getByRole('button',{name:'Ver cifras'}).click();await page.getByRole('heading',{name:'2. Lee las cifras con contexto'}).waitFor();await page.getByRole('button',{name:'Ver riesgos'}).click();await page.getByRole('heading',{name:'3. Reconoce los límites'}).waitFor();await page.getByRole('button',{name:'Cerrar guía'}).click();assert.equal(await page.getByRole('button',{name:'Entender esta empresa'}).evaluate(el=>el===document.activeElement),true);
-for(const width of [390,768]){await page.setViewportSize({width,height:1000});await page.evaluate(()=>window.scrollTo(0,0));assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth),false);assert.equal(await page.locator('.provider-reference-inline').isVisible(),true,'La advertencia debe seguir visible');await page.screenshot({path:path.join(out,'resumen-'+width+'.png')});}
-fs.writeFileSync(path.join(out,'resultado.json'),JSON.stringify({indicators_desktop_y:desktop.y,keyboard_disclosure:true,widths:[1440,768,390],overflow:false},null,2));process.stdout.write('Jerarquía inicial, teclado y tres tamaños comprobados.\n');
-}finally{await browser.close()}})().catch(e=>{process.stderr.write(String(e)+'\n');process.exitCode=1});
+const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict')
+const repo = path.resolve(__dirname, '..')
+const { chromium } = require(require.resolve('playwright', { paths: [path.join(repo, 'frontend')] }))
+const web = 'http://127.0.0.1:55193'
+
+;(async () => {
+  const out = path.resolve(repo, '../output/reading-design')
+  fs.mkdirSync(out, { recursive: true })
+  const creds = JSON.parse(fs.readFileSync(path.resolve(repo, '../presentation_runtime_sprint3/demo_credentials.json'), 'utf8').replace(/^\uFEFF/, '')).free
+  const browser = await chromium.launch({ channel: 'msedge', headless: true })
+  const errors = [], checks = [], sizes = []
+  try {
+    const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } })
+    page.on('pageerror', error => errors.push(error.message))
+    await page.goto(web + '/login')
+    await page.locator('#username').fill(creds.username)
+    await page.locator('#password').fill(creds.password)
+    await page.getByRole('button', { name: 'Iniciar sesión', exact: true }).click()
+    await page.waitForURL('**/dashboard')
+    await page.getByRole('button', { name: 'Explorar empresas', exact: false }).waitFor()
+    await page.goto(web + '/company/AAPL')
+    const overview = page.locator('#company-overview')
+    await overview.locator('.metric-value').first().waitFor()
+    await page.evaluate(() => document.fonts.ready)
+    const actualScore = await overview.locator('.altman-score').textContent()
+    assert.equal(actualScore, '12.7', 'Debe conservar el puntaje real, mayor que diez')
+    assert.equal(await overview.locator('.altman-zone[aria-current]').count(), 1)
+    assert.match(await overview.locator('.altman-zone[aria-current]').innerText(), /Favorable/)
+    assert.equal(await page.locator('.metric-help').count(), 0)
+    assert.equal(await page.locator('.metric-meaning').count(), 5)
+    assert.equal(await page.locator('.company-context').evaluate(el => el.open), false)
+    const metricY = (await page.locator('.terminal-fundamentals').boundingBox()).y
+    const readingY = (await overview.locator('.financial-health').boundingBox()).y
+    assert.ok(readingY < metricY, 'La conclusión debe preceder al detalle')
+    const marketValue = await overview.locator('.metric-card').first().locator('.metric-value').textContent()
+    await page.screenshot({ path: path.join(out, '01-resumen-escritorio.png') })
+    await overview.locator('.financial-health').scrollIntoViewIfNeeded()
+    await page.screenshot({ path: path.join(out, '02-lectura-del-balance.png') })
+    await page.getByRole('group', { name: 'Rango de precios' }).getByRole('button', { name: '1 año', exact: true }).click()
+    await page.getByRole('button', { name: 'Entender esta empresa' }).focus()
+    await page.keyboard.press('Enter')
+    await page.getByRole('heading', { name: '1. Conoce el negocio' }).waitFor()
+    await page.getByRole('button', { name: 'Ver cifras' }).click()
+    await page.getByRole('button', { name: 'Ver riesgos' }).click()
+    await page.getByRole('button', { name: 'Cerrar guía' }).click()
+    assert.equal(await page.getByRole('button', { name: 'Entender esta empresa' }).evaluate(el => el === document.activeElement), true)
+    await page.getByRole('button', { name: 'Entender esta empresa' }).click()
+    await page.getByRole('button', { name: 'Ver cifras' }).click()
+    await page.getByRole('button', { name: 'Ver riesgos' }).click()
+    await page.getByRole('button', { name: 'Explorar salud financiera' }).click()
+    await page.waitForFunction(() => document.activeElement?.id === 'financial-pillars-title')
+    assert.equal(await page.getByRole('button', { name: 'Salud financiera', exact: true }).getAttribute('aria-pressed'), 'true')
+    await page.getByRole('button', { name: 'Resumen', exact: true }).click()
+    await page.getByRole('button', { name: 'Cerrar guía' }).click()
+    for (const width of [1440, 768, 390, 360]) {
+      await page.setViewportSize({ width, height: 844 })
+      await page.evaluate(() => window.scrollTo(0, 0))
+      const action = await page.getByRole('button', { name: 'Entender esta empresa' }).boundingBox()
+      assert.ok(action.y > 65 && action.y + action.height <= 844, 'La acción inicial debe verse completa: ' + width)
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false)
+      assert.equal(await page.locator('.provider-reference-inline').isVisible(), true)
+      assert.equal(await page.locator('.dashboard-title .section-eyebrow').isVisible(), true)
+      sizes.push({ width, action_bottom: action.y + action.height, overflow: false })
+      await page.screenshot({ path: path.join(out, 'resumen-' + width + '.png') })
+      await overview.locator('.financial-health').scrollIntoViewIfNeeded()
+      await page.screenshot({ path: path.join(out, 'balance-' + width + '.png') })
+      assert.equal(await page.locator('.company-sections').evaluate(el => getComputedStyle(el).position), 'static')
+    }
+    checks.push('Guía visible en la primera pantalla a 1440, 768, 390 y 360 px; sin desbordamiento ni pestañas superpuestas.')
+    checks.push('Recorrido con teclado, retorno del foco al cerrar y foco en Salud financiera al continuar.')
+    await page.goto(web + '/search?q=AAPL')
+    const card = page.getByRole('button', { name: 'Ver ficha de Apple Inc.', exact: true })
+    await card.waitFor()
+    assert.equal(await card.locator('.metric-value').first().textContent(), marketValue)
+    assert.equal(await card.locator('.coverage-label').textContent(), '3 de 3 cifras de esta lista')
+    await card.scrollIntoViewIfNeeded()
+    await page.screenshot({ path: path.join(out, '03-explorador-telefono.png') })
+    checks.push('Valor en bolsa y unidades coinciden en el explorador y la ficha.')
+    await page.setViewportSize({ width: 1440, height: 1000 })
+    await page.goto(web + '/company/ABBV')
+    await overview.locator('.financial-health').waitFor()
+    assert.equal(await overview.locator('.altman-score').count(), 0)
+    assert.equal(await overview.locator('.altman-zone[aria-current]').count(), 0)
+    assert.ok(await overview.locator('.metric-unavailable').count())
+    assert.equal(await overview.locator('.altman-zones').count(), 0)
+    await overview.locator('.financial-health').scrollIntoViewIfNeeded()
+    await page.screenshot({ path: path.join(out, '04-datos-pendientes.png') })
+    await page.getByRole('button', { name: 'Ver cifras disponibles' }).click()
+    assert.equal(await page.locator('#company-metrics-title').evaluate(el => el === document.activeElement), true)
+    checks.push('Datos parciales y Altman-Z pendiente conservan motivos concretos y no asignan una zona.')
+    await page.goto(web + '/favorites')
+    await page.getByRole('button', { name: 'Actualizar favoritos', exact: true }).waitFor({ state: 'visible' })
+    await page.waitForFunction(() => !document.querySelector('.favorites-page button')?.disabled)
+    await page.screenshot({ path: path.join(out, '05-favoritos.png') })
+    assert.deepEqual(errors, [])
+    fs.writeFileSync(path.join(out, 'resultado.json'), JSON.stringify({ verified_at: new Date().toISOString(), checks, sizes, page_errors: errors }, null, 2))
+    checks.forEach(check => process.stdout.write(check + '\n'))
+  } finally { await browser.close() }
+})().catch(error => { process.stderr.write(String(error) + '\n'); process.exitCode = 1 })

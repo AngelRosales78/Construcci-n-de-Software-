@@ -11,7 +11,7 @@ export default function FavoritesPage() {
   return <WorkspaceLayout><section className="favorites-page">
     <p className="section-eyebrow">TU LISTA PERSONAL</p><h1>Mis favoritos</h1>
     <p>Guarda empresas desde el explorador o su ficha. Tu lista pertenece a tu cuenta.</p>
-    <p aria-live="polite">{favorites.items.length} empresas guardadas</p>
+    <p aria-live="polite">{favorites.ready || favorites.items.length > 0 ? `${favorites.items.length} ${favorites.items.length === 1 ? 'empresa guardada' : 'empresas guardadas'}` : favorites.loading ? 'Consultando tu lista…' : 'Lista pendiente de consultar'}</p>
     {favorites.lastSynced && <p className="pillar-muted">{favorites.ready ? 'Sincronizado' : 'Copia anterior, pendiente de conexión'}: {new Date(favorites.lastSynced).toLocaleTimeString('es-PE')}</p>}
     <button type="button" onClick={favorites.reload} disabled={favorites.loading}>Actualizar favoritos</button>
     {favorites.message && <p role="status">{favorites.message}</p>}
@@ -19,7 +19,7 @@ export default function FavoritesPage() {
     <TagsPanel items={favorites.items} onFilter={setFilter} />
     {favorites.loading && <p role="status">Consultando favoritos…</p>}
     {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
-    {!favorites.loading && favorites.ready && favorites.items.length === 0 && <p>Aún no guardaste empresas. <Link to="/search">Explorar empresas</Link></p>}
+    {!favorites.loading && favorites.ready && favorites.items.length === 0 && <div className="favorites-empty"><h2>Guarda tu primera empresa</h2><p>Aún no guardaste empresas. Encuentra una y usa «Guardar favorito» para volver a ella después.</p><Link to="/search">Explorar empresas →</Link></div>}
     {favorites.items.length > 0 && <ul className="favorites-list">{favorites.items.filter(item => !filter || filter.has(item.id)).map(item => <li key={item.id}>
       <div><strong>{item.ticker}</strong><span>{item.name}</span></div>
       <Link to={`/company/${encodeURIComponent(item.ticker)}`} state={{ searchReturn: '/favorites' }}>Ver ficha →</Link>

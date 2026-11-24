@@ -47,7 +47,7 @@ it('muestra el logo configurado y conserva métricas con valor cero',()=>{
  render(<MemoryRouter><CompanyList companies={[{ticker:'AAA',name:'Empresa',sector:'technology',sector_display:'Technology',market_cap:0,per:0,roe:0,logo_url:'https://example.test/logo.svg'}]} loading={false}/></MemoryRouter>)
  expect(screen.getByRole('img',{name:'Logo de Empresa'}).getAttribute('src')).toBe('https://example.test/logo.svg')
  expect(screen.getByText('AAA').tagName).toBe('STRONG')
- expect(screen.getByText('0%')).toBeTruthy()
+ expect(screen.getByText('0.00%')).toBeTruthy()
 })
 
 it('presenta sugerencias por nombre y selecciona la primera al usar el teclado', async () => {

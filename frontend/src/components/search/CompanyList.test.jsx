@@ -11,8 +11,9 @@ const show = company => render(<MemoryRouter><CompanyList companies={[{
 test('usa el logo verificado local y mantiene el cero financiero', () => {
   show({ market_cap: 0 })
   expect(screen.getByRole('img').getAttribute('src')).toBe('/company-logos/MSFT.png')
-  expect(screen.getByText('$0.00B')).toBeTruthy()
-  expect(screen.getByText('Indicadores disponibles')).toBeTruthy()
+  expect(screen.getByText('USD 0.00')).toBeTruthy()
+  expect(screen.getByText('1 de 3 cifras de esta lista')).toBeTruthy()
+  expect(screen.getAllByText('Sin datos')).toHaveLength(2)
 })
 
 test('muestra ticker y dato ausente cuando falta el logo o la capitalización', () => {

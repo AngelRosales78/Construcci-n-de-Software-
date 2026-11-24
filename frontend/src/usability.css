@@ -1,0 +1,167 @@
+/* Reading order and legibility for the customer workspace. */
+.workspace-content :is(button, a, summary, input, select):focus-visible {
+  outline: 3px solid #a64f2e;
+  outline-offset: 4px;
+}
+.workspace-content :is(.company-dashboard, .comparison-page, .favorites-page) button {
+  min-height: 44px;
+}
+.workspace-content :is(.section-eyebrow, .coverage-badge, .coverage-label) {
+  font-size: 12px;
+  line-height: 1.5;
+}
+.workspace-content .editorial-cover { padding-block: 32px; gap: 44px; }
+.workspace-content .editorial-cover h1 { font-size: clamp(42px, 5vw, 70px); line-height: 1.05; }
+.workspace-content .editorial-cover .section-description { font-size: 16px; line-height: 1.7; max-width: 51ch; }
+.workspace-content :is(.cover-footnote, .cover-index small, .cover-index-heading, .desk-masthead, .reading-route-heading) { font-size: 12px; }
+.workspace-content .onboarding-grid p { font-size: 14px; line-height: 1.7; }
+.workspace-content .cover-index > a { min-height: 72px; }
+
+/* Compact context leaves room for the first useful action on a phone. */
+.workspace-content .company-dashboard > .dashboard-header {
+  padding: 18px 24px;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.workspace-content .company-dashboard .dashboard-title h1 { font-size: clamp(30px, 3vw, 44px); margin: 4px 0 8px; line-height: 1.1; }
+.workspace-content .company-dashboard .dashboard-title .section-eyebrow { margin: 0; display: block; font-size: 12px; }
+.workspace-content .company-dashboard .dashboard-sector { font-size: 13px; }
+.workspace-content .company-dashboard .terminal-quote small { font-size: 12px; line-height: 1.5; }
+.workspace-content .company-dashboard .terminal-quote strong { font-size: 30px; }
+.workspace-content .company-dashboard .company-first-step .beginner-intro { padding: 22px 24px; margin: 0; gap: 12px 24px; }
+.workspace-content .company-dashboard .beginner-intro h2 { font-size: 28px; margin-block: 6px 10px; }
+.workspace-content .company-dashboard .beginner-intro p { margin-block: 0; line-height: 1.65; }
+.workspace-content .company-dashboard .beginner-intro .primary-action { font-size: 14px; }
+.workspace-content .company-dashboard .dashboard-content { padding-top: 20px; }
+.workspace-content .company-dashboard .company-sections { position: static; gap: 8px; margin-bottom: 18px; }
+.workspace-content .company-dashboard .company-sections button { font-size: 14px; padding: 10px 16px; border-radius: 4px; }
+.workspace-content .company-dashboard .data-provenance { margin-bottom: 20px; padding: 10px 0 14px; gap: 8px 24px; }
+.workspace-content .company-dashboard .data-provenance :is(small, p) { font-size: 12px; line-height: 1.6; }
+.workspace-content .company-dashboard .terminal-financial-grid { grid-template-columns: minmax(0, 1fr); }
+.workspace-content .company-dashboard .terminal-financial-grid > .price-chart { grid-column: 1 / -1; grid-row: 2; }
+.workspace-content .company-dashboard .terminal-fundamentals .metric-card .metric-reference { font-size: 12px; }
+.workspace-content .company-dashboard .terminal-fundamentals .metric-card .metric-meaning { font-size: 14px; }
+.workspace-content .company-dashboard .terminal-fundamentals .metrics-period-note { font-size: 12px; line-height: 1.6; }
+.workspace-content .company-dashboard .terminal-fundamentals .financial-detail-action,
+.workspace-content .company-dashboard .beginner-guide button {
+  background: var(--ink); color: #fff9ed; border: 1px solid var(--ink);
+  padding: 12px 18px; border-radius: 4px; font-size: 14px; cursor: pointer;
+}
+.workspace-content .company-dashboard .terminal-fundamentals .financial-detail-action:hover,
+.workspace-content .company-dashboard .beginner-guide button:hover { background: #355643; }
+.workspace-content .company-dashboard #financial-pillars-title { scroll-margin-top: 110px; }
+.workspace-content .company-dashboard .beginner-guide p { margin-block: 12px; }
+.workspace-content .company-dashboard .beginner-guide-actions button:last-child { background: transparent; color: var(--ink); }
+
+/* A categorical reading, with the actual unbounded score. No capped speedometer. */
+.workspace-content .company-dashboard .financial-health.altman-reading {
+  background: #203e30; color: #fff9ed; border: 1px solid #203e30;
+  border-radius: 6px; padding: 28px; margin: 0 0 24px;
+}
+.workspace-content .company-dashboard .financial-health.altman-reading.health-grey { background: #eeeee4; color: var(--ink); border-color: var(--rule); }
+.workspace-content .company-dashboard .altman-reading-heading { display: flex; gap: 12px; justify-content: space-between; align-items: start; flex-wrap: wrap; }
+.workspace-content .company-dashboard .altman-reading .section-eyebrow { color: inherit; opacity: .85; }
+.workspace-content .company-dashboard .altman-status { font-size: 12px; border: 1px solid #9cae98; padding: 4px 9px; border-radius: 4px; }
+.workspace-content .company-dashboard .altman-reading h3 { color: inherit; font: 500 30px/1.2 var(--display-font); margin: 16px 0 8px; }
+.workspace-content .company-dashboard .altman-reading > strong { color: inherit; font: 600 17px/1.5 var(--body-font, sans-serif); display: block; }
+.workspace-content .company-dashboard .altman-result { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 16px; }
+.workspace-content .company-dashboard .altman-result .altman-score { font: 500 clamp(48px, 5vw, 68px)/1 var(--display-font); color: #f3c7a5; font-variant-numeric: tabular-nums; }
+.workspace-content .company-dashboard .altman-result p { color: inherit; margin: 0; font-size: 15px; line-height: 1.7; }
+.workspace-content .company-dashboard .altman-result p span { font-size: 13px; color: #e0e5d9; }
+.workspace-content .company-dashboard .altman-reading .health-explanation { font-size: 15px; color: inherit; line-height: 1.7; max-width: 84ch; margin: 18px 0; }
+.workspace-content .company-dashboard .altman-zones { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; padding: 0; margin: 20px 0; list-style: none; }
+.workspace-content .company-dashboard .altman-zone { border: 1px solid #708775; border-top: 4px solid #d7a385; padding: 12px; display: grid; gap: 6px; font-size: 13px; line-height: 1.5; min-width: 0; }
+.workspace-content .company-dashboard .altman-zone.zone-grey { border-top-color: #e4c784; }
+.workspace-content .company-dashboard .altman-zone.zone-safe { border-top-color: #99c5a4; }
+.workspace-content .company-dashboard .altman-zone[aria-current] { background: #f3eedf; color: #203e30; border-color: #f3eedf; border-top-color: #99c5a4; }
+.workspace-content .company-dashboard .zone-grey[aria-current] { border-top-color: #b77c18; }
+.workspace-content .company-dashboard .zone-distress[aria-current] { border-top-color: #a64f2e; }
+.workspace-content .company-dashboard .zone-name { font-weight: 700; }
+.workspace-content .company-dashboard .zone-name b { display: inline-block; font-size: 12px; }
+.workspace-content .company-dashboard .altman-reading :is(.altman-limits, .altman-date) { color: inherit; font-size: 13px; line-height: 1.7; margin: 12px 0 0; }
+.workspace-content .company-dashboard .altman-reading .altman-date { padding-top: 12px; border-top: 1px solid #708775; }
+.workspace-content .company-dashboard .altman-review { padding: 10px 16px; background: var(--ink); color: #fff9ed; border: 0; border-radius: 4px; margin-top: 18px; cursor: pointer; }
+.workspace-content .company-dashboard #company-metrics-title { scroll-margin-top: 110px; }
+.workspace-content .company-dashboard .altmanz-gauge > .altman-reading { padding: 0; border: 0; background: transparent; }
+.workspace-content .company-dashboard .altmanz-gauge > .altman-reading.health-grey { padding: 20px; background: #eeeee4; }
+.workspace-content .company-dashboard .altmanz-gauge .financial-help summary { font-size: 14px; min-height: 44px; padding: 12px; }
+.workspace-content .company-dashboard .altman-reference-note { font-size: 13px; line-height: 1.7; }
+
+/* Names and units remain readable in a three-column financial list. */
+.workspace-content .company-list .company-card {
+  grid-template-columns: 64px minmax(150px, 1fr) minmax(320px, 1.5fr) 24px;
+  grid-template-areas: none; gap: 8px 20px; padding: 24px 12px 24px 4px;
+}
+.workspace-content .company-list .company-card-header { grid-column: 1; grid-row: 1 / 4; }
+.workspace-content .company-list .company-name { grid-column: 2; grid-row: 1; font-size: 25px; align-self: end; }
+.workspace-content .company-list .company-sector { grid-column: 2; grid-row: 2; font-size: 12px; line-height: 1.5; }
+.workspace-content .company-list .coverage-label { grid-column: 2; grid-row: 3; display: block; justify-self: start; font-size: 12px; text-align: left; max-width: none; }
+.workspace-content .company-list .company-metrics { grid-column: 3; grid-row: 1 / 4; gap: 18px; }
+.workspace-content .company-list .company-metrics .metric { display: flex; flex-direction: column; gap: 8px; }
+.workspace-content .company-list .company-metrics .metric-label { font-size: 12px; line-height: 1.5; }
+.workspace-content .company-list .company-metrics .metric-value { font-size: 15px; line-height: 1.5; white-space: normal; }
+.workspace-content .company-list .company-card-action { grid-column: 4; grid-row: 1 / 4; }
+.workspace-content .company-list .company-card-wrapper > .favorite-button { min-height: 44px; font-size: 12px; }
+.workspace-content .company-list-empty { padding: 36px 20px; text-align: center; }
+.workspace-content .company-list-empty button { min-height: 44px; padding: 10px 18px; background: var(--ink); color: #fff9ed; border: 0; border-radius: 4px; cursor: pointer; }
+.workspace-content .catalog-reading-note { font-size: 13px; color: var(--ink-soft); margin-block: 0 16px; }
+.workspace-content :is(.comparison-page, .favorites-page) > p { font-size: 14px; }
+.workspace-content .comparison-picker small { font-size: 12px; }
+.workspace-content :is(.simulation-settings, .pillar-details, .ai-advanced) > summary { min-height: 44px; cursor: pointer; }
+.workspace-content .company-dashboard :is(.simulation-panel, .ai-panel) > p { font-size: 14px; }
+.workspace-content .company-dashboard :is(.simulation-settings, .pillar-details) { font-size: 14px; }
+.workspace-content .company-dashboard .pillar-meaning { font-size: 15px; line-height: 1.7; color: #e0e5d9; padding-block: 8px; }
+.workspace-content .company-dashboard .overall-score-pending .overall-score-value { font-size: 26px; margin-block: 14px; color: inherit; }
+.workspace-content .company-dashboard .overall-score-pending > div > p { max-width: 70ch; }
+.workspace-content .welcome-dashboard .primary-action { min-height: 48px; font-size: 14px; }
+.workspace-content .company-search :is(.catalog-notice p, .catalog-notice a, .results-heading > span, .coverage-filter, .filters-summary) { font-size: 13px; }
+.workspace-content .comparison-page > h1 { font-size: clamp(34px, 3.5vw, 46px); }
+.workspace-content .comparison-page > p.comparison-access { display: inline-block; padding: 6px 10px; margin-block: 0 8px; background: #e8eddf; border: 0; font-size: 13px; }
+.workspace-content .comparison-page .comparison-selectors { margin-block: 16px; }
+.workspace-content .comparison-page .comparison-picker { padding: 18px 22px; }
+.workspace-content .comparison-page .comparison-picker h2 { font-size: 24px; margin-bottom: 12px; }
+.workspace-content .comparison-page .comparison-picker label { margin-block: 10px; }
+.workspace-content .comparison-page .comparison-result :is(th, td, caption) { font-size: 14px; }
+.workspace-content .comparison-coverage { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; padding-bottom: 16px; border-bottom: 1px solid #708775; }
+.workspace-content .comparison-coverage strong { background: #e8eddf; color: var(--ink); padding: 6px 10px; border-radius: 4px; }
+.workspace-content .comparison-coverage span { font-size: 14px; }
+.workspace-content .favorites-empty { margin-top: 24px; border: 1px solid var(--rule); border-left: 3px solid var(--ink); background: var(--paper-white); padding: 28px; }
+.workspace-content .favorites-empty h2 { font: 500 30px/1.2 var(--display-font); margin: 0 0 12px; }
+.workspace-content .favorites-empty p { font-size: 15px; line-height: 1.7; max-width: 58ch; }
+.workspace-content .favorites-empty a { display: inline-flex; align-items: center; min-height: 44px; padding: 10px 18px; background: var(--ink); color: #fff9ed; border-radius: 4px; text-decoration: none; margin-top: 8px; }
+
+@media (max-width: 1100px) {
+  .workspace-content .company-list .company-card { grid-template-columns: 52px minmax(0, 1fr) 24px; }
+  .workspace-content .company-list .company-metrics { grid-column: 1 / -1; grid-row: 4; margin-top: 10px; padding-top: 16px; border-top: 1px solid var(--rule); }
+  .workspace-content .company-list .company-card-action { grid-column: 3; }
+}
+@media (max-width: 820px) {
+  .workspace-content .company-dashboard .company-first-step .beginner-intro { grid-template-columns: minmax(0, 1fr); }
+  .workspace-content .company-dashboard .beginner-intro .primary-action { justify-self: start; }
+}
+@media (max-width: 520px) {
+  .workspace-content .editorial-cover { padding-block: 24px; gap: 24px; }
+  .workspace-content .editorial-cover h1 { font-size: 42px; }
+  .workspace-content .company-dashboard > .dashboard-header { padding: 14px 16px; gap: 10px; margin-bottom: 12px; }
+  .workspace-content .company-dashboard .dashboard-title h1 { font-size: 30px; }
+  .workspace-content .company-dashboard .terminal-quote { width: auto; margin-left: 0; }
+  .workspace-content .company-dashboard .terminal-quote strong { font-size: 25px; }
+  .workspace-content .company-dashboard .company-first-step .beginner-intro { padding: 18px; gap: 16px; }
+  .workspace-content .company-dashboard .beginner-intro h2 { font-size: 26px; }
+  .workspace-content .company-dashboard .company-sections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .workspace-content .company-dashboard .company-sections button { font-size: 13px; padding: 12px 8px; }
+  .workspace-content .company-dashboard .financial-health.altman-reading { padding: 20px; }
+  .workspace-content .company-dashboard .altman-reading h3 { font-size: 28px; }
+  .workspace-content .company-dashboard .altman-zones { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .workspace-content .company-dashboard .altman-zone { grid-template-columns: 1fr 1fr; align-items: center; padding: 10px 12px; border-top-width: 1px; border-left-width: 4px; }
+  .workspace-content .company-dashboard .altman-zone.zone-distress { border-left-color: #d7a385; }
+  .workspace-content .company-dashboard .altman-zone.zone-grey { border-left-color: #e4c784; }
+  .workspace-content .company-dashboard .altman-zone.zone-safe { border-left-color: #99c5a4; }
+  .workspace-content .company-list .company-card { gap: 8px 12px; padding-block: 22px; }
+  .workspace-content .company-list .company-name { font-size: 25px; }
+  .workspace-content .company-list .company-metrics { grid-template-columns: 1fr; gap: 12px; }
+  .workspace-content .company-list .company-metrics .metric { flex-direction: row; justify-content: space-between; gap: 16px; }
+  .workspace-content .company-list .company-metrics .metric-label { flex: 1; }
+  .workspace-content .company-list .company-metrics .metric-value { flex: 1; text-align: right; }
+  .workspace-content .company-list .company-card-wrapper > .favorite-button { margin-bottom: 18px; padding: 10px 14px; }
+}

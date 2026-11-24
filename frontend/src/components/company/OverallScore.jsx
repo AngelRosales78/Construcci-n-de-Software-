@@ -1,6 +1,6 @@
 export default function OverallScore({ score, fiscalYear, periodBasis = 'reported' }) {
   const ready = score.status === 'available'
-  return <section className="overall-score" aria-labelledby="overall-score-title">
+  return <section className={`overall-score${ready ? '' : ' overall-score-pending'}`} aria-labelledby="overall-score-title">
     <div><h3 id="overall-score-title">Puntaje general de los cinco pilares</h3>
       <p className="pillar-muted">{periodBasis === 'provider_normalized' ? `Referencia anual ${fiscalYear} · ${score.period?.end}` : `Ejercicio ${fiscalYear || 'sin datos'} · ${score.period?.start || 'Sin fecha inicial'} a ${score.period?.end || 'Sin fecha final'}`}</p>
       <p className="overall-score-value">{ready ? score.display_value : 'No disponible'}{ready && <small> / 100</small>}</p>

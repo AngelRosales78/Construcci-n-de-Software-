@@ -63,7 +63,7 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       for(const key of ['market_cap','per','roe','beta','dividend_yield']) {
         if(summary[key]==null) assert.ok(absenceLabels.includes(summary.indicator_availability[key].label),'Falta motivo visible de '+key)
       }
-      if(summary.altman_z.score==null) assert.equal(await page.locator('.financial-health>strong').textContent(),summary.altman_z.availability.label)
+      if(summary.altman_z.score==null) assert.equal(await page.locator('#company-overview .financial-health>strong').textContent(),summary.altman_z.availability.label)
       if(ticker==='AAPL') {
         await screenshot('01-apple-indicadores')
         await page.getByRole('button',{name:'Salud financiera',exact:true}).click()

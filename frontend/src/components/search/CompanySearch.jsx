@@ -16,7 +16,7 @@ export default function CompanySearch() {
       <div className="search-header">
         <p className="section-eyebrow">EXPLORACIÓN DE MERCADOS</p>
         <h1>Explorar empresas</h1>
-        <p className="section-description">Busca por nombre o símbolo. Filtra las fichas con indicadores cargados.</p>
+        <p className="section-description">Busca por nombre o símbolo y filtra por sector.</p>
         <SearchBar onSearch={handleSearch} onSubmitSearch={saveHistory} initialValue={params.q} />
       </div>
       <div className="catalog-notice"><p><strong>Catálogo S&amp;P 500 y altas manuales.</strong> Cada ficha indica sus datos disponibles y si su pertenencia al índice está verificada.</p><Link to="/company/MSFT" state={{ searchReturn: searchPath }}>Abrir Microsoft →</Link></div>
@@ -26,6 +26,7 @@ export default function CompanySearch() {
           <CompanyFilters onFilterChange={handleFilterChange}
             initialSector={params.sector} initialOrdering={params.ordering} />
           <label className="coverage-filter"><input type="checkbox" checked={params.withData} onChange={event => setWithData(event.target.checked)} /> Solo con indicadores o balances cargados</label>
+          <p className="catalog-reading-note">Cifras históricas. Abre una ficha para consultar qué significan, sus fechas y fuentes.</p>
           {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
           {favorites.message && <p role="status">{favorites.message} <Link to="/favorites">Ver favoritos</Link></p>}
           {error ? <div className="search-error" role="alert"><p>{error}</p><button type="button" onClick={retry}>Reintentar</button></div> : <CompanyList companies={companies} loading={loading} favorites={favorites} />}
