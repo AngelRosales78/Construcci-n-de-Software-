@@ -48,6 +48,8 @@ const output = path.resolve(repo, '../output/catalog_enrichment')
       await page.getByRole('heading', { name: 'Acerca de ' + company.name }).waitFor()
       assert.ok(company.description && company.website_url && company.quote)
       await page.locator('.highcharts-series').first().waitFor()
+      await page.locator('.company-tools>summary').click()
+      await page.locator('.company-context>summary').click()
       await page.locator('.company-profile-sources>summary').click()
       await page.getByRole('link', { name: /Consultar informes de la empresa en SEC/ }).waitFor()
       if (ticker !== 'HIMS') {

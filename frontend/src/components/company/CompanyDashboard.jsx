@@ -15,10 +15,10 @@ import CompanyAbout from './CompanyAbout'
 import './company-reading.css'
 
 const sections = [
-  { id: 'overview', label: 'Resumen', description: 'Consulta el precio histórico y los cinco indicadores del resumen. Cada dato conserva su fecha de referencia.' },
-  { id: 'pillars', label: 'Salud financiera', description: 'Revisa los cinco pilares del balance anual. Elige un ejercicio y abre cada pilar para consultar sus indicadores, fórmulas y fuentes.' },
-  { id: 'simulation', label: 'Simulaciones', description: 'Explora escenarios cambiando sus supuestos. Los resultados de un escenario no modifican los datos históricos de la empresa.' },
-  { id: 'analysis', label: 'Explicación de IA', description: 'Consulta una explicación de los indicadores del ejercicio seleccionado, junto con sus referencias y fecha de generación.' },
+  { id: 'overview', label: 'Resumen', icon: '◫', description: 'Precio, indicadores y lectura del balance, de un vistazo.' },
+  { id: 'pillars', label: 'Salud financiera', icon: '◉', description: 'Elige un año y explora los cinco pilares del balance.' },
+  { id: 'simulation', label: 'Simulaciones', icon: '↗', description: 'Explora escenarios. Los supuestos no modifican los datos históricos.' },
+  { id: 'analysis', label: 'Explicación de IA', icon: '✧', description: 'Entiende los indicadores del año seleccionado con sus referencias.' },
 ]
 
 export default function CompanyDashboard() {
@@ -44,33 +44,35 @@ export default function CompanyDashboard() {
       </div>
 
       <div className="dashboard-content">
-        <CompanyAbout company={company} />
-        <ReportPanel a={company.ticker} />
         {visitError && <p role="status">{visitError} <button onClick={retryVisit}>Reintentar registro de visita</button></p>}
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
         {favorites.message && <p role="status">{favorites.message}</p>}
-        <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
-          <span><small>Indicadores del resumen</small><strong>{countAvailableIndicators(company)} de 5 disponibles</strong></span>
-          <span><small>{company.reference_basis === 'provider_normalized' ? 'Referencia anual del proveedor' : 'Balance de referencia'}</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
-          <span><small>Último cierre importado</small><strong>{company.quote ? `${company.quote.date} · ${company.quote.currency}` : 'Sin precios cargados'}</strong></span>
-          <p>Las fechas del balance, los precios y cada indicador pueden ser diferentes.</p>
-          {company.reference_basis === 'provider_normalized' && <p className="provider-reference-inline">La fecha anual del proveedor está normalizada; no acredita el cierre contable exacto. Cada indicador conserva su propia referencia.</p>}
-        </div>
         <nav className="company-sections" aria-label="Secciones de la empresa">
-          {sections.map(({ id, label }) =>
-            <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}>{label}</button>)}
+          {sections.map(({ id, label, icon }) =>
+            <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}><span aria-hidden="true">{icon}</span> {label}</button>)}
         </nav>
         <p className="company-section-guide">{sections.find(item => item.id === section).description}</p>
+        {company.is_active === false && <p role="status">Empresa inactiva: ficha histórica, fuera de los buscadores.</p>}
+        {company.is_index_member === false && <p role="note">Pertenencia al índice S&amp;P 500 sin verificar.</p>}
+        <details className="company-tools"><summary>Información y reportes</summary><div className="company-utilities">
+          <details className="company-context"><summary>Acerca de {company.name}</summary><CompanyAbout company={company} /></details>
+          <ReportPanel a={company.ticker} />
+          <DataSources company={company} />
+        </div></details>
+        <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
+          <span><small>{company.reference_basis === 'provider_normalized' ? 'Referencia anual del proveedor' : 'Balance de referencia'}</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
+          <p>Datos históricos · Cada indicador conserva su fecha.</p>
+          {company.reference_basis === 'provider_normalized' && <p className="provider-reference-inline">Fecha anual normalizada; no acredita el cierre contable exacto.</p>}
+        </div>
         {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>{company.quote ? 'Ya puedes consultar su histórico de precios. ' : ''}Los cinco indicadores del resumen todavía no están cargados. La disponibilidad de balances se muestra en Salud financiera.</p><button onClick={() => setSection('pillars')}>Ver salud financiera</button></section>}
         {company.is_demo && hasIndicators(company) && <p role="status" className="data-notice">Resumen financiero pendiente de verificar. Consulta la procedencia de los precios y de los balances anuales.</p>}
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars key={company.ticker} view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
         {(hasIndicators(company) || company.quote) && <>
-        <div className="overview-intro"><div><h2>La empresa, de un vistazo</h2><p>Precio histórico e indicadores del balance.</p></div><DataSources company={company} /></div>
         <div className="terminal-financial-grid">
+          <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span className="coverage-badge">{countAvailableIndicators(company)} de 5 disponibles</span></div><MetricCards company={company} /><p className="metrics-period-note">El rango del gráfico no cambia estos indicadores.</p></section>
           <PriceChart />
-          <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span>{company.as_of ? `${company.reference_basis === 'provider_normalized' ? 'Referencia' : 'Balance'}: ${company.as_of}` : 'Balance pendiente'}</span></div><p className="metrics-period-note">Cambiar el rango del gráfico no modifica estos indicadores.</p><MetricCards company={company} /></section>
           <div className="dashboard-charts">
             <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} />
             <FinancialHealthIndicator altmanZ={company.altman_z} profile={company.profile} />

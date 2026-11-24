@@ -20,16 +20,16 @@ export default function MetricCards({ company }) {
   }
   return <section className="dashboard-metrics" aria-label="Ficha técnica">
     {indicators.map(([key, label, explanation]) => <article className="metric-card" key={key}>
-      <abbr title={explanation} className="metric-label">{label}</abbr>
+      <span className="metric-label">{label}</span>
       <span className="metric-value">{format(key, company[key])}</span>
-      <p className="metric-explanation">{explanation}</p>
       {company.field_sources?.[key]?.as_of ? <small className="metric-reference">Referencia · {company.field_sources[key].as_of}</small>
         : <small className="metric-reference">Fecha de referencia no informada.</small>}
-      {company.field_sources?.[key] && <details className="metric-help"><summary>Ver cálculo y fuente</summary>
-        <p>{company.field_sources[key].method}</p>
-          <a href={company.field_sources[key].source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a>
-      </details>}
-      {key === 'market_cap' && <small className="metric-unit-note">B: mil millones · T: un billón</small>}
+      <details className="metric-help"><summary aria-label={`Entender ${label}`}><span aria-hidden="true">?</span> Qué significa</summary>
+        <p>{explanation}</p>
+        {key === 'market_cap' && <p>B: mil millones · T: un billón.</p>}
+        {company.field_sources?.[key] && <><p>{company.field_sources[key].method}</p>
+          <a href={company.field_sources[key].source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a></>}
+      </details>
     </article>)}
   </section>
 }

@@ -22,10 +22,10 @@ export function PillarMetric({ metric }) {
     <h4>{metric.label}</h4>
     <p className="pillar-value">{ready ? metric.display_value : metric.status === 'not_applicable' ? 'No aplica' : 'No disponible'}{ready && <small> {UNITS[metric.unit] || metric.unit}</small>}</p>
     {!ready && <p>{metric.explanation || 'Faltan datos para calcular este indicador.'}</p>}
-    {!!metric.missing_fields?.length && <p className="pillar-muted">Componentes pendientes: {metric.missing_fields.join(', ')}</p>}
     {ready && policy && <p className={`pillar-band pillar-band-${policy.band}`}>{BANDS[policy.band]} según regla académica</p>}
     <details className="pillar-details">
       <summary>Ver fórmula, componentes y fuente</summary>
+      {!!metric.missing_fields?.length && <p className="pillar-muted">Componentes pendientes: {metric.missing_fields.join(', ')}</p>}
       <p>{metric.period_basis === 'provider_normalized' ? `Referencia anual del proveedor: ${metric.period?.end}` : `Periodo: ${metric.period?.start || 'Sin datos'} a ${metric.period?.end || 'Sin datos'}`}</p>
       <p>Fórmula: <code>{metric.formula_display || metric.formula}</code></p>
       {metric.applicability_source && <a href={metric.applicability_source.url} target="_blank" rel="noreferrer">Consultar procedencia de la clasificación</a>}
@@ -73,7 +73,7 @@ export default function FinancialPillars({ view = 'pillars' }) {
         </select>
       </div>
       <p className="pillar-muted">{data.period_basis === 'provider_normalized' ? `Referencia anual: ${data.period.end} · ${data.fiscal_year}` : `Ejercicio: ${data.fiscal_year || 'Sin datos'} · ${data.period.start || 'Sin fecha inicial'} a ${data.period.end || 'Sin fecha final'}`}</p>
-      {data.period_note && <p className="provider-period-note" role="note">{data.period_note}</p>}
+      {data.period_note && <div className="provider-period-note" role="note"><strong>Referencia anual normalizada</strong><span>El cierre contable exacto no está verificado.</span><details><summary>Qué implica esta fecha</summary><p>{data.period_note}</p></details></div>}
       {!!data.annual_components?.length && <details className="financial-help annual-statement"><summary>Ver estados anuales importados</summary><div className="help-content">
         <p>Importes completos en {data.currency}; no están expresados en millones. Los valores ausentes permanecen sin dato.</p>
         <div className="scenario-table"><table><caption>Componentes anuales · {data.fiscal_year} · {data.currency}</caption><thead><tr><th scope="col">Concepto</th><th scope="col">Importe</th><th scope="col">Procedencia</th></tr></thead>

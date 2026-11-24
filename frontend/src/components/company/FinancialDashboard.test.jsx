@@ -22,7 +22,10 @@ it('conserva las fechas independientes de valoración bursátil y balance', () =
 })
 it('muestra cinco métricas, conserva cero y describe los indicadores',()=>{
  render(<MetricCards company={{per:0,roe:-2,market_cap:100,beta:null,dividend_yield:0}}/> )
- expect(screen.getByTitle(/Precio de la acción/)).toBeTruthy()
+ const help = screen.getByText('Precio de la acción dividido entre beneficio por acción.').closest('details')
+ expect(help.open).toBe(false)
+ fireEvent.click(screen.getByLabelText('Entender PER'))
+ expect(screen.getByText('Precio de la acción dividido entre beneficio por acción.')).toBeTruthy()
  expect(screen.getByText('Sin datos')).toBeTruthy()
  expect(screen.getAllByText('0%')).toHaveLength(1)
  expect(screen.getByText('-2%')).toBeTruthy()

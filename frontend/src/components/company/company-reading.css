@@ -57,3 +57,81 @@
   display: inline-block;
   margin-top: 8px;
 }
+
+/* Company reading: essential facts first, supporting detail on demand. */
+.company-dashboard .dashboard-content { padding-top: 20px; }
+.company-dashboard .company-sections { margin: 0 0 14px; display: flex; flex-wrap: wrap; }
+.company-dashboard .company-sections button { min-height: 44px; font-size: 13px; padding: 12px 18px; }
+.company-dashboard .company-sections button > span { margin-right: 7px; font-size: 17px; }
+.company-dashboard .company-section-guide { margin: 0 0 20px; line-height: 1.5; font-size: 13px; }
+.company-utilities { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 20px; align-items: start; }
+.company-tools { margin: 0 0 16px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper-white); }
+.company-tools > summary { padding: 13px 16px; min-height: 44px; color: var(--ink); font-size: 12px; cursor: pointer; }
+.company-tools .company-utilities { padding: 12px; margin-bottom: 0; }
+.company-dashboard .company-sections { box-shadow: none; }
+.company-utilities > details { min-width: 0; margin: 0; border: 1px solid var(--rule); background: var(--paper-white); border-radius: 6px; padding: 0; color: var(--ink); font-size: 12px; }
+.company-utilities > details > summary { padding: 14px 16px; min-height: 46px; cursor: pointer; color: var(--ink); line-height: 1.5; }
+.company-utilities > details[open] { grid-column: 1 / -1; }
+.company-utilities > details[open] > :not(summary) { margin-inline: 18px; max-width: calc(100% - 36px); }
+.company-utilities .company-about { border: 0; margin-block: 0 18px; padding-block: 12px; }
+.company-dashboard .data-provenance { padding: 14px 0; gap: 10px 22px; margin-bottom: 24px; }
+.company-dashboard .data-provenance > span { flex-basis: 180px; }
+.company-dashboard .data-provenance > span { flex: 0 1 250px; }
+.company-dashboard .data-provenance > p { display: block; flex: 0 1 auto; padding: 0; border: 0; line-height: 1.5; font-size: 12px; }
+.company-dashboard .data-provenance small { font-size: 11px; }
+.company-dashboard .data-provenance strong { font-size: 13px; }
+.company-dashboard .terminal-financial-grid { grid-template-columns: minmax(0,1fr) minmax(300px,.7fr); gap: 24px; }
+.company-dashboard .terminal-financial-grid > .terminal-fundamentals { grid-column: 1 / -1; grid-row: 1; padding: 22px; }
+.company-dashboard .terminal-financial-grid > .price-chart { grid-column: 1; grid-row: 2; min-width: 0; }
+.company-dashboard .terminal-financial-grid > .dashboard-charts { grid-column: 2; grid-row: 2; display: grid; grid-template-columns: minmax(0,1fr); gap: 16px; }
+.company-dashboard .terminal-fundamentals .dashboard-metrics { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 0; }
+.company-dashboard .terminal-fundamentals .metric-card { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 16px; border: 0; border-right: 1px solid var(--rule); background: none; min-width: 0; }
+.company-dashboard .terminal-fundamentals .metric-card:first-child { padding-left: 0; }
+.company-dashboard .terminal-fundamentals .metric-card:last-child { border: 0; padding-bottom: 12px; }
+.company-dashboard .terminal-fundamentals .metric-label { font-size: 12px; line-height: 1.5; color: var(--ink-soft); }
+.company-dashboard .terminal-fundamentals .metric-value { font-size: clamp(21px,2.1vw,29px); line-height: 1.15; white-space: normal; }
+.company-dashboard .terminal-fundamentals .metric-reference { font-size: 11px; line-height: 1.5; margin-top: auto; }
+.company-dashboard .terminal-fundamentals .metric-help { font-size: 12px; line-height: 1.7; width: 100%; }
+.company-dashboard .terminal-fundamentals .metric-help summary { color: var(--ink); padding-block: 6px; min-height: 32px; }
+.metric-help summary > span { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border: 1px solid currentColor; border-radius: 50%; font-size: 11px; }
+.coverage-badge, .altman-period-badge { display: inline-block; padding: 5px 9px; font-size: 11px; line-height: 1.5; border-radius: 4px; }
+.coverage-badge { color: var(--ink); background: #e8eddf; }
+.altman-period-badge { color: #e6e9dc; border: 1px solid #64755e; margin-top: 0; }
+.company-dashboard .metrics-period-note { font-size: 11px; margin: 14px 0 0; }
+.company-dashboard .altmanz-gauge { padding: 24px; min-width: 0; }
+.company-dashboard .altmanz-gauge h3 { font-size: 28px; margin: 0 0 12px; }
+.company-dashboard .altmanz-gauge .risk-legend { background: none; border: 0; margin: 12px 0; padding: 0; line-height: 1.6; font-size: 12px; }
+.company-dashboard .altmanz-gauge .risk-legend summary { cursor: pointer; min-height: 32px; }
+.company-dashboard .altmanz-gauge .financial-help { margin: 8px 0; }
+.company-dashboard .financial-health { padding: 24px; min-width: 0; }
+.company-dashboard .financial-health > strong { font-size: 27px; }
+.company-dashboard .financial-health .health-explanation { line-height: 1.7; font-size: 12px; }
+.company-dashboard .financial-health summary { cursor: pointer; padding-block: 8px; }
+.company-dashboard .provider-period-note { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 14px 16px; line-height: 1.6; }
+.company-dashboard .provider-period-note details { flex-basis: 100%; }
+.company-dashboard .provider-period-note summary { cursor: pointer; }
+.company-dashboard :is(summary,button,a,select):focus-visible { outline: 3px solid #bd6a42; outline-offset: 4px; }
+@media(max-width: 1100px) {
+  .company-dashboard .terminal-fundamentals .dashboard-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+  .company-dashboard .terminal-fundamentals .metric-card { border: 1px solid var(--rule); padding: 16px; border-radius: 4px; }
+  .company-dashboard .terminal-fundamentals .metric-card:first-child { padding-left: 16px; }
+  .company-dashboard .terminal-fundamentals .metric-card:last-child { border: 1px solid var(--rule); }
+}
+@media(max-width: 820px) {
+  .company-utilities { grid-template-columns: minmax(0,1fr); gap: 8px; }
+  .company-dashboard .terminal-financial-grid { grid-template-columns: minmax(0,1fr); }
+  .company-dashboard .terminal-financial-grid > .price-chart { grid-column: 1; grid-row: 2; }
+  .company-dashboard .terminal-financial-grid > .dashboard-charts { grid-column: 1; grid-row: 3; }
+}
+@media(max-width: 520px) {
+  .workspace-content .company-dashboard > .dashboard-header { padding: 16px; gap: 12px; }
+  .company-dashboard .dashboard-title h1 { font-size: 32px; margin-bottom: 8px; }
+  .company-dashboard .terminal-quote strong { font-size: 30px; }
+  .company-dashboard .company-sections { display: grid; grid-template-columns: 1fr 1fr; }
+  .company-dashboard .company-sections button { padding: 12px 8px; text-align: left; font-size: 12px; }
+  .company-dashboard .terminal-fundamentals .dashboard-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .company-dashboard .terminal-financial-grid > .terminal-fundamentals { padding: 16px; }
+  .company-dashboard .terminal-fundamentals .section-title { flex-wrap: wrap; gap: 10px; }
+  .company-dashboard .data-provenance > span { flex-basis: 140px; }
+  .company-dashboard .terminal-fundamentals .metric-value { font-size: 22px; }
+}

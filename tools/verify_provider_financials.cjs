@@ -80,6 +80,7 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       else assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth),false)
       await page.setViewportSize({width:1440,height:1000})
       if(ticker==='AAPL') {
+        await page.locator('.company-tools>summary').click()
         await page.getByText('Exportar reporte PDF de esta empresa',{exact:true}).click()
         await page.getByRole('checkbox',{name:'Incluir gráficos vectoriales del rango activo'}).uncheck()
         await page.getByRole('button',{name:'Solicitar PDF',exact:true}).click()
