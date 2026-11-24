@@ -1,5 +1,6 @@
 package com.example.sp500auth.ui.scenarios
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -21,9 +22,8 @@ import java.util.Locale
 @Composable
 fun ScenariosScreen(nav: NavController,ticker: String,vm: ScenariosViewModel=hiltViewModel()) {
     LaunchedEffect(ticker){vm.load(ticker)}
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-        TextButton(onClick={nav.popBackStack()}){Text("Volver")}
-        Text("$ticker · Escenarios a doce meses",style=MaterialTheme.typography.headlineSmall)
+    Column(Modifier.fillMaxSize().background(com.example.sp500auth.ui.common.AppColors.Background).statusBarsPadding().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
+        com.example.sp500auth.ui.common.ScreenHeader("Escenarios a doce meses", "$ticker · base, optimista y pesimista", { nav.popBackStack() }, ticker)
         Text("Simulación del servidor, no ganancias garantizadas. P10, P50 y P90 pertenecen a una misma ejecución.")
         when(val state=vm.defaults) {
             is Resource.Loading -> CircularProgressIndicator()

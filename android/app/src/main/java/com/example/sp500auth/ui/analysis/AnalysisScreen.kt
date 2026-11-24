@@ -20,11 +20,8 @@ import com.example.sp500auth.ui.pillars.pillarLabels
 fun AnalysisScreen(nav: NavController,ticker: String,year: Int,vm: AnalysisViewModel=hiltViewModel()) {
     LaunchedEffect(ticker,year){vm.load(ticker,year)}
     Column(Modifier.fillMaxSize().background(Color(0xFF101416)).statusBarsPadding().navigationBarsPadding().verticalScroll(rememberScrollState()).padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)) {
-        TextButton(onClick={nav.popBackStack()}){Text("Volver")}
-        Text("$ticker · Informe FY$year",style=MaterialTheme.typography.headlineSmall)
-        Row{listOf("simple" to "Sencillo","technical" to "Técnico").forEach{(level,label)->
-            TextButton(onClick={vm.load(ticker,year,level)},enabled=vm.state !is Resource.Loading){Text(if(vm.requestedLevel==level)"✓ $label" else label)}
-        }}
+        com.example.sp500auth.ui.common.ScreenHeader("Informe FY$year", "$ticker · resumen, pilares, fortalezas y riesgos", { nav.popBackStack() }, ticker)
+        AnalysisLevelToggle(vm.requestedLevel, vm.state !is Resource.Loading) { vm.load(ticker, year, it) }
         if(vm.state is Resource.Loading){CircularProgressIndicator();Text("Consultando indicadores y explicaciones…")}
         if(vm.state is Resource.Error){Text(vm.state.message.orEmpty(),color=MaterialTheme.colorScheme.error);Button(onClick={vm.load(ticker,year)}){Text("Reintentar")}}
         val data=vm.lastValid
@@ -56,5 +53,17 @@ fun AnalysisScreen(nav: NavController,ticker: String,year: Int,vm: AnalysisViewM
             Text("Fuentes",style=MaterialTheme.typography.titleLarge)
             data.sources.orEmpty().forEach{SourceLink(it.url,it.label ?: it.url)}
         } else if(vm.state !is Resource.Loading) Text("Análisis no disponible. La app no genera una respuesta de ejemplo.")
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AnalysisLevelToggle(level: String?, enabled: Boolean, onLevel: (String) -> Unit) {
+    val levels = listOf("simple" to "Sencillo", "technical" to "Técnico")
+    SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+        levels.forEachIndexed { index, (value, label) ->
+            SegmentedButton(selected = level == value, onClick = { onLevel(value) }, enabled = enabled,
+                shape = SegmentedButtonDefaults.itemShape(index, levels.size)) { Text(label) }
+        }
     }
 }

@@ -7,5 +7,4 @@ sealed class NavRoutes(val route: String) {
     object ForgotPassword : NavRoutes("forgot_password")
     object Profile : NavRoutes("profile")
     object Splash : NavRoutes("splash")
-    object AssetDetail : NavRoutes("asset_detail")
 }

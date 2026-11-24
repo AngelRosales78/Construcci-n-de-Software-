@@ -40,7 +40,7 @@ import com.example.sp500auth.util.Resource
     LaunchedEffect(snapshot,favoriteId){selected=snapshot?.assignments?.singleOrNull{it?.favorite_id==favoriteId}?.tag_ids.orEmpty().filterNotNull().toSet()}
     LaunchedEffect(vm.savedVersion){creating=false;editing=null;deleting=null}
     Column(Modifier.fillMaxSize().padding(18.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){
-        TextButton(onClick={nav.popBackStack()}){Text("Volver")};Text("Mis etiquetas",style=MaterialTheme.typography.headlineMedium)
+        com.example.sp500auth.ui.common.ScreenHeader("Mis etiquetas", "Organiza tus favoritos en listas", { nav.popBackStack() })
         RemoteContent(vm.state,vm::load){data->
             Button(onClick={creating=true},enabled=!vm.busy){Text("Nueva etiqueta")}
             data.tags.orEmpty().filterNotNull().forEach{tag->Card{Column(Modifier.padding(12.dp)){
