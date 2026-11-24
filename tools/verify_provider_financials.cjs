@@ -55,9 +55,10 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       } else assert.equal(summary.altman_z.score,null)
       await page.getByText('Referencia anual del proveedor',{exact:true}).waitFor()
       if(ticker==='AAPL') {
+        await screenshot('01-apple-indicadores')
+        await page.getByRole('button',{name:'Salud financiera',exact:true}).click()
         await page.getByText('Ver datos y fuentes de Altman-Z',{exact:true}).click()
         await page.getByRole('link',{name:'Consultar informe oficial',exact:true}).waitFor()
-        await screenshot('01-apple-indicadores')
       }
       await page.getByRole('button',{name:'Salud financiera',exact:true}).click()
       await page.locator('.financial-pillars>.provider-period-note').waitFor()
@@ -80,7 +81,6 @@ const api = 'http://127.0.0.1:58020/api/v1', web = 'http://127.0.0.1:55193'
       else assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>document.documentElement.clientWidth),false)
       await page.setViewportSize({width:1440,height:1000})
       if(ticker==='AAPL') {
-        await page.locator('.company-tools>summary').click()
         await page.getByText('Exportar reporte PDF de esta empresa',{exact:true}).click()
         await page.getByRole('checkbox',{name:'Incluir gráficos vectoriales del rango activo'}).uncheck()
         await page.getByRole('button',{name:'Solicitar PDF',exact:true}).click()

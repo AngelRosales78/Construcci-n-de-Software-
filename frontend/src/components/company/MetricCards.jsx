@@ -1,35 +1,30 @@
 import { hasIndicatorValue } from '../../utils/financialPresentation'
 
 const indicators = [
-  ['per', 'PER', 'Precio de la acción dividido entre beneficio por acción.'],
-  ['roe', 'ROE', 'Rentabilidad del patrimonio, expresada en porcentaje.'],
-  ['market_cap', 'Capitalización', 'Valor de mercado total de las acciones de la empresa.'],
-  ['beta', 'Beta', 'Sensibilidad de la acción frente a los movimientos del mercado.'],
-  ['dividend_yield', 'Rendimiento por dividendo', 'Dividendo anual dividido entre el precio, expresado en porcentaje.'],
+  ['market_cap', 'Valor de la empresa en bolsa', 'Valor de todas sus acciones en el mercado; no es el dinero que tiene en caja.'],
+  ['roe', 'Rentabilidad del patrimonio · ROE', 'Relaciona el beneficio con el patrimonio de la empresa. No representa tu ganancia como inversionista.'],
+  ['per', 'Precio frente al beneficio · PER', 'Compara el precio con el beneficio por acción. Por sí solo no indica si está barata o cara.'],
+  ['beta', 'Movimiento frente al mercado · Beta', 'Describe cómo se ha movido la acción frente al mercado; no predice su próximo movimiento.'],
+  ['dividend_yield', 'Rendimiento por dividendo', 'Relaciona los dividendos registrados con el precio. Los pagos futuros no están garantizados.'],
 ]
 export default function MetricCards({ company }) {
   const format = (key, value) => {
     if (!hasIndicatorValue(value)) return 'Sin datos'
     if (key === 'market_cap') {
       const number = Number(value)
-      const unit = number >= 1e12 ? 'T' : number >= 1e9 ? 'B' : ''
-      const amount = number / (unit === 'T' ? 1e12 : unit === 'B' ? 1e9 : 1)
+      const unit = number >= 1e12 ? 'billones' : number >= 1e9 ? 'mil millones' : ''
+      const amount = number / (number >= 1e12 ? 1e12 : number >= 1e9 ? 1e9 : 1)
       return `USD ${amount.toLocaleString('es-PE', { maximumFractionDigits: 2 })}${unit ? ` ${unit}` : ''}`
     }
     return `${Number(value).toLocaleString('es-PE', { maximumFractionDigits: 4 })}${['roe', 'dividend_yield'].includes(key) ? '%' : ''}`
   }
-  return <section className="dashboard-metrics" aria-label="Ficha técnica">
+  return <section className="dashboard-metrics beginner-metrics" aria-label="Ficha técnica">
     {indicators.map(([key, label, explanation]) => <article className="metric-card" key={key}>
       <span className="metric-label">{label}</span>
       <span className="metric-value">{format(key, company[key])}</span>
+      <p className="metric-meaning">{hasIndicatorValue(company[key]) ? explanation : 'No hay información suficiente para mostrar esta cifra. No equivale a cero.'}</p>
       {company.field_sources?.[key]?.as_of ? <small className="metric-reference">Referencia · {company.field_sources[key].as_of}</small>
         : <small className="metric-reference">Fecha de referencia no informada.</small>}
-      <details className="metric-help"><summary aria-label={`Entender ${label}`}><span aria-hidden="true">?</span> Qué significa</summary>
-        <p>{explanation}</p>
-        {key === 'market_cap' && <p>B: mil millones · T: un billón.</p>}
-        {company.field_sources?.[key] && <><p>{company.field_sources[key].method}</p>
-          <a href={company.field_sources[key].source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a></>}
-      </details>
     </article>)}
   </section>
 }

@@ -8,6 +8,8 @@ La aplicación permite explorar empresas, consultar precios y balances, interpre
 
 Primera pantalla: la ficha de empresa, en Resumen y Salud financiera. La acción principal es identificar los indicadores disponibles y elegir qué explorar. El objetivo de diseño es que en unos cinco segundos se reconozcan empresa, precio histórico, disponibilidad y siguiente acción; no afirmes haber validado ese tiempo sin observar usuarios.
 
+**Ajuste acordado tras revisar el primer diseño:** el Resumen debe mostrar las definiciones breves junto a los valores, sin un desplegable por indicador. Una acción «Entender esta empresa» guía por negocio, cifras y riesgos. La metodología, los componentes y las fuentes individuales se agrupan en Salud financiera. El Resumen conserva la clasificación de Altman-Z y su fecha; el medidor técnico se consulta en Salud financiera. Las advertencias importantes permanecen visibles.
+
 ## Criterios de diseño
 
 1. Prioriza nombre, precio con fecha, navegación, valores y estados. Usa títulos cortos y una guía de una línea por sección.

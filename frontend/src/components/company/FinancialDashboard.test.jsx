@@ -3,6 +3,7 @@ import { it, expect, vi, afterEach } from 'vitest'
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
 import MetricCards from './MetricCards'
+import DataSources from './DataSources'
 import FinancialHealthIndicator from './FinancialHealthIndicator'
 import PriceChart from './PriceChart'
 import api from '../../services/api'
@@ -18,14 +19,15 @@ it('conserva las fechas independientes de valoración bursátil y balance', () =
  }}} />)
  expect(screen.getByText('Referencia · 2026-10-26')).toBeTruthy()
  expect(screen.getByText('Referencia · 2025-12-31')).toBeTruthy()
- expect(screen.getAllByText('Consultar fuente del indicador')).toHaveLength(2)
+ expect(screen.queryByText('Consultar fuente del indicador')).toBeNull()
+ render(<DataSources company={{field_sources:{per:{as_of:'2026-10-26',source:'https://finance.yahoo.com/quote/GOOGL/',method:'Valoración reportada'}}}} />)
+ expect(screen.getByText('Valoración reportada')).toBeTruthy()
 })
 it('muestra cinco métricas, conserva cero y describe los indicadores',()=>{
  render(<MetricCards company={{per:0,roe:-2,market_cap:100,beta:null,dividend_yield:0}}/> )
- const help = screen.getByText('Precio de la acción dividido entre beneficio por acción.').closest('details')
- expect(help.open).toBe(false)
- fireEvent.click(screen.getByLabelText('Entender PER'))
- expect(screen.getByText('Precio de la acción dividido entre beneficio por acción.')).toBeTruthy()
+ const meaning = screen.getByText(/Relaciona el beneficio con el patrimonio/)
+ expect(meaning.closest('details')).toBeNull()
+ expect(screen.getByText(/No representa tu ganancia como inversionista/)).toBeTruthy()
  expect(screen.getByText('Sin datos')).toBeTruthy()
  expect(screen.getAllByText('0%')).toHaveLength(1)
  expect(screen.getByText('-2%')).toBeTruthy()

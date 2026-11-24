@@ -12,6 +12,7 @@ import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
 import FavoriteButton from '../favorites/FavoriteButton'
 import ReportPanel from '../reports/ReportPanel'
 import CompanyAbout from './CompanyAbout'
+import BeginnerGuide from './BeginnerGuide'
 import './company-reading.css'
 
 const sections = [
@@ -54,9 +55,8 @@ export default function CompanyDashboard() {
         <p className="company-section-guide">{sections.find(item => item.id === section).description}</p>
         {company.is_active === false && <p role="status">Empresa inactiva: ficha histórica, fuera de los buscadores.</p>}
         {company.is_index_member === false && <p role="note">Pertenencia al índice S&amp;P 500 sin verificar.</p>}
-        <details className="company-tools"><summary>Información y reportes</summary><div className="company-utilities">
+        <details className="company-tools" hidden={section === 'overview'}><summary>Información y fuentes</summary><div className="company-utilities">
           <details className="company-context"><summary>Acerca de {company.name}</summary><CompanyAbout company={company} /></details>
-          <ReportPanel a={company.ticker} />
           <DataSources company={company} />
         </div></details>
         <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
@@ -69,18 +69,21 @@ export default function CompanyDashboard() {
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars key={company.ticker} view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
+        <BeginnerGuide key={company.ticker} company={company} onExplore={() => setSection('pillars')} />
         {(hasIndicators(company) || company.quote) && <>
         <div className="terminal-financial-grid">
-          <section className="terminal-fundamentals"><div className="section-title"><h2>Indicadores clave</h2><span className="coverage-badge">{countAvailableIndicators(company)} de 5 disponibles</span></div><MetricCards company={company} /><p className="metrics-period-note">El rango del gráfico no cambia estos indicadores.</p></section>
+          <section className="terminal-fundamentals"><div className="section-title"><h2>Las cifras, explicadas</h2><span className="coverage-badge">{countAvailableIndicators(company)} de 5 disponibles</span></div><MetricCards company={company} /><p className="metrics-period-note">El rango del gráfico no cambia estos indicadores.</p><button onClick={() => setSection('pillars')}>Ver detalle financiero y fuentes →</button></section>
           <PriceChart />
           <div className="dashboard-charts">
-            <AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} />
-            <FinancialHealthIndicator altmanZ={company.altman_z} profile={company.profile} />
-            {company.reference_basis === 'provider_normalized' && company.altman_z.score == null && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
+            <FinancialHealthIndicator altmanZ={company.altman_z} asOf={company.as_of} />
           </div>
         </div>
         </>}
         </div>
+        <div className="altman-detail" hidden={section !== 'pillars'}><AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} />
+          {company.reference_basis === 'provider_normalized' && company.altman_z.score == null && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
+        </div>
+        <div className="overview-report"><ReportPanel a={company.ticker} /></div>
       </div>
     </div></WorkspaceLayout>
   )

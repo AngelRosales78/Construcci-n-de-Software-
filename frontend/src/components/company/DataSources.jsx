@@ -6,6 +6,7 @@ export default function DataSources({ company }) {
       {company.reference_basis === 'provider_normalized' && <p>El proveedor no aporta aquí el inicio contable exacto ni la fecha de publicación del informe. La referencia anual no se presenta como una fecha de presentación ante SEC.</p>}
       {company.quote && <p><strong>Precios:</strong> {company.quote.source} · último cierre importado: {company.quote.date} ({company.quote.currency}).</p>}
       {Object.keys(company.field_sources || {}).length > 0 && <p>Cada indicador muestra su fecha y fuente. Las valoraciones bursátiles y los ratios del balance pueden corresponder a periodos distintos.</p>}
+      <ul>{Object.entries(company.field_sources || {}).map(([key,evidence]) => <li key={key}><strong>{({per:'PER',roe:'ROE',market_cap:'Capitalización',beta:'Beta',dividend_yield:'Rendimiento por dividendo'})[key] || key}</strong> · {evidence.as_of}<p>{evidence.method}</p><a href={evidence.source} target="_blank" rel="noreferrer">Consultar fuente del indicador</a></li>)}</ul>
       {company.ticker === 'MSFT' && company.as_of && <p>Los indicadores se calculan con los balances anuales de SEC/EDGAR. Los precios son cierres ajustados de Yahoo Finance. Consulta la fecha y la fuente de cada dato para interpretar su contexto.</p>}
       <dl>
         <dt>PER</dt><dd>Precio de referencia / beneficio por acción. No representa años garantizados para recuperar una inversión.</dd>

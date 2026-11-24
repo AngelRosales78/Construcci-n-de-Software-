@@ -60,11 +60,44 @@
 
 /* Company reading: essential facts first, supporting detail on demand. */
 .company-dashboard .dashboard-content { padding-top: 20px; }
+
+/* Beginner summary: meanings stay beside values; methods live in the detail view. */
+.company-dashboard .beginner-intro { display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 20px 32px; padding: 24px; margin: 0 0 24px; background: var(--paper-white); border-left: 3px solid var(--ink); }
+.beginner-intro h2 { font: 500 28px/1.2 var(--display-font); margin: 8px 0 12px; color: var(--ink); }
+.beginner-intro p { max-width: 70ch; line-height: 1.7; font-size: 14px; }
+.beginner-intro .primary-action { background: var(--ink); color: #fff9ed; padding: 14px 18px; border: 0; border-radius: 4px; min-height: 48px; }
+.beginner-guide { grid-column: 1/-1; border-top: 1px solid var(--rule); padding-top: 20px; }
+.beginner-guide h3 { font-size: 20px; margin-top: 24px; }
+.beginner-steps { display: flex; flex-wrap: wrap; gap: 20px; padding: 0; list-style: none; color: var(--ink-soft); }
+.beginner-steps li { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.beginner-steps li span { display: inline-grid; place-items: center; width: 26px; height: 26px; border: 1px solid var(--rule); border-radius: 50%; }
+.beginner-steps li[aria-current] { color: var(--ink); font-weight: 700; }
+.beginner-steps li[aria-current] span { background: var(--ink); color: #fff9ed; }
+.beginner-guide-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics .metric-card { padding: 20px; border: 1px solid var(--rule); border-radius: 4px; gap: 14px; }
+.company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics .metric-label { font-size: 14px; color: var(--ink); font-weight: 650; }
+.company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics .metric-value { font-size: clamp(23px,2vw,29px); }
+.company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics .metric-meaning { font-size: 13px; line-height: 1.7; margin: 0; color: var(--ink-soft); }
+.company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics .metric-reference { margin-top: auto; font-size: 11px; }
+.company-dashboard .terminal-fundamentals > button { margin-top: 18px; min-height: 44px; }
+.overview-report { margin-top: 24px; }
+.company-dashboard .altman-detail { margin-top: 24px; max-width: 800px; }
+.company-dashboard .company-utilities { grid-template-columns: repeat(2,minmax(0,1fr)); }
+@media(max-width: 820px) {
+  .company-dashboard .beginner-intro { grid-template-columns: minmax(0,1fr); padding: 20px; }
+  .beginner-intro .primary-action { justify-self: start; }
+  .company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .company-dashboard .company-utilities { grid-template-columns: minmax(0,1fr); }
+}
+@media(max-width: 520px) {
+  .company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics { grid-template-columns: minmax(0,1fr); }
+}
 .company-dashboard .company-sections { margin: 0 0 14px; display: flex; flex-wrap: wrap; }
 .company-dashboard .company-sections button { min-height: 44px; font-size: 13px; padding: 12px 18px; }
 .company-dashboard .company-sections button > span { margin-right: 7px; font-size: 17px; }
 .company-dashboard .company-section-guide { margin: 0 0 20px; line-height: 1.5; font-size: 13px; }
-.company-utilities { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 20px; align-items: start; }
+.company-utilities { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-bottom: 20px; align-items: start; }
 .company-tools { margin: 0 0 16px; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper-white); }
 .company-tools > summary { padding: 13px 16px; min-height: 44px; color: var(--ink); font-size: 12px; cursor: pointer; }
 .company-tools .company-utilities { padding: 12px; margin-bottom: 0; }
