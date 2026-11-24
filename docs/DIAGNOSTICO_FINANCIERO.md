@@ -37,6 +37,21 @@ Ambas referencias emplean el cierre sin ajustar de la última sesión hasta el c
 
 No se declara completo Altman-Z para todo el catálogo: 498 fichas siguen sin un cálculo publicable.
 
+### Revisión posterior de cobertura y presentación
+
+La nueva auditoría de solo lectura confirma 6 resultados disponibles, 439 valoraciones del cierre pendientes y 59 casos con más componentes ausentes. No se han añadido nuevas referencias en esta corrección visual.
+
+Para ampliar la cobertura:
+
+1. Revisar primero el grupo de 439: obtener el cierre fiscal real del informe, el número de acciones en circulación de esa misma fecha y el cierre bursátil sin ajustar compatible con las acciones. Conciliar también los importes del balance; la fecha normalizada del proveedor no acredita el cierre real.
+2. Revisar después los 59 con más carencias: además de la valoración, completar los componentes identificados por empresa en el listado.
+3. Registrar informe, ubicación de cada cifra, moneda, fechas, método y precios en referencias verificadas. Validar con el importador existente antes de publicar y volver a ejecutar la auditoría de cobertura.
+4. Revisar la aplicabilidad antes de presentar una puntuación como comparable. La fórmula original se desarrolló principalmente para manufactureras; otras variantes tienen coeficientes y límites diferentes. Cualquier modelo adicional debe identificarse y documentarse por separado.
+
+La entrevista de [Edward Altman en CFA Institute](https://rpc.cfainstitute.org/blogs/enterprising-investor/2016/the-altman-z-score-in-edward-altmans-own-words) explica el alcance del modelo original y sus variantes. Una nota de cobertura de datos o un promedio parcial no sustituye el puntaje financiero.
+
+El detalle visual ahora ocupa el ancho de la ficha, elimina el contenedor claro dentro de otro oscuro cuando el cálculo está pendiente y reúne el siguiente paso técnico con la metodología. El motivo y el estado siguen visibles.
+
 ## Reproducción y conservación
 
 La migración 0026 añade diagnósticos independientes a FinancialMetrics. Una huella liga cada diagnóstico al contenido del resumen; si cambian sus datos o su fuente, la API deja de mostrar el motivo anterior como vigente. Los ceros conocidos se mantienen como valores disponibles. La importación financiera conserva las referencias y diagnósticos, y el arranque los verifica después de cargar los datos.

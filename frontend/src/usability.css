@@ -85,6 +85,18 @@
 .workspace-content .company-dashboard .altmanz-gauge > .altman-reading { padding: 0; border: 0; background: transparent; }
 .workspace-content .company-dashboard .altmanz-gauge > .altman-reading.health-grey { padding: 20px; background: #eeeee4; }
 .workspace-content .company-dashboard .altmanz-gauge .financial-help summary { font-size: 14px; min-height: 44px; padding: 12px; }
+.workspace-content .company-dashboard .altman-detail { max-width: none; width: 100%; }
+.workspace-content .company-dashboard .financial-health.altman-reading { display: block; height: auto; min-height: 0; }
+.workspace-content .company-dashboard .altman-reading > strong { margin-bottom: 0; }
+.workspace-content .company-dashboard .altman-reading .health-explanation { border: 0; padding: 0; opacity: 1; margin-block: 12px; }
+.workspace-content .company-dashboard .altmanz-gauge.altman-pending {
+  --terminal-text: #22372d; --terminal-muted: #617065; --primary: #a94430;
+  background: #eeeee4; color: #22372d; border: 1px solid var(--rule);
+}
+.workspace-content .company-dashboard .altmanz-gauge.altman-pending > .altman-reading {
+  padding: 0; margin-bottom: 16px; border: 0; background: transparent;
+}
+.workspace-content .company-dashboard .altman-pending .altman-limits { margin-top: 8px; }
 .workspace-content .company-dashboard .altman-reference-note { font-size: 13px; line-height: 1.7; }
 
 /* Names and units remain readable in a three-column financial list. */
