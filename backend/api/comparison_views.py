@@ -153,3 +153,76 @@ def conclusion(request):
                              year_value(request.query_params.get('fiscal_year')), request.query_params.get('level', 'simple'))
     save_analysis(request.user, report, report['b'])
     return Response(report)
+
+
+# ─── Sugerencias de empresas comparables ─────────────────────────────
+
+def _period_scores(year, start, end):
+    """Available pillar scores of every company whose fiscal year has exactly these dates (cached)."""
+    from collections import defaultdict
+    from django.core.cache import cache
+    from django.db.models import Count, Max
+    from .models import AnnualFinancialStatement
+    from .pillars import METHODOLOGY_VERSION
+    stamp = AnnualFinancialStatement.objects.aggregate(n=Count('id'), last=Max('id'))
+    key = f'compare-candidates:{METHODOLOGY_VERSION}:{year}:{start}:{end}:{stamp["n"]}:{stamp["last"]}'
+    cached = cache.get(key)
+    if cached is not None:
+        return cached
+    ids = list(AnnualFinancialStatement.objects.filter(fiscal_year=year, is_demo=False, period_start=start,
+                                                        period_end=end).values_list('company_id', flat=True))
+    statements = defaultdict(dict)
+    for row in AnnualFinancialStatement.objects.filter(company_id__in=ids, is_demo=False):
+        statements[row.company_id][row.fiscal_year] = row
+    result = {}
+    for company in Company.objects.filter(id__in=ids).only('id', 'ticker', 'name', 'sector', 'market_cap'):
+        rows = statements[company.id]
+        data = build_pillars(company, rows.get(year), rows.get(year - 1), year, sorted(rows, reverse=True), rows)
+        result[company.ticker] = {
+            'name': company.name, 'sector': company.sector, 'sector_display': company.get_sector_display(),
+            'market_cap': str(company.market_cap) if company.market_cap is not None else None,
+            'scores': {p['id']: p['score']['version'] for p in data['pillars'] if p['score']['status'] == 'available'},
+            'scoring_policy': data['scoring_policy']['version'], 'methodology': data['methodology_version']}
+    cache.set(key, result, 600)
+    return result
+
+
+def candidates_data(ticker, year, limit=500):
+    """Companies that can be compared with `ticker` in `year`: same fiscal dates and methodology,
+    ranked by how many of the five pillars both have scored, then same sector, then market cap."""
+    from .models import AnnualFinancialStatement
+    company = get_object_or_404(Company, ticker=str(ticker or '').strip().upper())
+    statement = AnnualFinancialStatement.objects.filter(company=company, fiscal_year=year, is_demo=False).first()
+    base = {'schema_version': 'compare-candidates-v1', 'a': company.ticker, 'fiscal_year': year,
+            'period': None, 'a_pillars': [], 'total_same_period': 0, 'results': []}
+    if statement is None or not statement.period_start or not statement.period_end:
+        available = sorted(AnnualFinancialStatement.objects.filter(company=company, is_demo=False)
+                           .values_list('fiscal_year', flat=True), reverse=True)
+        return base | {'reason': f'{company.ticker} no tiene balance anual para FY{year}.', 'available_years': available[:6]}
+    scores = _period_scores(year, statement.period_start, statement.period_end)
+    own = scores.get(company.ticker, {})
+    results = []
+    for other, info in scores.items():
+        if other == company.ticker or info['methodology'] != own.get('methodology') or info['scoring_policy'] != own.get('scoring_policy'):
+            continue
+        shared = [p for p, version in own.get('scores', {}).items() if info['scores'].get(p) == version]
+        if shared:
+            results.append({'ticker': other, 'name': info['name'], 'sector': info['sector'], 'sector_display': info['sector_display'],
+                            'market_cap': info['market_cap'], 'comparable_pillars': len(shared), 'pillars': shared,
+                            'same_sector': info['sector'] == company.sector})
+    results.sort(key=lambda r: (-r['comparable_pillars'], not r['same_sector'], -Decimal(r['market_cap'] or 0), r['ticker']))
+    reason = None
+    if not own.get('scores'):
+        reason = f'{company.ticker} no tiene notas de pilares para FY{year}; no se puede comparar ese ejercicio.'
+    elif not results:
+        reason = f'Ninguna otra empresa cierra su ejercicio en las mismas fechas que {company.ticker} con pilares disponibles.'
+    return base | {'period': {'start': statement.period_start.isoformat(), 'end': statement.period_end.isoformat()},
+                   'a_pillars': list(own.get('scores', {})), 'total_same_period': len(scores) - 1,
+                   'results': results[:limit], 'reason': reason}
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def compare_candidates(request):
+    require_pro(request.user)
+    return Response(candidates_data(request.query_params.get('a'), year_value(request.query_params.get('fiscal_year'))))

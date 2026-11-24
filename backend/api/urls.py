@@ -39,6 +39,7 @@ urlpatterns = [
     path('subscription/cancel/', subscription_views.cancel_subscription),
     path('compare/', comparison_views.compare),
     path('compare/conclusion/', comparison_views.conclusion),
+    path('compare/candidates/', comparison_views.compare_candidates),
     path('favorites/', personal_views.favorites),
     path('favorites/<int:pk>/', personal_views.favorite_delete),
     path('favorites/<int:pk>/tags/', personal_views.assign_tags),
