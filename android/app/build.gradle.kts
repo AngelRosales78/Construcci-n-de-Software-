@@ -1,3 +1,4 @@
+import groovy.json.JsonSlurper
 import java.util.Properties
 
 // app/build.gradle.kts
@@ -36,6 +37,21 @@ android {
             .getOrElse(deviceProperties.getProperty("apiBaseUrl", "http://10.0.2.2:8000/api/v1/"))
         require(baseUrl.matches(Regex("https?://[a-zA-Z0-9.:_-]+/api/v1/"))) { "apiBaseUrl debe terminar en /api/v1/" }
         buildConfigField("String", "API_BASE_URL", "\"$baseUrl\"")
+
+        // HU12_02: without google-services.json the app builds and Push is reported as not configured.
+        val firebase = mutableMapOf("APP_ID" to "", "API_KEY" to "", "PROJECT_ID" to "", "SENDER_ID" to "")
+        file("google-services.json").takeIf { it.isFile }?.let { file ->
+            val json = JsonSlurper().parse(file) as Map<*, *>
+            val project = json["project_info"] as Map<*, *>
+            val client = (json["client"] as List<*>).map { it as Map<*, *> }.first {
+                ((it["client_info"] as Map<*, *>)["android_client_info"] as? Map<*, *>)?.get("package_name") == "com.example.sp500auth"
+            }
+            firebase["APP_ID"] = (client["client_info"] as Map<*, *>)["mobilesdk_app_id"].toString()
+            firebase["API_KEY"] = ((client["api_key"] as List<*>).first() as Map<*, *>)["current_key"].toString()
+            firebase["PROJECT_ID"] = project["project_id"].toString()
+            firebase["SENDER_ID"] = project["project_number"].toString()
+        }
+        firebase.forEach { (name, value) -> buildConfigField("String", "FIREBASE_$name", "\"$value\"") }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -110,6 +126,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.squareup.okhttp3:logging-interceptor:$okhttpVersion")
 
+    // Push notifications (HU12_02)
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
+
     // Data Store (Preferences)
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
@@ -132,10 +151,10 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:5.11.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.7.0")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.7.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2024.06.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
