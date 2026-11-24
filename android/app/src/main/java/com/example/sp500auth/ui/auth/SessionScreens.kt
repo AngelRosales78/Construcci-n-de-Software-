@@ -6,11 +6,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.WorkspacePremium
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,12 +48,14 @@ fun ForgotPasswordScreen(navController: NavController, viewModel: AuthViewModel)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
+fun ProfileScreen(navController: NavController, viewModel: AuthViewModel, account: com.example.sp500auth.ui.ops.AccountViewModel? = null) {
     val context = LocalContext.current
     var biometricError by remember { mutableStateOf("") }
     val manager = remember { BiometricAuthManager() }
-    LaunchedEffect(Unit) { viewModel.fetchUserProfile() }
+    LaunchedEffect(Unit) { viewModel.fetchUserProfile(); account?.load() }
     val signingOut = viewModel.logoutState is Resource.Loading
+    var confirmLogout by remember { mutableStateOf(false) }
+    if (confirmLogout) LogoutConfirmDialog({ confirmLogout = false; viewModel.logout() }, { confirmLogout = false })
     val biometricEnabled = viewModel.biometricEnabled
     val colors = MaterialTheme.colorScheme
     Scaffold(topBar = {
@@ -69,7 +76,7 @@ fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
                 verticalArrangement = Arrangement.spacedBy(18.dp)
             ) {
                 when (val profile = viewModel.userProfileState) {
-                    is Resource.Success -> ProfileIdentityCard(profile.successData)
+                    is Resource.Success -> ProfileIdentityCard(account?.profile?.value ?: profile.successData, account?.photo)
                     is Resource.Error -> Card(
                         colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)
                     ) {
@@ -79,6 +86,29 @@ fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
                         }
                     }
                     else -> LinearProgressIndicator(Modifier.fillMaxWidth())
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Perfil y avisos", style = MaterialTheme.typography.titleMedium)
+                    AccountLink(Icons.Default.Edit, "Editar perfil", "Nombre, apellido y foto") { navController.navigate("profile/edit") }
+                    AccountLink(Icons.Default.Notifications, "Avisos", "Cambios de calificación de tus favoritas") { navController.navigate("notifications") }
+                    AccountLink(Icons.Default.Tune, "Preferencias de avisos", "Tipos de aviso y canales") { navController.navigate("notifications/preferences") }
+                    if (account?.isAdmin == true) AccountLink(Icons.Default.AdminPanelSettings, "Administración", "Usuarios, empresas y monitoreo") { navController.navigate("admin") }
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("Suscripción", style = MaterialTheme.typography.titleMedium)
+                    Card(onClick = { navController.navigate("plans") }, colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)) {
+                        Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.WorkspacePremium, contentDescription = null, tint = colors.primary)
+                            Column(Modifier.weight(1f)) {
+                                Text("Plan y suscripción", style = MaterialTheme.typography.titleSmall)
+                                Text("Estado, vencimiento, comprobantes y cambio de plan", style = MaterialTheme.typography.bodySmall,
+                                    color = colors.onSurfaceVariant)
+                            }
+                        }
+                    }
                 }
 
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -145,7 +175,7 @@ fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
                 }
 
                 OutlinedButton(
-                    onClick = { viewModel.logout() },
+                    onClick = { confirmLogout = true },
                     enabled = !signingOut,
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = colors.error)
@@ -154,13 +184,29 @@ fun ProfileScreen(navController: NavController, viewModel: AuthViewModel) {
                     Spacer(Modifier.width(8.dp))
                     Text(if (signingOut) "Cerrando sesión…" else "Cerrar sesión")
                 }
+                TextButton(onClick = { navController.navigate("profile/delete") }, enabled = !signingOut, modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.textButtonColors(contentColor = colors.error)) { Text("Eliminar mi cuenta") }
             }
         }
     }
 }
 
 @Composable
-private fun ProfileIdentityCard(profile: UserProfile) {
+private fun AccountLink(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, text: String, onClick: () -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    Card(onClick = onClick, colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)) {
+        Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(icon, contentDescription = null, tint = colors.primary)
+            Column(Modifier.weight(1f)) {
+                Text(title, style = MaterialTheme.typography.titleSmall)
+                Text(text, style = MaterialTheme.typography.bodySmall, color = colors.onSurfaceVariant)
+            }
+        }
+    }
+}
+
+@Composable
+private fun ProfileIdentityCard(profile: UserProfile, photo: ByteArray? = null) {
     val colors = MaterialTheme.colorScheme
     val username = profile.username.orEmpty()
     val name = listOf(profile.first_name.orEmpty(), profile.last_name.orEmpty())
@@ -169,11 +215,7 @@ private fun ProfileIdentityCard(profile: UserProfile) {
     Card(colors = CardDefaults.cardColors(containerColor = colors.surfaceContainer)) {
         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(14.dp), verticalAlignment = Alignment.CenterVertically) {
-                Surface(Modifier.size(52.dp), shape = CircleShape, color = colors.primary.copy(alpha = 0.14f)) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(Icons.Default.Person, contentDescription = null, tint = colors.primary)
-                    }
-                }
+                com.example.sp500auth.ui.ops.AvatarCircle(photo, 56.dp, "Foto de perfil")
                 Column(Modifier.weight(1f)) {
                     Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
                     if (name.isNotBlank() && username.isNotBlank() && name != username) {

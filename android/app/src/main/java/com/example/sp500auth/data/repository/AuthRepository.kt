@@ -13,6 +13,8 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(private val api: AuthApiService, private val tokens: TokenManager) {
     private val refreshMutex = Mutex()
+    /** Runs while the session is still valid, before the server revokes it. */
+    var beforeLogout: suspend () -> Unit = {}
 
     suspend fun login(username: String, password: String): Resource<Unit> = try {
         val response = api.login(LoginRequest(username, password))
@@ -21,13 +23,13 @@ class AuthRepository @Inject constructor(private val api: AuthApiService, privat
             tokens.clearTokens()
             tokens.saveTokens(body.accessToken, body.refreshToken)
             Resource.Success(Unit)
-        } else Resource.Error("Usuario, correo o contraseña incorrectos.")
+        } else Resource.Error("Usuario, correo o contraseña incorrectos, o la cuenta está bloqueada.")
     } catch (e: CancellationException) { throw e
     } catch (_: Exception) { Resource.Error("No se pudo conectar. Inténtalo de nuevo.") }
 
     suspend fun register(username: String, email: String, password: String, passwordConfirm: String,
-                         firstName: String = "", lastName: String = ""): Resource<Unit> = try {
-        val response = api.register(RegisterRequest(username, email, password, passwordConfirm, firstName, lastName))
+                         firstName: String = "", lastName: String = "", phone: String = ""): Resource<Unit> = try {
+        val response = api.register(RegisterRequest(username, email, password, passwordConfirm, firstName, lastName, phone_number = normalizedPhone(phone)))
         val body = response.body()
         if (response.isSuccessful && body != null && body.accessToken.isNotBlank() && body.refreshToken.isNotBlank()) {
             tokens.clearTokens()
@@ -72,6 +74,7 @@ class AuthRepository @Inject constructor(private val api: AuthApiService, privat
         try {
             if (tokens.getRefreshToken() != null) {
                 getUserProfile()
+                if (tokens.getRefreshToken() != null) beforeLogout()
                 val refresh = tokens.getRefreshToken()
                 if (refresh != null) confirmed = api.logout(LogoutRequest(refresh)).isSuccessful
                 else confirmed = true
@@ -82,6 +85,9 @@ class AuthRepository @Inject constructor(private val api: AuthApiService, privat
         return if (confirmed) Resource.Success(Unit)
         else Resource.Error("Sesión cerrada aquí. No se confirmó el cierre remoto por falta de conexión.")
     }
+
+    /** The server already deleted or revoked the session: only local data remains. */
+    fun forgetSession() = tokens.clearTokens()
 
     fun isLoggedIn(): Boolean = tokens.isUserLoggedIn()
     fun isBiometricEnabled(): Boolean = tokens.isBiometricEnabled() && isLoggedIn()

@@ -9,7 +9,8 @@ data class RegisterRequest(
     val password_confirm: String,
     val first_name: String = "",
     val last_name: String = "",
-    val user_type: String = "retail"
+    val user_type: String = "retail",
+    val phone_number: String = ""
 )
 
 data class LoginRequest(
@@ -54,5 +55,7 @@ data class UserProfile(
     val user_type: String,
     @SerializedName(value = "created_at", alternate = ["date_joined"])
     val date_joined: String = "",
-    val role: String = "user"
+    val role: String = "user",
+    val avatar_url: String? = null,
+    val avatar_version: String? = null
 )

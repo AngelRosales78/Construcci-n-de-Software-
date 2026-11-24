@@ -31,6 +31,8 @@ import com.example.sp500auth.ui.auth.AuthViewModel
 import com.example.sp500auth.util.Resource
 import com.example.sp500auth.ui.favorites.*
 import com.example.sp500auth.ui.sprint3.*
+import com.example.sp500auth.ui.common.CompanyLogo
+import androidx.compose.foundation.clickable
 import java.math.BigDecimal
 import java.text.NumberFormat
 import java.util.Locale
@@ -78,7 +80,8 @@ private fun Retry(message: String, action: () -> Unit) {
 }
 
 @Composable
-fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel(),recent:RecentViewModel=hiltViewModel()) {
+fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyViewModel = hiltViewModel(), favorites: FavoritesViewModel = hiltViewModel(),recent:RecentViewModel=hiltViewModel(),
+                        notices: com.example.sp500auth.ui.ops.NotificationsViewModel? = null, account: com.example.sp500auth.ui.ops.AccountViewModel? = null) {
     RefreshFavoritesOnResume(favorites)
     var query by rememberSaveable { mutableStateOf("") }
     var page by rememberSaveable { mutableStateOf(1) }
@@ -88,20 +91,23 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
     fun search() = vm.search(query, page, sector, if (descending) "-market_cap" else "market_cap", readyOnly)
     LaunchedEffect(Unit) { search() }
     LaunchedEffect(Unit){recent.load()}
+    var confirmLogout by remember { mutableStateOf(false) }
+    if (confirmLogout) com.example.sp500auth.ui.auth.LogoutConfirmDialog({ confirmLogout = false; auth.logout() }, { confirmLogout = false })
     Scaffold(containerColor = Background, bottomBar = {
         NavigationBar(containerColor = Panel) {
             NavigationBarItem(selected = true, onClick = {}, icon = { Icon(Icons.Default.Explore, null) }, label = { Text("Explorar") })
             NavigationBarItem(selected = false, onClick = { nav.navigate("compare") }, icon = { Icon(Icons.Default.CompareArrows, null) }, label = { Text("Comparar") })
             NavigationBarItem(selected = false, onClick = { nav.navigate("favorites") }, icon = { Icon(Icons.Default.Star, null) }, label = { Text("Favoritos") })
             NavigationBarItem(selected = false, onClick = { nav.navigate("profile") }, icon = { Icon(Icons.Default.Person, null) }, label = { Text("Mi cuenta") })
-            NavigationBarItem(selected = false, onClick = { auth.logout() }, icon = { Icon(Icons.Default.Logout, null) }, label = { Text("Salir") })
+            NavigationBarItem(selected = false, onClick = { confirmLogout = true }, icon = { Icon(Icons.Default.Logout, null) }, label = { Text("Salir") })
         }
     }) { padding ->
         LazyColumn(Modifier.fillMaxSize().padding(padding), contentPadding = PaddingValues(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
             item {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) { Text("MERCADOS", color = Muted, style = MaterialTheme.typography.labelSmall); Text("Explorar", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold) }
-                    FilledTonalIconButton(onClick = { nav.navigate("profile") }) { Icon(Icons.Default.Person, "Mi perfil") }
+                    if (notices != null) { com.example.sp500auth.ui.ops.NotificationsBell(notices) { nav.navigate("notifications") }; Spacer(Modifier.width(4.dp)) }
+                    IconButton(onClick = { nav.navigate("profile") }) { com.example.sp500auth.ui.ops.AvatarCircle(account?.photo, 38.dp, "Mi perfil") }
                 }
             }
             item {
@@ -126,8 +132,13 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
             item {
                 FinanceCard {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Icon(Icons.Default.TrendingUp, null, tint = Green, modifier = Modifier.size(32.dp))
-                        Column { Text("Universo S&P 500", fontWeight = FontWeight.Bold); Text("Empresas y análisis financiero", color = Muted, style = MaterialTheme.typography.bodySmall) }
+                        Surface(color = Green.copy(alpha = .14f), shape = RoundedCornerShape(14.dp)) {
+                            Icon(Icons.Default.TrendingUp, null, tint = Green, modifier = Modifier.padding(10.dp).size(28.dp))
+                        }
+                        Column(Modifier.weight(1f)) { Text("Universo S&P 500", fontWeight = FontWeight.Bold); Text("503 empresas · cinco pilares · IA", color = Muted, style = MaterialTheme.typography.bodySmall) }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(-8.dp)) {
+                        listOf("AAPL", "MSFT", "NVDA", "AMZN", "GOOGL").forEach { CompanyLogo(it, size = 34.dp) }
                     }
                     Text("Consulta datos, fuentes y cinco pilares de cada empresa.", color = Muted, style = MaterialTheme.typography.bodySmall)
                 }
@@ -161,22 +172,28 @@ fun CompanySearchScreen(nav: NavController, auth: AuthViewModel, vm: CompanyView
 
 @Composable
 private fun CompanyRow(company: CompanyItem, favorites: FavoritesViewModel, onOpen: () -> Unit) {
-    FinanceCard {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Surface(color = Inner, shape = RoundedCornerShape(12.dp)) {
-                Box(Modifier.size(52.dp), contentAlignment = Alignment.Center) { Text(company.ticker.orEmpty(), color = Green, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium) }
+    Card(Modifier.fillMaxWidth().clickable(onClick = onOpen), shape = RoundedCornerShape(18.dp), colors = CardDefaults.cardColors(containerColor = Panel)) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                CompanyLogo(company.ticker.orEmpty(), size = 48.dp)
+                Column(Modifier.weight(1f)) {
+                    Text(company.name.orEmpty(), fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(company.ticker.orEmpty(), color = Green, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.labelMedium)
+                        Text("· ${company.sector_display ?: company.sector.orEmpty()}", color = Muted, style = MaterialTheme.typography.bodySmall,
+                            maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(capital(company.market_cap), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                    Text("Capitalización", color = Muted, style = MaterialTheme.typography.labelSmall)
+                }
             }
-            Column(Modifier.weight(1f)) {
-                Text(company.name.orEmpty(), fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Text(company.sector_display ?: company.sector.orEmpty(), color = Muted, style = MaterialTheme.typography.bodySmall)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.weight(1f)) { FavoriteAction(company.ticker.orEmpty(), favorites) }
+                TextButton(onClick = onOpen) { Text("Ver ficha"); Spacer(Modifier.width(4.dp)); Icon(Icons.AutoMirrored.Filled.ArrowForward, null, Modifier.size(16.dp)) }
             }
         }
-        HorizontalDivider(color = Inner)
-        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) { Text("Capitalización", color = Muted, style = MaterialTheme.typography.labelSmall); Text(capital(company.market_cap), style = MaterialTheme.typography.titleSmall) }
-            FilledTonalButton(onClick = onOpen) { Text("Ver ficha"); Spacer(Modifier.width(5.dp)); Icon(Icons.AutoMirrored.Filled.ArrowForward, null, Modifier.size(16.dp)) }
-        }
-        FavoriteAction(company.ticker.orEmpty(), favorites)
     }
 }
 
@@ -204,22 +221,36 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                     Text("Detalle del activo", fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
                     IconButton(onClick = { nav.navigate("profile") }) { Icon(Icons.Default.AccountCircle, "Mi perfil", tint = Green) }
                 }
-                OutlinedButton(onClick = { nav.navigate("compare?ticker=$encoded") }, modifier = Modifier.fillMaxWidth()) {
-                    Text("Comparar $ticker con otra empresa")
+                val logoUrl = (vm.summary as? Resource.Success<CompanySummary>)?.successData?.logo_url
+                Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp), modifier = Modifier.padding(vertical = 8.dp)) {
+                    CompanyLogo(ticker, size = 64.dp, logoUrl = logoUrl)
+                    Column(Modifier.weight(1f)) {
+                        val loaded = (vm.summary as? Resource.Success<CompanySummary>)?.successData
+                        Text(loaded?.name ?: ticker, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            com.example.sp500auth.ui.common.StatusPill(ticker, Green)
+                            loaded?.sector_display?.let { com.example.sp500auth.ui.common.StatusPill(it, com.example.sp500auth.ui.common.AppColors.Blue) }
+                        }
+                    }
+                }
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilledTonalButton(onClick = { nav.navigate("compare?ticker=$encoded") }, modifier = Modifier.weight(1f)) {
+                        Icon(Icons.Default.CompareArrows, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Comparar")
+                    }
+                    FilledTonalButton(onClick = { nav.navigate("report?a=$encoded&range=$range") }, modifier = Modifier.weight(1f)) {
+                        Icon(Icons.Default.PictureAsPdf, null, Modifier.size(18.dp)); Spacer(Modifier.width(6.dp)); Text("Exportar PDF")
+                    }
                 }
                 FavoritesStatus(favorites)
                 FavoriteAction(ticker, favorites)
                 if(recent.state is Resource.Error){Text("No se pudo registrar la visita en recientes.");TextButton(onClick={recent.visit(ticker,visitEvent)}){Text("Reintentar registro de visita")}}
-                OutlinedButton(onClick = { nav.navigate("report?a=$encoded&range=$range") }, modifier = Modifier.fillMaxWidth()) { Text("Exportar ficha en PDF") }
             }
             when (val state = vm.summary) {
                 is Resource.Loading -> item { LinearProgressIndicator(Modifier.fillMaxWidth(), color = Green) }
                 is Resource.Error -> item { Retry(state.message.orEmpty()) { vm.load(ticker); if (range != "1Y") vm.history(ticker, range) } }
                 is Resource.Success -> item {
                     val company = state.successData
-                    Text(ticker, color = Green, style = MaterialTheme.typography.labelLarge)
-                    Text(company.name.orEmpty(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(12.dp))
+                    Text("Último cierre", color = Muted, style = MaterialTheme.typography.labelMedium)
                     Text(company.quote?.adjusted_close?.let { "$${money(it)}" } ?: "Precio no disponible", style = MaterialTheme.typography.headlineLarge, fontWeight = FontWeight.Bold)
                     Text("${company.quote?.currency ?: "Moneda no informada"} · Cierre ajustado ${company.quote?.date ?: "sin fecha"}", color = Muted, style = MaterialTheme.typography.bodySmall)
                     company.reporting_note?.let { Text(it, color = Muted, style = MaterialTheme.typography.bodySmall) }
@@ -274,10 +305,19 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                         if (company.dividend_yield == null) Text(company.field_sources?.get("dividend_yield")?.reason ?: "La fuente no proporcionó datos suficientes.", color = Muted, style = MaterialTheme.typography.bodySmall)
                     }
                 }
+                if (company.is_active == false || !company.description.isNullOrBlank() || !company.website_url.isNullOrBlank()) item {
+                    FinanceCard {
+                        SectionTitle("Acerca de la empresa")
+                        if (company.is_active == false) Text("Empresa inactiva en el catálogo: no aparece en las búsquedas. Sus datos se conservan.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                        company.description?.takeIf { it.isNotBlank() }?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                        company.website_url?.takeIf { it.startsWith("https://") }?.let { com.example.sp500auth.ui.common.SourceLink(it, "Sitio web oficial") }
+                    }
+                }
+                item { FinancialProfileCard(company) }
                 item { SolvencyCard(company) }
                 item {
                     FinanceCard {
-                        SectionTitle("Análisis del Script 2")
+                        SectionTitle("Análisis financiero")
                         Text("Liquidez · Rentabilidad · Solvencia · Eficiencia · Crecimiento", color = Muted, style = MaterialTheme.typography.bodySmall)
                         OutlinedButton(onClick = { nav.navigate("finance/$encoded/all") }, modifier = Modifier.fillMaxWidth()) { Text("Pilares, radar y puntaje") }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -295,7 +335,7 @@ fun CompanyDetailScreen(nav: NavController, ticker: String, vm: CompanyViewModel
                         Text("Fuente financiera: ${company.source ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
                         Text("Fuente del precio: ${company.quote?.source ?: "No disponible"}", color = Muted, style = MaterialTheme.typography.bodySmall)
                         company.field_sources.orEmpty().forEach { (key, origin) ->
-                            val label = mapOf("market_cap" to "Capitalización", "per" to "P/E", "roe" to "ROE", "beta" to "Beta", "dividend_yield" to "Dividendos")[key]
+                            val label = mapOf("market_cap" to "Capitalización", "per" to "P/E", "roe" to "ROE", "beta" to "Beta", "dividend_yield" to "Dividendos", "equity_value" to "Valor de mercado al cierre")[key]
                             if (label != null && origin.source != null) com.example.sp500auth.ui.common.SourceLink(origin.source, "$label · ${origin.as_of ?: "Fecha no disponible"}")
                         }
                     }

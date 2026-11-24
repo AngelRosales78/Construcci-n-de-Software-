@@ -37,12 +37,13 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
             if (loginState is Resource.Success) biometricEnabled = false
         }
     }
-    fun register(username: String, email: String, password: String, passwordConfirm: String, firstName: String, lastName: String) {
+    fun register(username: String, email: String, password: String, passwordConfirm: String, firstName: String, lastName: String, phone: String = "") {
         registrationPasswordError(password, passwordConfirm)?.let { registerState = Resource.Error(it); return }
+        registrationPhoneError(phone)?.let { registerState = Resource.Error(it); return }
         viewModelScope.launch {
             logoutState = Resource.Empty()
             registerState = Resource.Loading()
-            registerState = repository.register(username, email, password, passwordConfirm, firstName, lastName)
+            registerState = repository.register(username, email, password, passwordConfirm, firstName, lastName, phone)
             if (registerState is Resource.Success) biometricEnabled = false
         }
     }
@@ -90,6 +91,12 @@ class AuthViewModel @Inject constructor(private val repository: AuthRepository) 
         sessionState = Resource.Empty()
         userProfileState = Resource.Empty()
         return true
+    }
+    /** HU13_03 and HU13_05: the server ended the session, so there is nothing left to revoke. */
+    fun sessionEnded() {
+        repository.forgetSession()
+        loginState = Resource.Empty(); registerState = Resource.Empty()
+        userProfileState = Resource.Empty(); biometricEnabled = false; sessionState = Resource.Empty()
     }
     fun logout() {
         viewModelScope.launch {
