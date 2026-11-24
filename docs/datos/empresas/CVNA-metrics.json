@@ -26,6 +26,11 @@
       "dividend_yield": {
         "status": "unavailable",
         "reason": "La fuente no ofrece componentes comparables suficientes para este indicador."
+      },
+      "equity_value": {
+        "as_of": "2025-12-31",
+        "source": "https://finance.yahoo.com/quote/CVNA/key-statistics/",
+        "method": "annual market capitalization reported for the balance date"
       }
     },
     "as_of": "2025-12-31",
@@ -42,6 +47,6 @@
     "ebit": null,
     "total_liabilities": "8998000000.00",
     "sales": "20322000000.00",
-    "equity_value": null
+    "equity_value": "60023904600.00"
   }
 }

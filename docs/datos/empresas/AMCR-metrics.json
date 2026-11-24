@@ -26,6 +26,11 @@
       "dividend_yield": {
         "status": "unavailable",
         "reason": "La fuente no ofrece componentes comparables suficientes para este indicador."
+      },
+      "equity_value": {
+        "as_of": "2026-06-30",
+        "source": "https://finance.yahoo.com/quote/AMCR/key-statistics/",
+        "method": "annual market capitalization reported for the balance date"
       }
     },
     "as_of": "2026-06-30",
@@ -42,6 +47,6 @@
     "ebit": "1958000000.00",
     "total_liabilities": "25294000000.00",
     "sales": "23506000000.00",
-    "equity_value": null
+    "equity_value": "20023365000.00"
   }
 }

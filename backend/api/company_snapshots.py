@@ -33,6 +33,16 @@ def latest_valuation(payload, typ):
     return max(candidates,key=lambda r:r[0]) if candidates else None
 
 
+def balance_market_value(payload, when):
+    """Capitalización anual cuya fecha coincide exactamente con la del balance; nunca una cercana ni la actual."""
+    for item in payload.get('timeseries',{}).get('result') or []:
+        for row in item.get('annualMarketCap',[]) or []:
+            value=((row or {}).get('reportedValue') or {}).get('raw')
+            if value is not None and math.isfinite(value) and value>=0 and row.get('asOfDate')==when.isoformat():
+                return Decimal(str(value))
+    return None
+
+
 def beta_value(rows, benchmark):
     stock={r['date']:float(r['adjusted_close']) for r in rows}
     index={r['date']:float(r['adjusted_close']) for r in benchmark}
@@ -81,6 +91,11 @@ def update_snapshot(company, facts, chart, rows, valuations, benchmark):
                 break
         # Market equity is used by Altman only if it belongs to the same annual balance date.
         if provenance.get('market_cap',{}).get('as_of')==current.period_end.isoformat():values['equity_value']=values['market_cap']
+        else:
+            values['equity_value']=balance_market_value(valuations,current.period_end)
+            if values['equity_value'] is not None:
+                provenance['equity_value']={'as_of':current.period_end.isoformat(),'source':valuation_url,
+                                            'method':'annual market capitalization reported for the balance date'}
     if rows:
         value=beta_value(rows,benchmark)
         if value is not None:

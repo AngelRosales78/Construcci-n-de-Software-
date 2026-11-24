@@ -26,6 +26,11 @@
       "dividend_yield": {
         "status": "unavailable",
         "reason": "La fuente no ofrece componentes comparables suficientes para este indicador."
+      },
+      "equity_value": {
+        "as_of": "2025-12-31",
+        "source": "https://finance.yahoo.com/quote/APH/key-statistics/",
+        "method": "annual market capitalization reported for the balance date"
       }
     },
     "as_of": "2025-12-31",
@@ -42,6 +47,6 @@
     "ebit": null,
     "total_liabilities": "22727200000.00",
     "sales": "23094700000.00",
-    "equity_value": null
+    "equity_value": "165762724000.00"
   }
 }

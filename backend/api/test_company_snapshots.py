@@ -50,6 +50,26 @@ def test_snapshot_populates_card_and_does_not_mark_real_data_as_demo():
 
 
 @pytest.mark.django_db
+def test_altman_market_value_uses_only_the_exact_balance_date(tmp_path):
+    import json
+    from io import StringIO
+    from django.core.management import call_command
+    from .company_snapshots import balance_market_value
+    data={'timeseries':{'result':[{'annualMarketCap':[None,{'asOfDate':'2024-12-30','reportedValue':{'raw':7}},{'asOfDate':'2024-12-31','reportedValue':{'raw':2000}}]}]}}
+    assert balance_market_value(data,date(2024,12,31))==Decimal('2000')
+    assert balance_market_value(data,date(2024,12,29)) is None and balance_market_value({},date(2024,12,31)) is None
+    company=Company.objects.create(ticker='TEST',name='Fixture',sector='technology')
+    card=FinancialMetrics.objects.create(company=company,as_of=date(2024,12,31),source='https://data.sec.gov/x',working_capital=200,total_assets=1000,
+        retained_earnings=300,ebit=150,total_liabilities=500,sales=900)
+    (tmp_path/'TEST-valuations.json').write_text(json.dumps(data),encoding='utf-8')
+    for expected in ('1 valores','0 valores'):
+        out=StringIO();call_command('fill_balance_market_value',str(tmp_path),no_export=True,stdout=out)
+        assert out.getvalue().startswith(expected)
+    card.refresh_from_db()
+    assert card.equity_value==2000 and card.field_sources['equity_value']['as_of']=='2024-12-31' and card.ebit==150
+
+
+@pytest.mark.django_db
 def test_no_new_data_keeps_existing_snapshot():
     company=Company.objects.create(ticker='TEST',name='Fixture',sector='technology')
     FinancialMetrics.objects.create(company=company,as_of=date(2024,1,1),source='https://example.org',market_cap=100)

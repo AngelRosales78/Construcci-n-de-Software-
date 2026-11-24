@@ -27,6 +27,11 @@
         "as_of": "2026-10-27",
         "source": "https://finance.yahoo.com/quote/WST/history/",
         "method": "recorded cash dividends over trailing 365 days / unadjusted closing price; percent"
+      },
+      "equity_value": {
+        "as_of": "2025-12-31",
+        "source": "https://finance.yahoo.com/quote/WST/key-statistics/",
+        "method": "annual market capitalization reported for the balance date"
       }
     },
     "as_of": "2025-12-31",
@@ -43,6 +48,6 @@
     "ebit": null,
     "total_liabilities": "1094000000.00",
     "sales": "3074100000.00",
-    "equity_value": null
+    "equity_value": "19822024377.00"
   }
 }
