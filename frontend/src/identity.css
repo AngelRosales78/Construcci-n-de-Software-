@@ -1,0 +1,190 @@
+@font-face { font-family: 'IBM Plex Sans'; src: url('/fonts/ibm-plex-sans-variable.ttf') format('truetype'); font-style: normal; font-weight: 100 700; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('/fonts/ibm-plex-mono-regular.ttf') format('truetype'); font-style: normal; font-weight: 400; font-display: swap; }
+:root {
+  --body-font: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --display-font: 'IBM Plex Sans', 'Segoe UI', sans-serif;
+  --data-font: 'IBM Plex Mono', ui-monospace, monospace;
+  --ink: #203d32; --ink-soft: #56685d; --oxide: #97442f; --paper: #f4f2e9; --paper-white: #fffef9;
+}
+body { font-family: var(--body-font); font-weight: 400; line-height: 1.6; }
+button, input, select, textarea { font-family: var(--body-font); }
+.ui-icon { flex: 0 0 auto; vertical-align: middle; }
+.workspace-content h1 { font-weight: 600; font-size: clamp(32px, 3.5vw, 48px); letter-spacing: -.035em; line-height: 1.1; }
+.workspace-content :is(h2,h3,h4) { font-family: var(--body-font); font-weight: 600; letter-spacing: -.02em; }
+.workspace-content :is(button,a,input,select) { -webkit-tap-highlight-color: transparent; }
+.workspace-content :is(button,a) { transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
+.workspace-content .section-eyebrow { letter-spacing: .09em; font-size: 11px; font-weight: 600; }
+.workspace-brand strong { font: 600 25px/1.2 var(--body-font); letter-spacing: -.04em; }
+.workspace-brand small { font-size: 9px; letter-spacing: .06em; }
+.workspace-sidebar nav > a { font-size: 14px; padding-block: 13px; }
+.workspace-sidebar nav > a:before { font-family: var(--data-font); }
+.workspace-heading > small, .workspace-footer, .sidebar-note small { font-size: 11px; }
+.navigation-caption { font-size: 11px; }
+.workspace-header .account-name { font-size: 13px; }
+.auth-editorial-story h2 { font: 600 clamp(35px,4vw,56px)/1.12 var(--body-font); letter-spacing: -.04em; }
+.auth-editorial h2 em, .auth-editorial-story h2 em { font-style: normal; }
+.auth-wordmark > span, .auth-header h1 { font-family: var(--body-font); font-weight: 600; }
+
+/* A recognizable issuer, with one consistent fallback for unavailable logos. */
+.company-mark { display: inline-grid; place-items: center; width: 42px; height: 42px; flex-shrink: 0; background: #fffef9; border: 1px solid #d5dbd0; border-radius: 9px; overflow: hidden; }
+.company-mark img { width: 100%; height: 100%; object-fit: contain; padding: 7px; }
+.company-mark img.company-logo-on-dark { background: #203d32; }
+.company-mark-large { width: 68px; height: 68px; border-radius: 12px; }
+.company-mark-large img { padding: 11px; }
+.company-mark .company-logo-fallback { font: 400 11px/1.2 var(--data-font); text-align: center; word-break: break-word; color: var(--ink); background: #e7ecdf; width: 100%; height: 100%; display: grid; place-items: center; }
+.workspace-content .company-list .company-card-header img { width: 100%; height: 100%; border-radius: 0; padding: 7px; }
+.workspace-content .company-list .company-name { font-size: 23px; font-weight: 600; }
+.workspace-content .company-list .company-ticker { font-family: var(--data-font); font-size: 12px; letter-spacing: 0; }
+.workspace-content .company-list .company-card:hover { background: #e9eee2; }
+
+/* Home: a strong entry point and a visual directory of real sectors. */
+.workspace-content .desk-masthead { font-size: 11px; letter-spacing: .07em; border-color: var(--rule); }
+.workspace-content .desk-masthead p { font: 400 13px/1.5 var(--body-font); }
+.workspace-content .editorial-cover { padding-block: 34px; grid-template-columns: minmax(0,1.45fr) minmax(280px,1fr); gap: 48px; }
+.workspace-content .editorial-cover h1 { font: 600 clamp(36px,4.2vw,60px)/1.06 var(--body-font); letter-spacing: -.045em; margin-block: 16px 22px; }
+.workspace-content .editorial-cover h1 > span { color: var(--oxide); }
+.workspace-content .editorial-cover .section-description { max-width: 48ch; font-size: 16px; }
+.workspace-content .cover-index { background: #203d32; color: #f6f3e6; border: 0; border-radius: 10px; padding: 22px 26px; }
+.workspace-content .cover-index > a { color: inherit; border-color: #516658; padding: 16px 0; gap: 16px; }
+.workspace-content .cover-index :is(.index-number,a>span:last-child) { color: #edb89b; }
+.workspace-content .cover-index strong { font: 500 20px/1.3 var(--body-font); letter-spacing: -.015em; }
+.workspace-content .cover-index small { color: #d2dccb; font-size: 13px; line-height: 1.6; }
+.workspace-content .cover-index > p { font: 400 13px/1.6 var(--body-font); color: #d2dccb; margin-top: 18px; }
+.workspace-content .reading-route-heading { margin-top: 26px; }
+.workspace-content .reading-route-heading > span { font: 400 13px/1.5 var(--body-font); }
+.workspace-content .onboarding-grid { margin-block: 20px 32px; }
+.workspace-content .onboarding-grid h2 { font-size: 16px; }
+.workspace-content .onboarding-grid .step-number { font-family: var(--data-font); font-size: 18px; }
+.workspace-content .recent-companies h2 { font: 600 25px/1.2 var(--body-font); }
+.workspace-content .recent-companies > p { font-size: 13px; }
+.sector-explorer { margin: 32px 0; }
+.sector-explorer-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+.sector-explorer-heading .section-eyebrow { margin: 0 0 7px; }
+.sector-explorer-heading h2 { font-size: 28px; line-height: 1.2; margin: 0; }
+.sector-explorer-heading > a { font-size: 14px; padding-block: 10px; }
+.sector-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.sector-tile { display: block; padding: 22px; border: 1px solid #ced7c8; border-radius: 8px; background: var(--paper-white); color: var(--ink); text-decoration: none; min-width: 0; }
+.sector-tile:hover { border-color: #52725a; background: #edf1e6; }
+.sector-tile-icon { color: #3c684c; display: inline-flex; padding: 9px; border-radius: 9px; background: #edf1e6; }
+.sector-tile h3 { display: flex; justify-content: space-between; gap: 12px; font-size: 21px; margin: 16px 0 8px; }
+.sector-tile h3 > span { color: var(--oxide); }
+.sector-tile > p { font-size: 14px; line-height: 1.6; color: var(--ink-soft); margin: 0; min-height: 44px; }
+.sector-brands { display: flex; align-items: center; margin-top: 18px; gap: 5px; }
+.sector-brands .company-mark { width: 29px; height: 29px; border-radius: 50%; }
+.sector-brands .company-mark img { padding: 5px; }
+.sector-brands > span:last-child { margin-left: auto; font-size: 12px; color: var(--ink-soft); }
+.sector-shortcuts { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0; }
+.sector-shortcuts button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; min-height: 44px; font-size: 13px; border: 1px solid var(--rule); background: transparent; color: var(--ink); border-radius: 5px; cursor: pointer; }
+.sector-shortcuts button[aria-pressed='true'] { background: var(--ink); color: #fffef9; border-color: var(--ink); }
+
+/* Company: price history and interpretation share the first analytical row. */
+.workspace-content .company-dashboard > .dashboard-header { display: grid; grid-template-columns: auto 68px minmax(0,1fr) auto; gap: 18px; border-top: 0; border-radius: 10px; padding: 22px; }
+.workspace-content .company-dashboard .dashboard-title h1 { font-size: clamp(27px,3vw,40px); font-weight: 600; }
+.workspace-content .company-dashboard .dashboard-title .section-eyebrow { font-family: var(--data-font); font-size: 11px; letter-spacing: .025em; }
+.workspace-content .company-dashboard .terminal-quote strong { font-family: var(--body-font); font-weight: 600; letter-spacing: -.03em; }
+.workspace-content .company-dashboard .company-first-step .beginner-intro { border-left: 0; border: 1px solid var(--rule); border-radius: 8px; padding: 18px 22px; }
+.workspace-content .company-dashboard .beginner-intro h2 { font: 500 18px/1.3 var(--body-font); margin-block: 4px 6px; }
+.workspace-content .company-dashboard .beginner-intro .section-eyebrow { color: var(--ink-soft); font-size: 10px; }
+.workspace-content .company-dashboard .company-sections { display: flex; gap: 8px; padding-bottom: 8px; border-color: var(--rule); }
+.workspace-content .company-dashboard .company-sections button { display: flex; align-items: center; justify-content: center; gap: 8px; flex: 1; font-weight: 500; font-size: 14px; min-height: 46px; border-bottom: 0; background: transparent; border-radius: 5px; padding: 10px; }
+.workspace-content .company-dashboard .company-sections button[aria-pressed='true'] { color: #fffef9; background: var(--ink); }
+.company-overview-feature { display: grid; grid-template-columns: minmax(0,1.65fr) minmax(280px,1fr); gap: 18px; align-items: start; margin-bottom: 22px; }
+.workspace-content .company-dashboard .company-overview-feature > .price-chart { margin: 0; padding: 22px; min-width: 0; border-radius: 10px; }
+.workspace-content .company-dashboard .company-overview-feature > .financial-health.altman-reading { margin: 0; padding: 22px; border-radius: 10px; }
+.workspace-content .company-dashboard .altman-reading h3 { font: 600 24px/1.2 var(--body-font); letter-spacing: -.03em; margin-block: 16px 8px; }
+.workspace-content .company-dashboard .altman-reading > strong { font: 500 15px/1.5 var(--body-font); letter-spacing: 0; }
+.workspace-content .company-dashboard .altman-result { margin-top: 18px; gap: 10px 16px; }
+.workspace-content .company-dashboard .altman-result .altman-score { font: 500 46px/1.1 var(--body-font); letter-spacing: -.04em; }
+.workspace-content .company-dashboard .altman-result p { font-size: 14px; }
+.workspace-content .company-dashboard .altman-result p span { font-size: 12px; }
+.workspace-content .company-dashboard .altman-zones { grid-template-columns: 1fr; gap: 6px; margin-block: 18px; }
+.workspace-content .company-dashboard .altman-zone { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 12px; padding: 9px 10px; border-top-width: 1px; border-left-width: 4px; }
+.workspace-content .company-dashboard .altman-zone.zone-safe { border-left-color: #99c5a4; }
+.workspace-content .company-dashboard .altman-zone.zone-grey { border-left-color: #e4c784; }
+.workspace-content .company-dashboard .altman-zone.zone-distress { border-left-color: #d7a385; }
+.workspace-content .company-dashboard .altman-reading .health-explanation { font-size: 14px; line-height: 1.65; }
+.workspace-content .company-dashboard .altman-reading :is(.altman-limits,.altman-date) { font-size: 12px; line-height: 1.65; }
+.workspace-content .company-dashboard .company-overview-feature .chart-heading { display: block; }
+.workspace-content .company-dashboard .price-chart .chart-heading h3 { font: 500 23px/1.2 var(--body-font); margin-block: 5px 16px; }
+.workspace-content .company-dashboard .price-chart [aria-label='Rango de precios'] { display: flex; flex-wrap: wrap; gap: 6px; }
+.workspace-content .company-dashboard .price-chart [data-range] { flex: 1; font-size: 13px; min-height: 44px; }
+.chart-inspection { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 20px 0 8px; }
+.chart-inspection small { display: block; color: #c0c8b5; font-size: 12px; }
+.chart-inspection strong { font-size: 32px; font-weight: 500; letter-spacing: -.03em; color: #f4f0df; font-variant-numeric: tabular-nums; }
+.chart-inspection strong > span { font-size: 13px; font-weight: 400; letter-spacing: 0; color: #c0c8b5; }
+.chart-inspection time { font-family: var(--data-font); color: #dde4d4; font-size: 12px; }
+.chart-session-control { display: grid; gap: 8px; font-size: 13px; margin-top: 14px; color: #edf0e4; }
+.chart-session-control input { width: 100%; accent-color: #c9d6a5; cursor: pointer; min-height: 26px; }
+.chart-session-control > span { font-size: 12px; color: #c0c8b5; }
+.workspace-content .company-dashboard .price-chart .chart-date-range { font-size: 12px; line-height: 1.6; }
+.workspace-content .company-dashboard .price-chart .chart-caption { display: block; }
+.workspace-content .company-dashboard .price-chart .chart-caption p { font-size: 12px; line-height: 1.6; }
+.workspace-content .company-dashboard .price-chart .chart-caption a { color: #eab397; text-underline-offset: 3px; }
+.workspace-content .company-dashboard .terminal-fundamentals { border-radius: 10px; }
+.workspace-content .company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.workspace-content .company-dashboard .terminal-fundamentals .metric-card .metric-value { font-family: var(--body-font); font-weight: 600; letter-spacing: -.025em; }
+.workspace-content .company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics .metric-card { border-radius: 6px; background: #fafbf5; }
+.workspace-content .company-dashboard .terminal-fundamentals .section-title h2 { font: 600 25px/1.3 var(--body-font); }
+
+/* Comparative marks are drawn only for compatible, available scores on /100. */
+.workspace-content .comparison-page > h1 { font-weight: 600; }
+.workspace-content .comparison-page .comparison-picker { border-radius: 9px; }
+.workspace-content .comparison-picker .comparison-selection { justify-content: start; gap: 14px; }
+.workspace-content .comparison-picker .comparison-selection strong { font: 400 23px/1.3 var(--data-font); color: var(--ink); }
+.workspace-content .comparison-picker .comparison-selection button { margin-left: auto; }
+.workspace-content .comparison-page .comparison-result { border-radius: 10px; }
+.workspace-content .comparison-page .comparison-result > h2 { font: 500 29px/1.3 var(--body-font); }
+.comparison-identity { border: 1px solid #576e5d; border-left: 4px solid #a8c1a6; border-radius: 7px; padding: 20px; display: grid; grid-template-columns: 68px minmax(0,1fr); column-gap: 16px; align-items: center; min-width: 0; }
+.comparison-identity-b { border-left-color: #eab397; }
+.comparison-identity > .company-mark { grid-column: 1; grid-row: 1; }
+.comparison-identity > h3 { grid-column: 2; grid-row: 1; margin: 0; font: 400 23px/1.3 var(--data-font); }
+.comparison-identity > :is(p,a) { grid-column: 1/-1; }
+.comparison-score { min-width: 100px; font-variant-numeric: tabular-nums; }
+.comparison-score > span:first-child { display: block; margin-bottom: 8px; }
+.comparison-score-track { display: block; height: 8px; background: #445e4b; border-radius: 3px; overflow: hidden; width: 100%; }
+.comparison-score-track > span { display: block; height: 100%; background: #c9d6a5; border-radius: inherit; }
+.comparison-score-b .comparison-score-track > span { background: #eab397; }
+
+@media (max-width: 1150px) {
+  .company-overview-feature { grid-template-columns: minmax(0,1fr); }
+  .workspace-content .company-dashboard .company-overview-feature > .financial-health.altman-reading { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); column-gap: 24px; align-content: start; }
+  .workspace-content .company-dashboard .company-overview-feature .altman-reading > * { grid-column: 1/-1; }
+  .sector-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .workspace-content .company-dashboard > .dashboard-header { grid-template-columns: auto 58px minmax(0,1fr); }
+  .workspace-content .company-dashboard > .dashboard-header .terminal-quote { grid-column: 2/-1; margin: 0; display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; text-align: left; }
+}
+@media (max-width: 760px) {
+  .workspace-content .editorial-cover { grid-template-columns: minmax(0,1fr); gap: 24px; padding-block: 26px; }
+  .workspace-content .editorial-cover h1 { font-size: clamp(35px,7.5vw,50px); }
+  .workspace-content .cover-index { padding: 20px; }
+  .sector-explorer-heading { flex-direction: column; align-items: start; gap: 6px; }
+  .sector-explorer-heading h2 { font-size: 25px; }
+  .sector-tile { padding: 18px; }
+  .sector-brands > span:last-child { display: none; }
+  .workspace-content .company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .workspace-content .company-dashboard .company-sections { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .workspace-content .company-dashboard .company-sections button { font-size: 13px; padding-inline: 6px; }
+}
+@media (max-width: 520px) {
+  .workspace-content .company-dashboard > .dashboard-header { grid-template-columns: 56px minmax(0,1fr); gap: 14px; padding: 18px; }
+  .workspace-content .company-dashboard > .dashboard-header .back-button { grid-column: 1/-1; justify-self: start; min-height: 36px; }
+  .workspace-content .company-dashboard > .dashboard-header > .company-mark { width: 56px; height: 56px; align-self: start; }
+  .workspace-content .company-dashboard .dashboard-title h1 { font-size: 27px; }
+  .workspace-content .company-dashboard > .dashboard-header .terminal-quote { grid-column: 1/-1; border-top: 1px solid var(--rule); padding-top: 12px; gap: 6px 14px; }
+  .workspace-content .company-dashboard .terminal-quote > small:first-child { flex-basis: 100%; }
+  .workspace-content .company-dashboard .terminal-quote strong { font-size: 28px; }
+  .workspace-content .company-dashboard .company-first-step .beginner-intro { padding: 16px; gap: 14px; }
+  .workspace-content .company-dashboard .company-overview-feature > .price-chart { padding: 18px 14px; }
+  .workspace-content .company-dashboard .company-overview-feature > .financial-health.altman-reading { padding: 20px; display: block; }
+  .workspace-content .company-dashboard .terminal-fundamentals .dashboard-metrics.beginner-metrics { grid-template-columns: minmax(0,1fr); }
+  .chart-inspection strong { font-size: 28px; }
+  .chart-inspection time { font-size: 11px; }
+  .sector-tile h3 { font-size: 18px; }
+  .sector-tile > p { font-size: 13px; min-height: 62px; }
+  .comparison-identity { padding: 16px; grid-template-columns: 56px minmax(0,1fr); }
+  .comparison-identity > .company-mark { width: 56px; height: 56px; }
+  .workspace-content .comparison-page .comparison-result > h2 { font-size: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .workspace-content *, .workspace-content *::before, .workspace-content *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}

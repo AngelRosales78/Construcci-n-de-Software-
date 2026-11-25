@@ -1,19 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { hasIndicatorValue, sectorLabel, formatMarketValue, formatFinancialNumber } from '../../utils/financialPresentation'
-import { useState } from 'react'
-import verifiedLogos from '../../data/verifiedLogos.json'
-import lightLogos from '../../data/lightLogos.json'
 import FavoriteButton from '../favorites/FavoriteButton'
-
-function CompanyLogo({ company }) {
-  const [failed, setFailed] = useState(false)
-  const local = verifiedLogos.includes(company.ticker)
-    ? `/company-logos/${company.ticker.replaceAll('.', '-')}.png` : ''
-  const source = local || company.logo_url
-  return source && !failed
-    ? <img src={source} className={lightLogos.includes(company.ticker) ? 'company-logo-on-dark' : undefined} alt={`Logo de ${company.name}`} width="40" height="40" loading="lazy" onError={() => setFailed(true)} />
-    : <span className="company-logo-fallback" aria-label={`Logo no disponible para ${company.name}`}>{company.ticker}</span>
-}
+import CompanyMark from '../shared/CompanyMark'
 
 export default function CompanyList({ companies, loading, favorites }) {
   const navigate = useNavigate()
@@ -45,7 +33,7 @@ export default function CompanyList({ companies, loading, favorites }) {
           onClick={() => handleSelectCompany(company.ticker)}
         >
           <div className="company-card-header">
-            <CompanyLogo company={company} />
+            <CompanyMark company={company} />
             <strong className="company-ticker">{company.ticker}</strong>
           </div>
           <h3 className="company-name">{company.name}{company.is_index_member === false && <small className="company-membership">Alta manual · índice sin verificar</small>}</h3>

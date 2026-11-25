@@ -26,6 +26,22 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers() })
 const mount = () => render(<MemoryRouter><CompanySearch /></MemoryRouter>)
 
+it('los accesos por sector conservan consulta, orden y disponibilidad, y sincronizan el selector', async () => {
+ render(<MemoryRouter initialEntries={['/search?q=AAA&ordering=market_cap&with_data=true&page=2']}><CompanySearch /></MemoryRouter>)
+ await screen.findByText('Empresa AAA')
+ fireEvent.click(screen.getByRole('button',{name:'Tecnología',exact:true}))
+ await waitFor(()=>expect(search.mock.lastCall[0]).toContain('sector=technology'))
+ const selected = new URLSearchParams(search.mock.lastCall[0].split('?')[1])
+ expect(selected.get('q')).toBe('AAA')
+ expect(selected.get('ordering')).toBe('market_cap')
+ expect(selected.get('with_data')).toBe('true')
+ expect(selected.get('page')).toBe('1')
+ expect(screen.getByLabelText('Sector:').value).toBe('technology')
+ fireEvent.click(screen.getByRole('button',{name:'Todos',exact:true}))
+ await waitFor(()=>expect(search.mock.lastCall[0]).not.toContain('sector='))
+ expect(screen.getByLabelText('Sector:').value).toBe('')
+})
+
 it('muestra resultados e historial paginados sin repetir búsquedas al montar', async () => {
   mount()
   await screen.findByText('Empresa AAA')

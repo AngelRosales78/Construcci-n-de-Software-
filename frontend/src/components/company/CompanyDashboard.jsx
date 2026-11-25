@@ -13,13 +13,15 @@ import FavoriteButton from '../favorites/FavoriteButton'
 import ReportPanel from '../reports/ReportPanel'
 import CompanyAbout from './CompanyAbout'
 import BeginnerGuide from './BeginnerGuide'
+import CompanyMark from '../shared/CompanyMark'
+import Icon from '../shared/Icon'
 import './company-reading.css'
 
 const sections = [
-  { id: 'overview', label: 'Resumen', icon: '◫', description: 'Precio, indicadores y lectura del balance, de un vistazo.' },
-  { id: 'pillars', label: 'Salud financiera', icon: '◉', description: 'Elige un año y explora los cinco pilares del balance.' },
-  { id: 'simulation', label: 'Simulaciones', icon: '↗', description: 'Explora escenarios. Los supuestos no modifican los datos históricos.' },
-  { id: 'analysis', label: 'Explicación de IA', icon: '✧', description: 'Entiende los indicadores del año seleccionado con sus referencias.' },
+  { id: 'overview', label: 'Resumen', description: 'Precio, indicadores y lectura del balance, de un vistazo.' },
+  { id: 'pillars', label: 'Salud financiera', description: 'Elige un año y explora los cinco pilares del balance.' },
+  { id: 'simulation', label: 'Simulaciones', description: 'Explora escenarios. Los supuestos no modifican los datos históricos.' },
+  { id: 'analysis', label: 'Explicación de IA', description: 'Entiende los indicadores del año seleccionado con sus referencias.' },
 ]
 
 export default function CompanyDashboard() {
@@ -39,6 +41,7 @@ export default function CompanyDashboard() {
         <button onClick={() => navigate(returnTo, { replace: true })} className="back-button">
           ← Volver
         </button>
+        <CompanyMark company={company} large />
         <div className="dashboard-title">
           <p className="section-eyebrow">FICHA FINANCIERA · {company.ticker}</p>
           <h1>{company.name}</h1>
@@ -55,8 +58,8 @@ export default function CompanyDashboard() {
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
         {favorites.message && <p role="status">{favorites.message}</p>}
         <nav className="company-sections" aria-label="Secciones de la empresa">
-          {sections.map(({ id, label, icon }) =>
-            <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}><span aria-hidden="true">{icon}</span> {label}</button>)}
+          {sections.map(({ id, label }) =>
+            <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}><Icon name={id} /> {label}</button>)}
         </nav>
         {section !== 'overview' && <p className="company-section-guide">{sections.find(item => item.id === section).description}</p>}
         {company.is_active === false && <p role="status">Empresa inactiva: ficha histórica, fuera de los buscadores.</p>}
@@ -71,7 +74,10 @@ export default function CompanyDashboard() {
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars key={company.ticker} view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
-        <FinancialHealthIndicator altmanZ={company.altman_z} asOf={company.as_of} onReviewIndicators={hasIndicators(company) ? () => document.getElementById('company-metrics-title')?.focus() : undefined} />
+        <div className="company-overview-feature">
+          <PriceChart />
+          <FinancialHealthIndicator altmanZ={company.altman_z} asOf={company.as_of} onReviewIndicators={hasIndicators(company) ? () => document.getElementById('company-metrics-title')?.focus() : undefined} />
+        </div>
         <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
           <span><small>{company.reference_basis === 'provider_normalized' ? 'Referencia anual del proveedor' : 'Balance de referencia'}</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
           <p>Datos históricos · Cada indicador conserva su fecha.</p>
@@ -80,7 +86,6 @@ export default function CompanyDashboard() {
         {(hasIndicators(company) || company.quote) && <>
         <div className="terminal-financial-grid">
           <section className="terminal-fundamentals"><div className="section-title"><h2 id="company-metrics-title" tabIndex={-1}>Las cifras, explicadas</h2><span className="coverage-badge">{countAvailableIndicators(company)} de 5 disponibles</span></div><MetricCards company={company} /><p className="metrics-period-note">El rango del gráfico no cambia estos indicadores.</p><button className="financial-detail-action" onClick={openFinancialDetails}>Ver detalle financiero y fuentes →</button></section>
-          <PriceChart />
         </div>
         </>}
         </div>

@@ -8,7 +8,7 @@ export default function SimulationScenarios() {
   const { data, loading, error, simulate, draft, update } = useSimulationViewModel()
   const [hidden, setHidden] = useState({})
   const options = useMemo(() => ({
-    chart: { backgroundColor: 'transparent', height: 340, animation: false },
+    chart: { backgroundColor: 'transparent', height: 340, animation: false, style:{fontFamily:'IBM Plex Sans, sans-serif'} },
     title: { text: null }, credits: { enabled: false }, legend: { enabled: false },
     xAxis: { type: 'datetime', labels: { style: { color: '#bacbb9' } } },
     yAxis: { title: { text: data?.currency || 'Precio', style: { color: '#bacbb9' } }, labels: { style: { color: '#bacbb9' } }, gridLineColor: '#343e39' },

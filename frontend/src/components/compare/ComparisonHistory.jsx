@@ -11,11 +11,13 @@ export default function ComparisonHistory({ a, b, year }) {
   const [cursor, setCursor] = useState(0)
   const resource = useRemoteResource(`/compare/history/?${new URLSearchParams({ a, b, fiscal_year: year, range })}`, requested)
   const data = resource.data?.a === a && resource.data?.b === b ? resource.data : null
-  const options = useMemo(() => ({ chart: { height: 320, backgroundColor: 'transparent', animation: false },
-    title: { text: 'Rendimiento desde una fecha común (%)' },
-    xAxis: { type: 'datetime' }, yAxis: { title: { text: 'Rendimiento (%)' } },
-    tooltip: { shared: true, valueSuffix: ' %', valueDecimals: 2 },
-    series: [['a', a], ['b', b]].map(([side, name], i) => ({ name, dashStyle: i ? 'ShortDash' : 'Solid',
+  const options = useMemo(() => ({ chart: { height: 320, backgroundColor: 'transparent', animation: false, style:{fontFamily:'IBM Plex Sans, sans-serif'} },
+    title: { text: 'Rendimiento desde una fecha común (%)', style:{color:'#e6ebdd',fontSize:'15px'} },
+    xAxis: { type: 'datetime', labels:{style:{color:'#bacbb9'}}, lineColor:'#576e5d', tickColor:'#576e5d' },
+    yAxis: { title: { text: 'Rendimiento (%)', style:{color:'#bacbb9'} }, labels:{style:{color:'#bacbb9'}}, gridLineColor:'#445e4b' },
+    legend: { itemStyle:{color:'#e6ebdd'}, itemHoverStyle:{color:'#fffef9'}, itemHiddenStyle:{color:'#91a28b'} },
+    tooltip: { shared: true, valueSuffix: ' %', valueDecimals: 2, backgroundColor:'#203d32', borderColor:'#91a28b', style:{color:'#fffef9'} },
+    series: [['a', a], ['b', b]].map(([side, name], i) => ({ name, color:i ? '#eab397' : '#c9d6a5', dashStyle: i ? 'ShortDash' : 'Solid',
       data: (data?.points || []).map(p => [Date.parse(p.date + 'T00:00:00Z'), p[side]]), animation: false })),
     credits: { enabled: false }, accessibility: { enabled: false },
   }), [data, a, b])
@@ -25,7 +27,7 @@ export default function ComparisonHistory({ a, b, year }) {
     <p>Fechas comunes, sin rellenar huecos. Ambas series comienzan en 0 %.</p>
     <label>Rango del comparador<select value={range} onChange={e => setParams(previous => {
       const next = new URLSearchParams(previous); next.set('range', e.target.value); return next
-    })}>{['1M', '6M', '1Y', '5Y'].map(value => <option key={value}>{value}</option>)}</select></label>
+    })}>{Object.entries({'1M':'1 mes','6M':'6 meses','1Y':'1 año','5Y':'5 años'}).map(([value,label]) => <option key={value} value={value}>{label}</option>)}</select></label>
     <button onClick={() => { setRequested(true); resource.reload() }}>Consultar rendimiento</button>
     {resource.loading && <p role="status">Consultando precios…</p>}
     {resource.error && <p role="alert">{resource.error}</p>}

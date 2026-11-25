@@ -4,9 +4,10 @@ import WorkspaceLayout from '../layout/WorkspaceLayout'
 import CompanyPicker from './CompanyPicker'
 import ComparisonHistory from './ComparisonHistory'
 import ReportPanel from '../reports/ReportPanel'
+import CompanyMark from '../shared/CompanyMark'
+import ScoreComparison from './ScoreComparison'
 
 const labels = { liquidity: 'Liquidez', profitability: 'Rentabilidad', solvency: 'Solvencia', efficiency: 'Eficiencia', growth: 'Crecimiento' }
-const displayNote = note => note?.status === 'available' ? `${note.display_value} / 100` : 'No disponible'
 
 export default function ComparisonPage() {
   const vm = useComparisonViewModel()
@@ -37,7 +38,7 @@ export default function ComparisonPage() {
       <h2>{vm.data.a.ticker} y {vm.data.b.ticker} · FY{vm.data.fiscal_year}</h2>
       <p className="comparison-coverage"><strong>{vm.data.comparisons.filter(row => row.status === 'available').length} de {vm.data.comparisons.length} pilares comparables</strong><span>Las notas son sobre 100; no indican cuánto ganarás.</span></p>
       {vm.data.reason && <p className="data-notice" role="status">{vm.data.reason}</p>}
-      <div className="comparison-periods">{['a', 'b'].map(side => <div key={side}><h3>{side.toUpperCase()} · {vm.data[side].ticker}</h3>
+      <div className="comparison-periods">{['a', 'b'].map(side => <div key={side} className={`comparison-identity comparison-identity-${side}`}><CompanyMark company={{ticker:vm.data[side].ticker,name:vm.data[side].ticker}} large /><h3>{side.toUpperCase()} · {vm.data[side].ticker}</h3>
         <p>{vm.data[side].period_basis === 'provider_normalized' ? `Referencia anual del proveedor: ${vm.data[side].period.end}` : vm.data[side].period?.start && vm.data[side].period?.end ? `${vm.data[side].period.start} → ${vm.data[side].period.end}` : 'Sin balance para este ejercicio'}</p>
         {vm.data[side].period_note && <p>{vm.data[side].period_note}</p>}
         <Link to={`/company/${vm.data[side].ticker}`}>Ver ficha de {vm.data[side].ticker}</Link>
@@ -47,8 +48,8 @@ export default function ComparisonPage() {
       <div className="scenario-table" tabIndex="0" role="region" aria-label="Tabla de notas, desplazable horizontalmente"><table><caption>Puntuaciones por pilar · Solo se comparan períodos y versiones compatibles</caption>
         <thead><tr><th scope="col">Pilar</th><th scope="col">{vm.data.a.ticker}</th><th scope="col">{vm.data.b.ticker}</th><th scope="col">Resultado</th></tr></thead>
         <tbody>{vm.data.comparisons.map(row => <tr key={row.id}><th scope="row">{labels[row.id] || row.id}</th>
-          <td>{displayNote(vm.data.a.pillars.find(p => p.id === row.id)?.score)}</td>
-          <td>{displayNote(vm.data.b.pillars.find(p => p.id === row.id)?.score)}</td>
+          <td><ScoreComparison score={vm.data.a.pillars.find(p => p.id === row.id)?.score} side="a" comparable={row.status === 'available'} /></td>
+          <td><ScoreComparison score={vm.data.b.pillars.find(p => p.id === row.id)?.score} side="b" comparable={row.status === 'available'} /></td>
           <td>{row.status === 'available' ? row.result === 'tie' ? 'Empate · 0,00 puntos' : `${row.result === 'a' ? vm.data.a.ticker : vm.data.b.ticker}: mayor nota · A − B: ${row.delta} puntos`
             : <>No comparable<small>{row.reason}</small></>}</td>
         </tr>)}</tbody>

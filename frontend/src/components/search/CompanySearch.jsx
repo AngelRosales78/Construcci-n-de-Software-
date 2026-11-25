@@ -3,6 +3,7 @@ import SearchBar from './SearchBar'
 import CompanyFilters from './CompanyFilters'
 import SearchHistory from './SearchHistory'
 import CompanyList from './CompanyList'
+import SectorExplorer from './SectorExplorer'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import { Link } from 'react-router-dom'
 import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
@@ -23,6 +24,7 @@ export default function CompanySearch() {
       <div className="search-content">
         <section className="search-main" aria-label="Resultados de búsqueda">
           <div className="results-heading"><h2>{params.q ? `Resultados para “${params.q}”` : 'Empresas del catálogo'}</h2><span>{loading ? 'Consultando…' : `${count} resultados`}</span></div>
+          <SectorExplorer compact selected={params.sector} onSelect={sector => handleFilterChange({ sector, ordering: params.ordering })} />
           <CompanyFilters onFilterChange={handleFilterChange}
             initialSector={params.sector} initialOrdering={params.ordering} />
           <label className="coverage-filter"><input type="checkbox" checked={params.withData} onChange={event => setWithData(event.target.checked)} /> Solo con indicadores o balances cargados</label>

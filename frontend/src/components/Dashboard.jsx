@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import WorkspaceLayout from './layout/WorkspaceLayout'
 import RecentCompanies from './RecentCompanies'
+import SectorExplorer from './search/SectorExplorer'
 
 export default function Dashboard() {
   const navigate = useNavigate()
@@ -9,7 +10,7 @@ export default function Dashboard() {
     <section className="welcome-dashboard editorial-cover">
       <div className="cover-story">
         <p className="section-eyebrow">EL PUNTO DE PARTIDA</p>
-        <h1>Explora empresas.<br /><em>Entiende sus cifras.</em></h1>
+        <h1>Conoce la empresa.<br /><span>Entiende sus cifras.</span></h1>
         <p className="section-description">Conoce el negocio, entiende sus números y compara empresas con datos históricos y fuentes identificadas.</p>
         <button className="primary-action" onClick={() => navigate('/search')}>Explorar empresas <span aria-hidden="true">↗</span></button>
         <p className="cover-footnote">Datos históricos. Fuentes identificadas. Lecturas propias.</p>
@@ -28,6 +29,7 @@ export default function Dashboard() {
       <article><span className="step-number">02</span><h2>Entiende las cifras</h2><p>Cada indicador explica qué mide. Su fecha y su fuente te ayudan a ponerlo en contexto.</p></article>
       <article><span className="step-number">03</span><h2>Revisa los límites</h2><p>Explora el balance y los precios históricos. Los resultados del pasado no garantizan ganancias futuras.</p></article>
     </div>
+    <SectorExplorer />
     <RecentCompanies />
   </WorkspaceLayout>
 }

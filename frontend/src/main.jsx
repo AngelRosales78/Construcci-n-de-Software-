@@ -6,6 +6,7 @@ import './terminal.css'
 import './product.css'
 import './editorial.css'
 import './usability.css'
+import './identity.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

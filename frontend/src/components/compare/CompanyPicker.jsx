@@ -1,10 +1,11 @@
 import { useCompanyPickerViewModel } from '../../viewmodels/useCompanyPickerViewModel'
+import CompanyMark from '../shared/CompanyMark'
 
 export default function CompanyPicker({ side, selected, onSelect, onRemove }) {
   const vm = useCompanyPickerViewModel({ selected, onSelect })
   return <section className="comparison-picker" aria-label={`Empresa ${side}`}>
     <h2>Empresa {side}</h2>
-    {selected && <div className="comparison-selection"><strong>{selected}</strong><button type="button" onClick={onRemove} aria-label={`Quitar empresa ${side}`}>Quitar</button></div>}
+    {selected && <div className="comparison-selection"><CompanyMark company={{ticker:selected,name:selected}} large /><strong>{selected}</strong><button type="button" onClick={onRemove} aria-label={`Quitar empresa ${side}`}>Quitar</button></div>}
     <label htmlFor={`${vm.id}-input`}>{selected ? 'Cambiar empresa' : 'Buscar por nombre o símbolo'}</label>
     <input id={`${vm.id}-input`} role="combobox" aria-label={`Buscar empresa ${side}`}
       aria-autocomplete="list" aria-expanded={vm.open && vm.rows.length > 0} aria-controls={`${vm.id}-list`}
