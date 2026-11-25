@@ -10,6 +10,7 @@ const sectors = [
   { id: 'energy', name: 'Energía', description: 'Producción, distribución y servicios energéticos.', tickers: ['XOM', 'CVX', 'COP'] },
   { id: 'consumer_discretionary', name: 'Consumo', description: 'Comercio, automóviles y experiencias.', tickers: ['AMZN', 'TSLA', 'HD'] },
 ]
+const images={technology:'technology',healthcare:'healthcare',financials:'architecture',industrials:'industry',energy:'energy',consumer_discretionary:'retail'}
 
 export default function SectorExplorer({ compact = false, selected = '', onSelect }) {
   if (compact) return <nav className="sector-shortcuts" aria-label="Accesos por sector">
@@ -19,6 +20,7 @@ export default function SectorExplorer({ compact = false, selected = '', onSelec
   return <section className="sector-explorer" aria-labelledby="sector-explorer-title">
     <div className="sector-explorer-heading"><div><p className="section-eyebrow">ENCUENTRA TU PUNTO DE PARTIDA</p><h2 id="sector-explorer-title">Empieza por un sector</h2></div><Link to="/search">Ver todo el catálogo →</Link></div>
     <div className="sector-grid">{sectors.map(sector => <Link key={sector.id} className="sector-tile" to={`/search?sector=${sector.id}`}>
+      <img className="sector-image" src={`/editorial-images/${images[sector.id]}.jpg`} alt="" width="480" height="220" loading="lazy"/>
       <span className="sector-tile-icon"><Icon name={sector.id} size={25} /></span>
       <h3>{sector.name}<span aria-hidden="true">↗</span></h3><p>{sector.description}</p>
       <div className="sector-brands" aria-hidden="true">{sector.tickers.map(ticker => <CompanyMark key={ticker} company={{ ticker, name: ticker }} />)}<span>Explorar empresas</span></div>

@@ -11,13 +11,13 @@ export default function ComparisonHistory({ a, b, year }) {
   const [cursor, setCursor] = useState(0)
   const resource = useRemoteResource(`/compare/history/?${new URLSearchParams({ a, b, fiscal_year: year, range })}`, requested)
   const data = resource.data?.a === a && resource.data?.b === b ? resource.data : null
-  const options = useMemo(() => ({ chart: { height: 320, backgroundColor: 'transparent', animation: false, style:{fontFamily:'IBM Plex Sans, sans-serif'} },
+  const options = useMemo(() => ({ chart: { height: 320, backgroundColor: 'transparent', animation: false, style:{fontFamily:'Source Sans 3, sans-serif'} },
     title: { text: 'Rendimiento desde una fecha común (%)', style:{color:'#e6ebdd',fontSize:'15px'} },
     xAxis: { type: 'datetime', labels:{style:{color:'#bacbb9'}}, lineColor:'#576e5d', tickColor:'#576e5d' },
     yAxis: { title: { text: 'Rendimiento (%)', style:{color:'#bacbb9'} }, labels:{style:{color:'#bacbb9'}}, gridLineColor:'#445e4b' },
     legend: { itemStyle:{color:'#e6ebdd'}, itemHoverStyle:{color:'#fffef9'}, itemHiddenStyle:{color:'#91a28b'} },
     tooltip: { shared: true, valueSuffix: ' %', valueDecimals: 2, backgroundColor:'#203d32', borderColor:'#91a28b', style:{color:'#fffef9'} },
-    series: [['a', a], ['b', b]].map(([side, name], i) => ({ name, color:i ? '#eab397' : '#c9d6a5', dashStyle: i ? 'ShortDash' : 'Solid',
+    series: [['a', a], ['b', b]].map(([side, name], i) => ({ name, color:i ? '#f1bf6b' : '#8dbdff', dashStyle: i ? 'ShortDash' : 'Solid',
       data: (data?.points || []).map(p => [Date.parse(p.date + 'T00:00:00Z'), p[side]]), animation: false })),
     credits: { enabled: false }, accessibility: { enabled: false },
   }), [data, a, b])

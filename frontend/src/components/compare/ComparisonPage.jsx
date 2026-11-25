@@ -7,6 +7,7 @@ import ReportPanel from '../reports/ReportPanel'
 import CompanyMark from '../shared/CompanyMark'
 import ScoreComparison from './ScoreComparison'
 import FinancialAssistant from '../company/FinancialAssistant'
+import AskAI from '../shared/AskAI'
 
 const labels = { liquidity: 'Liquidez', profitability: 'Rentabilidad', solvency: 'Solvencia', efficiency: 'Eficiencia', growth: 'Crecimiento' }
 
@@ -38,6 +39,7 @@ export default function ComparisonPage() {
     {vm.data && <section aria-label="Resultado de la selección" className="comparison-result">
       <h2>{vm.data.a.ticker} y {vm.data.b.ticker} · FY{vm.data.fiscal_year}</h2>
       <p className="comparison-coverage"><strong>{vm.data.comparisons.filter(row => row.status === 'available').length} de {vm.data.comparisons.length} pilares comparables</strong><span>Las notas son sobre 100; no indican cuánto ganarás.</span></p>
+      <AskAI question="¿Qué diferencias hay entre las dos empresas?">Explícame las diferencias</AskAI>
       {vm.data.reason && <p className="data-notice" role="status">{vm.data.reason}</p>}
       <div className="comparison-periods">{['a', 'b'].map(side => <div key={side} className={`comparison-identity comparison-identity-${side}`}><CompanyMark company={{ticker:vm.data[side].ticker,name:vm.data[side].ticker}} large /><h3>{side.toUpperCase()} · {vm.data[side].ticker}</h3>
         <p>{vm.data[side].period_basis === 'provider_normalized' ? `Referencia anual del proveedor: ${vm.data[side].period.end}` : vm.data[side].period?.start && vm.data[side].period?.end ? `${vm.data[side].period.start} → ${vm.data[side].period.end}` : 'Sin balance para este ejercicio'}</p>

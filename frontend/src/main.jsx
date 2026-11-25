@@ -7,6 +7,7 @@ import './product.css'
 import './editorial.css'
 import './usability.css'
 import './identity.css'
+import './clarity.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

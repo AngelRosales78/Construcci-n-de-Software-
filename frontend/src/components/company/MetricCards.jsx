@@ -1,4 +1,5 @@
 import { hasIndicatorValue, formatMarketValue, formatFinancialNumber } from '../../utils/financialPresentation'
+import AskAI from '../shared/AskAI'
 
 const indicators = [
   ['market_cap', 'Valor en bolsa', 'Valor de todas sus acciones en el mercado; no es el dinero que tiene en caja.'],
@@ -22,6 +23,7 @@ export default function MetricCards({ company }) {
       <p className="metric-meaning">{hasIndicatorValue(company[key]) ? explanation : company.indicator_availability?.[key]?.explanation || 'No hay información suficiente para mostrar esta cifra. No equivale a cero.'}</p>
       {company.field_sources?.[key]?.as_of ? <small className="metric-reference">Referencia · {company.field_sources[key].as_of}</small>
         : <small className="metric-reference">Fecha de referencia no informada.</small>}
+      {company.ticker && <AskAI ticker={company.ticker} question={key==='roe' ? 'Explícame el ROE publicado en la ficha.' : `¿Qué significa ${label} en la ficha?`}>Explícame esta cifra</AskAI>}
     </article>)}
   </section>
 }

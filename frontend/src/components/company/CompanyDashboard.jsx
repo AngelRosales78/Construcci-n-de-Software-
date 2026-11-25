@@ -15,6 +15,7 @@ import CompanyAbout from './CompanyAbout'
 import BeginnerGuide from './BeginnerGuide'
 import CompanyMark from '../shared/CompanyMark'
 import Icon from '../shared/Icon'
+import AskAI from '../shared/AskAI'
 import './company-reading.css'
 
 const sections = [
@@ -51,8 +52,6 @@ export default function CompanyDashboard() {
         {company.quote && <div className="terminal-quote"><small>Último cierre ajustado importado</small><strong>{Number(company.quote.adjusted_close).toLocaleString('es-PE', { maximumFractionDigits: 2, minimumFractionDigits: 2 })} <span>{company.quote.currency}</span></strong><small>{company.quote.date}</small></div>}
       </div>
 
-      <div className="company-first-step" hidden={section !== 'overview'}><BeginnerGuide key={company.ticker} company={company} onExplore={openFinancialDetails} /></div>
-
       <div className="dashboard-content">
         {visitError && <p role="status">{visitError} <button onClick={retryVisit}>Reintentar registro de visita</button></p>}
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
@@ -75,9 +74,10 @@ export default function CompanyDashboard() {
         <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
         <div className="company-overview-feature">
-          <PriceChart />
-          <FinancialHealthIndicator altmanZ={company.altman_z} asOf={company.as_of} onReviewIndicators={hasIndicators(company) ? () => document.getElementById('company-metrics-title')?.focus() : undefined} />
+          <FinancialHealthIndicator ticker={company.ticker} altmanZ={company.altman_z} asOf={company.as_of} onReviewIndicators={hasIndicators(company) ? () => document.getElementById('company-metrics-title')?.focus() : undefined} />
+          <div className="company-first-step"><BeginnerGuide key={company.ticker} company={company} onExplore={openFinancialDetails} /><aside className="company-ai-invitation"><span className="ai-label">IA</span><h3>Una cifra no tiene por qué dejarte con dudas.</h3><p>Pregunta sobre esta empresa y sigue la conversación con ejemplos sencillos.</p><AskAI ticker={company.ticker}>Preguntar sobre {company.ticker}</AskAI></aside></div>
         </div>
+        <PriceChart />
         <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
           <span><small>{company.reference_basis === 'provider_normalized' ? 'Referencia anual del proveedor' : 'Balance de referencia'}</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
           <p>Datos históricos · Cada indicador conserva su fecha.</p>

@@ -3,6 +3,9 @@ import { useEffect, useRef, useState } from 'react'
 import { useSessionViewModel } from '../../viewmodels/useSessionViewModel'
 import NotificationBell from '../notifications/NotificationBell'
 import BrandMark from './BrandMark'
+import AssistantLauncher from '../company/AssistantLauncher'
+import Icon from '../shared/Icon'
+import {openAssistant} from '../../utils/assistantEvents'
 
 export default function WorkspaceLayout({ children }) {
   const { pathname } = useLocation()
@@ -14,7 +17,7 @@ export default function WorkspaceLayout({ children }) {
     if (!menuOpen) return
     const previousFocus = document.activeElement
     const previousOverflow = document.body.style.overflow
-    const links = () => [...sidebar.current.querySelectorAll('a[href]')]
+    const links = () => [...sidebar.current.querySelectorAll('a[href],button:not(:disabled)')]
     document.body.style.overflow = 'hidden'
     links()[0]?.focus()
     const keyboard = event => {
@@ -41,24 +44,25 @@ export default function WorkspaceLayout({ children }) {
     <aside ref={sidebar} className={`workspace-sidebar ${menuOpen ? 'is-open' : ''}`} id="primary-sidebar">
       <Link to="/search" className="workspace-brand" aria-label="S&P 500 · Explorar empresas">
         <BrandMark />
-        <span><strong>S&amp;P 500</strong><small>FINANCE / CUADERNO DE ANÁLISIS</small></span>
+        <span><strong>S&amp;P 500</strong><small>EMPRESAS EN PALABRAS CLARAS</small></span>
       </Link>
       <nav aria-label="Navegación principal">
-        <Link to="/dashboard" aria-label="Inicio" aria-current={pathname === '/dashboard' ? 'page' : undefined}>Inicio</Link>
-        <Link to="/search" aria-label="Explorar empresas" aria-current={pathname === '/search' || pathname.startsWith('/company/') ? 'page' : undefined}>Explorar empresas</Link>
-        <Link to="/favorites" aria-label="Favoritos" aria-current={pathname === '/favorites' ? 'page' : undefined}>Favoritos</Link>
-        <Link to="/compare" aria-label="Comparar" aria-current={pathname === '/compare' ? 'page' : undefined}>Comparar</Link>
-        <Link to="/notifications" aria-label="Mis avisos" aria-current={pathname === '/notifications' ? 'page' : undefined}>Mis avisos</Link>
+        <Link to="/dashboard" aria-label="Inicio" aria-current={pathname === '/dashboard' ? 'page' : undefined}><Icon name="overview"/>Inicio</Link>
+        <Link to="/search" aria-label="Explorar empresas" aria-current={pathname === '/search' || pathname.startsWith('/company/') ? 'page' : undefined}><Icon name="search"/>Explorar empresas</Link>
+        <Link to="/favorites" aria-label="Favoritos" aria-current={pathname === '/favorites' ? 'page' : undefined}><Icon name="bookmark"/>Favoritos</Link>
+        <Link to="/compare" aria-label="Comparar" aria-current={pathname === '/compare' ? 'page' : undefined}><Icon name="simulation"/>Comparar</Link>
+        <Link to="/notifications" aria-label="Alertas de tus empresas" aria-current={pathname === '/notifications' ? 'page' : undefined}><Icon name="bell"/>Alertas de empresas</Link>
+        <button type="button" className="sidebar-assistant" aria-haspopup="dialog" onClick={()=>{setMenuOpen(false);openAssistant()}}><Icon name="chat"/>Consultar a la IA<span>IA</span></button>
         <span className="navigation-caption">TU CUENTA</span>
         <Link to="/profile/subscription" aria-label="Mi suscripción" aria-current={pathname === '/profile/subscription' ? 'page' : undefined}>Mi suscripción</Link>
         <Link to="/profile" aria-label="Mi perfil" aria-current={pathname === '/profile' ? 'page' : undefined}>Mi perfil</Link>
         {role === 'admin' && <Link to="/admin-panel" aria-label="Administración" aria-current={pathname.startsWith('/admin-panel') ? 'page' : undefined}>Administración</Link>}
       </nav>
-      <div className="sidebar-note"><span className="sidebar-indicator" /><p>EL VALOR DEL CONTEXTO<small>Fuentes y fechas en cada ficha.</small></p></div>
+      <div className="sidebar-note"><Icon name="pillars"/><p>Entender viene primero.<small>Cada resultado conserva su fecha y su fuente.</small></p></div>
     </aside>
     <header className="workspace-header">
       <div className="workspace-heading"><button className="navigation-toggle" aria-label="Abrir navegación" aria-expanded={menuOpen} aria-controls="primary-sidebar" onClick={() => setMenuOpen(!menuOpen)}>☰</button><span>S&amp;P 500 <b>/</b> Finance</span><small>{pathname.startsWith('/admin-panel') ? 'Administración' : pathname.startsWith('/company/') ? 'Ficha de empresa' : 'Exploración y análisis'}</small></div>
-      <div className="workspace-account"><Link className="account-identity" to="/profile"><span className="account-avatar" aria-hidden="true">{avatarUrl ? <img src={avatarUrl} alt="" style={{width:36,height:36,borderRadius:'50%',objectFit:'cover'}} /> : name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span></Link>
+      <div className="workspace-account"><button type="button" className="mobile-ai-trigger" aria-label="Abrir asistente IA" aria-haspopup="dialog" onClick={()=>openAssistant()}><Icon name="chat" size={17}/><span>IA</span></button><Link className="account-identity" to="/profile"><span className="account-avatar" aria-hidden="true">{avatarUrl ? <img src={avatarUrl} alt="" style={{width:36,height:36,borderRadius:'50%',objectFit:'cover'}} /> : name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span></Link>
         <NotificationBell />
         <button className="logout-button" aria-label={leaving ? 'Cerrando…' : 'Cerrar Sesión'} onClick={logout} disabled={leaving}>
           <span className="logout-label">{leaving ? 'Cerrando…' : 'Cerrar Sesión'}</span>
@@ -67,6 +71,7 @@ export default function WorkspaceLayout({ children }) {
       </div>
     </header>
     <main id="workspace-content" className="workspace-content">{children}</main>
+    <AssistantLauncher />
     <footer className="workspace-footer"><span>S&amp;P 500 FINANCE <b> / </b> CUADERNO DE ANÁLISIS</span><span>La información empieza en sus fuentes.</span></footer>
   </div>
 }

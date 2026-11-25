@@ -8,7 +8,7 @@ export default function BeginnerGuide({ company, onExplore }) {
   const close = () => { setStep(null); trigger.current?.focus() }
   const ready = Number.isFinite(company.altman_z?.score) && company.altman_z?.zone !== 'unknown'
   return <section className="beginner-intro" aria-label="Empieza por aquí">
-    <div><p className="section-eyebrow">EL NEGOCIO, EN UNA FRASE</p><h2>Conoce a {company.name || company.ticker}</h2>
+    <div><p className="section-eyebrow">EL NEGOCIO, ANTES QUE LAS CIFRAS</p><h2>¿Por dónde empiezo?</h2>
       <p>{company.description || 'La reseña de esta empresa todavía no está disponible. Puedes consultar sus datos financieros y fuentes.'}</p>
     </div>
     <button className="primary-action" ref={trigger} onClick={() => setStep(0)}>Entender esta empresa <span aria-hidden="true">→</span></button>

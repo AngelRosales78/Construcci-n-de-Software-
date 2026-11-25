@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { assistantRepository } from '../models/assistantRepository'
 
-export function useFinancialAssistantViewModel({ a, b, year, deferred=false }) {
+export function useFinancialAssistantViewModel({ a, b, year, deferred=false,initialMode='summary',initialQuestion='' }) {
   const context={a,b,year}
   const key=`${a}:${b || ''}:${year || ''}`
   const sequence=useRef(0), controller=useRef(null), last=useRef(null)
-  const [state,setState]=useState({key,meta:null,mode:'summary',turns:[],draft:'',busy:'',error:'',summary:null,changes:null,lesson:null,fromYear:'',answer:''})
+  const launched=useRef('')
+  const [state,setState]=useState({key,meta:null,mode:initialMode,turns:[],draft:'',busy:'',error:'',summary:null,changes:null,lesson:null,fromYear:'',answer:''})
   const current=state.key===key ? state : {key,meta:null,mode:'summary',turns:[],draft:'',busy:'',error:'',summary:null,changes:null,lesson:null,fromYear:'',answer:''}
   const patch=values=>setState(previous=>({...previous,...values}))
   function checked(result) {
@@ -32,7 +33,7 @@ export function useFinancialAssistantViewModel({ a, b, year, deferred=false }) {
         patch({summary:result,meta:result})
       } else {
         if(!Array.isArray(result.facts))throw new Error('unavailable')
-        patch({meta:result,fromYear:String(result.available_years.find(value=>value<Number(year)) || '')})
+        patch({meta:result,fromYear:String(result.available_years.find(value=>value<Number(year || result.fiscal_year)) || '')})
       }
     } catch(error) {
       if(id!==sequence.current || error.code==='ERR_CANCELED')return
@@ -44,7 +45,8 @@ export function useFinancialAssistantViewModel({ a, b, year, deferred=false }) {
   }
   useEffect(()=>{
     sequence.current++;controller.current?.abort();last.current=null
-    setState({key,meta:null,mode:'summary',turns:[],draft:'',busy:'',error:'',summary:null,changes:null,lesson:null,fromYear:'',answer:''})
+    launched.current=''
+    setState({key,meta:null,mode:initialMode,turns:[],draft:'',busy:'',error:'',summary:null,changes:null,lesson:null,fromYear:'',answer:''})
     if(!deferred)request(null)
     return ()=>{sequence.current++;controller.current?.abort()}
   },[key,deferred])
@@ -54,9 +56,13 @@ export function useFinancialAssistantViewModel({ a, b, year, deferred=false }) {
     return request({action:'question',question:question.trim(),history:current.turns.slice(-4).map(turn=>({question:turn.question,topics:turn.response.answer.topics}))})
   }
   const reset=()=>{sequence.current++;controller.current?.abort();last.current=null;patch({turns:[],draft:'',error:'',busy:''})}
+  useEffect(()=>{
+    const launchKey=`${key}:${initialQuestion}`
+    if(initialQuestion && current.meta && !current.busy && launched.current!==launchKey){launched.current=launchKey;ask(initialQuestion)}
+  },[key,current.meta,current.busy,initialQuestion])
   return {...current,load:()=>request(null),retry:()=>request(last.current),setMode:mode=>patch({mode,error:''}),
     setDraft:draft=>patch({draft}),ask,reset, summarize:()=>request({action:'summary'}),
-    setFromYear:fromYear=>patch({fromYear,changes:null}),compareYears:()=>request({action:'changes',from_year:Number(current.fromYear),to_year:Number(year)}),
+    setFromYear:fromYear=>patch({fromYear,changes:null}),compareYears:()=>request({action:'changes',from_year:Number(current.fromYear),to_year:Number(year || current.meta?.fiscal_year)}),
     learn:topic=>{patch({lesson:null,answer:''});return request({action:'learn',topic})},
     setAnswer:answer=>patch({answer}),checkAnswer:()=>request({action:'learn',topic:current.lesson.id,answer:Number(current.answer)})}
 }

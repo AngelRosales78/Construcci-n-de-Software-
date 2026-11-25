@@ -22,14 +22,14 @@ export default function PriceChart() {
   const selectedIndex = inspection?.key === historyKey ? Math.min(inspection.index, history.length - 1) : history.length - 1
   const inspected = history[selectedIndex]
   const options = useMemo(() => ({
-    chart: { animation: false, zooming: { type: 'x' }, height: 380, backgroundColor: 'transparent', style: { fontFamily: 'IBM Plex Sans, sans-serif' }, spacing: [12, 8, 8, 8] },
+    chart: { animation: false, zooming: { type: 'x' }, height: 380, backgroundColor: 'transparent', style: { fontFamily: 'Source Sans 3, sans-serif' }, spacing: [12, 8, 8, 8] },
     title: { text: `${ticker} · Cierre ajustado`, align: 'left', style: { fontSize: '14px', fontWeight: '600', color: '#bacbb9' } },
     rangeSelector: { enabled: false },
     navigator: { enabled: true, maskFill: 'rgba(220,154,118,0.08)', series: { color: '#dc9a76', lineWidth: 1 }, handles: { backgroundColor: '#2e4738', borderColor: '#91a28b' } }, scrollbar: { enabled: true },
     xAxis: { labels: { style: { color: '#bacbb9' } }, crosshair: true, lineColor: '#343e39', tickColor: '#343e39', plotLines: inspected ? [{ value: Date.parse(`${inspected.date}T00:00:00Z`), color: '#dc9a76', width: 1, dashStyle: 'ShortDash', zIndex: 4 }] : [] }, yAxis: { labels: { style: { color: '#bacbb9' } }, title: { style: { color: '#bacbb9' }, text: data?.currencies?.[0] || 'Precio' }, gridLineColor: '#262a31' },
     tooltip: { backgroundColor: '#262a31', borderColor: '#536158', style: { color: '#dfe2eb' }, split: false, valueDecimals: 2, xDateFormat: '%d/%m/%Y' },
     plotOptions: { series: { animation: false, dataGrouping: { enabled: false } } },
-    series: [{ name: 'Cierre ajustado', type: 'area', threshold: null, color: '#c9d6a5', lineWidth: 2, fillColor: { linearGradient: [0, 0, 0, 350], stops: [[0, 'rgba(201,214,165,0.23)'], [1, 'rgba(201,214,165,0.01)']] }, turboThreshold: 10000,
+    series: [{ name: 'Cierre ajustado', type: 'area', threshold: null, color: '#8dbdff', lineWidth: 2, fillColor: { linearGradient: [0, 0, 0, 350], stops: [[0, 'rgba(141,189,255,0.23)'], [1, 'rgba(141,189,255,0.01)']] }, turboThreshold: 10000,
       data: (data?.history || []).map(point => [Date.parse(`${point.date}T00:00:00Z`), point.price]) }],
     accessibility: { enabled: false },
   }), [ticker, data, inspected?.date])
