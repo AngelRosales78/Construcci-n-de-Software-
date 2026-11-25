@@ -19,6 +19,11 @@ export default function AltmanZGauge({ score, zone, reference, availability }) {
         <p>Acciones al cierre: {Number(reference.shares_outstanding).toLocaleString('es-PE')}.</p>
         <ul>{Object.entries(reference.inputs).map(([key, value]) => <li key={key}>{({working_capital:'Capital de trabajo',total_assets:'Activos totales',retained_earnings:'Beneficios retenidos',ebit:'EBIT',equity_value:'Valor bursátil del patrimonio',total_liabilities:'Pasivos totales',sales:'Ventas'})[key]}: {Number(value).toLocaleString('es-PE', {maximumFractionDigits:2})} USD</li>)}</ul>
         <p>{reference.method}</p><p>{reference.locator}</p>
+        {reference.sec_evidence && <div className="altman-sec-evidence"><h4>Hechos SEC utilizados</h4>
+          <p>Los componentes pertenecen al informe {reference.sec_evidence.accession} y conservan sus contextos originales.</p>
+          <a href={reference.sec_evidence.facts_url} target="_blank" rel="noreferrer">Consultar hechos XBRL de la SEC</a>
+          <ul>{Object.entries(reference.sec_evidence.facts).map(([key, fact]) => <li key={key}><code>{fact.tag}</code>: {Number(fact.point.val).toLocaleString('es-PE')} {fact.unit === 'shares' ? 'acciones' : fact.unit}. Cierre: {fact.point.end}. Publicado: {fact.point.filed}.</li>)}</ul>
+        </div>}
         <a href={reference.report_url} target="_blank" rel="noreferrer">Consultar informe oficial</a>{' · '}<a href={reference.price_url} target="_blank" rel="noreferrer">Consultar histórico de precios</a>
       </div></details>}
     </div>

@@ -1,5 +1,7 @@
 # Datos importados para la presentación
 
+Cobertura actual de Altman-Z: 180 empresas, con 174 referencias SEC adicionales. [Fuentes, límites y reproducción](../ALTMAN_CATALOGO_SEC.md). El resto conserva motivos concretos de revisión, sin cifras sustitutas.
+
 Snapshot preparado el lunes 12 de octubre de 2026. No es un servicio de cotizaciones en tiempo real.
 
 - `catalogo_sp500.csv`: 503 símbolos del conjunto público mantenido por https://github.com/datasets/s-and-p-500-companies, descargado de su archivo `data/constituents.csv`. Es un catálogo de referencia; no una certificación oficial de membresía emitida por S&P.

@@ -19,7 +19,9 @@ class Command(BaseCommand):
         parser.add_argument('--dry-run', action='store_true')
     def handle(self, *args, **options):
         try:
-            payload = json.loads(Path(options['snapshot']).read_text(encoding='utf-8'))
+            path = Path(options['snapshot'])
+            captured = path.read_bytes()
+            payload = json.loads(gzip.decompress(captured) if path.suffix == '.gz' else captured)
             raw_prices = Path(options['prices']).read_bytes()
             if payload['version'] != 1 or hashlib.sha256(raw_prices).hexdigest() != payload['price_snapshot_sha256']:
                 raise ValueError('Copia de precios no correspondiente.')
@@ -30,6 +32,8 @@ class Command(BaseCommand):
                 if ticker in seen: raise ValueError('Empresa repetida.')
                 seen.add(ticker)
                 validate_reference(reference)
+                if reference.get('sec_evidence', {}).get('ticker', ticker) != ticker:
+                    raise ValueError('Los hechos SEC pertenecen a otro símbolo.')
                 entry = entries[ticker]; raw = entry['raw_response'].encode()
                 if hashlib.sha256(raw).hexdigest() != entry['sha256'] or reference['price_sha256'] != entry['sha256']:
                     raise ValueError('Huella de cotización no válida.')

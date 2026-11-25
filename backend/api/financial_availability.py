@@ -73,6 +73,16 @@ def altman_status(summary, score):
     if score.get('score') is not None: return available()
     if getattr(summary,'altman_reference',None):
         return reason('invalid_reference','Referencia de cierre por revisar','La referencia Altman guardada no supera las validaciones.','Verificar fechas, importes y precio de la referencia.')
+    review = (getattr(summary,'data_diagnostics',{}) or {}).get('altman_review',{})
+    if review.get('fingerprint') == fingerprint(summary):
+        codes = {
+            'sector_model_review': ('Requiere un modelo sectorial','La clasificación SEC corresponde a una actividad financiera o inmobiliaria. Esta versión mantiene el modelo original pendiente de revisión para ese sector.'),
+            'share_classes_review': ('Clases de acciones por conciliar','El emisor tiene varios valores cotizados. Falta comprobar qué acciones y precios corresponden al valor bursátil del cierre.'),
+            'sec_components_pending': ('Componentes del informe por completar','La captura oficial aún no permite conciliar todos los componentes necesarios en el mismo cierre contable.'),
+        }
+        if review.get('code') in codes:
+            label, explanation = codes[review['code']]
+            return reason(review['code'],label,explanation,review['next_step']) | {'source_url':review['source_url']}
     missing=[key for key in LABELS if getattr(summary,key,None) is None]
     if missing:
         item=reason('missing_components','Faltan componentes del cierre','Falta verificar: '+', '.join(LABELS[key] for key in missing)+'.','Completar estos componentes en el mismo cierre contable.')

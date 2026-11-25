@@ -22,8 +22,25 @@ class Command(BaseCommand):
         parser.add_argument('--csv')
         parser.add_argument('--report')
         parser.add_argument('--dry-run',action='store_true')
+        parser.add_argument('--sec-review',help='Informe de conciliación SEC, sin cifras sustitutas.')
     def handle(self,*args,**options):
         try:
+            sec_rows = {}
+            if options.get('sec_review'):
+                review = json.loads(Path(options['sec_review']).read_text(encoding='utf-8'))
+                for item in review['companies']:
+                    if item.get('status') != 'review' or not item.get('cik') or not item.get('sic'):
+                        continue
+                    if item['ticker'] not in item.get('identity_tickers',[]):
+                        continue
+                    expected = f"https://data.sec.gov/submissions/CIK{int(item['cik']):010d}.json"
+                    if item.get('identity_source') != expected:
+                        raise ValueError('La identidad SEC del diagnóstico no corresponde.')
+                    sic = int(item['sic'])
+                    code = ('sector_model_review' if 6000 <= sic <= 6799 else
+                            'share_classes_review' if item['reason'].startswith('Revisar las clases') else
+                            'sec_components_pending')
+                    sec_rows[item['ticker']] = dict(code=code,sic=sic,source_url=expected,next_step=item['reason'])
             bundle=read_gzip(Path(options['snapshot'])); price_path=Path(options['prices'])
             if hashlib.sha256(price_path.read_bytes()).hexdigest()!=bundle['price_snapshot_sha256']:
                 raise ValueError('No corresponde la copia de precios.')
@@ -44,6 +61,13 @@ class Command(BaseCommand):
                 raw_chart=json.loads(raw)['chart']['result'][0]
                 data=diagnose(summary,records,chart,raw_chart,benchmark)
                 data['source_sha256']=entry['evidence']['sha256']
+                saved = getattr(summary,'data_diagnostics',{}) or {}
+                previous = saved.get('altman_review',{})
+                if ticker in sec_rows:
+                    data['altman_review'] = sec_rows[ticker] | {'fingerprint':data['fingerprint']}
+                elif not options.get('sec_review') and previous.get('fingerprint') == data['fingerprint']:
+                    data['altman_review'] = previous
+                summary.data_diagnostics = data
                 state=altman_status(summary,calculate_altman_z(summary))
                 for key,item in data['indicators'].items():counts[key][item['code']]+=1
                 counts['altman'][state['code']]+=1

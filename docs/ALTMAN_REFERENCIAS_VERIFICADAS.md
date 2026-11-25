@@ -4,6 +4,8 @@ Actualización: 24 de noviembre de 2026.
 
 ## Resultado para la exposición
 
+La cobertura actual es de 180 puntuaciones después de la [ampliación SEC](ALTMAN_CATALOGO_SEC.md). Este documento conserva la procedencia de las primeras cinco referencias añadidas manualmente.
+
 Se añadieron referencias independientes para calcular Altman-Z en cinco fichas que antes aparecían sin datos. Con Microsoft, son seis resultados disponibles. Los datos financieros anteriores se conservan. El diagnóstico del resto del catálogo está en [DIAGNOSTICO_FINANCIERO.md](DIAGNOSTICO_FINANCIERO.md).
 
 | Empresa | Ejercicio contable | Última sesión al cierre | Puntaje |
@@ -25,7 +27,7 @@ Para mostrarlo:
 
 Explicación breve: «Antes faltaba el valor bursátil del cierre. Ahora utilizamos las acciones publicadas en el balance y el precio histórico de esa fecha. Por eso podemos calcular el puntaje sin mezclarlo con la capitalización actual».
 
-Un resultado superior a cinco conserva su valor completo; solo la aguja se limita al extremo de la escala visual. Apple muestra 12,70, no un puntaje artificial de cinco.
+Un resultado superior a cinco conserva su valor completo. La interfaz actual muestra el puntaje y sus zonas sin una escala visual limitada a cinco.
 
 ## Fuentes y cálculo
 

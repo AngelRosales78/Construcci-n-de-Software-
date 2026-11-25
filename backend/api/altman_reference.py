@@ -27,4 +27,18 @@ def validate_reference(data, today=None):
         raise ValueError('El valor bursátil no coincide con acciones por cierre.')
     if values['total_assets'] <= 0 or values['total_liabilities'] <= 0 or values['sales'] < 0:
         raise ValueError('Denominadores o ventas no válidos.')
+    if 'sec_evidence' in data:
+        from .sec_altman import derive
+        evidence = data['sec_evidence']
+        derived, sec_shares = derive(evidence, today)
+        if evidence['version'] != 1 or evidence['period_start'] != data['period_start'] or evidence['period_end'] != data['period_end']:
+            raise ValueError('Las fechas SEC no corresponden a la referencia.')
+        if sec_shares != shares or any(derived[key] != values[key] for key in derived):
+            raise ValueError('Los importes no coinciden con los hechos SEC conservados.')
+        cik, accession = evidence['cik'], evidence['accession']
+        expected_url = f'https://www.sec.gov/Archives/edgar/data/{cik}/{accession.replace("-", "")}/{accession}-index.htm'
+        if data['report_url'] != expected_url:
+            raise ValueError('El informe no corresponde a los hechos SEC.')
+        if evidence['tickers'] != [evidence['ticker']] or 6000 <= evidence['sic'] <= 6799 or not evidence['sic']:
+            raise ValueError('La identidad o el sector requieren revisión individual.')
     return values

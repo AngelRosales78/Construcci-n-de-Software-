@@ -21,6 +21,7 @@ export default function FinancialHealthIndicator({ altmanZ, asOf, onReviewIndica
       </li>)}
     </ol>}
     <p className="altman-limits">{known ? 'Clasificación académica; no indica cuánto ganarás ni si conviene comprar. No garantiza solvencia.' : 'Sin puntaje no podemos decir que la empresa sea segura o esté en riesgo.'}</p>
+    {!known && altmanZ?.availability?.source_url && <a className="altman-review-source" href={altmanZ.availability.source_url} target="_blank" rel="noreferrer">Consultar referencia SEC</a>}
     {!known && onReviewIndicators && <button className="altman-review" onClick={onReviewIndicators}>Ver cifras disponibles <span aria-hidden="true">↓</span></button>}
     {known && date && <p className="altman-date">Cierre contable usado para Altman-Z · <time>{date}</time></p>}
   </section>

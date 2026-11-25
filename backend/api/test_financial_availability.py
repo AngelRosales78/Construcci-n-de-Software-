@@ -54,3 +54,15 @@ def test_valuation_is_only_listed_as_only_gap_when_other_inputs_exist():
 def test_fingerprint_ignores_json_dictionary_order():
     a=summary(altman_reference={'x':1,'y':2}); b=summary(altman_reference={'y':2,'x':1})
     assert fingerprint(a)==fingerprint(b)
+
+
+def test_sec_review_is_specific_current_and_never_overrides_a_valid_score():
+    row=summary()
+    row.data_diagnostics={'altman_review':{'fingerprint':fingerprint(row),'code':'sector_model_review',
+        'next_step':'Revisar método sectorial.','source_url':'https://data.sec.gov/submissions/CIK0000000123.json'}}
+    result=altman_status(row,{'score':None})
+    assert result['code']=='sector_model_review' and result['status']=='unavailable'
+    assert result['source_url'].startswith('https://data.sec.gov/')
+    assert altman_status(row,{'score':0})['status']=='available'
+    row.source_snapshot_sha256='b'*64
+    assert altman_status(row,{'score':None})['code']=='missing_components'

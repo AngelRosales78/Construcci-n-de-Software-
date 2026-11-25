@@ -25,3 +25,13 @@ it.each([[-5.9,'distress','Atención'], [0,'distress','Atención'], [1.81,'grey'
   expect(screen.getByLabelText('Resultado de esta empresa').parentElement.textContent).toContain(label)
   expect(screen.getByText('No es un porcentaje ni una nota sobre 10.')).toBeTruthy()
 })
+
+it('conserva el informe y el contexto de cada hecho SEC detrás de sus fuentes', () => {
+  render(<AltmanZGauge score={4} zone="safe" reference={{period_start:'2025-01-01',period_end:'2025-12-31',
+    price_date:'2025-12-31',unadjusted_close:'20',shares_outstanding:'100',currency:'USD',inputs:{total_assets:'1000'},
+    sec_evidence:{accession:'0000000123-26-000001',facts_url:'https://data.sec.gov/api/xbrl/companyfacts/CIK0000000123.json',
+      facts:{assets:{tag:'Assets',unit:'USD',point:{val:1000,end:'2025-12-31',filed:'2026-02-01'}}}}}} />)
+  expect(screen.getByRole('link',{name:'Consultar hechos XBRL de la SEC'}).getAttribute('href')).toBe('https://data.sec.gov/api/xbrl/companyfacts/CIK0000000123.json')
+  expect(screen.getByText('Assets').closest('details')).toBeTruthy()
+  expect(screen.getByText(/Publicado: 2026-02-01/)).toBeTruthy()
+})

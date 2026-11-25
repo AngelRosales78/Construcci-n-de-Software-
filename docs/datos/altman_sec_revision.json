@@ -1,0 +1,6053 @@
+{
+  "prepared_at": "2026-11-25T03:20:44.542932+00:00",
+  "counts": {
+    "prepared": 174,
+    "existing": 6,
+    "review": 319,
+    "pending": 5
+  },
+  "companies": [
+    {
+      "ticker": "A",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-10-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1090872/000109087225000087/0001090872-25-000087-index.htm",
+      "cik": 1090872,
+      "sic": "3826",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001090872.json",
+      "identity_tickers": [
+        "A"
+      ]
+    },
+    {
+      "ticker": "AAPL",
+      "status": "existing",
+      "reason": "Cálculo anterior conservado."
+    },
+    {
+      "ticker": "ABBV",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1551152,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001551152.json",
+      "identity_tickers": [
+        "ABBV"
+      ]
+    },
+    {
+      "ticker": "ABNB",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1559720,
+      "sic": "7340",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001559720.json",
+      "identity_tickers": [
+        "ABNB"
+      ]
+    },
+    {
+      "ticker": "ABT",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1800,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000001800.json",
+      "identity_tickers": [
+        "ABT"
+      ]
+    },
+    {
+      "ticker": "ACGL",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 947484,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000947484.json",
+      "identity_tickers": [
+        "ACGL",
+        "ACGLN",
+        "ACGLO"
+      ]
+    },
+    {
+      "ticker": "ACN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1467373,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001467373.json",
+      "identity_tickers": [
+        "ACN"
+      ]
+    },
+    {
+      "ticker": "ADBE",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-11-28",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/796343/000079634326000003/0000796343-26-000003-index.htm",
+      "cik": 796343,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000796343.json",
+      "identity_tickers": [
+        "ADBE"
+      ]
+    },
+    {
+      "ticker": "ADI",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-11-01",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/6281/000000628125000153/0000006281-25-000153-index.htm",
+      "cik": 6281,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000006281.json",
+      "identity_tickers": [
+        "ADI"
+      ]
+    },
+    {
+      "ticker": "ADM",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 7084,
+      "sic": "2070",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000007084.json",
+      "identity_tickers": [
+        "ADM"
+      ]
+    },
+    {
+      "ticker": "ADP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-06-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/8670/000000867026000030/0000008670-26-000030-index.htm",
+      "cik": 8670,
+      "sic": "7374",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000008670.json",
+      "identity_tickers": [
+        "ADP"
+      ]
+    },
+    {
+      "ticker": "ADSK",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 769397,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000769397.json",
+      "identity_tickers": [
+        "ADSK"
+      ]
+    },
+    {
+      "ticker": "AEE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1002910,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001002910.json",
+      "identity_tickers": [
+        "AEE"
+      ]
+    },
+    {
+      "ticker": "AEP",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 4904,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000004904.json",
+      "identity_tickers": [
+        "AEP"
+      ]
+    },
+    {
+      "ticker": "AES",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/874761/000087476126000063/0000874761-26-000063-index.htm",
+      "cik": 874761,
+      "sic": "4991",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000874761.json",
+      "identity_tickers": [
+        "AES"
+      ]
+    },
+    {
+      "ticker": "AFL",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 4977,
+      "sic": "6321",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000004977.json",
+      "identity_tickers": [
+        "AFL"
+      ]
+    },
+    {
+      "ticker": "AIG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 5272,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000005272.json",
+      "identity_tickers": [
+        "AIG"
+      ]
+    },
+    {
+      "ticker": "AIZ",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1267238,
+      "sic": "6399",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001267238.json",
+      "identity_tickers": [
+        "AIZ",
+        "AIZN"
+      ]
+    },
+    {
+      "ticker": "AJG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 354190,
+      "sic": "6411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000354190.json",
+      "identity_tickers": [
+        "AJG"
+      ]
+    },
+    {
+      "ticker": "AKAM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1086222/000108622226000022/0001086222-26-000022-index.htm",
+      "cik": 1086222,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001086222.json",
+      "identity_tickers": [
+        "AKAM"
+      ]
+    },
+    {
+      "ticker": "ALB",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 915913,
+      "sic": "2821",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000915913.json",
+      "identity_tickers": [
+        "ALB",
+        "ALB.PA"
+      ]
+    },
+    {
+      "ticker": "ALGN",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1097149/000109714926000014/0001097149-26-000014-index.htm",
+      "cik": 1097149,
+      "sic": "3842",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001097149.json",
+      "identity_tickers": [
+        "ALGN"
+      ]
+    },
+    {
+      "ticker": "ALL",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 899051,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000899051.json",
+      "identity_tickers": [
+        "ALL",
+        "ALL.PH",
+        "ALL.PB",
+        "ALL.PI",
+        "ALL.PJ"
+      ]
+    },
+    {
+      "ticker": "ALLE",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1579241/000157924126000007/0001579241-26-000007-index.htm",
+      "cik": 1579241,
+      "sic": "7381",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001579241.json",
+      "identity_tickers": [
+        "ALLE"
+      ]
+    },
+    {
+      "ticker": "AMAT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-10-26",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/6951/000162828025056742/0001628280-25-056742-index.htm",
+      "cik": 6951,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000006951.json",
+      "identity_tickers": [
+        "AMAT"
+      ]
+    },
+    {
+      "ticker": "AMCR",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1748790,
+      "sic": "3990",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001748790.json",
+      "identity_tickers": [
+        "AMCR",
+        "AMCCF"
+      ]
+    },
+    {
+      "ticker": "AMD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 2488,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000002488.json",
+      "identity_tickers": [
+        "AMD"
+      ]
+    },
+    {
+      "ticker": "AME",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1037868/000103786826000016/0001037868-26-000016-index.htm",
+      "cik": 1037868,
+      "sic": "3823",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001037868.json",
+      "identity_tickers": [
+        "AME"
+      ]
+    },
+    {
+      "ticker": "AMGN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 318154,
+      "sic": "2836",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000318154.json",
+      "identity_tickers": [
+        "AMGN"
+      ]
+    },
+    {
+      "ticker": "AMP",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 820027,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000820027.json",
+      "identity_tickers": [
+        "AMP"
+      ]
+    },
+    {
+      "ticker": "AMT",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1053507,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001053507.json",
+      "identity_tickers": [
+        "AMT"
+      ]
+    },
+    {
+      "ticker": "AMZN",
+      "status": "existing",
+      "reason": "Cálculo anterior conservado."
+    },
+    {
+      "ticker": "ANET",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1596532/000159653226000013/0001596532-26-000013-index.htm",
+      "cik": 1596532,
+      "sic": "3576",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001596532.json",
+      "identity_tickers": [
+        "ANET"
+      ]
+    },
+    {
+      "ticker": "AON",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 315293,
+      "sic": "6411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000315293.json",
+      "identity_tickers": [
+        "AON"
+      ]
+    },
+    {
+      "ticker": "AOS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 91142,
+      "sic": "3630",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000091142.json",
+      "identity_tickers": [
+        "AOS"
+      ]
+    },
+    {
+      "ticker": "APA",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 1841666,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001841666.json",
+      "identity_tickers": [
+        "APA"
+      ]
+    },
+    {
+      "ticker": "APD",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/2969/000000296926000050/0000002969-26-000050-index.htm",
+      "cik": 2969,
+      "sic": "2810",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000002969.json",
+      "identity_tickers": [
+        "APD"
+      ]
+    },
+    {
+      "ticker": "APH",
+      "status": "review",
+      "reason": "Desdoblamiento posterior: requiere conciliar la base por acción.",
+      "cik": 820313,
+      "sic": "3678",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000820313.json",
+      "identity_tickers": [
+        "APH"
+      ]
+    },
+    {
+      "ticker": "APO",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1858681,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001858681.json",
+      "identity_tickers": [
+        "APO",
+        "APOS"
+      ]
+    },
+    {
+      "ticker": "APP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1751008/000175100826000010/0001751008-26-000010-index.htm",
+      "cik": 1751008,
+      "sic": "7370",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001751008.json",
+      "identity_tickers": [
+        "APP"
+      ]
+    },
+    {
+      "ticker": "APTV",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1521332/000152133226000009/0001521332-26-000009-index.htm",
+      "cik": 1521332,
+      "sic": "3714",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001521332.json",
+      "identity_tickers": [
+        "APTV"
+      ]
+    },
+    {
+      "ticker": "ARE",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1035443,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001035443.json",
+      "identity_tickers": [
+        "ARE"
+      ]
+    },
+    {
+      "ticker": "ARES",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1176948,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001176948.json",
+      "identity_tickers": [
+        "ARES",
+        "ARES.PB"
+      ]
+    },
+    {
+      "ticker": "ATO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 731802,
+      "sic": "4924",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000731802.json",
+      "identity_tickers": [
+        "ATO"
+      ]
+    },
+    {
+      "ticker": "AVGO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-11-02",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016825000121/0001730168-25-000121-index.htm",
+      "cik": 1730168,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001730168.json",
+      "identity_tickers": [
+        "AVGO"
+      ]
+    },
+    {
+      "ticker": "AVY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 8818,
+      "sic": "2670",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000008818.json",
+      "identity_tickers": [
+        "AVY"
+      ]
+    },
+    {
+      "ticker": "AWK",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1410636,
+      "sic": "4941",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001410636.json",
+      "identity_tickers": [
+        "AWK"
+      ]
+    },
+    {
+      "ticker": "AXON",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1069183/000162828026011360/0001628280-26-011360-index.htm",
+      "cik": 1069183,
+      "sic": "3480",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001069183.json",
+      "identity_tickers": [
+        "AXON"
+      ]
+    },
+    {
+      "ticker": "AXP",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 4962,
+      "sic": "6199",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000004962.json",
+      "identity_tickers": [
+        "AXP"
+      ]
+    },
+    {
+      "ticker": "AZO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 866787,
+      "sic": "5531",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000866787.json",
+      "identity_tickers": [
+        "AZO"
+      ]
+    },
+    {
+      "ticker": "BA",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 12927,
+      "sic": "3721",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000012927.json",
+      "identity_tickers": [
+        "BA",
+        "BA.PA"
+      ]
+    },
+    {
+      "ticker": "BAC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 70858,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000070858.json",
+      "identity_tickers": [
+        "BAC",
+        "BML.PG",
+        "BML.PL",
+        "BAC.PB",
+        "BAC.PK",
+        "BAC.PE",
+        "BAC.PL",
+        "BAC.PM",
+        "BAC.PN",
+        "BAC.PO",
+        "BAC.PP",
+        "BAC.PQ",
+        "BAC.PS",
+        "BACRP",
+        "BML.PH",
+        "BML.PJ",
+        "MER.PK"
+      ]
+    },
+    {
+      "ticker": "BALL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 9389,
+      "sic": "3411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000009389.json",
+      "identity_tickers": [
+        "BALL"
+      ]
+    },
+    {
+      "ticker": "BAX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 10456,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000010456.json",
+      "identity_tickers": [
+        "BAX"
+      ]
+    },
+    {
+      "ticker": "BBY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 764478,
+      "sic": "5731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000764478.json",
+      "identity_tickers": [
+        "BBY"
+      ]
+    },
+    {
+      "ticker": "BDX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 10795,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000010795.json",
+      "identity_tickers": [
+        "BDX"
+      ]
+    },
+    {
+      "ticker": "BE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1664703,
+      "sic": "3620",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001664703.json",
+      "identity_tickers": [
+        "BE"
+      ]
+    },
+    {
+      "ticker": "BEN",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 38777,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000038777.json",
+      "identity_tickers": [
+        "BEN"
+      ]
+    },
+    {
+      "ticker": "BF.B",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 14693,
+      "sic": "2080",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000014693.json",
+      "identity_tickers": [
+        "BF.B",
+        "BF.A"
+      ]
+    },
+    {
+      "ticker": "BG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1996862,
+      "sic": "2070",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001996862.json",
+      "identity_tickers": [
+        "BG"
+      ]
+    },
+    {
+      "ticker": "BIIB",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/875045/000087504526000013/0000875045-26-000013-index.htm",
+      "cik": 875045,
+      "sic": "2836",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000875045.json",
+      "identity_tickers": [
+        "BIIB"
+      ]
+    },
+    {
+      "ticker": "BKNG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1075531,
+      "sic": "4700",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001075531.json",
+      "identity_tickers": [
+        "BKNG"
+      ]
+    },
+    {
+      "ticker": "BKR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1701605,
+      "sic": "3533",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001701605.json",
+      "identity_tickers": [
+        "BKR"
+      ]
+    },
+    {
+      "ticker": "BLK",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 2012383,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002012383.json",
+      "identity_tickers": [
+        "BLK"
+      ]
+    },
+    {
+      "ticker": "BMY",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 14272,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000014272.json",
+      "identity_tickers": [
+        "BMY",
+        "CELG.RI"
+      ]
+    },
+    {
+      "ticker": "BNY",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1390777,
+      "sic": "6022",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001390777.json",
+      "identity_tickers": [
+        "BNY",
+        "BNY.PK"
+      ]
+    },
+    {
+      "ticker": "BR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-06-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1383312/000162828026052243/0001628280-26-052243-index.htm",
+      "cik": 1383312,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001383312.json",
+      "identity_tickers": [
+        "BR"
+      ]
+    },
+    {
+      "ticker": "BRK.B",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1067983,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001067983.json",
+      "identity_tickers": [
+        "BRK.B",
+        "BRK.A"
+      ]
+    },
+    {
+      "ticker": "BRO",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 79282,
+      "sic": "6411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000079282.json",
+      "identity_tickers": [
+        "BRO"
+      ]
+    },
+    {
+      "ticker": "BSX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 885725,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000885725.json",
+      "identity_tickers": [
+        "BSX"
+      ]
+    },
+    {
+      "ticker": "BX",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1393818,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001393818.json",
+      "identity_tickers": [
+        "BX"
+      ]
+    },
+    {
+      "ticker": "BXP",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1037540,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001037540.json",
+      "identity_tickers": [
+        "BXP"
+      ]
+    },
+    {
+      "ticker": "C",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 831001,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000831001.json",
+      "identity_tickers": [
+        "C",
+        "C.PN",
+        "C.PR"
+      ]
+    },
+    {
+      "ticker": "CAH",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 721371,
+      "sic": "5122",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000721371.json",
+      "identity_tickers": [
+        "CAH"
+      ]
+    },
+    {
+      "ticker": "CARR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1783180/000178318026000008/0001783180-26-000008-index.htm",
+      "cik": 1783180,
+      "sic": "3585",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001783180.json",
+      "identity_tickers": [
+        "CARR"
+      ]
+    },
+    {
+      "ticker": "CASY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: IncomeLossFromContinuingOperationsBeforeIncomeTaxesExtraordinaryItemsNoncontrollingInterest/IncomeLossFromContinuingOperationsBeforeIncomeTaxesMinorityInterestAndIncomeLossFromEquityMethodInvestments",
+      "cik": 726958,
+      "sic": "5500",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000726958.json",
+      "identity_tickers": [
+        "CASY"
+      ]
+    },
+    {
+      "ticker": "CAT",
+      "status": "existing",
+      "reason": "Cálculo anterior conservado."
+    },
+    {
+      "ticker": "CB",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 896159,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000896159.json",
+      "identity_tickers": [
+        "CB"
+      ]
+    },
+    {
+      "ticker": "CBOE",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1374310,
+      "sic": "6200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001374310.json",
+      "identity_tickers": [
+        "CBOE"
+      ]
+    },
+    {
+      "ticker": "CBRE",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1138118,
+      "sic": "6500",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001138118.json",
+      "identity_tickers": [
+        "CBRE"
+      ]
+    },
+    {
+      "ticker": "CCI",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1051470,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001051470.json",
+      "identity_tickers": [
+        "CCI"
+      ]
+    },
+    {
+      "ticker": "CCL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 815097,
+      "sic": "4400",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000815097.json",
+      "identity_tickers": [
+        "CCL"
+      ]
+    },
+    {
+      "ticker": "CDNS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/813672/000081367226000016/0000813672-26-000016-index.htm",
+      "cik": 813672,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000813672.json",
+      "identity_tickers": [
+        "CDNS"
+      ]
+    },
+    {
+      "ticker": "CDW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1402057/000140205726000011/0001402057-26-000011-index.htm",
+      "cik": 1402057,
+      "sic": "5961",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001402057.json",
+      "identity_tickers": [
+        "CDW"
+      ]
+    },
+    {
+      "ticker": "CEG",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1868275/000186827526000032/0001868275-26-000032-index.htm",
+      "cik": 1868275,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001868275.json",
+      "identity_tickers": [
+        "CEG"
+      ]
+    },
+    {
+      "ticker": "CF",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1324404,
+      "sic": "2870",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001324404.json",
+      "identity_tickers": [
+        "CF"
+      ]
+    },
+    {
+      "ticker": "CFG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 759944,
+      "sic": "6022",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000759944.json",
+      "identity_tickers": [
+        "CFG",
+        "CFG.PE",
+        "CFG.PH",
+        "CFG.PI"
+      ]
+    },
+    {
+      "ticker": "CHD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 313927,
+      "sic": "2840",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000313927.json",
+      "identity_tickers": [
+        "CHD"
+      ]
+    },
+    {
+      "ticker": "CHRW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1043277/000104327726000009/0001043277-26-000009-index.htm",
+      "cik": 1043277,
+      "sic": "4731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001043277.json",
+      "identity_tickers": [
+        "CHRW"
+      ]
+    },
+    {
+      "ticker": "CHTR",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1091667,
+      "sic": "4841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001091667.json",
+      "identity_tickers": [
+        "CHTR",
+        "CHTRP"
+      ]
+    },
+    {
+      "ticker": "CI",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1739940,
+      "sic": "6324",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001739940.json",
+      "identity_tickers": [
+        "CI"
+      ]
+    },
+    {
+      "ticker": "CIEN",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-11-01",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/936395/000162828025056698/0001628280-25-056698-index.htm",
+      "cik": 936395,
+      "sic": "3661",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000936395.json",
+      "identity_tickers": [
+        "CIEN"
+      ]
+    },
+    {
+      "ticker": "CINF",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 20286,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000020286.json",
+      "identity_tickers": [
+        "CINF"
+      ]
+    },
+    {
+      "ticker": "CL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/21665/000002166526000006/0000021665-26-000006-index.htm",
+      "cik": 21665,
+      "sic": "2844",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000021665.json",
+      "identity_tickers": [
+        "CL"
+      ]
+    },
+    {
+      "ticker": "CLX",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 21076,
+      "sic": "2842",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000021076.json",
+      "identity_tickers": [
+        "CLX"
+      ]
+    },
+    {
+      "ticker": "CMCSA",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1166691,
+      "sic": "4841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001166691.json",
+      "identity_tickers": [
+        "CMCSA",
+        "CCZ"
+      ]
+    },
+    {
+      "ticker": "CME",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1156375,
+      "sic": "6200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001156375.json",
+      "identity_tickers": [
+        "CME"
+      ]
+    },
+    {
+      "ticker": "CMG",
+      "status": "pending",
+      "reason": "Captura SEC pendiente de descargar."
+    },
+    {
+      "ticker": "CMI",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 26172,
+      "sic": "3510",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000026172.json",
+      "identity_tickers": [
+        "CMI"
+      ]
+    },
+    {
+      "ticker": "CMS",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 811156,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000811156.json",
+      "identity_tickers": [
+        "CMS",
+        "CMSA",
+        "CMSC",
+        "CMSD",
+        "CMS.PC"
+      ]
+    },
+    {
+      "ticker": "CNC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1071739,
+      "sic": "6324",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001071739.json",
+      "identity_tickers": [
+        "CNC"
+      ]
+    },
+    {
+      "ticker": "CNP",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1130310,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001130310.json",
+      "identity_tickers": [
+        "CNP"
+      ]
+    },
+    {
+      "ticker": "COF",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 927628,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000927628.json",
+      "identity_tickers": [
+        "COF",
+        "COF.PI",
+        "COF.PJ",
+        "COF.PK",
+        "COF.PL",
+        "COF.PN"
+      ]
+    },
+    {
+      "ticker": "COHR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 820318,
+      "sic": "3827",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000820318.json",
+      "identity_tickers": [
+        "COHR"
+      ]
+    },
+    {
+      "ticker": "COIN",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1679788,
+      "sic": "6199",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001679788.json",
+      "identity_tickers": [
+        "COIN"
+      ]
+    },
+    {
+      "ticker": "COO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-10-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/711404/000162828025055615/0001628280-25-055615-index.htm",
+      "cik": 711404,
+      "sic": "3851",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000711404.json",
+      "identity_tickers": [
+        "COO"
+      ]
+    },
+    {
+      "ticker": "COP",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1163165,
+      "sic": "2911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001163165.json",
+      "identity_tickers": [
+        "COP"
+      ]
+    },
+    {
+      "ticker": "COR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1140859,
+      "sic": "5122",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001140859.json",
+      "identity_tickers": [
+        "COR"
+      ]
+    },
+    {
+      "ticker": "COST",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-08-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/909832/000090983226000093/0000909832-26-000093-index.htm",
+      "cik": 909832,
+      "sic": "5331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000909832.json",
+      "identity_tickers": [
+        "COST"
+      ]
+    },
+    {
+      "ticker": "CPAY",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1175454/000117545426000018/0001175454-26-000018-index.htm",
+      "cik": 1175454,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001175454.json",
+      "identity_tickers": [
+        "CPAY"
+      ]
+    },
+    {
+      "ticker": "CPRT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-07-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/900075/000119312526405731/0001193125-26-405731-index.htm",
+      "cik": 900075,
+      "sic": "5500",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000900075.json",
+      "identity_tickers": [
+        "CPRT"
+      ]
+    },
+    {
+      "ticker": "CPT",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 906345,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000906345.json",
+      "identity_tickers": [
+        "CPT"
+      ]
+    },
+    {
+      "ticker": "CRH",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/849395/000162828026009043/0001628280-26-009043-index.htm",
+      "cik": 849395,
+      "sic": "3241",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000849395.json",
+      "identity_tickers": [
+        "CRH"
+      ]
+    },
+    {
+      "ticker": "CRL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1100682/000110068226000022/0001100682-26-000022-index.htm",
+      "cik": 1100682,
+      "sic": "8731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001100682.json",
+      "identity_tickers": [
+        "CRL"
+      ]
+    },
+    {
+      "ticker": "CRM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1108524/000110852426000060/0001108524-26-000060-index.htm",
+      "cik": 1108524,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001108524.json",
+      "identity_tickers": [
+        "CRM"
+      ]
+    },
+    {
+      "ticker": "CRWD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1535527,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001535527.json",
+      "identity_tickers": [
+        "CRWD"
+      ]
+    },
+    {
+      "ticker": "CSCO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-07-25",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/858877/000085887726000132/0000858877-26-000132-index.htm",
+      "cik": 858877,
+      "sic": "3576",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000858877.json",
+      "identity_tickers": [
+        "CSCO"
+      ]
+    },
+    {
+      "ticker": "CSGP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1057352/000105735226000020/0001057352-26-000020-index.htm",
+      "cik": 1057352,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001057352.json",
+      "identity_tickers": [
+        "CSGP"
+      ]
+    },
+    {
+      "ticker": "CSX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/277948/000027794826000006/0000277948-26-000006-index.htm",
+      "cik": 277948,
+      "sic": "4011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000277948.json",
+      "identity_tickers": [
+        "CSX"
+      ]
+    },
+    {
+      "ticker": "CTAS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-05-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/723254/000072325426000028/0000723254-26-000028-index.htm",
+      "cik": 723254,
+      "sic": "2320",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000723254.json",
+      "identity_tickers": [
+        "CTAS"
+      ]
+    },
+    {
+      "ticker": "CTSH",
+      "status": "pending",
+      "reason": "Captura SEC pendiente de descargar."
+    },
+    {
+      "ticker": "CVNA",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1690820,
+      "sic": "5500",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001690820.json",
+      "identity_tickers": [
+        "CVNA"
+      ]
+    },
+    {
+      "ticker": "CVS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/64803/000006480326000010/0000064803-26-000010-index.htm",
+      "cik": 64803,
+      "sic": "5912",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000064803.json",
+      "identity_tickers": [
+        "CVS"
+      ]
+    },
+    {
+      "ticker": "CVX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 93410,
+      "sic": "2911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000093410.json",
+      "identity_tickers": [
+        "CVX"
+      ]
+    },
+    {
+      "ticker": "D",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/715957/000119312526063120/0001193125-26-063120-index.htm",
+      "cik": 715957,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000715957.json",
+      "identity_tickers": [
+        "D"
+      ]
+    },
+    {
+      "ticker": "DAL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 27904,
+      "sic": "4512",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000027904.json",
+      "identity_tickers": [
+        "DAL"
+      ]
+    },
+    {
+      "ticker": "DASH",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1792789,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001792789.json",
+      "identity_tickers": [
+        "DASH"
+      ]
+    },
+    {
+      "ticker": "DD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1666700,
+      "sic": "2821",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001666700.json",
+      "identity_tickers": [
+        "DD"
+      ]
+    },
+    {
+      "ticker": "DDOG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1561550,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001561550.json",
+      "identity_tickers": [
+        "DDOG"
+      ]
+    },
+    {
+      "ticker": "DE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: AssetsCurrent",
+      "cik": 315189,
+      "sic": "3523",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000315189.json",
+      "identity_tickers": [
+        "DE"
+      ]
+    },
+    {
+      "ticker": "DECK",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-03-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/910521/000162828026037664/0001628280-26-037664-index.htm",
+      "cik": 910521,
+      "sic": "3021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000910521.json",
+      "identity_tickers": [
+        "DECK"
+      ]
+    },
+    {
+      "ticker": "DELL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1571996/000157199626000008/0001571996-26-000008-index.htm",
+      "cik": 1571996,
+      "sic": "3571",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001571996.json",
+      "identity_tickers": [
+        "DELL"
+      ]
+    },
+    {
+      "ticker": "DG",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/29534/000110465926032325/0001104659-26-032325-index.htm",
+      "cik": 29534,
+      "sic": "5331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000029534.json",
+      "identity_tickers": [
+        "DG"
+      ]
+    },
+    {
+      "ticker": "DGX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1022079,
+      "sic": "8071",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001022079.json",
+      "identity_tickers": [
+        "DGX"
+      ]
+    },
+    {
+      "ticker": "DHI",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: AssetsCurrent",
+      "cik": 882184,
+      "sic": "1531",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000882184.json",
+      "identity_tickers": [
+        "DHI"
+      ]
+    },
+    {
+      "ticker": "DHR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 313616,
+      "sic": "3823",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000313616.json",
+      "identity_tickers": [
+        "DHR"
+      ]
+    },
+    {
+      "ticker": "DIS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1744489,
+      "sic": "7990",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001744489.json",
+      "identity_tickers": [
+        "DIS"
+      ]
+    },
+    {
+      "ticker": "DLR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1297996,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001297996.json",
+      "identity_tickers": [
+        "DLR",
+        "DLR.PK",
+        "DLR.PJ",
+        "DLR.PL"
+      ]
+    },
+    {
+      "ticker": "DLTR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/935703/000093570326000025/0000935703-26-000025-index.htm",
+      "cik": 935703,
+      "sic": "5331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000935703.json",
+      "identity_tickers": [
+        "DLTR"
+      ]
+    },
+    {
+      "ticker": "DOC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 765880,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000765880.json",
+      "identity_tickers": [
+        "DOC"
+      ]
+    },
+    {
+      "ticker": "DOV",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 29905,
+      "sic": "3530",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000029905.json",
+      "identity_tickers": [
+        "DOV"
+      ]
+    },
+    {
+      "ticker": "DOW",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1751788,
+      "sic": "2821",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001751788.json",
+      "identity_tickers": [
+        "DOW"
+      ]
+    },
+    {
+      "ticker": "DPZ",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-28",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1286681/000119312526062321/0001193125-26-062321-index.htm",
+      "cik": 1286681,
+      "sic": "5140",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001286681.json",
+      "identity_tickers": [
+        "DPZ"
+      ]
+    },
+    {
+      "ticker": "DRI",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-05-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/940944/000094094426000025/0000940944-26-000025-index.htm",
+      "cik": 940944,
+      "sic": "5812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000940944.json",
+      "identity_tickers": [
+        "DRI"
+      ]
+    },
+    {
+      "ticker": "DTE",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 936340,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000936340.json",
+      "identity_tickers": [
+        "DTE",
+        "DTW",
+        "DTB",
+        "DTG",
+        "DTK"
+      ]
+    },
+    {
+      "ticker": "DUK",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1326160,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001326160.json",
+      "identity_tickers": [
+        "DUK",
+        "DUKB",
+        "DUK.PA",
+        "DUKU"
+      ]
+    },
+    {
+      "ticker": "DVA",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/927066/000092706626000012/0000927066-26-000012-index.htm",
+      "cik": 927066,
+      "sic": "8090",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000927066.json",
+      "identity_tickers": [
+        "DVA"
+      ]
+    },
+    {
+      "ticker": "DVN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1090012,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001090012.json",
+      "identity_tickers": [
+        "DVN"
+      ]
+    },
+    {
+      "ticker": "DXCM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1093557/000109355726000027/0001093557-26-000027-index.htm",
+      "cik": 1093557,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001093557.json",
+      "identity_tickers": [
+        "DXCM"
+      ]
+    },
+    {
+      "ticker": "EBAY",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1065088/000106508826000027/0001065088-26-000027-index.htm",
+      "cik": 1065088,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001065088.json",
+      "identity_tickers": [
+        "EBAY"
+      ]
+    },
+    {
+      "ticker": "ECHO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1415404,
+      "sic": "4899",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001415404.json",
+      "identity_tickers": [
+        "ECHO"
+      ]
+    },
+    {
+      "ticker": "ECL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/31462/000110465926018357/0001104659-26-018357-index.htm",
+      "cik": 31462,
+      "sic": "2840",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000031462.json",
+      "identity_tickers": [
+        "ECL"
+      ]
+    },
+    {
+      "ticker": "ED",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1047862,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001047862.json",
+      "identity_tickers": [
+        "ED"
+      ]
+    },
+    {
+      "ticker": "EFX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/33185/000003318526000010/0000033185-26-000010-index.htm",
+      "cik": 33185,
+      "sic": "7320",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000033185.json",
+      "identity_tickers": [
+        "EFX"
+      ]
+    },
+    {
+      "ticker": "EG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1095073,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001095073.json",
+      "identity_tickers": [
+        "EG"
+      ]
+    },
+    {
+      "ticker": "EIX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/827052/000082705226000012/0000827052-26-000012-index.htm",
+      "cik": 827052,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000827052.json",
+      "identity_tickers": [
+        "EIX"
+      ]
+    },
+    {
+      "ticker": "EL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1001250,
+      "sic": "2844",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001001250.json",
+      "identity_tickers": [
+        "EL"
+      ]
+    },
+    {
+      "ticker": "ELV",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1156039,
+      "sic": "6324",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001156039.json",
+      "identity_tickers": [
+        "ELV"
+      ]
+    },
+    {
+      "ticker": "EME",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/105634/000010563426000025/0000105634-26-000025-index.htm",
+      "cik": 105634,
+      "sic": "1731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000105634.json",
+      "identity_tickers": [
+        "EME"
+      ]
+    },
+    {
+      "ticker": "EMR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 32604,
+      "sic": "3600",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000032604.json",
+      "identity_tickers": [
+        "EMR"
+      ]
+    },
+    {
+      "ticker": "EOG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 821189,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000821189.json",
+      "identity_tickers": [
+        "EOG"
+      ]
+    },
+    {
+      "ticker": "EQIX",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1101239,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001101239.json",
+      "identity_tickers": [
+        "EQIX"
+      ]
+    },
+    {
+      "ticker": "EQT",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 33213,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000033213.json",
+      "identity_tickers": [
+        "EQT"
+      ]
+    },
+    {
+      "ticker": "ERIE",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 922621,
+      "sic": "6411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000922621.json",
+      "identity_tickers": [
+        "ERIE"
+      ]
+    },
+    {
+      "ticker": "ES",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 72741,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000072741.json",
+      "identity_tickers": [
+        "ES"
+      ]
+    },
+    {
+      "ticker": "ESS",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 920522,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000920522.json",
+      "identity_tickers": [
+        "ESS"
+      ]
+    },
+    {
+      "ticker": "ETN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: InterestExpense/InterestExpenseNonOperating",
+      "cik": 1551182,
+      "sic": "3590",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001551182.json",
+      "identity_tickers": [
+        "ETN"
+      ]
+    },
+    {
+      "ticker": "ETR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 65984,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000065984.json",
+      "identity_tickers": [
+        "ETR"
+      ]
+    },
+    {
+      "ticker": "EVRG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1711269,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001711269.json",
+      "identity_tickers": [
+        "EVRG"
+      ]
+    },
+    {
+      "ticker": "EW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1099800/000109980026000009/0001099800-26-000009-index.htm",
+      "cik": 1099800,
+      "sic": "3842",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001099800.json",
+      "identity_tickers": [
+        "EW"
+      ]
+    },
+    {
+      "ticker": "EXC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1109357/000110935726000018/0001109357-26-000018-index.htm",
+      "cik": 1109357,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001109357.json",
+      "identity_tickers": [
+        "EXC"
+      ]
+    },
+    {
+      "ticker": "EXE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 895126,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000895126.json",
+      "identity_tickers": [
+        "EXE"
+      ]
+    },
+    {
+      "ticker": "EXPD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 746515,
+      "sic": "4731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000746515.json",
+      "identity_tickers": [
+        "EXPD"
+      ]
+    },
+    {
+      "ticker": "EXPE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1324424,
+      "sic": "4700",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001324424.json",
+      "identity_tickers": [
+        "EXPE"
+      ]
+    },
+    {
+      "ticker": "EXR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1289490,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001289490.json",
+      "identity_tickers": [
+        "EXR"
+      ]
+    },
+    {
+      "ticker": "F",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 37996,
+      "sic": "3711",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000037996.json",
+      "identity_tickers": [
+        "F",
+        "F.PB",
+        "F.PC",
+        "F.PD"
+      ]
+    },
+    {
+      "ticker": "FANG",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1539838/000153983826000010/0001539838-26-000010-index.htm",
+      "cik": 1539838,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001539838.json",
+      "identity_tickers": [
+        "FANG"
+      ]
+    },
+    {
+      "ticker": "FAST",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 815556,
+      "sic": "5200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000815556.json",
+      "identity_tickers": [
+        "FAST"
+      ]
+    },
+    {
+      "ticker": "FCX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 831259,
+      "sic": "1000",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000831259.json",
+      "identity_tickers": [
+        "FCX"
+      ]
+    },
+    {
+      "ticker": "FDS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-08-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1013237/000162828026066391/0001628280-26-066391-index.htm",
+      "cik": 1013237,
+      "sic": "7370",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001013237.json",
+      "identity_tickers": [
+        "FDS"
+      ]
+    },
+    {
+      "ticker": "FDX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1048911,
+      "sic": "4513",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001048911.json",
+      "identity_tickers": [
+        "FDX"
+      ]
+    },
+    {
+      "ticker": "FDXF",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-05-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/2082247/000162828026053359/0001628280-26-053359-index.htm",
+      "cik": 2082247,
+      "sic": "4513",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002082247.json",
+      "identity_tickers": [
+        "FDXF"
+      ]
+    },
+    {
+      "ticker": "FE",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1031296/000103129626000046/0001031296-26-000046-index.htm",
+      "cik": 1031296,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001031296.json",
+      "identity_tickers": [
+        "FE"
+      ]
+    },
+    {
+      "ticker": "FERG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 2011641,
+      "sic": "5070",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002011641.json",
+      "identity_tickers": [
+        "FERG"
+      ]
+    },
+    {
+      "ticker": "FFIV",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1048695/000104869526000077/0001048695-26-000077-index.htm",
+      "cik": 1048695,
+      "sic": "3576",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001048695.json",
+      "identity_tickers": [
+        "FFIV"
+      ]
+    },
+    {
+      "ticker": "FICO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/814547/000081454726000042/0000814547-26-000042-index.htm",
+      "cik": 814547,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000814547.json",
+      "identity_tickers": [
+        "FICO"
+      ]
+    },
+    {
+      "ticker": "FIS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1136893,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001136893.json",
+      "identity_tickers": [
+        "FIS"
+      ]
+    },
+    {
+      "ticker": "FISV",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 798354,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000798354.json",
+      "identity_tickers": [
+        "FISV"
+      ]
+    },
+    {
+      "ticker": "FITB",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 35527,
+      "sic": "6022",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000035527.json",
+      "identity_tickers": [
+        "FITB",
+        "FITB.PA",
+        "FITB.PI",
+        "FITB.PK",
+        "FITB.PM"
+      ]
+    },
+    {
+      "ticker": "FIX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1035983/000110465926017530/0001104659-26-017530-index.htm",
+      "cik": 1035983,
+      "sic": "1731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001035983.json",
+      "identity_tickers": [
+        "FIX"
+      ]
+    },
+    {
+      "ticker": "FLEX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-03-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/866374/000086637426000012/0000866374-26-000012-index.htm",
+      "cik": 866374,
+      "sic": "3672",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000866374.json",
+      "identity_tickers": [
+        "FLEX"
+      ]
+    },
+    {
+      "ticker": "FOX",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1754301,
+      "sic": "4833",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001754301.json",
+      "identity_tickers": [
+        "FOXA",
+        "FOX"
+      ]
+    },
+    {
+      "ticker": "FOXA",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1754301,
+      "sic": "4833",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001754301.json",
+      "identity_tickers": [
+        "FOXA",
+        "FOX"
+      ]
+    },
+    {
+      "ticker": "FRT",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 34903,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000034903.json",
+      "identity_tickers": [
+        "FRT",
+        "FRT.PC"
+      ]
+    },
+    {
+      "ticker": "FSLR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1274494/000127449426000021/0001274494-26-000021-index.htm",
+      "cik": 1274494,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001274494.json",
+      "identity_tickers": [
+        "FSLR"
+      ]
+    },
+    {
+      "ticker": "FTNT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1262039/000126203926000007/0001262039-26-000007-index.htm",
+      "cik": 1262039,
+      "sic": "3577",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001262039.json",
+      "identity_tickers": [
+        "FTNT"
+      ]
+    },
+    {
+      "ticker": "FTV",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1659166,
+      "sic": "3823",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001659166.json",
+      "identity_tickers": [
+        "FTV"
+      ]
+    },
+    {
+      "ticker": "GD",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/40533/000004053326000006/0000040533-26-000006-index.htm",
+      "cik": 40533,
+      "sic": "3730",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000040533.json",
+      "identity_tickers": [
+        "GD"
+      ]
+    },
+    {
+      "ticker": "GDDY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1609711,
+      "sic": "7373",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001609711.json",
+      "identity_tickers": [
+        "GDDY"
+      ]
+    },
+    {
+      "ticker": "GE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: InterestExpense/InterestExpenseNonOperating",
+      "cik": 40545,
+      "sic": "3600",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000040545.json",
+      "identity_tickers": [
+        "GE"
+      ]
+    },
+    {
+      "ticker": "GEHC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1932393,
+      "sic": "3844",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001932393.json",
+      "identity_tickers": [
+        "GEHC"
+      ]
+    },
+    {
+      "ticker": "GEN",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 849399,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000849399.json",
+      "identity_tickers": [
+        "GEN",
+        "GENVR"
+      ]
+    },
+    {
+      "ticker": "GEV",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1996810/000199681026000015/0001996810-26-000015-index.htm",
+      "cik": 1996810,
+      "sic": "3600",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001996810.json",
+      "identity_tickers": [
+        "GEV"
+      ]
+    },
+    {
+      "ticker": "GILD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 882095,
+      "sic": "2836",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000882095.json",
+      "identity_tickers": [
+        "GILD"
+      ]
+    },
+    {
+      "ticker": "GIS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 40704,
+      "sic": "2040",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000040704.json",
+      "identity_tickers": [
+        "GIS"
+      ]
+    },
+    {
+      "ticker": "GL",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 320335,
+      "sic": "6311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000320335.json",
+      "identity_tickers": [
+        "GL",
+        "GL.PD"
+      ]
+    },
+    {
+      "ticker": "GLW",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 24741,
+      "sic": "3357",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000024741.json",
+      "identity_tickers": [
+        "GLW"
+      ]
+    },
+    {
+      "ticker": "GM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1467858/000146785826000013/0001467858-26-000013-index.htm",
+      "cik": 1467858,
+      "sic": "3711",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001467858.json",
+      "identity_tickers": [
+        "GM"
+      ]
+    },
+    {
+      "ticker": "GNRC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1474735,
+      "sic": "3621",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001474735.json",
+      "identity_tickers": [
+        "GNRC"
+      ]
+    },
+    {
+      "ticker": "GOOG",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1652044,
+      "sic": "7370",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001652044.json",
+      "identity_tickers": [
+        "GOOGL",
+        "GOOG",
+        "GOOGM",
+        "GOOGN"
+      ]
+    },
+    {
+      "ticker": "GOOGL",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1652044,
+      "sic": "7370",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001652044.json",
+      "identity_tickers": [
+        "GOOGL",
+        "GOOG",
+        "GOOGM",
+        "GOOGN"
+      ]
+    },
+    {
+      "ticker": "GPC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 40987,
+      "sic": "5013",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000040987.json",
+      "identity_tickers": [
+        "GPC"
+      ]
+    },
+    {
+      "ticker": "GPN",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1123360/000112336026000008/0001123360-26-000008-index.htm",
+      "cik": 1123360,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001123360.json",
+      "identity_tickers": [
+        "GPN"
+      ]
+    },
+    {
+      "ticker": "GRMN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1121788,
+      "sic": "3812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001121788.json",
+      "identity_tickers": [
+        "GRMN"
+      ]
+    },
+    {
+      "ticker": "GS",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 886982,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000886982.json",
+      "identity_tickers": [
+        "GS",
+        "GSCE",
+        "GS.PA",
+        "GS.PC",
+        "GS.PD"
+      ]
+    },
+    {
+      "ticker": "GWW",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 277135,
+      "sic": "5000",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000277135.json",
+      "identity_tickers": [
+        "GWW"
+      ]
+    },
+    {
+      "ticker": "HAL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/45012/000004501226000015/0000045012-26-000015-index.htm",
+      "cik": 45012,
+      "sic": "1389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000045012.json",
+      "identity_tickers": [
+        "HAL"
+      ]
+    },
+    {
+      "ticker": "HAS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 46080,
+      "sic": "3944",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000046080.json",
+      "identity_tickers": [
+        "HAS"
+      ]
+    },
+    {
+      "ticker": "HBAN",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 49196,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000049196.json",
+      "identity_tickers": [
+        "HBAN",
+        "HBANL",
+        "HBANM",
+        "HBANP",
+        "HBANZ"
+      ]
+    },
+    {
+      "ticker": "HCA",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 860730,
+      "sic": "8062",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000860730.json",
+      "identity_tickers": [
+        "HCA"
+      ]
+    },
+    {
+      "ticker": "HD",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-02-01",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/354950/000162828026019436/0001628280-26-019436-index.htm",
+      "cik": 354950,
+      "sic": "5211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000354950.json",
+      "identity_tickers": [
+        "HD"
+      ]
+    },
+    {
+      "ticker": "HIG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 874766,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000874766.json",
+      "identity_tickers": [
+        "HIG",
+        "HIG.PG"
+      ]
+    },
+    {
+      "ticker": "HII",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1501585/000150158526000006/0001501585-26-000006-index.htm",
+      "cik": 1501585,
+      "sic": "3730",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001501585.json",
+      "identity_tickers": [
+        "HII"
+      ]
+    },
+    {
+      "ticker": "HIMS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1773751,
+      "sic": "8011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001773751.json",
+      "identity_tickers": [
+        "HIMS"
+      ]
+    },
+    {
+      "ticker": "HLT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1585689/000158568926000007/0001585689-26-000007-index.htm",
+      "cik": 1585689,
+      "sic": "7011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001585689.json",
+      "identity_tickers": [
+        "HLT"
+      ]
+    },
+    {
+      "ticker": "HON",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 773840,
+      "sic": "3724",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000773840.json",
+      "identity_tickers": [
+        "HON"
+      ]
+    },
+    {
+      "ticker": "HONA",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 2089271,
+      "sic": "3724",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002089271.json",
+      "identity_tickers": [
+        "HONA"
+      ]
+    },
+    {
+      "ticker": "HOOD",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1783879,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001783879.json",
+      "identity_tickers": [
+        "HOOD"
+      ]
+    },
+    {
+      "ticker": "HPE",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1645590,
+      "sic": "3570",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001645590.json",
+      "identity_tickers": [
+        "HPE",
+        "HPE.PC"
+      ]
+    },
+    {
+      "ticker": "HPQ",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 47217,
+      "sic": "3570",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000047217.json",
+      "identity_tickers": [
+        "HPQ"
+      ]
+    },
+    {
+      "ticker": "HRL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 48465,
+      "sic": "2011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000048465.json",
+      "identity_tickers": [
+        "HRL"
+      ]
+    },
+    {
+      "ticker": "HSIC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1000228/000100022826000013/0001000228-26-000013-index.htm",
+      "cik": 1000228,
+      "sic": "5047",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001000228.json",
+      "identity_tickers": [
+        "HSIC"
+      ]
+    },
+    {
+      "ticker": "HST",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1070750,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001070750.json",
+      "identity_tickers": [
+        "HST"
+      ]
+    },
+    {
+      "ticker": "HSY",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/47111/000162828026008586/0001628280-26-008586-index.htm",
+      "cik": 47111,
+      "sic": "2060",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000047111.json",
+      "identity_tickers": [
+        "HSY"
+      ]
+    },
+    {
+      "ticker": "HUBB",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/48898/000162828026007500/0001628280-26-007500-index.htm",
+      "cik": 48898,
+      "sic": "3670",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000048898.json",
+      "identity_tickers": [
+        "HUBB"
+      ]
+    },
+    {
+      "ticker": "HUM",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 49071,
+      "sic": "6324",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000049071.json",
+      "identity_tickers": [
+        "HUM"
+      ]
+    },
+    {
+      "ticker": "HWM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/4281/000000428126000012/0000004281-26-000012-index.htm",
+      "cik": 4281,
+      "sic": "3350",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000004281.json",
+      "identity_tickers": [
+        "HWM"
+      ]
+    },
+    {
+      "ticker": "IBKR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1381197,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001381197.json",
+      "identity_tickers": [
+        "IBKR"
+      ]
+    },
+    {
+      "ticker": "IBM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/51143/000005114326000010/0000051143-26-000010-index.htm",
+      "cik": 51143,
+      "sic": "3570",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000051143.json",
+      "identity_tickers": [
+        "IBM"
+      ]
+    },
+    {
+      "ticker": "ICE",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1571949,
+      "sic": "6200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001571949.json",
+      "identity_tickers": [
+        "ICE"
+      ]
+    },
+    {
+      "ticker": "IDXX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/874716/000087471626000038/0000874716-26-000038-index.htm",
+      "cik": 874716,
+      "sic": "2835",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000874716.json",
+      "identity_tickers": [
+        "IDXX"
+      ]
+    },
+    {
+      "ticker": "IEX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 832101,
+      "sic": "3561",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000832101.json",
+      "identity_tickers": [
+        "IEX"
+      ]
+    },
+    {
+      "ticker": "IFF",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/51253/000005125326000006/0000051253-26-000006-index.htm",
+      "cik": 51253,
+      "sic": "2860",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000051253.json",
+      "identity_tickers": [
+        "IFF"
+      ]
+    },
+    {
+      "ticker": "ILMN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1110803,
+      "sic": "3826",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001110803.json",
+      "identity_tickers": [
+        "ILMN"
+      ]
+    },
+    {
+      "ticker": "INCY",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/879169/000087916926000010/0000879169-26-000010-index.htm",
+      "cik": 879169,
+      "sic": "8731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000879169.json",
+      "identity_tickers": [
+        "INCY"
+      ]
+    },
+    {
+      "ticker": "INTC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 50863,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000050863.json",
+      "identity_tickers": [
+        "INTC"
+      ]
+    },
+    {
+      "ticker": "INTU",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-07-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/896878/000089687826000037/0000896878-26-000037-index.htm",
+      "cik": 896878,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000896878.json",
+      "identity_tickers": [
+        "INTU"
+      ]
+    },
+    {
+      "ticker": "INVH",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1687229,
+      "sic": "6510",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001687229.json",
+      "identity_tickers": [
+        "INVH"
+      ]
+    },
+    {
+      "ticker": "IP",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 51434,
+      "sic": "2621",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000051434.json",
+      "identity_tickers": [
+        "IP",
+        "INPAP"
+      ]
+    },
+    {
+      "ticker": "IQV",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1478242/000162828026008322/0001628280-26-008322-index.htm",
+      "cik": 1478242,
+      "sic": "8731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001478242.json",
+      "identity_tickers": [
+        "IQV"
+      ]
+    },
+    {
+      "ticker": "IR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1699150/000162828026008617/0001628280-26-008617-index.htm",
+      "cik": 1699150,
+      "sic": "3560",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001699150.json",
+      "identity_tickers": [
+        "IR"
+      ]
+    },
+    {
+      "ticker": "IRM",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1020569,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001020569.json",
+      "identity_tickers": [
+        "IRM"
+      ]
+    },
+    {
+      "ticker": "ISRG",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1035267/000103526726000010/0001035267-26-000010-index.htm",
+      "cik": 1035267,
+      "sic": "3842",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001035267.json",
+      "identity_tickers": [
+        "ISRG"
+      ]
+    },
+    {
+      "ticker": "IT",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 749251,
+      "sic": "8741",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000749251.json",
+      "identity_tickers": [
+        "IT"
+      ]
+    },
+    {
+      "ticker": "ITW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/49826/000004982626000008/0000049826-26-000008-index.htm",
+      "cik": 49826,
+      "sic": "3560",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000049826.json",
+      "identity_tickers": [
+        "ITW"
+      ]
+    },
+    {
+      "ticker": "IVZ",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 914208,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000914208.json",
+      "identity_tickers": [
+        "IVZ"
+      ]
+    },
+    {
+      "ticker": "J",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-09-26",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/52988/000162828026075495/0001628280-26-075495-index.htm",
+      "cik": 52988,
+      "sic": "1600",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000052988.json",
+      "identity_tickers": [
+        "J"
+      ]
+    },
+    {
+      "ticker": "JBHT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/728535/000143774926005294/0001437749-26-005294-index.htm",
+      "cik": 728535,
+      "sic": "4213",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000728535.json",
+      "identity_tickers": [
+        "JBHT"
+      ]
+    },
+    {
+      "ticker": "JBL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-08-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/898293/000162828026067038/0001628280-26-067038-index.htm",
+      "cik": 898293,
+      "sic": "3672",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000898293.json",
+      "identity_tickers": [
+        "JBL"
+      ]
+    },
+    {
+      "ticker": "JCI",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 833444,
+      "sic": "3585",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000833444.json",
+      "identity_tickers": [
+        "JCI"
+      ]
+    },
+    {
+      "ticker": "JKHY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 779152,
+      "sic": "7373",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000779152.json",
+      "identity_tickers": [
+        "JKHY"
+      ]
+    },
+    {
+      "ticker": "JNJ",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 200406,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000200406.json",
+      "identity_tickers": [
+        "JNJ"
+      ]
+    },
+    {
+      "ticker": "JPM",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 19617,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000019617.json",
+      "identity_tickers": [
+        "JPM",
+        "JPM.PC",
+        "AMJB",
+        "JPM.PD",
+        "JPM.PJ",
+        "JPM.PK",
+        "JPM.PL",
+        "JPM.PM",
+        "VYLD"
+      ]
+    },
+    {
+      "ticker": "KDP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1418135/000141813526000016/0001418135-26-000016-index.htm",
+      "cik": 1418135,
+      "sic": "2080",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001418135.json",
+      "identity_tickers": [
+        "KDP"
+      ]
+    },
+    {
+      "ticker": "KEY",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 91576,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000091576.json",
+      "identity_tickers": [
+        "KEY",
+        "KEY.PK",
+        "KEY.PI",
+        "KEY.PJ",
+        "KEY.PL"
+      ]
+    },
+    {
+      "ticker": "KEYS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1601046,
+      "sic": "3823",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001601046.json",
+      "identity_tickers": [
+        "KEYS"
+      ]
+    },
+    {
+      "ticker": "KHC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1637459/000163745926000009/0001637459-26-000009-index.htm",
+      "cik": 1637459,
+      "sic": "2030",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001637459.json",
+      "identity_tickers": [
+        "KHC"
+      ]
+    },
+    {
+      "ticker": "KIM",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 879101,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000879101.json",
+      "identity_tickers": [
+        "KIM",
+        "KIM.PL",
+        "KIM.PM",
+        "KIM.PN"
+      ]
+    },
+    {
+      "ticker": "KKR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1404912,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001404912.json",
+      "identity_tickers": [
+        "KKR",
+        "KKR.PD",
+        "KKRS",
+        "KKRT"
+      ]
+    },
+    {
+      "ticker": "KLAC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: InterestExpense/InterestExpenseNonOperating",
+      "cik": 319201,
+      "sic": "3827",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000319201.json",
+      "identity_tickers": [
+        "KLAC"
+      ]
+    },
+    {
+      "ticker": "KMB",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 55785,
+      "sic": "2670",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000055785.json",
+      "identity_tickers": [
+        "KMB"
+      ]
+    },
+    {
+      "ticker": "KMI",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1506307,
+      "sic": "4922",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001506307.json",
+      "identity_tickers": [
+        "KMI",
+        "EP.PC"
+      ]
+    },
+    {
+      "ticker": "KO",
+      "status": "existing",
+      "reason": "Cálculo anterior conservado."
+    },
+    {
+      "ticker": "KR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 56873,
+      "sic": "5411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000056873.json",
+      "identity_tickers": [
+        "KR"
+      ]
+    },
+    {
+      "ticker": "KVUE",
+      "status": "review",
+      "reason": "Sin precio histórico para el cierre contable.",
+      "cik": 1944048,
+      "sic": "2844",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001944048.json",
+      "identity_tickers": [
+        "KVUE"
+      ]
+    },
+    {
+      "ticker": "L",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 60086,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000060086.json",
+      "identity_tickers": [
+        "L"
+      ]
+    },
+    {
+      "ticker": "LDOS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-01-03",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1336920/000133692026000030/0001336920-26-000030-index.htm",
+      "cik": 1336920,
+      "sic": "7373",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001336920.json",
+      "identity_tickers": [
+        "LDOS"
+      ]
+    },
+    {
+      "ticker": "LEN",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 920760,
+      "sic": "1520",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000920760.json",
+      "identity_tickers": [
+        "LEN",
+        "LEN.B"
+      ]
+    },
+    {
+      "ticker": "LH",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/920148/000092014826000111/0000920148-26-000111-index.htm",
+      "cik": 920148,
+      "sic": "8071",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000920148.json",
+      "identity_tickers": [
+        "LH"
+      ]
+    },
+    {
+      "ticker": "LHX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-01-03",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/202058/000020205826000015/0000202058-26-000015-index.htm",
+      "cik": 202058,
+      "sic": "3812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000202058.json",
+      "identity_tickers": [
+        "LHX"
+      ]
+    },
+    {
+      "ticker": "LII",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1069202,
+      "sic": "3585",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001069202.json",
+      "identity_tickers": [
+        "LII"
+      ]
+    },
+    {
+      "ticker": "LIN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1707925,
+      "sic": "2810",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001707925.json",
+      "identity_tickers": [
+        "LIN"
+      ]
+    },
+    {
+      "ticker": "LITE",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-06-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1633978/000162828026057358/0001628280-26-057358-index.htm",
+      "cik": 1633978,
+      "sic": "3669",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001633978.json",
+      "identity_tickers": [
+        "LITE"
+      ]
+    },
+    {
+      "ticker": "LLY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 59478,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000059478.json",
+      "identity_tickers": [
+        "LLY"
+      ]
+    },
+    {
+      "ticker": "LMT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/936468/000162828026004195/0001628280-26-004195-index.htm",
+      "cik": 936468,
+      "sic": "3760",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000936468.json",
+      "identity_tickers": [
+        "LMT"
+      ]
+    },
+    {
+      "ticker": "LNT",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 352541,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000352541.json",
+      "identity_tickers": [
+        "LNT"
+      ]
+    },
+    {
+      "ticker": "LOW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/60667/000006066726000029/0000060667-26-000029-index.htm",
+      "cik": 60667,
+      "sic": "5211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000060667.json",
+      "identity_tickers": [
+        "LOW"
+      ]
+    },
+    {
+      "ticker": "LRCX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-06-28",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/707549/000070754926000037/0000707549-26-000037-index.htm",
+      "cik": 707549,
+      "sic": "3559",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000707549.json",
+      "identity_tickers": [
+        "LRCX"
+      ]
+    },
+    {
+      "ticker": "LULU",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-02-01",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1397187/000139718726000020/0001397187-26-000020-index.htm",
+      "cik": 1397187,
+      "sic": "2300",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001397187.json",
+      "identity_tickers": [
+        "LULU"
+      ]
+    },
+    {
+      "ticker": "LUV",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 92380,
+      "sic": "4512",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000092380.json",
+      "identity_tickers": [
+        "LUV"
+      ]
+    },
+    {
+      "ticker": "LVS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1300514/000130051426000013/0001300514-26-000013-index.htm",
+      "cik": 1300514,
+      "sic": "7011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001300514.json",
+      "identity_tickers": [
+        "LVS"
+      ]
+    },
+    {
+      "ticker": "LYB",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1489393,
+      "sic": "2860",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001489393.json",
+      "identity_tickers": [
+        "LYB"
+      ]
+    },
+    {
+      "ticker": "LYV",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1335258,
+      "sic": "7900",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001335258.json",
+      "identity_tickers": [
+        "LYV"
+      ]
+    },
+    {
+      "ticker": "MA",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1141391,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001141391.json",
+      "identity_tickers": [
+        "MA"
+      ]
+    },
+    {
+      "ticker": "MAA",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 912595,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000912595.json",
+      "identity_tickers": [
+        "MAA"
+      ]
+    },
+    {
+      "ticker": "MAR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1048286,
+      "sic": "7011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001048286.json",
+      "identity_tickers": [
+        "MAR"
+      ]
+    },
+    {
+      "ticker": "MAS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/62996/000006299626000005/0000062996-26-000005-index.htm",
+      "cik": 62996,
+      "sic": "3430",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000062996.json",
+      "identity_tickers": [
+        "MAS"
+      ]
+    },
+    {
+      "ticker": "MCD",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 63908,
+      "sic": "5812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000063908.json",
+      "identity_tickers": [
+        "MCD"
+      ]
+    },
+    {
+      "ticker": "MCHP",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 827054,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000827054.json",
+      "identity_tickers": [
+        "MCHP",
+        "MCHPP"
+      ]
+    },
+    {
+      "ticker": "MCK",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 927653,
+      "sic": "5122",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000927653.json",
+      "identity_tickers": [
+        "MCK"
+      ]
+    },
+    {
+      "ticker": "MCO",
+      "status": "pending",
+      "reason": "Captura SEC pendiente de descargar."
+    },
+    {
+      "ticker": "MDLZ",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1103982,
+      "sic": "2000",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001103982.json",
+      "identity_tickers": [
+        "MDLZ"
+      ]
+    },
+    {
+      "ticker": "MDT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-04-24",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1613103/000162828026044354/0001628280-26-044354-index.htm",
+      "cik": 1613103,
+      "sic": "3845",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001613103.json",
+      "identity_tickers": [
+        "MDT"
+      ]
+    },
+    {
+      "ticker": "MET",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1099219,
+      "sic": "6311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001099219.json",
+      "identity_tickers": [
+        "MET",
+        "MET.PA",
+        "MET.PE",
+        "MET.PF"
+      ]
+    },
+    {
+      "ticker": "META",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1326801,
+      "sic": "7370",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001326801.json",
+      "identity_tickers": [
+        "META",
+        "METAM"
+      ]
+    },
+    {
+      "ticker": "MGM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/789570/000078957026000018/0000789570-26-000018-index.htm",
+      "cik": 789570,
+      "sic": "7011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000789570.json",
+      "identity_tickers": [
+        "MGM"
+      ]
+    },
+    {
+      "ticker": "MKC",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 63754,
+      "sic": "2090",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000063754.json",
+      "identity_tickers": [
+        "MKC",
+        "MKC.V"
+      ]
+    },
+    {
+      "ticker": "MLM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/916076/000119312526059193/0001193125-26-059193-index.htm",
+      "cik": 916076,
+      "sic": "1400",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000916076.json",
+      "identity_tickers": [
+        "MLM"
+      ]
+    },
+    {
+      "ticker": "MMM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/66740/000006674026000014/0000066740-26-000014-index.htm",
+      "cik": 66740,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000066740.json",
+      "identity_tickers": [
+        "MMM"
+      ]
+    },
+    {
+      "ticker": "MNST",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 865752,
+      "sic": "2086",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000865752.json",
+      "identity_tickers": [
+        "MNST"
+      ]
+    },
+    {
+      "ticker": "MO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/764180/000076418026000017/0000764180-26-000017-index.htm",
+      "cik": 764180,
+      "sic": "2111",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000764180.json",
+      "identity_tickers": [
+        "MO"
+      ]
+    },
+    {
+      "ticker": "MOS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1285785,
+      "sic": "2870",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001285785.json",
+      "identity_tickers": [
+        "MOS"
+      ]
+    },
+    {
+      "ticker": "MPC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1510295,
+      "sic": "2911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001510295.json",
+      "identity_tickers": [
+        "MPC"
+      ]
+    },
+    {
+      "ticker": "MPWR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1280452/000143774926006113/0001437749-26-006113-index.htm",
+      "cik": 1280452,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001280452.json",
+      "identity_tickers": [
+        "MPWR"
+      ]
+    },
+    {
+      "ticker": "MRK",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 310158,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000310158.json",
+      "identity_tickers": [
+        "MRK"
+      ]
+    },
+    {
+      "ticker": "MRNA",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1682852/000168285226000033/0001682852-26-000033-index.htm",
+      "cik": 1682852,
+      "sic": "2836",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001682852.json",
+      "identity_tickers": [
+        "MRNA"
+      ]
+    },
+    {
+      "ticker": "MRSH",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 62709,
+      "sic": "6411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000062709.json",
+      "identity_tickers": [
+        "MRSH"
+      ]
+    },
+    {
+      "ticker": "MRVL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1835632/000183563226000011/0001835632-26-000011-index.htm",
+      "cik": 1835632,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001835632.json",
+      "identity_tickers": [
+        "MRVL"
+      ]
+    },
+    {
+      "ticker": "MS",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 895421,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000895421.json",
+      "identity_tickers": [
+        "MS",
+        "MS.PK",
+        "MS.PE",
+        "MS.PA",
+        "MS.PF",
+        "MS.PI",
+        "MS.PL",
+        "MS.PO",
+        "MS.PP",
+        "MS.PQ"
+      ]
+    },
+    {
+      "ticker": "MSCI",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1408198/000140819826000011/0001408198-26-000011-index.htm",
+      "cik": 1408198,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001408198.json",
+      "identity_tickers": [
+        "MSCI"
+      ]
+    },
+    {
+      "ticker": "MSFT",
+      "status": "existing",
+      "reason": "Cálculo anterior conservado."
+    },
+    {
+      "ticker": "MSI",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 68505,
+      "sic": "3663",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000068505.json",
+      "identity_tickers": [
+        "MSI"
+      ]
+    },
+    {
+      "ticker": "MTB",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 36270,
+      "sic": "6022",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000036270.json",
+      "identity_tickers": [
+        "MTB",
+        "MTB.PH",
+        "MTB.PJ",
+        "MTB.PK",
+        "MTB.PL"
+      ]
+    },
+    {
+      "ticker": "MTD",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1037646/000103764626000011/0001037646-26-000011-index.htm",
+      "cik": 1037646,
+      "sic": "3826",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001037646.json",
+      "identity_tickers": [
+        "MTD"
+      ]
+    },
+    {
+      "ticker": "MU",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-03",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000023/0000723125-26-000023-index.htm",
+      "cik": 723125,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000723125.json",
+      "identity_tickers": [
+        "MU"
+      ]
+    },
+    {
+      "ticker": "NCLH",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1513761/000110465926022067/0001104659-26-022067-index.htm",
+      "cik": 1513761,
+      "sic": "4400",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001513761.json",
+      "identity_tickers": [
+        "NCLH"
+      ]
+    },
+    {
+      "ticker": "NDAQ",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1120193,
+      "sic": "6200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001120193.json",
+      "identity_tickers": [
+        "NDAQ"
+      ]
+    },
+    {
+      "ticker": "NDSN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 72331,
+      "sic": "3569",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000072331.json",
+      "identity_tickers": [
+        "NDSN"
+      ]
+    },
+    {
+      "ticker": "NEE",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 753308,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000753308.json",
+      "identity_tickers": [
+        "NEE",
+        "NEE.PN",
+        "NEE.PS",
+        "NEE.PT",
+        "NEE.PU",
+        "NEE.PV",
+        "NEE.PW"
+      ]
+    },
+    {
+      "ticker": "NEM",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1164727,
+      "sic": "1040",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001164727.json",
+      "identity_tickers": [
+        "NEM",
+        "NEMCL"
+      ]
+    },
+    {
+      "ticker": "NFLX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1065280/000106528026000034/0001065280-26-000034-index.htm",
+      "cik": 1065280,
+      "sic": "7841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001065280.json",
+      "identity_tickers": [
+        "NFLX"
+      ]
+    },
+    {
+      "ticker": "NI",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1111711/000111171126000027/0001111711-26-000027-index.htm",
+      "cik": 1111711,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001111711.json",
+      "identity_tickers": [
+        "NI"
+      ]
+    },
+    {
+      "ticker": "NKE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 320187,
+      "sic": "3021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000320187.json",
+      "identity_tickers": [
+        "NKE"
+      ]
+    },
+    {
+      "ticker": "NOC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1133421/000113342126000003/0001133421-26-000003-index.htm",
+      "cik": 1133421,
+      "sic": "3812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001133421.json",
+      "identity_tickers": [
+        "NOC"
+      ]
+    },
+    {
+      "ticker": "NOW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1373715/000137371526000007/0001373715-26-000007-index.htm",
+      "cik": 1373715,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001373715.json",
+      "identity_tickers": [
+        "NOW"
+      ]
+    },
+    {
+      "ticker": "NRG",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1013871/000101387126000004/0001013871-26-000004-index.htm",
+      "cik": 1013871,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001013871.json",
+      "identity_tickers": [
+        "NRG"
+      ]
+    },
+    {
+      "ticker": "NSC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/702165/000162828026006268/0001628280-26-006268-index.htm",
+      "cik": 702165,
+      "sic": "4011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000702165.json",
+      "identity_tickers": [
+        "NSC"
+      ]
+    },
+    {
+      "ticker": "NTAP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-04-24",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1002047/000119312526259683/0001193125-26-259683-index.htm",
+      "cik": 1002047,
+      "sic": "3572",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001002047.json",
+      "identity_tickers": [
+        "NTAP"
+      ]
+    },
+    {
+      "ticker": "NTRS",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 73124,
+      "sic": "6022",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000073124.json",
+      "identity_tickers": [
+        "NTRS",
+        "NTRSO"
+      ]
+    },
+    {
+      "ticker": "NUE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 73309,
+      "sic": "3312",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000073309.json",
+      "identity_tickers": [
+        "NUE"
+      ]
+    },
+    {
+      "ticker": "NVDA",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-25",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/0001045810-26-000021-index.htm",
+      "cik": 1045810,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001045810.json",
+      "identity_tickers": [
+        "NVDA"
+      ]
+    },
+    {
+      "ticker": "NVR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: AssetsCurrent",
+      "cik": 906163,
+      "sic": "1531",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000906163.json",
+      "identity_tickers": [
+        "NVR"
+      ]
+    },
+    {
+      "ticker": "NWS",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1564708,
+      "sic": "2711",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001564708.json",
+      "identity_tickers": [
+        "NWSA",
+        "NWS",
+        "NWSLL"
+      ]
+    },
+    {
+      "ticker": "NWSA",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1564708,
+      "sic": "2711",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001564708.json",
+      "identity_tickers": [
+        "NWSA",
+        "NWS",
+        "NWSLL"
+      ]
+    },
+    {
+      "ticker": "NXPI",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1413447,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001413447.json",
+      "identity_tickers": [
+        "NXPI"
+      ]
+    },
+    {
+      "ticker": "O",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 726728,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000726728.json",
+      "identity_tickers": [
+        "O"
+      ]
+    },
+    {
+      "ticker": "ODFL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/878927/000119312526067161/0001193125-26-067161-index.htm",
+      "cik": 878927,
+      "sic": "4213",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000878927.json",
+      "identity_tickers": [
+        "ODFL"
+      ]
+    },
+    {
+      "ticker": "OKE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1039684,
+      "sic": "4923",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001039684.json",
+      "identity_tickers": [
+        "OKE"
+      ]
+    },
+    {
+      "ticker": "OMC",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 29989,
+      "sic": "7311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000029989.json",
+      "identity_tickers": [
+        "OMC"
+      ]
+    },
+    {
+      "ticker": "ON",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1097864/000109786426000006/0001097864-26-000006-index.htm",
+      "cik": 1097864,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001097864.json",
+      "identity_tickers": [
+        "ON"
+      ]
+    },
+    {
+      "ticker": "ORCL",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1341439,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001341439.json",
+      "identity_tickers": [
+        "ORCL",
+        "ORCL.PD"
+      ]
+    },
+    {
+      "ticker": "ORLY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 898173,
+      "sic": "5531",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000898173.json",
+      "identity_tickers": [
+        "ORLY"
+      ]
+    },
+    {
+      "ticker": "OTIS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1781335,
+      "sic": "3600",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001781335.json",
+      "identity_tickers": [
+        "OTIS"
+      ]
+    },
+    {
+      "ticker": "OXY",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 797468,
+      "sic": "1311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000797468.json",
+      "identity_tickers": [
+        "OXY",
+        "OXY.WT"
+      ]
+    },
+    {
+      "ticker": "P",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1474432,
+      "sic": "3572",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001474432.json",
+      "identity_tickers": [
+        "P"
+      ]
+    },
+    {
+      "ticker": "PANW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-07-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1327567/000132756726000023/0001327567-26-000023-index.htm",
+      "cik": 1327567,
+      "sic": "3577",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001327567.json",
+      "identity_tickers": [
+        "PANW"
+      ]
+    },
+    {
+      "ticker": "PAYX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-05-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/723531/000119312526307785/0001193125-26-307785-index.htm",
+      "cik": 723531,
+      "sic": "8700",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000723531.json",
+      "identity_tickers": [
+        "PAYX"
+      ]
+    },
+    {
+      "ticker": "PCAR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: AssetsCurrent",
+      "cik": 75362,
+      "sic": "3711",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000075362.json",
+      "identity_tickers": [
+        "PCAR"
+      ]
+    },
+    {
+      "ticker": "PCG",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1004980,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001004980.json",
+      "identity_tickers": [
+        "PCG",
+        "PCG.PE",
+        "PCG.PD",
+        "PCG.PC",
+        "PCG.PH",
+        "PCG.PG",
+        "PCG.PI",
+        "PCG.PB",
+        "PCG.PX"
+      ]
+    },
+    {
+      "ticker": "PEG",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/788784/000119312526077446/0001193125-26-077446-index.htm",
+      "cik": 788784,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000788784.json",
+      "identity_tickers": [
+        "PEG"
+      ]
+    },
+    {
+      "ticker": "PEP",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 77476,
+      "sic": "2080",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000077476.json",
+      "identity_tickers": [
+        "PEP"
+      ]
+    },
+    {
+      "ticker": "PFE",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 78003,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000078003.json",
+      "identity_tickers": [
+        "PFE"
+      ]
+    },
+    {
+      "ticker": "PFG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1126328,
+      "sic": "6321",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001126328.json",
+      "identity_tickers": [
+        "PFG"
+      ]
+    },
+    {
+      "ticker": "PG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 80424,
+      "sic": "2840",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000080424.json",
+      "identity_tickers": [
+        "PG"
+      ]
+    },
+    {
+      "ticker": "PGR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 80661,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000080661.json",
+      "identity_tickers": [
+        "PGR"
+      ]
+    },
+    {
+      "ticker": "PH",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 76334,
+      "sic": "3490",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000076334.json",
+      "identity_tickers": [
+        "PH"
+      ]
+    },
+    {
+      "ticker": "PHM",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: AssetsCurrent",
+      "cik": 822416,
+      "sic": "1531",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000822416.json",
+      "identity_tickers": [
+        "PHM"
+      ]
+    },
+    {
+      "ticker": "PKG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 75677,
+      "sic": "2650",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000075677.json",
+      "identity_tickers": [
+        "PKG"
+      ]
+    },
+    {
+      "ticker": "PLD",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1045609,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001045609.json",
+      "identity_tickers": [
+        "PLD",
+        "PLDGP"
+      ]
+    },
+    {
+      "ticker": "PLTR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1321655/000132165526000011/0001321655-26-000011-index.htm",
+      "cik": 1321655,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001321655.json",
+      "identity_tickers": [
+        "PLTR"
+      ]
+    },
+    {
+      "ticker": "PM",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1413329,
+      "sic": "2111",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001413329.json",
+      "identity_tickers": [
+        "PM"
+      ]
+    },
+    {
+      "ticker": "PNC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 713676,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000713676.json",
+      "identity_tickers": [
+        "PNC"
+      ]
+    },
+    {
+      "ticker": "PNR",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 77360,
+      "sic": "3550",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000077360.json",
+      "identity_tickers": [
+        "PNR"
+      ]
+    },
+    {
+      "ticker": "PNW",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 764622,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000764622.json",
+      "identity_tickers": [
+        "PNW"
+      ]
+    },
+    {
+      "ticker": "PODD",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1145197/000114519726000028/0001145197-26-000028-index.htm",
+      "cik": 1145197,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001145197.json",
+      "identity_tickers": [
+        "PODD"
+      ]
+    },
+    {
+      "ticker": "PPG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: InterestExpense/InterestExpenseNonOperating",
+      "cik": 79879,
+      "sic": "2851",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000079879.json",
+      "identity_tickers": [
+        "PPG"
+      ]
+    },
+    {
+      "ticker": "PPL",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 922224,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000922224.json",
+      "identity_tickers": [
+        "PPL",
+        "PPLC"
+      ]
+    },
+    {
+      "ticker": "PRU",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1137774,
+      "sic": "6311",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001137774.json",
+      "identity_tickers": [
+        "PRU",
+        "PFH",
+        "PRH",
+        "PRS"
+      ]
+    },
+    {
+      "ticker": "PSA",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1393311,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001393311.json",
+      "identity_tickers": [
+        "PSA",
+        "PSA.PH",
+        "PSA.PU",
+        "PSA.PF",
+        "PSA.PG",
+        "PSA.PI",
+        "PSA.PJ",
+        "PSA.PK",
+        "PSA.PL",
+        "PSA.PM",
+        "PSA.PN",
+        "PSA.PO",
+        "PSA.PP",
+        "PSA.PQ",
+        "PSA.PR",
+        "PSA.PS",
+        "PSA.PT"
+      ]
+    },
+    {
+      "ticker": "PSX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1534701,
+      "sic": "2911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001534701.json",
+      "identity_tickers": [
+        "PSX"
+      ]
+    },
+    {
+      "ticker": "PTC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/857005/000119312526470217/0001193125-26-470217-index.htm",
+      "cik": 857005,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000857005.json",
+      "identity_tickers": [
+        "PTC"
+      ]
+    },
+    {
+      "ticker": "PWR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1050915/000105091526000006/0001050915-26-000006-index.htm",
+      "cik": 1050915,
+      "sic": "1731",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001050915.json",
+      "identity_tickers": [
+        "PWR"
+      ]
+    },
+    {
+      "ticker": "PYPL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1633917/000163391726000024/0001633917-26-000024-index.htm",
+      "cik": 1633917,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001633917.json",
+      "identity_tickers": [
+        "PYPL"
+      ]
+    },
+    {
+      "ticker": "Q",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 2058873,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002058873.json",
+      "identity_tickers": [
+        "Q"
+      ]
+    },
+    {
+      "ticker": "QCOM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/804328/000080432826000128/0000804328-26-000128-index.htm",
+      "cik": 804328,
+      "sic": "3663",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000804328.json",
+      "identity_tickers": [
+        "QCOM"
+      ]
+    },
+    {
+      "ticker": "RCL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 884887,
+      "sic": "4400",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000884887.json",
+      "identity_tickers": [
+        "RCL"
+      ]
+    },
+    {
+      "ticker": "RDDT",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1713445,
+      "sic": "7374",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001713445.json",
+      "identity_tickers": [
+        "RDDT"
+      ]
+    },
+    {
+      "ticker": "REG",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 910606,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000910606.json",
+      "identity_tickers": [
+        "REG",
+        "REGCO",
+        "REGCP"
+      ]
+    },
+    {
+      "ticker": "REGN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 872589,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000872589.json",
+      "identity_tickers": [
+        "REGN"
+      ]
+    },
+    {
+      "ticker": "RF",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1281761,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001281761.json",
+      "identity_tickers": [
+        "RF",
+        "RF.PC",
+        "RF.PE",
+        "RF.PF"
+      ]
+    },
+    {
+      "ticker": "RJF",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 720005,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000720005.json",
+      "identity_tickers": [
+        "RJF"
+      ]
+    },
+    {
+      "ticker": "RL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1037038,
+      "sic": "2320",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001037038.json",
+      "identity_tickers": [
+        "RL"
+      ]
+    },
+    {
+      "ticker": "RMD",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 943819,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000943819.json",
+      "identity_tickers": [
+        "RMD",
+        "RSMDF"
+      ]
+    },
+    {
+      "ticker": "ROK",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1024478,
+      "sic": "3829",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001024478.json",
+      "identity_tickers": [
+        "ROK"
+      ]
+    },
+    {
+      "ticker": "ROL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/84839/000008483926000008/0000084839-26-000008-index.htm",
+      "cik": 84839,
+      "sic": "7340",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000084839.json",
+      "identity_tickers": [
+        "ROL"
+      ]
+    },
+    {
+      "ticker": "ROP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/882835/000088283526000009/0000882835-26-000009-index.htm",
+      "cik": 882835,
+      "sic": "3823",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000882835.json",
+      "identity_tickers": [
+        "ROP"
+      ]
+    },
+    {
+      "ticker": "ROST",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 745732,
+      "sic": "5651",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000745732.json",
+      "identity_tickers": [
+        "ROST"
+      ]
+    },
+    {
+      "ticker": "RSG",
+      "status": "pending",
+      "reason": "Captura SEC pendiente de descargar."
+    },
+    {
+      "ticker": "RTX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 101829,
+      "sic": "3724",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000101829.json",
+      "identity_tickers": [
+        "RTX"
+      ]
+    },
+    {
+      "ticker": "RVTY",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-28",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/31791/000003179126000012/0000031791-26-000012-index.htm",
+      "cik": 31791,
+      "sic": "3826",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000031791.json",
+      "identity_tickers": [
+        "RVTY"
+      ]
+    },
+    {
+      "ticker": "SBAC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1034054,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001034054.json",
+      "identity_tickers": [
+        "SBAC"
+      ]
+    },
+    {
+      "ticker": "SBUX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-09-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/829224/000082922426000162/0000829224-26-000162-index.htm",
+      "cik": 829224,
+      "sic": "5810",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000829224.json",
+      "identity_tickers": [
+        "SBUX"
+      ]
+    },
+    {
+      "ticker": "SCHW",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 316709,
+      "sic": "6211",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000316709.json",
+      "identity_tickers": [
+        "SCHW",
+        "SCHW.PD",
+        "SCHW.PJ"
+      ]
+    },
+    {
+      "ticker": "SHW",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 89800,
+      "sic": "5200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000089800.json",
+      "identity_tickers": [
+        "SHW"
+      ]
+    },
+    {
+      "ticker": "SJM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-04-30",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/91419/000009141926000050/0000091419-26-000050-index.htm",
+      "cik": 91419,
+      "sic": "2033",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000091419.json",
+      "identity_tickers": [
+        "SJM"
+      ]
+    },
+    {
+      "ticker": "SKYD",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 2041610,
+      "sic": "4833",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002041610.json",
+      "identity_tickers": [
+        "SKYD",
+        "SKYD.WT"
+      ]
+    },
+    {
+      "ticker": "SLB",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/87347/000119312526021017/0001193125-26-021017-index.htm",
+      "cik": 87347,
+      "sic": "1389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000087347.json",
+      "identity_tickers": [
+        "SLB"
+      ]
+    },
+    {
+      "ticker": "SMCI",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1375365,
+      "sic": "3571",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001375365.json",
+      "identity_tickers": [
+        "SMCI",
+        "SMCIP"
+      ]
+    },
+    {
+      "ticker": "SNA",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 91440,
+      "sic": "3420",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000091440.json",
+      "identity_tickers": [
+        "SNA"
+      ]
+    },
+    {
+      "ticker": "SNDK",
+      "status": "review",
+      "reason": "Desdoblamiento posterior: requiere conciliar la base por acción.",
+      "cik": 2023554,
+      "sic": "3572",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002023554.json",
+      "identity_tickers": [
+        "SNDK"
+      ]
+    },
+    {
+      "ticker": "SNPS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-10-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/883241/000088324125000028/0000883241-25-000028-index.htm",
+      "cik": 883241,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000883241.json",
+      "identity_tickers": [
+        "SNPS"
+      ]
+    },
+    {
+      "ticker": "SO",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 92122,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000092122.json",
+      "identity_tickers": [
+        "SO",
+        "SOJC",
+        "SOJD",
+        "SOJE",
+        "SOJF",
+        "SOMN"
+      ]
+    },
+    {
+      "ticker": "SOLV",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1964738/000196473826000007/0001964738-26-000007-index.htm",
+      "cik": 1964738,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001964738.json",
+      "identity_tickers": [
+        "SOLV"
+      ]
+    },
+    {
+      "ticker": "SPG",
+      "status": "pending",
+      "reason": "Captura SEC pendiente de descargar."
+    },
+    {
+      "ticker": "SPGI",
+      "status": "review",
+      "reason": "Desdoblamiento posterior: requiere conciliar la base por acción.",
+      "cik": 64040,
+      "sic": "7320",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000064040.json",
+      "identity_tickers": [
+        "SPGI"
+      ]
+    },
+    {
+      "ticker": "SRE",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1032208,
+      "sic": "4932",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001032208.json",
+      "identity_tickers": [
+        "SRE",
+        "SREA"
+      ]
+    },
+    {
+      "ticker": "STE",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-03-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1757898/000162828026039136/0001628280-26-039136-index.htm",
+      "cik": 1757898,
+      "sic": "3842",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001757898.json",
+      "identity_tickers": [
+        "STE"
+      ]
+    },
+    {
+      "ticker": "STLD",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1022671/000110465926021395/0001104659-26-021395-index.htm",
+      "cik": 1022671,
+      "sic": "3312",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001022671.json",
+      "identity_tickers": [
+        "STLD"
+      ]
+    },
+    {
+      "ticker": "STT",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 93751,
+      "sic": "6022",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000093751.json",
+      "identity_tickers": [
+        "STT",
+        "STT.PG"
+      ]
+    },
+    {
+      "ticker": "STX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-07-03",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1137789/000113778926000159/0001137789-26-000159-index.htm",
+      "cik": 1137789,
+      "sic": "3572",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001137789.json",
+      "identity_tickers": [
+        "STX"
+      ]
+    },
+    {
+      "ticker": "STZ",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 16918,
+      "sic": "2080",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000016918.json",
+      "identity_tickers": [
+        "STZ"
+      ]
+    },
+    {
+      "ticker": "SW",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/2005951/000162828026012555/0001628280-26-012555-index.htm",
+      "cik": 2005951,
+      "sic": "2650",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002005951.json",
+      "identity_tickers": [
+        "SW"
+      ]
+    },
+    {
+      "ticker": "SWK",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 93556,
+      "sic": "3420",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000093556.json",
+      "identity_tickers": [
+        "SWK"
+      ]
+    },
+    {
+      "ticker": "SWKS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-10-02",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/4127/000000412726000055/0000004127-26-000055-index.htm",
+      "cik": 4127,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000004127.json",
+      "identity_tickers": [
+        "SWKS"
+      ]
+    },
+    {
+      "ticker": "SYF",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1601712,
+      "sic": "6199",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001601712.json",
+      "identity_tickers": [
+        "SYF",
+        "SYF.PA",
+        "SYF.PB"
+      ]
+    },
+    {
+      "ticker": "SYK",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 310764,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000310764.json",
+      "identity_tickers": [
+        "SYK"
+      ]
+    },
+    {
+      "ticker": "SYY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: RetainedEarningsAccumulatedDeficit",
+      "cik": 96021,
+      "sic": "5140",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000096021.json",
+      "identity_tickers": [
+        "SYY"
+      ]
+    },
+    {
+      "ticker": "T",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 732717,
+      "sic": "4813",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000732717.json",
+      "identity_tickers": [
+        "T",
+        "TBB",
+        "T.PA",
+        "T.PC"
+      ]
+    },
+    {
+      "ticker": "TDG",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1260221,
+      "sic": "3728",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001260221.json",
+      "identity_tickers": [
+        "TDG"
+      ]
+    },
+    {
+      "ticker": "TDY",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-28",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1094285/000109428526000017/0001094285-26-000017-index.htm",
+      "cik": 1094285,
+      "sic": "3812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001094285.json",
+      "identity_tickers": [
+        "TDY"
+      ]
+    },
+    {
+      "ticker": "TECH",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 842023,
+      "sic": "2836",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000842023.json",
+      "identity_tickers": [
+        "TECH"
+      ]
+    },
+    {
+      "ticker": "TEL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1385157,
+      "sic": "5065",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001385157.json",
+      "identity_tickers": [
+        "TEL"
+      ]
+    },
+    {
+      "ticker": "TER",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/97210/000119312526059002/0001193125-26-059002-index.htm",
+      "cik": 97210,
+      "sic": "3825",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000097210.json",
+      "identity_tickers": [
+        "TER"
+      ]
+    },
+    {
+      "ticker": "TFC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 92230,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000092230.json",
+      "identity_tickers": [
+        "TFC",
+        "TFC.PI",
+        "TFC.PO",
+        "TFC.PR"
+      ]
+    },
+    {
+      "ticker": "TGT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/27419/000002741926000016/0000027419-26-000016-index.htm",
+      "cik": 27419,
+      "sic": "5331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000027419.json",
+      "identity_tickers": [
+        "TGT"
+      ]
+    },
+    {
+      "ticker": "TJX",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 109198,
+      "sic": "5651",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000109198.json",
+      "identity_tickers": [
+        "TJX"
+      ]
+    },
+    {
+      "ticker": "TKO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1973266,
+      "sic": "7900",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001973266.json",
+      "identity_tickers": [
+        "TKO"
+      ]
+    },
+    {
+      "ticker": "TMO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 97745,
+      "sic": "3829",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000097745.json",
+      "identity_tickers": [
+        "TMO"
+      ]
+    },
+    {
+      "ticker": "TMUS",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1283699,
+      "sic": "4812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001283699.json",
+      "identity_tickers": [
+        "TMUS",
+        "TMUSI",
+        "TMUSL",
+        "TMUSZ"
+      ]
+    },
+    {
+      "ticker": "TPL",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1811074,
+      "sic": "6792",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001811074.json",
+      "identity_tickers": [
+        "TPL"
+      ]
+    },
+    {
+      "ticker": "TPR",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-06-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1116132/000111613226000018/0001116132-26-000018-index.htm",
+      "cik": 1116132,
+      "sic": "3100",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001116132.json",
+      "identity_tickers": [
+        "TPR"
+      ]
+    },
+    {
+      "ticker": "TRGP",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1389170,
+      "sic": "4922",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001389170.json",
+      "identity_tickers": [
+        "TRGP"
+      ]
+    },
+    {
+      "ticker": "TRMB",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-01-03",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/864749/000086474926000015/0000864749-26-000015-index.htm",
+      "cik": 864749,
+      "sic": "3829",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000864749.json",
+      "identity_tickers": [
+        "TRMB"
+      ]
+    },
+    {
+      "ticker": "TROW",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1113169,
+      "sic": "6282",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001113169.json",
+      "identity_tickers": [
+        "TROW"
+      ]
+    },
+    {
+      "ticker": "TRV",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 86312,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000086312.json",
+      "identity_tickers": [
+        "TRV"
+      ]
+    },
+    {
+      "ticker": "TSCO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-27",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/916365/000091636526000014/0000916365-26-000014-index.htm",
+      "cik": 916365,
+      "sic": "5200",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000916365.json",
+      "identity_tickers": [
+        "TSCO"
+      ]
+    },
+    {
+      "ticker": "TSLA",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026003952/0001628280-26-003952-index.htm",
+      "cik": 1318605,
+      "sic": "3711",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001318605.json",
+      "identity_tickers": [
+        "TSLA"
+      ]
+    },
+    {
+      "ticker": "TSN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 100493,
+      "sic": "2015",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000100493.json",
+      "identity_tickers": [
+        "TSN"
+      ]
+    },
+    {
+      "ticker": "TT",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1466258,
+      "sic": "3822",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001466258.json",
+      "identity_tickers": [
+        "TT"
+      ]
+    },
+    {
+      "ticker": "TTWO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-03-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/946581/000162828026037434/0001628280-26-037434-index.htm",
+      "cik": 946581,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000946581.json",
+      "identity_tickers": [
+        "TTWO"
+      ]
+    },
+    {
+      "ticker": "TWLO",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1447669/000144766926000021/0001447669-26-000021-index.htm",
+      "cik": 1447669,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001447669.json",
+      "identity_tickers": [
+        "TWLO"
+      ]
+    },
+    {
+      "ticker": "TXN",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 97476,
+      "sic": "3674",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000097476.json",
+      "identity_tickers": [
+        "TXN"
+      ]
+    },
+    {
+      "ticker": "TXT",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 217346,
+      "sic": "3720",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000217346.json",
+      "identity_tickers": [
+        "TXT"
+      ]
+    },
+    {
+      "ticker": "TYL",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 860731,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000860731.json",
+      "identity_tickers": [
+        "TYL"
+      ]
+    },
+    {
+      "ticker": "UAL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/100517/000010051726000023/0000100517-26-000023-index.htm",
+      "cik": 100517,
+      "sic": "4512",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000100517.json",
+      "identity_tickers": [
+        "UAL"
+      ]
+    },
+    {
+      "ticker": "UBER",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1543151/000154315126000015/0001543151-26-000015-index.htm",
+      "cik": 1543151,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001543151.json",
+      "identity_tickers": [
+        "UBER"
+      ]
+    },
+    {
+      "ticker": "UDR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 74208,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000074208.json",
+      "identity_tickers": [
+        "UDR"
+      ]
+    },
+    {
+      "ticker": "UHS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 352915,
+      "sic": "8062",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000352915.json",
+      "identity_tickers": [
+        "UHS"
+      ]
+    },
+    {
+      "ticker": "ULTA",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1403568/000110465926035243/0001104659-26-035243-index.htm",
+      "cik": 1403568,
+      "sic": "5990",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001403568.json",
+      "identity_tickers": [
+        "ULTA"
+      ]
+    },
+    {
+      "ticker": "UNH",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 731766,
+      "sic": "6324",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000731766.json",
+      "identity_tickers": [
+        "UNH"
+      ]
+    },
+    {
+      "ticker": "UNP",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/100885/000010088526000037/0000100885-26-000037-index.htm",
+      "cik": 100885,
+      "sic": "4011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000100885.json",
+      "identity_tickers": [
+        "UNP"
+      ]
+    },
+    {
+      "ticker": "UPS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1090727,
+      "sic": "4210",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001090727.json",
+      "identity_tickers": [
+        "UPS"
+      ]
+    },
+    {
+      "ticker": "URI",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1067701/000106770126000007/0001067701-26-000007-index.htm",
+      "cik": 1067701,
+      "sic": "7359",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001067701.json",
+      "identity_tickers": [
+        "URI"
+      ]
+    },
+    {
+      "ticker": "USB",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 36104,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000036104.json",
+      "identity_tickers": [
+        "USB",
+        "USB.PA",
+        "USB.PH",
+        "USB.PP",
+        "USB.PQ",
+        "USB.PR",
+        "USB.PS"
+      ]
+    },
+    {
+      "ticker": "V",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1403161,
+      "sic": "7389",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001403161.json",
+      "identity_tickers": [
+        "V"
+      ]
+    },
+    {
+      "ticker": "VEEV",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-01-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1393052/000139305226000014/0001393052-26-000014-index.htm",
+      "cik": 1393052,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001393052.json",
+      "identity_tickers": [
+        "VEEV"
+      ]
+    },
+    {
+      "ticker": "VICI",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1705696,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001705696.json",
+      "identity_tickers": [
+        "VICI"
+      ]
+    },
+    {
+      "ticker": "VLO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1035002,
+      "sic": "2911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001035002.json",
+      "identity_tickers": [
+        "VLO"
+      ]
+    },
+    {
+      "ticker": "VLTO",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 1967680,
+      "sic": "3825",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001967680.json",
+      "identity_tickers": [
+        "VLTO"
+      ]
+    },
+    {
+      "ticker": "VMC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1396009/000162828026009546/0001628280-26-009546-index.htm",
+      "cik": 1396009,
+      "sic": "1400",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001396009.json",
+      "identity_tickers": [
+        "VMC"
+      ]
+    },
+    {
+      "ticker": "VMRK",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 906107,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000906107.json",
+      "identity_tickers": [
+        "VMRK"
+      ]
+    },
+    {
+      "ticker": "VRSK",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1442145/000143774926004452/0001437749-26-004452-index.htm",
+      "cik": 1442145,
+      "sic": "7374",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001442145.json",
+      "identity_tickers": [
+        "VRSK"
+      ]
+    },
+    {
+      "ticker": "VRSN",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1014473/000101447326000006/0001014473-26-000006-index.htm",
+      "cik": 1014473,
+      "sic": "7371",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001014473.json",
+      "identity_tickers": [
+        "VRSN"
+      ]
+    },
+    {
+      "ticker": "VRT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1674101/000167410126000008/0001674101-26-000008-index.htm",
+      "cik": 1674101,
+      "sic": "3679",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001674101.json",
+      "identity_tickers": [
+        "VRT"
+      ]
+    },
+    {
+      "ticker": "VRTX",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/875320/000087532026000056/0000875320-26-000056-index.htm",
+      "cik": 875320,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000875320.json",
+      "identity_tickers": [
+        "VRTX"
+      ]
+    },
+    {
+      "ticker": "VST",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1692819/000169281926000006/0001692819-26-000006-index.htm",
+      "cik": 1692819,
+      "sic": "4911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001692819.json",
+      "identity_tickers": [
+        "VST"
+      ]
+    },
+    {
+      "ticker": "VTR",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 740260,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000740260.json",
+      "identity_tickers": [
+        "VTR"
+      ]
+    },
+    {
+      "ticker": "VTRS",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1792044,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001792044.json",
+      "identity_tickers": [
+        "VTRS"
+      ]
+    },
+    {
+      "ticker": "VYLR",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 2128626,
+      "sic": "0100",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002128626.json",
+      "identity_tickers": [
+        "VYLR"
+      ]
+    },
+    {
+      "ticker": "VZ",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 732712,
+      "sic": "4813",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000732712.json",
+      "identity_tickers": [
+        "VZ"
+      ]
+    },
+    {
+      "ticker": "WAB",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/943452/000162828026008067/0001628280-26-008067-index.htm",
+      "cik": 943452,
+      "sic": "3743",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000943452.json",
+      "identity_tickers": [
+        "WAB"
+      ]
+    },
+    {
+      "ticker": "WAT",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1000697/000119312526062604/0001193125-26-062604-index.htm",
+      "cik": 1000697,
+      "sic": "3826",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001000697.json",
+      "identity_tickers": [
+        "WAT"
+      ]
+    },
+    {
+      "ticker": "WDAY",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: CommonStockSharesIssued",
+      "cik": 1327811,
+      "sic": "7374",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001327811.json",
+      "identity_tickers": [
+        "WDAY"
+      ]
+    },
+    {
+      "ticker": "WDC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-07-03",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/106040/000162828026057139/0001628280-26-057139-index.htm",
+      "cik": 106040,
+      "sic": "3572",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000106040.json",
+      "identity_tickers": [
+        "WDC"
+      ]
+    },
+    {
+      "ticker": "WEC",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/783325/000078332526000018/0000783325-26-000018-index.htm",
+      "cik": 783325,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000783325.json",
+      "identity_tickers": [
+        "WEC"
+      ]
+    },
+    {
+      "ticker": "WELL",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 766704,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000766704.json",
+      "identity_tickers": [
+        "WELL"
+      ]
+    },
+    {
+      "ticker": "WFC",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 72971,
+      "sic": "6021",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000072971.json",
+      "identity_tickers": [
+        "WFC",
+        "WFC.PY",
+        "WFC.PL",
+        "WFC.PC",
+        "WFCNP",
+        "WFC.PA",
+        "WFC.PD",
+        "WFC.PZ"
+      ]
+    },
+    {
+      "ticker": "WM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/823768/000110465926012049/0001104659-26-012049-index.htm",
+      "cik": 823768,
+      "sic": "4953",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000823768.json",
+      "identity_tickers": [
+        "WM"
+      ]
+    },
+    {
+      "ticker": "WMB",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: LiabilitiesNoncurrent",
+      "cik": 107263,
+      "sic": "4922",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000107263.json",
+      "identity_tickers": [
+        "WMB"
+      ]
+    },
+    {
+      "ticker": "WMT",
+      "status": "existing",
+      "reason": "Cálculo anterior conservado."
+    },
+    {
+      "ticker": "WRB",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 11544,
+      "sic": "6331",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000011544.json",
+      "identity_tickers": [
+        "WRB",
+        "WRB.PE",
+        "WRB.PF",
+        "WRB.PG",
+        "WRB.PH"
+      ]
+    },
+    {
+      "ticker": "WSM",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2026-02-01",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/719955/000071995526000059/0000719955-26-000059-index.htm",
+      "cik": 719955,
+      "sic": "5700",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000719955.json",
+      "identity_tickers": [
+        "WSM"
+      ]
+    },
+    {
+      "ticker": "WST",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/105770/000010577026000010/0000105770-26-000010-index.htm",
+      "cik": 105770,
+      "sic": "3841",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000105770.json",
+      "identity_tickers": [
+        "WST"
+      ]
+    },
+    {
+      "ticker": "WTW",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 1140536,
+      "sic": "6411",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001140536.json",
+      "identity_tickers": [
+        "WTW"
+      ]
+    },
+    {
+      "ticker": "WY",
+      "status": "review",
+      "reason": "Revisión sectorial requerida para el modelo original.",
+      "cik": 106535,
+      "sic": "6798",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000106535.json",
+      "identity_tickers": [
+        "WY"
+      ]
+    },
+    {
+      "ticker": "WYNN",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1174922/000117492226000013/0001174922-26-000013-index.htm",
+      "cik": 1174922,
+      "sic": "7011",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001174922.json",
+      "identity_tickers": [
+        "WYNN"
+      ]
+    },
+    {
+      "ticker": "XEL",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 72903,
+      "sic": "4931",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000072903.json",
+      "identity_tickers": [
+        "XEL",
+        "XELLL"
+      ]
+    },
+    {
+      "ticker": "XOM",
+      "status": "review",
+      "reason": "Falta un ejercicio anual USD compatible con el año del resumen.",
+      "cik": 2115436,
+      "sic": "2911",
+      "identity_source": "https://data.sec.gov/submissions/CIK0002115436.json",
+      "identity_tickers": [
+        "XOM"
+      ]
+    },
+    {
+      "ticker": "XYL",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1524472/000152447226000012/0001524472-26-000012-index.htm",
+      "cik": 1524472,
+      "sic": "3561",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001524472.json",
+      "identity_tickers": [
+        "XYL"
+      ]
+    },
+    {
+      "ticker": "XYZ",
+      "status": "review",
+      "reason": "Revisar las clases de acciones y otros valores cotizados del emisor.",
+      "cik": 1512673,
+      "sic": "7372",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001512673.json",
+      "identity_tickers": [
+        "XYZ",
+        "BSQKZ"
+      ]
+    },
+    {
+      "ticker": "YUM",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1041061,
+      "sic": "5812",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001041061.json",
+      "identity_tickers": [
+        "YUM"
+      ]
+    },
+    {
+      "ticker": "ZBH",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 1136869,
+      "sic": "3842",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001136869.json",
+      "identity_tickers": [
+        "ZBH"
+      ]
+    },
+    {
+      "ticker": "ZBRA",
+      "status": "review",
+      "reason": "Falta hecho del mismo cierre: TreasuryStockShares",
+      "cik": 877212,
+      "sic": "3560",
+      "identity_source": "https://data.sec.gov/submissions/CIK0000877212.json",
+      "identity_tickers": [
+        "ZBRA"
+      ]
+    },
+    {
+      "ticker": "ZTS",
+      "status": "prepared",
+      "reason": "Referencia SEC validada.",
+      "period_end": "2025-12-31",
+      "report_url": "https://www.sec.gov/Archives/edgar/data/1555280/000155528026000011/0001555280-26-000011-index.htm",
+      "cik": 1555280,
+      "sic": "2834",
+      "identity_source": "https://data.sec.gov/submissions/CIK0001555280.json",
+      "identity_tickers": [
+        "ZTS"
+      ]
+    }
+  ]
+}

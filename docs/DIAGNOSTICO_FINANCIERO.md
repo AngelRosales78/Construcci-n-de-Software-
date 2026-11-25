@@ -13,7 +13,7 @@ Las 504 fichas se revisaron contra las copias financieras y de precios conservad
 | ROE | 467 | 33 patrimonios no positivos; tres beneficios netos ausentes; un patrimonio ausente |
 | Beta | 500 | Cuatro históricos con menos de 253 sesiones comunes |
 | Dividendo | 390 | 95 sin pagos registrados en la ventana; 15 con desdoblamiento sin base por acción conciliada; cuatro con menos de un año de histórico |
-| Altman-Z | 6 | 439 requieren valoración bursátil del cierre; 59 necesitan además otros componentes |
+| Altman-Z | 180 | 182 referencias por conciliar; 97 modelos sectoriales por revisar; 40 emisores con varios valores cotizados; cinco identidades o referencias pendientes |
 
 Estos casos tienen tratamientos distintos. Un patrimonio no positivo no se corrige inventando un ROE. La falta de eventos de dividendos no prueba por sí sola que la empresa nunca pague o que el rendimiento sea cero. Los históricos cortos no se interpolan para alcanzar un mínimo.
 
@@ -35,11 +35,11 @@ Ambas referencias emplean el cierre sin ajustar de la última sesión hasta el c
 3. Para Altman, conciliar cierres reales, acciones por clase y precios del mismo cierre; después revisar los restantes componentes y la aplicabilidad del modelo al sector.
 4. Para dividendos, verificar eventos y ajustes por acción. Para beta, adquirir sesiones comunes adicionales cuando existan. No completar series con valores sintéticos.
 
-No se declara completo Altman-Z para todo el catálogo: 498 fichas siguen sin un cálculo publicable.
+La ampliación SEC eleva la cobertura a 180 puntuaciones; 324 fichas siguen sin un cálculo publicable. Procedencia y reproducción: [ALTMAN_CATALOGO_SEC.md](ALTMAN_CATALOGO_SEC.md).
 
 ### Revisión posterior de cobertura y presentación
 
-La nueva auditoría de solo lectura confirma 6 resultados disponibles, 439 valoraciones del cierre pendientes y 59 casos con más componentes ausentes. No se han añadido nuevas referencias en esta corrección visual.
+La auditoría anterior a la ampliación SEC confirmó 6 resultados disponibles, 439 valoraciones del cierre pendientes y 59 casos con más componentes ausentes. Ese fue el punto de partida de las 174 referencias adicionales descritas en la ampliación enlazada arriba.
 
 Para ampliar la cobertura:
 
