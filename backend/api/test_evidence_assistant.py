@@ -8,7 +8,7 @@ import pytest
 from django.core.cache import cache
 from rest_framework.test import APIClient
 from .test_pillars_liquidity import case
-from .models import AnnualFinancialStatement, Company, AccountPlan
+from .models import AnnualFinancialStatement, Company, AccountPlan, FinancialMetrics
 from .assistant_provider import plan_answer
 
 pytestmark=pytest.mark.django_db
@@ -240,3 +240,31 @@ def test_ai_limit_does_not_block_reading_data_or_learning(case,monkeypatch):
     assert post(case[0],action='question',question='¿Cómo está su liquidez?').status_code==429
     assert case[0].get(URL,{'fiscal_year':2024}).status_code==200
     assert post(case[0],action='learn',topic='liquidity').status_code==200
+
+
+def test_published_card_values_keep_their_own_dates_sources_and_small_values(case,monkeypatch):
+    client,current=case
+    FinancialMetrics.objects.create(company=current.company,as_of=date(2025,12,31),source='Proveedor',is_demo=False,
+        per=0,roe=12,beta=Decimal('-0.0004'),dividend_yield=Decimal('0.0012'),market_cap=Decimal('2000000000000'),
+        field_sources={'per':{'as_of':'2025-12-31','source':'https://finance.yahoo.com/quote/MSFT/','method':'Referencia publicada'}})
+    facts={f['id']:f for f in client.get(URL,{'fiscal_year':2024}).data['facts']}
+    assert facts['per']['value']=='0,00 veces' and facts['per']['period']['end']=='2025-12-31'
+    assert facts['per']['sources'][0]['url']=='https://finance.yahoo.com/quote/MSFT/'
+    assert facts['beta']['value']=='-0,0004' and facts['dividend_yield']['value']=='0,0012 %'
+    assert facts['market_cap']['value']=='USD 2,00 billones'
+    assert facts['overview_roe']['period']['end'] is None
+    assert 'Fecha de referencia no informada' in facts['overview_roe']['limit']
+    planner(monkeypatch,['per'])
+    result=post(client,action='question',question='¿Qué significa el PER de la ficha?').data
+    assert result['answer']['cards'][0]['id']=='per'
+
+
+def test_independent_quote_and_altman_cards_do_not_inherit_the_annual_period_warning():
+    from .assistant_facts import answer_for
+    pack={'period_note':'Referencia anual normalizada.','facts':[
+        {'id':'altman','topic':'altman','kind':'neutral','sources':[]},
+        {'id':'per','topic':'per','kind':'neutral','sources':[]},
+        {'id':'current_ratio','topic':'current_ratio','pillar':'liquidity','kind':'neutral','sources':[]}]}
+    assert answer_for(pack,['altman'])['period_note'] is None
+    assert answer_for(pack,['per'])['period_note'] is None
+    assert answer_for(pack,['liquidity'])['period_note']=='Referencia anual normalizada.'

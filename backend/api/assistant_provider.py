@@ -24,7 +24,7 @@ def validate_plan(plan):
 
 
 def plan_answer(pack, question, history, user_id, level='simple'):
-    signature={'version':VERSION,'router_revision':2,'model':MODEL_SHA256,'owner':user_id,'pack':pack,'question':question,'history':history,'level':level}
+    signature={'version':VERSION,'router_revision':3,'model':MODEL_SHA256,'owner':user_id,'pack':pack,'question':question,'history':history,'level':level}
     key='assistant:'+hashlib.sha256(json.dumps(signature,sort_keys=True,ensure_ascii=False,default=str).encode()).hexdigest()
     cached=cache.get(key)
     if cached:
@@ -48,6 +48,8 @@ def plan_answer(pack, question, history, user_id, level='simple'):
         'Para "qué destaca" usa overview; "qué falta" usa missing; "deudas" usa solvency. '
         'Ejemplos: "¿Cómo están sus deudas?" => {"topics":["solvency"],"context":"current"}; '
         '"¿Qué significa su liquidez?" => {"topics":["liquidity"],"context":"current"}; '
+        '"¿Qué significa su PER?" => {"topics":["per"],"context":"current"}; '
+        '"Explícame el ROE publicado en la ficha" => {"topics":["overview_roe"],"context":"current"}; '
         '"¿Por qué cayó el beneficio?" => {"topics":["causes"],"context":"current"}; '
         '"¿Debo comprar?" => {"topics":["advice"],"context":"current"}. Devuelve solo el JSON permitido. /no_think')
     content={'contexto':{'empresas':pack['tickers'],'nombre':pack['company_name'],'año':pack['fiscal_year'],'pantalla':pack['scope']},

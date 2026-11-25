@@ -10,6 +10,11 @@ PILLARS = {'liquidity': 'Liquidez', 'profitability': 'Rentabilidad', 'solvency':
 UNITS = {'times': 'veces', 'percent': '%', 'days': 'días'}
 LIMIT = 'Describe datos históricos; no anticipa ganancias ni constituye una recomendación de compra.'
 INTERPRETATIONS = {
+    'market_cap':('Es el valor conjunto de las acciones en bolsa publicado en la ficha: {v}.','No es el efectivo de la empresa ni el importe que pagarías por una sola acción.'),
+    'per':('El precio equivale a {v} veces el beneficio por acción usado por el proveedor.','Por sí solo no determina si una acción está cara o barata. Su fecha y la metodología del proveedor pueden diferir del balance anual seleccionado.'),
+    'beta':('La beta publicada en la ficha es {v}: resume cómo se movió la acción frente al mercado en la referencia del proveedor.','No es una probabilidad ni una predicción del próximo movimiento; depende del periodo y del índice de referencia.'),
+    'dividend_yield':('El rendimiento por dividendo publicado es {v} %: relaciona dividendos registrados con el precio usado en esa referencia.','No es una ganancia garantizada; las empresas pueden modificar o suspender dividendos.'),
+    'overview_roe':('El ROE publicado en la ficha es {v} %. Relaciona el resultado con el patrimonio según la referencia del proveedor.','No es el retorno de quien compra la acción. Conserva su fecha propia y no sustituye al ROE calculado con los balances del ejercicio seleccionado.'),
     'current_ratio': ('Por cada unidad de obligaciones de corto plazo, hay {v} unidades de recursos de corto plazo.', 'Estos recursos incluyen partidas que no son efectivo; el ratio no garantiza que se cobre o pague a tiempo.'),
     'quick_ratio': ('Compara efectivo, inversiones temporales y cuentas por cobrar con las obligaciones de corto plazo: {v} veces.', 'Excluye el inventario, pero las cuentas por cobrar tampoco son efectivo disponible de inmediato.'),
     'roe': ('El resultado neto equivale al {v} % del patrimonio contable promedio de los propietarios.', 'Es rentabilidad contable de la empresa, no la rentabilidad que recibiría quien compra la acción.'),
@@ -75,6 +80,28 @@ def company_pack(company, year):
     data = CompanyPillarsView().for_year(company.ticker, year).data
     facts = metric_facts(data)
     overview = company_financial_data(company)
+    summary=getattr(company,'financial_metrics',None) or company
+    for topic,field,label,unit in [('market_cap','market_cap','Valor en bolsa','USD'),('per','per','Precio / beneficio · PER','veces'),
+                                  ('beta','beta','Movimiento frente al mercado · Beta',''),('dividend_yield','dividend_yield','Rendimiento por dividendo','%'),
+                                  ('overview_roe','roe','ROE publicado en la ficha','%')]:
+        raw=getattr(summary,field,None)
+        available=raw is not None and Decimal(str(raw)).is_finite()
+        amount=Decimal(str(raw)) if available else None
+        rendered=(format(amount.normalize(),'f').replace('.',',') if amount and abs(amount)<Decimal('.01') else display(amount)) if available else None
+        if available and field=='market_cap':
+            value=Decimal(str(raw))
+            divisor,suffix=next(((d,s) for d,s in [(Decimal('1e12'),'billones'),(Decimal('1e9'),'mil millones'),(Decimal('1e6'),'millones')] if abs(value)>=d),(Decimal(1),''))
+            rendered=f"USD {display(value/divisor)} {suffix}".strip()
+        source=overview.get('field_sources',{}).get(field,{})
+        date=source.get('as_of')
+        definition,limit=INTERPRETATIONS[topic]
+        link=source_link(source.get('source'),'Fuente de la ficha',date)
+        diagnostic=overview.get('indicator_availability',{}).get(field,{})
+        facts.append({'id':topic,'topic':topic,'title':label,'status':'available' if available else 'unavailable','kind':'neutral' if available else 'missing',
+            'value':f"{rendered}{' '+unit if unit and field!='market_cap' else ''}" if available else diagnostic.get('label','No disponible'),
+            'meaning':definition.format(v=rendered) if available else diagnostic.get('explanation','No hay un valor publicado disponible para esta cifra.'),
+            'limit':limit+' Referencia independiente del ejercicio anual seleccionado.'+(' Fecha de referencia no informada.' if not date else '')+(' Procedencia pendiente de verificar.' if overview.get('is_demo') else ''),
+            'period':{'start':None,'end':date},'sources':[link] if link else []})
     altman = overview['altman_z']
     reference = altman.get('reference', {})
     closing = reference.get('period_end') or str(overview.get('as_of') or '') or None
@@ -218,4 +245,7 @@ def answer_for(pack, topics):
     unique={f['id']:f for f in selected}
     if not unique and not messages:
         messages.append('No hay datos de ese tema en el contexto abierto. Puedes consultar los datos faltantes o elegir otra pregunta.')
-    return {'cards':list(unique.values())[:5], 'messages':list(dict.fromkeys(messages)), 'topics':topics}
+    cards=list(unique.values())[:5]
+    independent={'altman','market_cap','per','beta','dividend_yield','overview_roe'}
+    return {'cards':cards, 'messages':list(dict.fromkeys(messages)), 'topics':topics,
+            'period_note':pack.get('period_note') if any(card['topic'] not in independent for card in cards) else None}
