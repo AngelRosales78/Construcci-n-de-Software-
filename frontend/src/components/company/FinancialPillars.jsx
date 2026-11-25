@@ -1,7 +1,7 @@
 import { useFinancialPillarsViewModel } from '../../viewmodels/useCompanyDashboardViewModel'
 import PillarRadar from './PillarRadar'
 import OverallScore from './OverallScore'
-import FinancialAnalysis from './FinancialAnalysis'
+import FinancialAssistant from './FinancialAssistant'
 import { useEffect, useState } from 'react'
 
 const UNITS = { times: 'veces', percent: '%', days: 'días' }
@@ -105,7 +105,7 @@ export default function FinancialPillars({ view = 'pillars' }) {
         </div>
       </section>)}
       </div>
-      <div hidden={view !== 'analysis'}><FinancialAnalysis fiscalYear={data.fiscal_year} /></div>
+      {view === 'analysis' && <FinancialAssistant key={`${data.ticker}:${data.fiscal_year}`} a={data.ticker} year={data.fiscal_year} />}
     </>}
   </section>
 }

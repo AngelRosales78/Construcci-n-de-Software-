@@ -1,0 +1,88 @@
+.workspace-content .financial-assistant { margin:24px 0; padding:26px; border:1px solid #bfcdbd; border-radius:10px; background:#fffef9; color:#203d32; min-width:0; }
+.workspace-content .financial-assistant :is(h2,h3,h4,p,small,label,legend) { color:inherit; }
+.workspace-content .financial-assistant h2 { margin:5px 0 10px; font:600 27px/1.2 var(--body-font); }
+.workspace-content .financial-assistant h3 { margin:0 0 12px; font:600 19px/1.3 var(--body-font); }
+.workspace-content .financial-assistant h4 { margin:0 0 8px; font:600 16px/1.4 var(--body-font); }
+.workspace-content .financial-assistant p { font:400 14px/1.65 var(--body-font); margin:8px 0 12px; }
+.assistant-heading { display:flex; gap:20px; justify-content:space-between; align-items:start; margin-bottom:16px; }
+.assistant-heading > div { min-width:0; }
+.workspace-content .financial-assistant .section-eyebrow { font-size:10px; color:#97442f; }
+.assistant-context-badge { display:inline-block; flex-shrink:0; border:1px solid #ccd5c5; padding:6px 9px; border-radius:5px; font-size:11px; }
+.assistant-modes { display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid #d1d8ca; padding-bottom:12px; margin-bottom:20px; }
+.workspace-content .financial-assistant button { cursor:pointer; min-height:44px; font:500 14px/1.4 var(--body-font); border:1px solid #b8c8b4; border-radius:5px; color:#203d32; background:#edf1e6; padding:10px 15px; }
+.workspace-content .financial-assistant button:hover:not(:disabled) { background:#dde7d7; border-color:#53705a; }
+.workspace-content .financial-assistant button:disabled { opacity:.6; cursor:wait; }
+.workspace-content .financial-assistant button[aria-pressed=true], .workspace-content .financial-assistant .primary-action { background:#203d32; border-color:#203d32; color:#fffef9; }
+.workspace-content .financial-assistant .primary-action:hover:not(:disabled) { background:#355843; }
+.workspace-content .financial-assistant :is(button,select,textarea,input):focus-visible { outline:3px solid #a14e36; outline-offset:3px; }
+.workspace-content .financial-assistant .assistant-section-intro { color:#56685d; }
+.assistant-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin:16px 0 20px; }
+.financial-assistant-comparison .assistant-overview { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.assistant-overview-group { border-top:3px solid #93ae8a; padding-top:15px; min-width:0; }
+.assistant-overview-attention { border-top-color:#bd8a4d; }
+.assistant-overview-missing { border-top-color:#9dada2; }
+.workspace-content .financial-assistant .assistant-overview-group > h3 { font-size:17px; }
+.assistant-fact { border:1px solid #d5ddce; border-radius:7px; padding:18px; background:#f6f7ef; min-width:0; }
+.assistant-overview-group > .assistant-fact + .assistant-fact { margin-top:12px; }
+.assistant-comparison-values { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-block:12px; }
+.assistant-comparison-values > span { display:grid; gap:6px; border-left:3px solid #93ae8a; padding-left:10px; }
+.assistant-comparison-values > span:nth-child(2) { border-left-color:#bd8a70; }
+.assistant-comparison-values small { font:400 12px/1.4 var(--data-font); }
+.assistant-comparison-values strong { font:600 clamp(16px,1.5vw,23px)/1.3 var(--body-font); letter-spacing:-.02em; }
+.workspace-content .financial-assistant .assistant-value { display:block; font:600 26px/1.3 var(--body-font); letter-spacing:-.025em; color:#203d32; overflow-wrap:anywhere; }
+.workspace-content .financial-assistant .assistant-date { font-size:12px; color:#526557; }
+.workspace-content .financial-assistant .assistant-limit { font-size:12px; color:#526557; }
+.assistant-sources { display:flex; flex-wrap:wrap; gap:6px 12px; margin-top:12px; }
+.workspace-content .financial-assistant .assistant-sources a { font:400 12px/1.6 var(--body-font); color:#97442f; text-decoration:underline; text-underline-offset:3px; overflow-wrap:anywhere; }
+.assistant-answer { margin-top:18px; }
+.workspace-content .financial-assistant .assistant-answer-context { font-size:12px; padding-bottom:10px; border-bottom:1px solid #d1d8ca; }
+.assistant-answer-cards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.assistant-message, .assistant-period-note { padding:14px 16px; border-left:3px solid #b0834b; background:#f2efdf; border-radius:0 5px 5px 0; }
+.assistant-question-heading { display:flex; gap:12px; justify-content:space-between; align-items:center; }
+.assistant-question-heading h3 { margin:0; }
+.assistant-suggestions, .assistant-lessons { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+.assistant-suggestions button { text-align:left; }
+.assistant-conversation { display:grid; gap:22px; margin:20px 0; }
+.assistant-turn { border-bottom:1px solid #ccd5c5; padding-bottom:20px; }
+.workspace-content .financial-assistant .assistant-user-question { padding:14px 16px; background:#e8eee0; border-radius:7px; overflow-wrap:anywhere; }
+.assistant-question-form { display:grid; gap:9px; margin-top:16px; }
+.assistant-question-form > div { display:flex; justify-content:space-between; gap:12px; align-items:center; }
+.workspace-content .financial-assistant :is(textarea,select) { background:#fffef9; color:#203d32; border:1px solid #8caa8c; border-radius:5px; padding:12px; font:400 15px/1.6 var(--body-font); min-height:46px; max-width:100%; }
+.assistant-question-form textarea { width:100%; resize:vertical; }
+.assistant-question-form small { font-size:12px; }
+.assistant-years { display:flex; flex-wrap:wrap; align-items:end; gap:18px; margin:20px 0; }
+.assistant-years label, .assistant-years > div { display:grid; gap:8px; font-size:14px; }
+.assistant-years > div { padding:10px; }
+.assistant-years > div strong { font:500 24px/1.2 var(--data-font); }
+.assistant-change-table { overflow-x:auto; max-width:100%; border:1px solid #ccd5c5; border-radius:6px; }
+.workspace-content .financial-assistant .assistant-change-table table { width:100%; min-width:650px; border-collapse:collapse; background:transparent; color:#203d32; }
+.workspace-content .financial-assistant .assistant-change-table :is(th,td) { padding:14px; border-bottom:1px solid #d1d8ca; font:400 14px/1.6 var(--body-font); text-align:left; color:#203d32; }
+.workspace-content .financial-assistant .assistant-change-table th { font-weight:600; }
+.assistant-change-table caption { padding:14px; text-align:left; font-size:14px; }
+.assistant-lesson { max-width:760px; border:1px solid #ccd5c5; border-radius:7px; padding:22px; }
+.assistant-example { background:#edf1e6; padding:16px; border-radius:5px; }
+.assistant-lesson fieldset { display:grid; gap:12px; padding:18px; border:1px solid #bfcdbd; margin:18px 0; }
+.assistant-lesson legend { font-size:15px; font-weight:500; padding:0 5px; }
+.assistant-lesson label { display:flex; align-items:start; gap:10px; font-size:14px; padding:6px; cursor:pointer; }
+.assistant-lesson input { margin-top:5px; accent-color:#203d32; }
+.assistant-feedback { background:#e8eee0; border-radius:5px; padding:16px; }
+.assistant-loading { background:#edf1e6; padding:14px; border-radius:6px; }
+.assistant-error { padding:16px; background:#f6e9df; border:1px solid #bc8d6b; border-radius:6px; }
+.assistant-footer { border-top:1px solid #ccd5c5; margin-top:24px; padding-top:14px; }
+.workspace-content .financial-assistant .assistant-footer p { font-size:12px; color:#526557; }
+@media (max-width:1150px) {
+ .assistant-overview, .financial-assistant-comparison .assistant-overview { grid-template-columns:minmax(0,1fr); }
+ .assistant-overview .assistant-fact { display:block; }
+ .assistant-heading { flex-wrap:wrap; gap:8px; }
+}
+@media (max-width:760px) {
+ .workspace-content .financial-assistant { padding:18px 14px; }
+ .workspace-content .financial-assistant h2 { font-size:24px; }
+ .assistant-answer-cards { grid-template-columns:minmax(0,1fr); }
+ .assistant-modes { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .workspace-content .financial-assistant .assistant-modes button { font-size:13px; padding:9px; }
+ .assistant-question-heading, .assistant-question-form > div { align-items:start; flex-direction:column; }
+ .assistant-question-form .primary-action { width:100%; }
+ .assistant-fact, .assistant-lesson { padding:15px; }
+ .assistant-suggestions button { width:100%; }
+}

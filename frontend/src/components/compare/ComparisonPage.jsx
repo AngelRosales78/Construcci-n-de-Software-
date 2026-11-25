@@ -6,6 +6,7 @@ import ComparisonHistory from './ComparisonHistory'
 import ReportPanel from '../reports/ReportPanel'
 import CompanyMark from '../shared/CompanyMark'
 import ScoreComparison from './ScoreComparison'
+import FinancialAssistant from '../company/FinancialAssistant'
 
 const labels = { liquidity: 'Liquidez', profitability: 'Rentabilidad', solvency: 'Solvencia', efficiency: 'Eficiencia', growth: 'Crecimiento' }
 
@@ -55,6 +56,7 @@ export default function ComparisonPage() {
         </tr>)}</tbody>
       </table></div>
       <p>Las puntuaciones siguen la metodología documentada y no son una recomendación de inversión.</p>
+      <FinancialAssistant key={`${vm.a}:${vm.b}:${vm.year}`} a={vm.a} b={vm.b} year={Number(vm.year)} deferred />
       <ComparisonHistory a={vm.a} b={vm.b} year={vm.year} />
       <ReportPanel a={vm.a} b={vm.b} year={Number(vm.year)} />
     </section>}
