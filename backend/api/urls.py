@@ -18,6 +18,7 @@ from . import views
 from .pillar_views import CompanyPillarsView
 from .simulation_views import CompanySimulationView, SimulationDetailView, CompanySimulationDefaultsView
 from .analysis_views import CompanyAnalysisView
+from .assistant_views import CompanyAssistantView, ComparisonAssistantView
 from .access_views import SubscriptionView
 from .user_management import AdminUsersView, AdminUserView, UserAvatarView, DeleteOwnAccountView
 from .catalog_views import AdminCompaniesView, AdminCompanyView
@@ -36,6 +37,8 @@ from .report_views import ReportsView, ReportStatusView, ReportFileView, ReportC
 app_name = 'auth'
 
 urlpatterns = [
+    path('companies/<str:ticker>/assistant/', CompanyAssistantView.as_view(), name='company-assistant'),
+    path('compare/assistant/', ComparisonAssistantView.as_view(), name='comparison-assistant'),
     path('user/push-installations/', PushInstallationsView.as_view()),
     path('user/push-installations/<uuid:installation_id>/', PushInstallationsView.as_view()),
     path('admin/monitoring/ai/', AIUsageView.as_view()),
