@@ -98,11 +98,16 @@ const web='http://127.0.0.1:55193',api='http://127.0.0.1:58020/api/v1'
   await drawerInput.fill('¿Qué significa su Altman-Z?');await drawerInput.press('Enter')
   await drawer.locator('.assistant-pending-turn').waitFor({state:'hidden',timeout:60000})
   assert.equal(await drawer.getByRole('alert').count(),0)
-  for(const width of [1440,390]){
-   await page.setViewportSize({width,height:1000})
+  for(const [width,height] of [[1440,1000],[768,800],[390,844],[360,640],[320,600]]){
+   await page.setViewportSize({width,height})
    await drawer.getByRole('log').evaluate(el=>{el.scrollTop=el.scrollHeight})
-   await page.screenshot({path:path.join(out,`03-chat-lateral-${width}.png`)})
+   const composer=await drawer.locator('.assistant-question-form').boundingBox()
+   assert.ok(composer.y>=0 && composer.y+composer.height<=height,`Composer visible at ${width}x${height}`)
+   assert.equal(await drawer.evaluate(el=>el.scrollWidth>el.clientWidth),false,`No horizontal overflow at ${width}`)
+   await page.screenshot({path:path.join(out,`03-chat-lateral-${width}.png`),animations:'disabled'})
   }
+  await page.emulateMedia({reducedMotion:'reduce'})
+  assert.equal(await drawer.evaluate(el=>getComputedStyle(el).animationName),'none')
   await page.keyboard.press('Escape')
   await drawer.waitFor({state:'hidden'})
   assert.deepEqual(errors,[])

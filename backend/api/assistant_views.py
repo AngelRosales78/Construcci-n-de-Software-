@@ -17,6 +17,7 @@ from .models import Company
 from .assistant_context import outside_context
 from .assistant_connection import connected, identity
 from .assistant_chat import small_talk, quick_topic, narrate, followup_topics
+from .assistant_guards import context_reply
 from .monitoring_services import usage_owner, BudgetExceeded, record_error
 
 
@@ -128,6 +129,11 @@ class CompanyAssistantView(APIView):
             result=presentation(pack)
             result.update(status='available',generation_mode='context_guard',answer=answer_for(pack,['out_of_scope']))
             return Response(result,headers={'Cache-Control':'private, no-store'})
+        guarded=context_reply(pack,question)
+        if guarded:
+            result=presentation(pack)
+            result.update(status='available',generation_mode='context_guard',answer=guarded)
+            return Response(result,headers={'Cache-Control':'private, no-store'})
         token=usage_owner.set(request.user.pk)
         try:
             previous=followup_topics(question,args['history']) if connected() else None
@@ -137,11 +143,13 @@ class CompanyAssistantView(APIView):
             conversational=next((t for t in topics if t in ('greeting','thanks','goodbye','business')),None)
             answer=quick_topic(pack,conversational) if conversational else answer_for(pack,topics)
             prose=None
-            if connected() and answer['cards']:
+            if connected() and answer['cards'] and any(f['status']=='available' for f in answer['cards']):
                 prose,prose_hit=narrate(pack,answer,question,args['history'],request.user.pk,args['level'])
                 hit=hit and prose_hit
                 answer['messages']=list(dict.fromkeys([*answer['messages'],*prose['paragraphs']]))
                 answer['evidence_ids']=prose['evidence_ids']
+            elif connected() and answer['cards'] and not answer['messages']:
+                answer['messages']=[f"{f['title']}: {f['meaning']}" for f in answer['cards'][:3]]
         except BudgetExceeded:
             raise
         except Exception:

@@ -10,7 +10,10 @@ from .assistant_context import normalized
 
 def small_talk(pack, question):
     text=normalized(question)
-    if re.fullmatch(r'(hola|hoa|hol|buenas|buenos dias|buenas tardes|buenas noches|hey|hello)( (hola|que tal|como estas|buenas))?',text):
+    text=re.sub(r'\bh+o+l+a+\b','hola',text)
+    if not text and '👋' in question:
+        return quick_topic(pack,'greeting')
+    if re.fullmatch(r'(hola|hoa|hol|buenas|buenos dias|buenas tardes|buenas noches|hey|hello)( (hola|que tal|como estas|buenas|me ayudas|puedes ayudarme|necesito ayuda))?',text):
         return quick_topic(pack,'greeting')
     if re.fullmatch(r'(muchas |mil )?gracias( por (la |tu )?ayuda)?|te agradezco',text):
         return quick_topic(pack,'thanks')
@@ -84,6 +87,8 @@ def validate_narrative(result, facts):
     if re.search(r'https?://|www\.|<[^>]+>|!\[|```',text,re.I):
         raise ValueError('unexpected_markup')
     if re.search(r'\b(te recomiendo (comprar|vender|invertir)|deber[ií]as (comprar|vender|invertir)|ganar[aá]s|rentabilidad garantizada|inversi[oó]n sin riesgo)\b',text,re.I):
+        raise ValueError('unsupported_advice')
+    if re.search(r'(?:^|[.!?]\s+)(?:compra|vende|invierte|apuesta)\b',text,re.I):
         raise ValueError('unsupported_advice')
     # References and dates are supplied by the server. New numerical claims are rejected.
     evidence=json.dumps([{key:known[i].get(key) for key in ('value','meaning','limit','period','periods','comparison_values')} for i in ids],ensure_ascii=False,default=str)

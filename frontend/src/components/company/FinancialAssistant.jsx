@@ -2,6 +2,7 @@ import { useEffect,useId,useRef,useState } from 'react'
 import { useFinancialAssistantViewModel } from '../../viewmodels/useFinancialAssistantViewModel'
 import './financial-assistant.css'
 import PendingState from '../shared/PendingState'
+import Icon from '../shared/Icon'
 
 function Sources({ sources=[] }) {
   return sources.length>0 && <div className="assistant-sources" aria-label="Fuentes de esta explicación">{sources.map((source,index)=><a key={`${source.url}-${source.period}-${index}`} href={source.url} target="_blank" rel="noreferrer">{source.label}{source.period && ` · ${source.period}`}</a>)}</div>
@@ -22,7 +23,8 @@ function Answer({ response,chat=false }) {
   const cards=response.answer.cards || []
   const cited=cards.filter(fact=>!response.answer.evidence_ids || response.answer.evidence_ids.includes(fact.id))
   const sources=cited.flatMap(fact=>fact.sources || []).filter((source,index,all)=>all.findIndex(other=>other.url===source.url && other.period===source.period)===index)
-  const dates=[...new Set(cited.filter(fact=>fact.period?.end).map(fact=>`${fact.title}: ${fact.period.end}`))]
+  const dateGroups=cited.filter(fact=>fact.period?.end).reduce((groups,fact)=>{(groups[fact.period.end] ||= []).push(fact);return groups},{})
+  const dates=Object.entries(dateGroups).map(([date,rows])=>Object.keys(dateGroups).length===1 ? date : `${rows.map(fact=>fact.title).join(', ')}: ${date}`)
   const messages=response.answer.messages?.length ? response.answer.messages : cards.slice(0,2).map(fact=>`${fact.title}: ${fact.value}. ${fact.meaning}`)
   return <div className="assistant-answer">
     {!chat && <p className="assistant-answer-context">{response.tickers.join(' y ')} · Ejercicio {response.fiscal_year} · {response.generation_mode==='conversational_ai' ? 'Explicación de IA con evidencias' : response.generation_mode==='local_ai_evidence_routing' ? 'IA con datos de esta pantalla' : response.generation_mode==='context_guard' ? 'Límite del contexto abierto' : 'Lectura calculada'}</p>}
@@ -52,7 +54,7 @@ export default function FinancialAssistant({ a, b, year, deferred=false,initialM
     {vm.busy && vm.busy!=='question' && <PendingState className="assistant-loading">{vm.busy==='summary' ? 'Preparando una lectura de las cifras…' : 'Consultando los datos…'}</PendingState>}
     {vm.error && <div className="assistant-error" role="alert"><p>{vm.error}</p><button type="button" onClick={vm.retry} disabled={!!vm.busy}>Reintentar consulta</button></div>}
     {vm.meta && <>
-      <div className="assistant-primary-tabs"><button type="button" aria-pressed={vm.mode==='question'} onClick={()=>vm.setMode('question')}>Preguntar</button><button type="button" aria-expanded={expandedTools} onClick={()=>setExpandedTools(value=>!value)}>Otras herramientas</button></div>
+      <div className="assistant-primary-tabs"><button type="button" aria-pressed={vm.mode==='question'} onClick={()=>vm.setMode('question')}>Preguntar</button><button type="button" aria-expanded={expandedTools} onClick={()=>setExpandedTools(value=>!value)}>Otras herramientas</button>{vm.turns.length>0 && <button type="button" className="assistant-reset" aria-label="Reiniciar conversación" onClick={vm.reset}>Reiniciar</button>}</div>
       {expandedTools && <nav className="assistant-modes" aria-label="Herramientas del asistente">{modes.map(([mode,label])=><button type="button" key={mode} aria-pressed={vm.mode===mode} aria-controls={`${id}-${mode}`} onClick={()=>vm.setMode(mode)}>{label}</button>)}</nav>}
       {vm.mode==='summary' && <div id={`${id}-summary`}>
         <p className="assistant-section-intro">Lectura automática de los datos disponibles. Las clasificaciones siguen las reglas académicas del proyecto.</p>
@@ -61,9 +63,9 @@ export default function FinancialAssistant({ a, b, year, deferred=false,initialM
         {vm.summary && <Answer response={vm.summary}/>}
       </div>}
       {vm.mode==='question' && <div id={`${id}-question`} className="assistant-chat">
-        <div className="assistant-question-heading"><h3>Hablemos de {b ? `${a} y ${b}` : a}</h3>{vm.turns.length>0 && <button type="button" onClick={vm.reset}>Reiniciar conversación</button>}</div>
-        {!vm.turns.length && vm.busy!=='question' && <div className="assistant-chat-welcome"><p>Pregunta con tus palabras. Te ayudo a entender las cifras y sus límites.</p><div className="assistant-suggestions" aria-label="Preguntas sugeridas">{vm.meta.suggestions.slice(0,3).map(question=><button type="button" key={question} onClick={()=>ask(question)} disabled={!!vm.busy}>{question}</button>)}</div></div>}
+        <div className="assistant-question-heading"><h3>Hablemos de {b ? `${a} y ${b}` : a}</h3></div>
         <div ref={conversation} className="assistant-conversation" role="log" aria-label="Conversación financiera" aria-live="polite" aria-busy={vm.busy==='question'} onScroll={()=>{const el=conversation.current;stickToBottom.current=el.scrollHeight-el.scrollTop-el.clientHeight<60}}>
+          {!vm.turns.length && vm.busy!=='question' && <div className="assistant-chat-welcome"><span className="assistant-welcome-mark"><Icon name="chat" size={26}/></span><h3>Las cifras, en palabras claras.</h3><p>Pregunta por sus deudas, su liquidez o el significado de un puntaje.</p><div className="assistant-suggestions" aria-label="Preguntas sugeridas">{vm.meta.suggestions.slice(0,3).map(question=><button type="button" key={question} onClick={()=>ask(question)} disabled={!!vm.busy}><span>{question}</span><span aria-hidden="true">→</span></button>)}</div></div>}
           {vm.turns.map((turn,index)=><article className="assistant-turn" key={index}><h4 className="assistant-user-question"><span>Tú</span>{turn.question}</h4><Answer response={turn.response} chat/></article>)}
           {vm.busy==='question' && <article className="assistant-turn assistant-pending-turn"><h4 className="assistant-user-question"><span>Tú</span>{vm.draft}</h4><PendingState className="assistant-loading">Preparando una respuesta con los datos de {b ? `${a} y ${b}` : a}…</PendingState></article>}
         </div>
@@ -84,7 +86,7 @@ export default function FinancialAssistant({ a, b, year, deferred=false,initialM
         <div className="assistant-lessons" aria-label="Lecciones disponibles">{vm.meta.lessons.map(item=><button key={item.id} type="button" aria-pressed={vm.lesson?.id===item.id} disabled={!!vm.busy} onClick={()=>vm.learn(item.id)}>{item.title}</button>)}</div>
         {vm.lesson && <article className="assistant-lesson"><h4>{vm.lesson.title}</h4><p>{vm.lesson.explanation}</p><p className="assistant-example">{vm.lesson.example}</p><form onSubmit={event=>{event.preventDefault();vm.checkAnswer()}}><fieldset><legend>{vm.lesson.question}</legend>{vm.lesson.options.map((option,index)=><label key={option}><input type="radio" name={`${id}-quiz`} value={index} checked={String(vm.answer)===String(index)} onChange={()=>vm.setAnswer(index)} disabled={!!vm.busy}/>{option}</label>)}</fieldset><button type="submit" disabled={!!vm.busy || vm.answer===''}>Comprobar mi respuesta</button></form>{vm.lesson.assessment && <p role="status" className="assistant-feedback"><strong>{vm.lesson.assessment.correct ? 'Correcto.' : 'Revisemos la idea.'}</strong> {vm.lesson.assessment.feedback}</p>}</article>}
       </div>}
-      <footer className="assistant-footer"><p>{vm.meta.disclaimer}</p><p>Usa los datos y fuentes de esta ficha. No incluyas información personal en tus preguntas.</p></footer>
+      <footer className="assistant-footer"><p>{vm.meta.disclaimer} <span>No incluyas información personal.</span></p></footer>
     </>}
   </section>
 }

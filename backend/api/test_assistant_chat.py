@@ -21,7 +21,7 @@ def clean_cache():
         cache.clear()
 
 
-@pytest.mark.parametrize('question,topic',[('Hola','greeting'),('hoa','greeting'),('Gracias','thanks'),('hasta luego','goodbye')])
+@pytest.mark.parametrize('question,topic',[('Hola','greeting'),('hoa','greeting'),('holaaa','greeting'),('👋','greeting'),('Hola, ¿me ayudas?','greeting'),('Gracias','thanks'),('hasta luego','goodbye')])
 def test_small_talk_never_calls_model_or_invents_financial_card(case,monkeypatch,question,topic):
     monkeypatch.setattr('api.assistant_views.plan_answer',lambda *args:pytest.fail('Small talk must be immediate'))
     response=case[0].post(URL,{'action':'question','fiscal_year':2024,'question':question},format='json')
@@ -63,6 +63,7 @@ def test_remote_answer_uses_evidence_and_exposes_no_connection_secrets(case,monk
     {'paragraphs':['![imagen](https://example.com/a.png)'],'evidence_ids':['current_ratio']},
     {'paragraphs':['Todo está bien.'],'evidence_ids':['invented']},
     {'paragraphs':['<img src=x>'],'evidence_ids':['current_ratio']},
+    {'paragraphs':['Compra estas acciones.'],'evidence_ids':['current_ratio']},
 ])
 def test_unsupported_numbers_markup_advice_or_evidence_are_rejected(result):
     with pytest.raises(ValueError):

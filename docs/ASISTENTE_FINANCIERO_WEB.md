@@ -23,11 +23,15 @@ Primero se identifican los temas dentro del catálogo permitido. Después, el mo
 
 Los saludos, agradecimientos y despedidas habituales tienen respuesta inmediata sin llamar al modelo. Los seguimientos comunes, como «¿y eso qué significa?», recuperan el tema financiero anterior aunque haya un agradecimiento intermedio. Un mensaje ambiguo pide aclaración en lugar de mostrar una tarjeta arbitraria.
 
+Las consultas por otro ejercicio, promedios sectoriales ausentes, Altman-Z no aplicable y comparaciones sin pilares compatibles reciben una explicación directa basada en el contexto, antes de consultar al modelo. Una premisa que atribuye un Altman-Z incorrecto se corrige con la cifra de la ficha. Preguntar si un dato ausente equivale a cero produce una aclaración explícita; no una lista de indicadores que no responde la duda.
+
 El servidor construye las tarjetas desde los cálculos de pilares y el Altman-Z existentes. Sus explicaciones relacionan las cifras reales con interpretaciones acotadas y límites explícitos. Las fechas de Altman-Z se conservan separadas del ejercicio seleccionado. La comprobación de nombres y símbolos conocidos impide responder sobre otra empresa con las cifras del contexto abierto, independientemente de la clasificación del modelo.
 
 La lectura inicial, los cambios y las lecciones funcionan sin llamar a la IA y se identifican como tales. Las consultas a la IA fallidas no se sustituyen por una respuesta que finja haber sido generada por el modelo. La conversación conserva su último resultado y el texto de la pregunta para reintentar.
 
 En el chat, las respuestas se presentan como mensajes. Las cifras detalladas quedan en «Ver cifras y fechas usadas»; las referencias de fecha y los enlaces a fuentes permanecen visibles junto al mensaje. Altman-Z conserva su cierre propio aunque sea distinto del ejercicio seleccionado. Enter envía y Mayús+Enter añade otra línea. «Detener espera» cancela la espera del navegador, conserva el borrador y descarta una respuesta tardía; no promete interrumpir la inferencia que ya se esté ejecutando en el servidor.
+
+El panel lateral mantiene el cuadro de escritura visible y desplaza solamente la conversación. La bienvenida ofrece tres preguntas sugeridas; las herramientas secundarias quedan en una barra compacta. Los mensajes usan ancho de lectura limitado y agrupan las fechas compartidas para evitar repetirlas por cada indicador. Se conservan los colores, las fuentes tipográficas y la preferencia de movimiento reducido de FINDSCORE.
 
 ## Conexión y credenciales
 
@@ -47,6 +51,7 @@ Contrato: `evidence-assistant-v1`. Los endpoints anteriores de análisis se mant
 
 - `assistant_facts.py`: cifras, interpretaciones, fuentes y diferencias calculadas con Decimal.
 - `assistant_context.py`: comprobación independiente de empresas mencionadas.
+- `assistant_guards.py`: ejercicios, datos ausentes, promedio sectorial, aplicabilidad y premisas que contradicen la evidencia.
 - `assistant_provider.py`: selección de temas mediante el proveedor configurado; conserva la conexión local anterior cuando no hay otra configurada.
 - `assistant_connection.py`: conexión del servidor con Open WebUI, límites de respuesta, tiempo de espera y registro del modelo y tokens observados.
 - `assistant_chat.py`: saludos, seguimiento y redacción con evidencias; validación del resultado y caché por usuario, modelo, pregunta, contexto y referencias.
@@ -58,9 +63,11 @@ El historial permanece en memoria del navegador y se reinicia al cambiar empresa
 
 ## Verificación
 
-La suite general del servidor aprobó 820 pruebas y omitió una comprobación opcional de servicios externos; la comprobación final de los módulos afectados aprobó 63 pruebas. La suite completa de la web aprobó 165 pruebas, incluidas las del saludo sin tarjetas, detener y descartar una respuesta tardía, y el cierre propio de Altman-Z visible fuera del desplegable de cifras. La compilación final también pasó.
+La suite general del servidor aprobó 836 pruebas y omitió una comprobación opcional de servicios externos. Tras añadir la aclaración sobre datos ausentes y reforzar la comprobación de fechas, la comprobación final de los módulos afectados aprobó 67 pruebas. La suite completa de la web aprobó 165 pruebas, incluidas las del saludo sin tarjetas, detener y descartar una respuesta tardía, y el cierre propio de Altman-Z visible fuera del desplegable de cifras. La compilación final también pasó.
 
 `tools/verify_assistant_chat.cjs` comprueba la conexión real con Qwen3.6, saludos, seguimiento, mensajes ambiguos, fuentes, detener, errores, reinicio y chat lateral. Guarda capturas en `../output/assistant-chat/`. `tools/verify_financial_assistant.cjs` recorre deudas, liquidez, Altman-Z, datos faltantes, causas, tutor, diferencias entre ejercicios y comparación, en 360–1440 px; sus evidencias quedan en `../output/financial-assistant/`. No se versionan credenciales ni conversaciones de prueba.
+
+`tools/verify_assistant_matrix.cjs --after` ejecuta 31 preguntas reales con las cuentas locales autorizadas: conversación, errores de escritura, seguimiento, liquidez, Altman-Z, fechas, datos ausentes, otra empresa, consejos personales, instrucciones ajenas y comparaciones. El resultado final aprobó las 31 comprobaciones y se revisó el contenido de las respuestas. Guarda los resultados locales en `../output/assistant-matrix/results-after.json`. No necesita saltarse los límites de consultas. Los errores de tiempo de espera, credenciales rechazadas, JSON inválido, respuesta incompleta y tamaño excesivo se simulan en pruebas del servidor; no se presentan como pruebas de fallos reales del proveedor. El recorrido del navegador comprueba el cuadro de escritura visible y la ausencia de desbordamiento horizontal entre 320 y 1440 px, además de cierre con Escape y movimiento reducido.
 
 ## Límites que permanecen
 
