@@ -351,6 +351,58 @@ button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
   .skeleton-tabs > span { min-width:0; flex:1; }
   .workspace-content .action-notice { padding:12px 14px; gap:10px; }
 }
+/* A consistent response for search, charts, guidance, forms and observed alerts. */
+.workspace-content .search-results-stage { min-width:0; }
+.workspace-content .search-progress { display:block; width:14px; height:14px; border:2px solid #c7cfbd; border-top-color:var(--primary); border-radius:50%; }
+.workspace-content .pending-state { display:flex; align-items:center; gap:12px; color:var(--ink-soft); }
+.pending-mark { display:inline-flex; align-items:center; gap:4px; flex-shrink:0; min-height:24px; }
+.pending-mark i { display:block; width:5px; height:5px; border-radius:50%; background:var(--primary); opacity:.65; }
+.workspace-content .chart-presentation { min-width:0; }
+.workspace-content .beginner-steps li > span { outline:2px solid transparent; outline-offset:3px; }
+.workspace-content .beginner-steps li[aria-current=step] > span { outline-color:var(--primary); }
+.workspace-content .financial-assistant .assistant-loading { border:1px solid var(--rule); background:var(--sage); border-radius:8px; padding:12px 16px; }
+.workspace-content :is(input,textarea,select)[aria-invalid=true],.auth-container :is(input,textarea,select)[aria-invalid=true] { border-color:#a3423b; box-shadow:0 0 0 1px #a3423b; }
+.workspace-content :is(input,textarea,select):focus:not([aria-invalid=true]),.auth-container :is(input,textarea,select):focus:not([aria-invalid=true]) { border-color:#597a61; }
+.workspace-header .notification-bell svg { transform-origin:50% 15%; }
+@keyframes findscore-fade { from {opacity:.45} to {opacity:1} }
+@keyframes findscore-dot { 0%,75%,100% {transform:none;opacity:.55} 35% {transform:translateY(-3px);opacity:1} }
+@keyframes findscore-rotate { to {transform:rotate(360deg)} }
+@keyframes findscore-working { from {transform:translateX(-120%)} to {transform:translateX(450%)} }
+@keyframes findscore-bell { 0%,100% {transform:rotate(0)} 25% {transform:rotate(10deg)} 55% {transform:rotate(-8deg)} 80% {transform:rotate(4deg)} }
+@keyframes findscore-check { from {stroke-dashoffset:24} to {stroke-dashoffset:0} }
+@media (prefers-reduced-motion:no-preference) {
+  .workspace-content :is(.search-suggestions,.comparison-picker > ul:not([hidden]),.active-filter,.guide-step-content,.financial-assistant > div[id],.assistant-answer,.assistant-lesson,.assistant-feedback,.company-list-empty,.favorites-empty) { animation:findscore-enter 180ms ease-out both; }
+  .workspace-content .chart-presentation { animation:findscore-fade 220ms ease-out both; }
+  .workspace-content .financial-assistant .assistant-turn { animation:none; }
+  .workspace-content .pending-mark i { animation:findscore-dot 1000ms ease-in-out 4; }
+  .workspace-content .pending-mark i:nth-child(2) { animation-delay:100ms; }
+  .workspace-content .pending-mark i:nth-child(3) { animation-delay:200ms; }
+  .workspace-content .search-progress { animation:findscore-rotate 850ms linear infinite; }
+  .workspace-shell button[aria-busy=true]:not(.favorite-button),.auth-container button[aria-busy=true] { position:relative; overflow:hidden; }
+  .workspace-shell button[aria-busy=true]:not(.favorite-button)::after,.auth-container button[aria-busy=true]::after { content:''; position:absolute; left:0; bottom:0; width:25%; height:3px; background:currentColor; opacity:.45; border-radius:2px; animation:findscore-working 1100ms linear infinite; pointer-events:none; }
+  .workspace-content .beginner-steps li > span { transition:background-color 160ms ease,outline-color 160ms ease; }
+  .workspace-content .altman-outcome-symbol { animation:findscore-confirmation 180ms ease-out both; }
+  .workspace-content .altman-zone[aria-current]::after { animation:findscore-fade 200ms ease-out both; }
+  .workspace-content .action-notice-symbol svg { stroke-dasharray:24; animation:findscore-check 220ms ease-out both; }
+  .workspace-header .notification-arrived { animation:findscore-bell 320ms ease-out; }
+  .workspace-shell .notification-dropdown { animation:findscore-enter 160ms ease-out both; }
+  .auth-container :is(.error-text,.auth-error,.auth-success),.workspace-content [role=alert] { animation:findscore-confirmation 160ms ease-out both; }
+  .workspace-shell input[type=range]::-webkit-slider-thumb { transition:box-shadow 120ms ease; }
+  .workspace-shell input[type=range]:focus-visible::-webkit-slider-thumb { box-shadow:0 0 0 5px #dc9a7633; }
+  @supports (transition-behavior:allow-discrete) and (overlay:auto) {
+    .workspace-shell .assistant-drawer { opacity:0; transform:translateX(16px); transition:opacity 180ms ease,transform 180ms ease,display 180ms allow-discrete,overlay 180ms allow-discrete; }
+    .workspace-shell .assistant-drawer[open] { animation:none; opacity:1; transform:none; }
+    .workspace-shell .account-dialog { opacity:0; transform:translateY(6px); transition:opacity 160ms ease,transform 160ms ease,display 160ms allow-discrete,overlay 160ms allow-discrete; }
+    .workspace-shell .account-dialog[open] { animation:none; opacity:1; transform:none; }
+    .workspace-shell :is(.assistant-drawer,.account-dialog)::backdrop { opacity:0; transition:opacity 160ms ease,display 180ms allow-discrete,overlay 180ms allow-discrete; }
+    .workspace-shell :is(.assistant-drawer,.account-dialog)[open]::backdrop { animation:none; opacity:1; }
+    @starting-style {
+      .workspace-shell .assistant-drawer[open] { opacity:0; transform:translateX(16px); }
+      .workspace-shell .account-dialog[open] { opacity:0; transform:translateY(6px); }
+      .workspace-shell :is(.assistant-drawer,.account-dialog)[open]::backdrop { opacity:0; }
+    }
+  }
+}
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
 }

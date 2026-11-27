@@ -60,7 +60,7 @@ export default function ResetPassword() {
               )}
             </div>
 
-            <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
+            <button type="submit" className="btn-primary" disabled={isSubmitting || loading} aria-busy={isSubmitting || loading}>
               {loading ? 'Restableciendo...' : 'Restablecer Contraseña'}
             </button>
           </form>

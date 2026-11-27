@@ -24,7 +24,7 @@ export default function SearchBar({ onSearch, onSubmitSearch = onSearch, initial
             placeholder="Buscar por ticker o nombre..."
             className="search-input"
           />
-          {loading && <span className="search-loading">...</span>}
+          {loading && <span className="search-loading" role="status" aria-label="Buscando sugerencias"><span className="search-progress" aria-hidden="true"/></span>}
           <button type="submit" className="search-button">Buscar</button>
         </div>
       </form>

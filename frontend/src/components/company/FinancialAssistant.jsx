@@ -1,6 +1,7 @@
 import { useId,useState } from 'react'
 import { useFinancialAssistantViewModel } from '../../viewmodels/useFinancialAssistantViewModel'
 import './financial-assistant.css'
+import PendingState from '../shared/PendingState'
 
 function Sources({ sources=[] }) {
   return sources.length>0 && <div className="assistant-sources" aria-label="Fuentes de esta explicación">{sources.map((source,index)=><a key={`${source.url}-${source.period}-${index}`} href={source.url} target="_blank" rel="noreferrer">{source.label}{source.period && ` · ${source.period}`}</a>)}</div>
@@ -36,7 +37,7 @@ export default function FinancialAssistant({ a, b, year, deferred=false,initialM
   return <section className={`financial-assistant${b ? ' financial-assistant-comparison' : ''}`} aria-labelledby={`${id}-title`}>
     <div className="assistant-heading"><div><p className="section-eyebrow">ENTIENDE ANTES DE CONCLUIR</p><h2 id={`${id}-title`}>{b ? 'Entiende la comparación' : 'Tu asistente financiero'}</h2><p>Cifras, significado y límites. {a}{b && ` y ${b}`} · {year || 'Último ejercicio disponible'}.</p></div><span className="assistant-context-badge">{b ? 'Dos empresas' : 'Una empresa'} · Contexto acotado</span></div>
     {!vm.meta && !vm.busy && !vm.error && <button type="button" className="primary-action" onClick={vm.load}>Abrir asistente</button>}
-    {vm.busy && <p role="status" className="assistant-loading">{['summary','question'].includes(vm.busy) ? 'La IA local está interpretando tu consulta. La primera respuesta puede tardar.' : 'Consultando los datos…'}</p>}
+    {vm.busy && <PendingState className="assistant-loading">{['summary','question'].includes(vm.busy) ? 'La IA local está interpretando tu consulta. La primera respuesta puede tardar.' : 'Consultando los datos…'}</PendingState>}
     {vm.error && <div className="assistant-error" role="alert"><p>{vm.error}</p><button type="button" onClick={vm.retry} disabled={!!vm.busy}>Reintentar consulta</button></div>}
     {vm.meta && <>
       {expandedTools && <nav className="assistant-modes" aria-label="Herramientas del asistente">{modes.map(([mode,label])=><button type="button" key={mode} aria-pressed={vm.mode===mode} aria-controls={`${id}-${mode}`} onClick={()=>vm.setMode(mode)}>{label}</button>)}</nav>}
@@ -54,7 +55,7 @@ export default function FinancialAssistant({ a, b, year, deferred=false,initialM
         </div>
         <form className="assistant-question-form" onSubmit={event=>{event.preventDefault();vm.ask(vm.draft)}}>
           <label htmlFor={`${id}-question-input`}>Tu pregunta</label><textarea id={`${id}-question-input`} value={vm.draft} onChange={event=>vm.setDraft(event.target.value)} maxLength={600} rows={3} placeholder="Por ejemplo: ¿qué significa su liquidez?" disabled={!!vm.busy}/>
-          <div><small>{vm.draft.length}/600 · No incluyas información personal.</small><button className="primary-action" type="submit" disabled={!!vm.busy || !vm.draft.trim()}>Enviar pregunta</button></div>
+          <div><small>{vm.draft.length}/600 · No incluyas información personal.</small><button className="primary-action" type="submit" disabled={!!vm.busy || !vm.draft.trim()} aria-busy={vm.busy==='question'}>{vm.busy==='question' ? 'Preparando respuesta…' : 'Enviar pregunta'}</button></div>
         </form>
       </div>}
       {initialQuestion && !expandedTools && <button type="button" className="assistant-expand-tools" onClick={()=>setExpandedTools(true)}>Ver preguntas sugeridas y herramientas</button>}

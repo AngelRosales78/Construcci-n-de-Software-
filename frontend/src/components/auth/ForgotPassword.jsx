@@ -32,7 +32,7 @@ export default function ForgotPassword() {
               )}
             </div>
 
-            <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
+            <button type="submit" className="btn-primary" disabled={isSubmitting || loading} aria-busy={isSubmitting || loading}>
               {loading ? 'Enviando...' : 'Solicitar enlace'}
             </button>
           </form>

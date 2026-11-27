@@ -27,7 +27,7 @@ export default function SimulationScenarios({ active = true }) {
     <p className="section-eyebrow">ESCENARIOS A DOCE MESES</p><h2 id="simulation-title">Simulación de precios</h2>
     <p>Compara tres escenarios a partir del histórico. Son estimaciones, no precios garantizados.</p>
     <form className="simulation-controls" onInvalid={event => { const settings = event.target.closest('details'); if (settings) settings.open = true }} onSubmit={event => { event.preventDefault(); simulate() }}>
-      <button className="primary-action" type="submit" disabled={loading}>{loading ? 'Calculando escenarios…' : 'Generar escenarios'}</button>
+      <button className="primary-action" type="submit" disabled={loading} aria-busy={loading}>{loading ? 'Calculando escenarios…' : 'Generar escenarios'}</button>
       <details className="simulation-settings"><summary>Ajustar supuestos <small>Opcional</small></summary><div className="simulation-settings-fields">
       <label>Tasa anual continua del modelo (%)<input aria-label="Tasa anual del modelo" type="number" min="-100" max="150" step="0.1" value={draft.annual_return} onChange={event => update('annual_return', event.target.value)} placeholder="Estimada del histórico" disabled={loading} /><small>Límite: -100 a 150 %. No es crecimiento de ventas.</small></label>
       <label>Volatilidad anual (%)<input aria-label="Volatilidad anual" type="number" min="0" max="200" step="0.1" value={draft.annual_volatility} onChange={event => update('annual_volatility', event.target.value)} placeholder="Estimada del histórico" disabled={loading} /><small>Límite: 0 a 200 %. Variación del precio.</small></label>
@@ -41,7 +41,7 @@ export default function SimulationScenarios({ active = true }) {
       <p>{data.horizon_months} meses desde el cierre del {data.as_of} · {data.currency}</p>
       <fieldset className="scenario-legend"><legend>Curvas visibles (ocultarlas no recalcula)</legend>{SCENARIOS.map(([key, label, color]) => <label key={key}><input type="checkbox" checked={!hidden[key]} onChange={() => setHidden(previous => ({ ...previous, [key]: !previous[key] }))} /><span className="scenario-swatch" style={{ backgroundColor: color }} aria-hidden="true" /> {label}</label>)}</fieldset>
       <p className="scenario-reading"><strong>Cómo leer el gráfico:</strong> la curva base es el valor central (P50). La baja (P10) y la alta (P90) son referencias de la simulación; el precio puede quedar fuera de ellas. No son límites de pérdida o ganancia.</p>
-      <HighchartsReact highcharts={Highcharts} options={options} callback={instance => { chart.current = instance }} />
+      <div className="chart-presentation" key={data.simulation_id}><HighchartsReact highcharts={Highcharts} options={options} callback={instance => { chart.current = instance }} /></div>
       <div className="scenario-table"><table><caption>Precios finales simulados · {data.currency} · misma ejecución</caption><thead><tr><th>Escenario</th><th>Fecha</th><th>Precio</th></tr></thead><tbody>{SCENARIOS.map(([key, label]) => <tr key={key}><th scope="row">{label}</th><td>{data.final_prices[key].date}</td><td>{data.final_prices[key].price.toLocaleString('es-PE', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</td></tr>)}</tbody></table></div>
       <details className="financial-help"><summary>Ver supuestos y procedencia de esta ejecución</summary><div className="help-content">
         <p>Monte Carlo genera muchas trayectorias posibles. P10, P50 y P90 resumen su distribución por mes; no son pérdidas mínimas ni ganancias máximas.</p>

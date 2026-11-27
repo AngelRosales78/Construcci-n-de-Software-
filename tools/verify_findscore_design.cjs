@@ -123,6 +123,7 @@ const web = 'http://127.0.0.1:55193'
     assert.equal(await page.locator('.simulation-panel').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(255, 253, 248)')
     await page.getByRole('button',{name:'Generar escenarios',exact:true}).click()
     await page.locator('.scenario-legend').waitFor({timeout:60000})
+    assert.equal(await page.locator('.simulation-panel .chart-presentation').evaluate(el=>getComputedStyle(el).animationName),'findscore-fade')
     await page.waitForFunction(() => {
       const chart=document.querySelector('.simulation-panel .highcharts-container')
       return chart && chart.getBoundingClientRect().width > document.querySelector('.simulation-panel').clientWidth * .8
@@ -140,6 +141,8 @@ const web = 'http://127.0.0.1:55193'
     await page.keyboard.press('Enter')
     const drawer=page.getByRole('dialog',{name:'Entiende las cifras con IA',exact:true})
     await drawer.waitFor()
+    const dialogMotion=await drawer.evaluate(el=>({native:CSS.supports('transition-behavior','allow-discrete') && CSS.supports('overlay','auto'),properties:getComputedStyle(el).transitionProperty}))
+    if(dialogMotion.native)assert.match(dialogMotion.properties,/display/)
     await page.keyboard.press('Escape')
     await drawer.waitFor({state:'hidden'})
     assert.equal(await opener.evaluate(el=>el===document.activeElement),true)
@@ -156,6 +159,12 @@ const web = 'http://127.0.0.1:55193'
     const motion=await page.locator('.workspace-page').evaluate(el=>({animation:getComputedStyle(el).animationName,transition:getComputedStyle(el.querySelector('button')).transitionDuration}))
     assert.equal(motion.animation,'none')
     assert.equal(motion.transition,'0s')
+    const reduced=await page.evaluate(()=>({
+      drawer:getComputedStyle(document.querySelector('.assistant-drawer')).transitionDuration,
+      zone:getComputedStyle(document.querySelector('#company-overview .altman-zone[aria-current]'),'::after').animationName,
+      chart:getComputedStyle(document.querySelector('#company-overview .chart-presentation')).animationName,
+    }))
+    assert.deepEqual(reduced,{drawer:'0s',zone:'none',chart:'none'})
     await page.emulateMedia({reducedMotion:'no-preference'})
     assert.equal(await page.locator('.workspace-page').evaluate(el=>getComputedStyle(el).animationName),'findscore-enter')
     checks.push('Animaciones cortas activas; movimiento reducido elimina animaciones y transiciones.')

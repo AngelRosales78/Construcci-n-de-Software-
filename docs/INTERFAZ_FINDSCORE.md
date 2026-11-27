@@ -31,6 +31,17 @@ Se conserva el uso por teclado, el enlace para saltar al contenido, el cierre co
 
 Todos estos efectos respetan movimiento reducido y no añaden solicitudes ni retrasos a las operaciones.
 
+### Movimiento en el recorrido completo
+
+- Buscador y selectores de empresas: aparecen las sugerencias sin retrasar la selección con flechas/Enter. El indicador de consulta existe únicamente durante una búsqueda real. La etiqueta del sector se anima cuando cambia.
+- Gráficos: entrada de opacidad de 220 ms al cargar una serie. Consultar otra sesión o esconder una curva no vuelve a animar la serie ni altera sus valores. Highcharts conserva desactivada la animación de datos.
+- Asistente: indicador de espera con texto explícito y puntos decorativos ocultos al lector de pantalla. Las respuestas se muestran completas, con una entrada de 180 ms; no se simula escritura. Cambios, lecciones y evaluación comparten la misma entrada.
+- Guía: cada paso tiene entrada de 180 ms y el marcador de paso cambia suavemente. Cerrar mantiene el retorno del foco.
+- Formularios: el estado ocupado se comunica con texto y `aria-busy`; la línea de actividad solo existe mientras se procesa la operación. Los errores mantienen su texto y borde de identificación. Perfil y preferencias usan confirmaciones del servidor.
+- Campana: un único movimiento de 320 ms al observar un aviso nuevo real y sin leer. La carga inicial, los ejemplos, marcar leído y cambiar de cuenta no producen el movimiento; no se modifica el contador para animarlo.
+- Diálogos: apertura y cierre mediante transiciones nativas de 160–180 ms en navegadores compatibles. Se conserva la apertura existente como alternativa; no hay temporizadores de cierre que retrasen la acción o el foco.
+- Las esperas reales pueden mantener un indicador indeterminado. Los efectos decorativos son breves o tienen repeticiones limitadas. Con movimiento reducido desaparecen todas las animaciones, incluidos pseudo-elementos y fondos.
+
 ## Navegación financiera
 
 Los tres accesos del resumen abren el pilar correspondiente, conservando ejercicio fiscal, rango de precios y dirección de retorno. El enlace «Ver cálculo y fuentes» abre Salud financiera y lleva al bloque Altman-Z. Cambiar de sección no vuelve a consultar la ficha ni registra otra visita.

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import { useNotificationPreferencesViewModel } from '../../viewmodels/useNotificationPreferencesViewModel'
 import './notifications.css'
+import ActionNotice from '../shared/ActionNotice'
+import PendingState from '../shared/PendingState'
 
 export default function NotificationPreferencesPage() {
   const vm=useNotificationPreferencesViewModel()
@@ -10,7 +12,7 @@ export default function NotificationPreferencesPage() {
     <p>Los cambios se guardan automáticamente. Desactivarlos no borra avisos anteriores.</p>
     {vm.resource.loading&&<p role="status">Consultando preferencias…</p>}
     {(vm.error||vm.resource.error)&&<p role="alert">{vm.error||vm.resource.error}</p>}
-    {vm.busy&&<p role="status">Guardando…</p>}{vm.message&&<p role="status">{vm.message}</p>}
+    {vm.busy&&<PendingState>Guardando…</PendingState>}<ActionNotice message={vm.message}/>
     {vm.form&&<div className="notification-preferences">
       <h2>Tipo de aviso</h2><label><input type="checkbox" checked={vm.form.rating_changes} disabled={vm.busy} onChange={event=>vm.change('rating_changes',event.target.checked)}/> Cambios del perfil Altman-Z</label>
       <h2>Canales</h2>{[['web','En la web'],['email','Correo de alertas'],['push','Push en Android']].map(([channel,label])=><div key={channel}>

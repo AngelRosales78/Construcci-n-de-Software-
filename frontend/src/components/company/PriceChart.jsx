@@ -48,7 +48,7 @@ export default function PriceChart({ active = true }) {
       : <>
         <div className="chart-inspection" aria-live="polite"><div><small>Sesión consultada</small><strong>{Number(inspected.price).toLocaleString('es-PE', {minimumFractionDigits:2,maximumFractionDigits:2})} <span>{data.currencies?.[0]}</span></strong></div><time dateTime={inspected.date}>{inspected.date}</time></div>
         <p className="chart-date-range">Periodo disponible: {data.history[0].date} → {data.history[data.history.length - 1].date} · {data.history.length} sesiones</p>
-        <HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={options} callback={instance => { chart.current = instance }} />
+        <div className="chart-presentation" key={historyKey}><HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={options} callback={instance => { chart.current = instance }} /></div>
         <label className="chart-session-control">Consultar un precio histórico<input type="range" aria-label="Consultar un precio histórico" min="0" max={history.length - 1} value={selectedIndex} aria-valuetext={`${inspected.date}: ${inspected.price} ${data.currencies?.[0] || ''}`} onChange={event => setInspection({key:historyKey,index:Number(event.target.value)})} /><span>La línea vertical marca la sesión. Usa el control o las flechas del teclado.</span></label>
         <div className="chart-caption"><p>Arrastra para ampliar; usa el navegador inferior para cambiar el intervalo.</p><p>Fuente: {data.sources.map((source,index) => <span key={`${source}-${index}`}>{index > 0 && ', '}<PriceSource source={source} /></span>)} · {data.is_demo ? 'Datos pendientes de verificar' : 'Datos importados'}</p></div>
       </>}

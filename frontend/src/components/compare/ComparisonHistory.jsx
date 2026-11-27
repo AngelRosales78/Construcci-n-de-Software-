@@ -34,7 +34,7 @@ export default function ComparisonHistory({ a, b, year }) {
     {data?.status === 'unavailable' && <p role="status">{data.reason}</p>}
     {data?.status === 'available' && <>
       <p>Fecha base: {data.base_date} · {data.points.length} fechas comunes · {data.is_demo ? 'Serie de prueba' : 'Precios históricos importados'}</p>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <div className="chart-presentation" key={`${a}:${b}:${range}:${data.base_date}`}><HighchartsReact highcharts={Highcharts} options={options} /></div>
       <label>Consultar fecha del histórico<input type="range" min="0" max={data.points.length - 1} value={Math.min(cursor, data.points.length - 1)} onChange={e => setCursor(Number(e.target.value))} /></label>
       {point && <p aria-live="polite">{point.date}: {a} {point.a.toFixed(2)} % · {b} {point.b.toFixed(2)} %</p>}
       <p>Fuentes: {data.sources.join(' · ')}. El rendimiento pasado no garantiza resultados futuros.</p>

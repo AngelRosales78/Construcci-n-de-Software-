@@ -11,7 +11,7 @@ export default function ConfirmationDialog({ open, title, children, busy, onCanc
     <form onSubmit={event => { event.preventDefault(); onConfirm() }}>
       <h2>{title}</h2>{children}
       <div className="account-actions"><button type="button" autoFocus disabled={busy} onClick={onCancel}>Volver</button>
-        <button type="submit" disabled={busy}>{busy ? 'Procesando…' : confirmLabel}</button></div>
+        <button type="submit" disabled={busy} aria-busy={busy}>{busy ? 'Procesando…' : confirmLabel}</button></div>
     </form>
   </dialog>
 }

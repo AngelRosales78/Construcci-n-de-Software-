@@ -7,7 +7,7 @@ export default function CompanyFilters({ onFilterChange, initialSector = '', ini
   return (
     <div className="company-filters">
       <p aria-live="polite">Orden: {ordering === 'name' ? 'Nombre: A–Z' : ordering === '-name' ? 'Nombre: Z–A' : ordering.startsWith('-') ? '↓ Mayor a menor' : '↑ Menor a mayor'}</p>
-      {selectedSector && <div className="active-filter">
+      {selectedSector && <div className="active-filter" key={selectedSector}>
         <span>{sectorLabel(selectedSector, sectors.find(s => s.value === selectedSector)?.label)}</span>
         <button type="button" onClick={clearFilters}>Quitar sector</button>
       </div>}

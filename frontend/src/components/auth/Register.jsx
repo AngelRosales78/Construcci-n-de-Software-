@@ -120,7 +120,7 @@ export default function Register() {
             )}
           </div>
 
-          <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
+          <button type="submit" className="btn-primary" disabled={isSubmitting || loading} aria-busy={isSubmitting || loading}>
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </button>
         </form>

@@ -46,7 +46,7 @@ export default function Login() {
             )}
           </div>
 
-          <button type="submit" className="btn-primary" disabled={isSubmitting || loading}>
+          <button type="submit" className="btn-primary" disabled={isSubmitting || loading} aria-busy={isSubmitting || loading}>
             {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
         </form>
