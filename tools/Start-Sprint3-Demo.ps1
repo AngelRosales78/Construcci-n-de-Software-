@@ -29,6 +29,7 @@ $env:REDIS_URL='redis://127.0.0.1:56379/0'
 $env:FRONTEND_URL='http://127.0.0.1:55193'
 $env:PYTHONPATH=$state; $env:DJANGO_SETTINGS_MODULE='sprint3_settings'
 . (Join-Path $PSScriptRoot 'Load-MercadoPago-Test.ps1')
+. (Join-Path $PSScriptRoot 'Load-Assistant-Provider.ps1')
 if (!(Test-Path (Join-Path $state 'sprint3_settings.py'))) {
     $settings = "from config.settings import *`nDEBUG = False`nCORS_ALLOWED_ORIGINS = ['http://127.0.0.1:55193']`nSECRET_KEY = '" + [guid]::NewGuid().ToString('N') + [guid]::NewGuid().ToString('N') + "'`n"
     [IO.File]::WriteAllText((Join-Path $state 'sprint3_settings.py'), $settings, [Text.UTF8Encoding]::new($false))

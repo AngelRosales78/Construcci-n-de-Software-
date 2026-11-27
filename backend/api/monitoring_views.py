@@ -71,7 +71,7 @@ class AIUsageView(MonitoringView):
             'timezone': str(timezone.get_current_timezone()), 'generated_at': timezone.now(), 'calls': rows.count(),
             'breakdown': breakdown, 'estimated_costs': [{'currency': key, 'amount': str(value)} for key, value in sorted(costs.items())],
             'unpriced_calls': unknown_cost,
-            'explanation': 'Llamadas observadas al motor local. Los aciertos de caché no generan llamadas. Tokens y costes solo se muestran cuando el motor y una tarifa versionada los permiten.'})
+            'explanation': 'Llamadas observadas a los motores de IA configurados. Los aciertos de caché no generan llamadas. Tokens y costes solo se muestran cuando el motor y una tarifa versionada los permiten.'})
 
 
 class TariffInput(ExactSerializer):

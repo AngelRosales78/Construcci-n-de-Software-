@@ -14,7 +14,8 @@ const lesson={id:'liquidity',title:'Entender la liquidez',explanation:'Recursos 
  question:'¿Todo está en efectivo?',options:['Sí.','No.']}
 beforeEach(()=>{vi.resetAllMocks();assistantRepository.read.mockResolvedValue(meta);assistantRepository.send.mockResolvedValue(response)})
 afterEach(cleanup)
-const mount=props=>render(<FinancialAssistant a="MSFT" year={2024} {...props}/> )
+const mount=props=>render(<FinancialAssistant a="MSFT" year={2024} initialMode="summary" {...props}/> )
+const tools=async()=>{await screen.findByRole('button',{name:'Otras herramientas',exact:true});fireEvent.click(screen.getByRole('button',{name:'Otras herramientas',exact:true}))}
 const questions=async()=>{await screen.findByRole('button',{name:'Preguntar',exact:true});fireEvent.click(screen.getByRole('button',{name:'Preguntar',exact:true}))}
 const ask=async text=>{fireEvent.change(screen.getByLabelText('Tu pregunta'),{target:{value:text}});fireEvent.click(screen.getByRole('button',{name:'Enviar pregunta',exact:true}));await waitFor(()=>expect(screen.getByLabelText('Tu pregunta').disabled).toBe(false))}
 
@@ -66,7 +67,7 @@ it('descarta respuestas antiguas al cambiar empresa o año',async()=>{
 })
 it('solicita dos años explícitos y muestra la diferencia calculada por el servidor',async()=>{
  assistantRepository.send.mockResolvedValue({...meta,scope:'changes',from_year:2023,to_year:2024,generation_mode:'calculated_evidence',facts:[{...fact,meaning:'Aumentó 1,00 veces.',value:'1,00 → 2,00 veces'}]})
- mount();await screen.findByRole('button',{name:'Cambios entre años'});fireEvent.click(screen.getByRole('button',{name:'Cambios entre años'}))
+ mount();await tools();fireEvent.click(screen.getByRole('button',{name:'Cambios entre años'}))
  fireEvent.click(screen.getByRole('button',{name:'Ver cambios',exact:true}))
  await screen.findByText('Aumentó 1,00 veces.')
  expect(assistantRepository.send.mock.lastCall[1]).toEqual({action:'changes',from_year:2023,to_year:2024})
@@ -74,7 +75,7 @@ it('solicita dos años explícitos y muestra la diferencia calculada por el serv
 })
 it('las lecciones identifican ejemplos ficticios y verifican la respuesta elegida',async()=>{
  assistantRepository.send.mockResolvedValueOnce({...meta,scope:'lesson',lesson}).mockResolvedValueOnce({...meta,scope:'lesson',lesson:{...lesson,assessment:{correct:true,feedback:'Puede incluir inventario.'}}})
- mount();await screen.findByRole('button',{name:'Aprender',exact:true});fireEvent.click(screen.getByRole('button',{name:'Aprender',exact:true}))
+ mount();await tools();fireEvent.click(screen.getByRole('button',{name:'Aprender',exact:true}))
  fireEvent.click(screen.getByRole('button',{name:'Entender la liquidez'}))
  await screen.findByText('Ejemplo ilustrativo: empresa ficticia.')
  fireEvent.click(screen.getByRole('radio',{name:'No.',exact:true}))
@@ -97,8 +98,49 @@ it('un acceso contextual envía una sola pregunta y no la repite después de rei
  await waitFor(()=>expect(screen.getByLabelText('Tu pregunta').disabled).toBe(false))
  expect(assistantRepository.send.mock.lastCall[1].question).toBe('¿Qué significa su Altman-Z?')
  expect(screen.queryByRole('navigation',{name:'Herramientas del asistente'})).toBeNull()
- fireEvent.click(screen.getByRole('button',{name:'Ver preguntas sugeridas y herramientas'}))
+ fireEvent.click(screen.getByRole('button',{name:'Otras herramientas'}))
  fireEvent.click(screen.getByRole('button',{name:'Reiniciar conversación'}))
  await act(async()=>{})
  expect(assistantRepository.send).toHaveBeenCalledTimes(1)
+})
+
+it('abre el chat y responde a un saludo sin mostrar tarjetas financieras ni imágenes',async()=>{
+ assistantRepository.send.mockResolvedValue({...meta,status:'available',generation_mode:'conversational_quick_reply',answer:{topics:['greeting'],cards:[],messages:['¡Hola! ¿Qué te gustaría entender de Microsoft?']}})
+ render(<FinancialAssistant a="MSFT" year={2024}/>)
+ await screen.findByLabelText('Tu pregunta')
+ expect(screen.queryByRole('navigation',{name:'Herramientas del asistente'})).toBeNull()
+ await ask('Hola')
+ const log=screen.getByRole('log')
+ expect(within(log).getByText(/¡Hola!/)).toBeTruthy()
+ expect(log.querySelector('.assistant-fact')).toBeNull()
+ expect(log.querySelector('img')).toBeNull()
+ expect(screen.queryByRole('group',{name:'Preguntas sugeridas'})).toBeNull()
+})
+
+it('detiene la espera, conserva el borrador e ignora la respuesta tardía',async()=>{
+ let finish
+ assistantRepository.send.mockImplementationOnce(()=>new Promise(resolve=>{finish=resolve}))
+ render(<FinancialAssistant a="MSFT" year={2024}/>)
+ const input=await screen.findByLabelText('Tu pregunta')
+ fireEvent.change(input,{target:{value:'¿Cómo están sus deudas?'}})
+ fireEvent.keyDown(input,{key:'Enter',code:'Enter'})
+ expect(await screen.findByRole('button',{name:'Detener espera'})).toBeTruthy()
+ const signal=assistantRepository.send.mock.lastCall[2]
+ fireEvent.click(screen.getByRole('button',{name:'Detener espera'}))
+ expect(signal.aborted).toBe(true)
+ expect(input.value).toBe('¿Cómo están sus deudas?')
+ await act(async()=>finish(response))
+ expect(within(screen.getByRole('log')).queryByText('¿Cómo están sus deudas?')).toBeNull()
+ fireEvent.keyDown(input,{key:'Enter',shiftKey:true})
+ expect(assistantRepository.send).toHaveBeenCalledTimes(1)
+})
+
+it('mantiene visible el cierre propio de Altman-Z aunque las cifras estén plegadas',async()=>{
+ const altman={...fact,id:'altman',topic:'altman',title:'Puntaje Altman-Z',period:{end:'2026-09-26'}}
+ assistantRepository.send.mockResolvedValue({...response,answer:{topics:['altman'],cards:[altman],evidence_ids:['altman'],messages:['Es una clasificación académica.']}})
+ render(<FinancialAssistant a="MSFT" year={2024}/>)
+ await screen.findByLabelText('Tu pregunta');await ask('¿Qué significa Altman-Z?')
+ const reference=within(screen.getByRole('log')).getByText(/Referencias usadas/)
+ expect(reference.textContent).toContain('2026-09-26')
+ expect(reference.closest('details')).toBeNull()
 })

@@ -71,6 +71,44 @@
 .assistant-error { padding:16px; background:#f6e9df; border:1px solid #bc8d6b; border-radius:6px; }
 .assistant-footer { border-top:1px solid #ccd5c5; margin-top:24px; padding-top:14px; }
 .workspace-content .financial-assistant .assistant-footer p { font-size:12px; color:#54866e; }
+.assistant-primary-tabs { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+.assistant-chat .assistant-question-heading { gap:12px; align-items:baseline; }
+.workspace-content .financial-assistant .assistant-chat .assistant-question-heading h3 { margin:0; font:600 21px/1.4 var(--display-font); }
+.workspace-content .financial-assistant .assistant-chat .assistant-question-heading button { background:transparent; border-color:transparent; color:var(--ink-soft); padding:6px 0; font-size:13px; }
+.workspace-content .financial-assistant .assistant-chat-welcome > p { font-size:16px; color:var(--ink-soft); }
+.assistant-chat .assistant-conversation { max-height:min(55dvh,620px); overflow-y:auto; overscroll-behavior:contain; scrollbar-gutter:stable; padding:4px 10px 4px 0; gap:24px; margin:16px 0; }
+.assistant-chat .assistant-turn { display:grid; gap:12px; border:0; padding:0; min-width:0; }
+.workspace-content .financial-assistant .assistant-chat .assistant-user-question { justify-self:end; max-width:88%; margin:0; padding:12px 16px; background:var(--sage); border:1px solid var(--rule); border-radius:14px 14px 3px 14px; font-size:15px; line-height:1.5; white-space:pre-wrap; }
+.assistant-user-question > span { display:block; font-size:11px; color:var(--ink-soft); font-weight:400; margin-bottom:4px; }
+.assistant-chat .assistant-answer { margin:0; padding:16px 18px; background:var(--paper-white); color:var(--ink); border:1px solid var(--rule); border-radius:3px 14px 14px 14px; min-width:0; }
+.assistant-speaker { display:block; font:600 11px/1.4 var(--body-font); letter-spacing:.05em; color:var(--primary); margin-bottom:8px; }
+.workspace-content .financial-assistant .assistant-chat .assistant-message { background:transparent; color:var(--ink); border:0; padding:0; margin:0 0 10px; font-size:16px; line-height:1.65; white-space:pre-wrap; }
+.workspace-content .financial-assistant .assistant-chat .assistant-message:last-child { margin-bottom:0; }
+.workspace-content .financial-assistant .assistant-chat .assistant-cited-dates { font-size:12px; color:var(--ink-soft); line-height:1.5; margin:12px 0 0; }
+.assistant-chat .assistant-question-form { position:sticky; bottom:0; z-index:1; margin-top:12px; padding-top:14px; background:var(--paper-white); border-top:1px solid var(--rule); }
+.workspace-content .financial-assistant .assistant-chat .assistant-question-form textarea { font-size:16px; border-color:#aebba6; border-radius:9px; resize:vertical; min-height:80px; max-height:180px; }
+.workspace-content .financial-assistant .assistant-chat .assistant-question-form small { font-size:12px; color:var(--ink-soft); }
+.assistant-chat .assistant-evidence { border-top:1px solid var(--rule); margin-top:14px; padding-top:8px; }
+.assistant-chat .assistant-evidence > summary { cursor:pointer; min-height:44px; display:flex; align-items:center; color:var(--primary); font-size:14px; }
+.assistant-chat .assistant-evidence[open] > summary { margin-bottom:8px; }
+.assistant-chat .assistant-answer-cards { grid-template-columns:minmax(0,1fr); }
+.workspace-content .financial-assistant.is-chat .assistant-heading { margin-bottom:10px; }
+.workspace-content .financial-assistant.is-chat .assistant-heading h2 { font-size:24px; margin:0 0 5px; }
+.workspace-content .financial-assistant.is-chat .assistant-heading p { margin:0; color:var(--ink-soft); }
+.financial-assistant.is-chat .assistant-heading :is(.section-eyebrow,.assistant-context-badge) { display:none; }
+.financial-assistant.is-chat .assistant-primary-tabs { margin-bottom:8px; }
+.financial-assistant.is-chat .assistant-question-heading { justify-content:flex-end; }
+.workspace-content .financial-assistant.is-chat .assistant-question-heading h3 { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.workspace-content .financial-assistant .assistant-footer p { color:var(--ink-soft); }
+@media(max-width:760px) {
+ .assistant-chat .assistant-conversation { max-height:42dvh; padding-right:4px; }
+ .assistant-chat .assistant-answer { padding:14px; }
+ .workspace-content .financial-assistant .assistant-chat .assistant-user-question { max-width:94%; }
+ .assistant-chat .assistant-question-form > div { flex-direction:row; align-items:center; flex-wrap:wrap; }
+ .assistant-chat .assistant-question-form > div small { flex:1 1 160px; }
+ .assistant-chat .assistant-question-form .primary-action { width:auto; }
+}
+@media(hover:none) { .assistant-keyboard-hint { display:none; } }
 @media (max-width:1150px) {
  .assistant-overview, .financial-assistant-comparison .assistant-overview { grid-template-columns:minmax(0,1fr); }
  .assistant-overview .assistant-fact { display:block; }

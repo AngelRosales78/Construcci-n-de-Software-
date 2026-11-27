@@ -4,7 +4,7 @@ const {chromium}=require(require.resolve('playwright',{paths:[path.join(repo,'fr
 const web='http://127.0.0.1:55193',api='http://127.0.0.1:58020/api/v1'
 ;(async()=>{
  const out=path.resolve(repo,'../output/financial-assistant');fs.mkdirSync(out,{recursive:true})
- const creds=JSON.parse(fs.readFileSync(path.resolve(repo,'../presentation_runtime_sprint3/demo_credentials.json'),'utf8').replace(/^\uFEFF/,'')).pro
+ const creds=JSON.parse(fs.readFileSync(path.resolve(repo,'../presentation_runtime_sprint3/demo_credentials.json'),'utf8').replace(/^\uFEFF/,''))[process.env.FINDSCORE_QA_ACCOUNT || 'pro']
  const browser=await chromium.launch({channel:'msedge',headless:true})
  const observations=[],errors=[]
  try{
@@ -24,6 +24,8 @@ const web='http://127.0.0.1:55193',api='http://127.0.0.1:58020/api/v1'
   }
   await page.goto(web+'/company/MSFT?section=analysis&fiscal_year=2024')
   const assistant=page.getByRole('region',{name:'Tu asistente financiero',exact:true})
+  await assistant.getByRole('button',{name:'Otras herramientas',exact:true}).click()
+  await assistant.getByRole('button',{name:'Lectura rápida',exact:true}).click()
   await assistant.getByRole('button',{name:'Pedir lectura de IA'}).waitFor()
   await page.evaluate(()=>document.fonts.ready)
   for(const width of [1440,768,390,360]){
@@ -41,8 +43,12 @@ const web='http://127.0.0.1:55193',api='http://127.0.0.1:58020/api/v1'
   assert.ok(await assistant.locator('.assistant-turn .assistant-fact').count())
   await assistant.locator('.assistant-turn').scrollIntoViewIfNeeded();await page.screenshot({path:path.join(out,'pregunta-deudas.png')})
   await assistant.getByLabel('Tu pregunta',{exact:true}).fill('¿Podrías explicarlo más?')
+  const moreResponse=page.waitForResponse(response=>response.url().includes('/companies/MSFT/assistant/') && response.request().method()==='POST',{timeout:60000})
   await assistant.getByRole('button',{name:'Enviar pregunta',exact:true}).click()
-  await page.waitForFunction(()=>document.querySelectorAll('.assistant-turn').length===2,{},{timeout:100000})
+  const more=await moreResponse
+  const moreBody=await more.json();assert.equal(more.status(),200,JSON.stringify(moreBody))
+  assert.ok(moreBody.answer.examples?.length)
+  await assistant.getByRole('region',{name:'Ejemplos ilustrativos',exact:true}).waitFor()
   assert.ok(await assistant.getByRole('region',{name:'Ejemplos ilustrativos',exact:true}).count())
   for(const width of [390,360]){
    await page.setViewportSize({width,height:1000});await assistant.locator('.assistant-turn').last().scrollIntoViewIfNeeded()
@@ -75,6 +81,7 @@ const web='http://127.0.0.1:55193',api='http://127.0.0.1:58020/api/v1'
   assert.match(await assistant.locator('.assistant-feedback').innerText(),/Correcto/)
   await page.screenshot({path:path.join(out,'tutor.png')})
   await page.goto(web+'/company/AAPL?section=analysis&fiscal_year=2025')
+  await page.getByRole('button',{name:'Otras herramientas',exact:true}).click()
   await page.getByRole('button',{name:'Cambios entre años',exact:true}).click()
   await page.getByLabel('Ejercicio anterior',{exact:true}).selectOption('2024')
   await page.getByRole('button',{name:'Ver cambios',exact:true}).click()
@@ -84,6 +91,8 @@ const web='http://127.0.0.1:55193',api='http://127.0.0.1:58020/api/v1'
   await page.goto(web+'/compare?a=GOOGL&b=META&fiscal_year=2024')
   await page.getByRole('button',{name:'Abrir asistente',exact:true}).click()
   const compare=page.getByRole('region',{name:'Entiende la comparación',exact:true})
+  await compare.getByRole('button',{name:'Otras herramientas',exact:true}).click()
+  await compare.getByRole('button',{name:'Lectura rápida',exact:true}).click()
   await compare.getByRole('button',{name:'Pedir lectura de IA',exact:true}).waitFor()
   await compare.getByRole('button',{name:'Pedir lectura de IA',exact:true}).click()
   await compare.locator('.assistant-answer').waitFor({timeout:100000})

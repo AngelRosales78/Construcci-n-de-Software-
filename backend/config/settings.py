@@ -10,6 +10,9 @@ SECRET_KEY = config('SECRET_KEY', default=secrets.token_urlsafe(64))
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = [host.strip() for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,10.0.2.2,testserver').split(',') if host.strip()]
 FCM_CREDENTIALS_FILE = config('FCM_CREDENTIALS_FILE', default='')
+ASSISTANT_API_BASE_URL = config('ASSISTANT_API_BASE_URL', default='')
+ASSISTANT_API_KEY = config('ASSISTANT_API_KEY', default='')
+ASSISTANT_MODEL = config('ASSISTANT_MODEL', default='')
 NOTIFICATION_EMAIL_ENABLED = config('NOTIFICATION_EMAIL_ENABLED', default=False, cast=bool)
 NOTIFICATION_ALLOWED_RECIPIENTS = [value.strip().lower() for value in config('NOTIFICATION_ALLOWED_RECIPIENTS', default='').split(',') if value.strip()]
 

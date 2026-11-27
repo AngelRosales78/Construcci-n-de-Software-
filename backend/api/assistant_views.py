@@ -15,6 +15,8 @@ from .assistant_lessons import LESSONS, lesson, examples_for
 from .assistant_provider import plan_answer, validate_plan, TOPICS, VERSION
 from .models import Company
 from .assistant_context import outside_context
+from .assistant_connection import connected, identity
+from .assistant_chat import small_talk, quick_topic, narrate, followup_topics
 from .monitoring_services import usage_owner, BudgetExceeded, record_error
 
 
@@ -74,6 +76,7 @@ def presentation(pack):
            ['¿Qué destaca y qué merece atención?','¿Cómo están sus deudas?','¿Qué significa su Altman-Z?','¿Qué información falta?']),
         'lessons':[{'id':key,'title':item['title']} for key,item in LESSONS.items()],
         'disclaimer':LIMIT,'generated_at':timezone.now().isoformat(),'generation_mode':'calculated_evidence',
+        'assistant':identity(),
         'validation_scope':'Cifras calculadas por el servidor y explicaciones acotadas a sus referencias. No certifica fuentes ni acredita causas.'}
 
 
@@ -83,6 +86,8 @@ class CompanyAssistantView(APIView):
 
     def get_throttles(self):
         data=self.request.data if self.request.method=='POST' else {}
+        if isinstance(data,dict) and data.get('action')=='question' and isinstance(data.get('question'),str) and small_talk({'company_name':''},data['question']):
+            return [AssistantThrottle()]
         if self.request.method=='POST' and isinstance(data,dict) and data.get('action','summary') in ('summary','question'):
             return [AssistantAIThrottle()]
         return [AssistantThrottle()]
@@ -114,29 +119,42 @@ class CompanyAssistantView(APIView):
 
     def respond(self,request,pack,args):
         question=args.get('question') if args['action']=='question' else ('Explica las diferencias entre las empresas y los datos faltantes.' if pack['scope']=='comparison' else 'Resume qué destaca, qué merece atención y qué falta conocer.')
+        immediate=small_talk(pack,question)
+        if immediate:
+            result=presentation(pack)
+            result.update(status='available',generation_mode='conversational_quick_reply',answer=immediate)
+            return Response(result,headers={'Cache-Control':'private, no-store'})
         if outside_context(question,pack['tickers']):
             result=presentation(pack)
             result.update(status='available',generation_mode='context_guard',answer=answer_for(pack,['out_of_scope']))
             return Response(result,headers={'Cache-Control':'private, no-store'})
         token=usage_owner.set(request.user.pk)
         try:
-            plan,hit=plan_answer(pack,question,args['history'],request.user.pk,args['level'])
+            previous=followup_topics(question,args['history']) if connected() else None
+            plan,hit=({'topics':previous,'context':'current'},False) if previous else plan_answer(pack,question,args['history'],request.user.pk,args['level'])
             validate_plan(plan)
+            topics=['out_of_scope'] if plan['context']=='other' else plan['topics']
+            conversational=next((t for t in topics if t in ('greeting','thanks','goodbye','business')),None)
+            answer=quick_topic(pack,conversational) if conversational else answer_for(pack,topics)
+            prose=None
+            if connected() and answer['cards']:
+                prose,prose_hit=narrate(pack,answer,question,args['history'],request.user.pk,args['level'])
+                hit=hit and prose_hit
+                answer['messages']=list(dict.fromkeys([*answer['messages'],*prose['paragraphs']]))
+                answer['evidence_ids']=prose['evidence_ids']
         except BudgetExceeded:
             raise
         except Exception:
             record_error('invalid_provider_response','local_ai')
-            return Response({'status':'unavailable','message':'La IA local no pudo completar una respuesta validada. Tus datos y tu pregunta se conservan; puedes reintentar.'},status=503)
+            return Response({'status':'unavailable','message':'No se pudo obtener una respuesta respaldada del asistente. Tu pregunta se conserva para reintentar.'},status=503)
         finally:
             usage_owner.reset(token)
-        topics=['out_of_scope'] if plan['context']=='other' else plan['topics']
         result=presentation(pack)
-        answer=answer_for(pack,topics)
         normalized=''.join(c for c in unicodedata.normalize('NFKD',question.lower()) if not unicodedata.combining(c))
         answer['examples']=examples_for(topics) if re.search(r'ejemplo|explica\w* mas|mas sencillo|no entiend|no entend',normalized) else []
-        result.update(status='available',generation_mode='local_ai_evidence_routing',cache_hit=hit,
+        result.update(status='available',generation_mode='conversational_ai' if prose else 'local_ai_evidence_routing',cache_hit=hit,
             answer=answer,level=args['level'],
-            ai_role='La IA identifica los temas de tu pregunta; el servidor aporta las cifras y las explicaciones respaldadas.')
+            ai_role='La IA explica evidencias de la ficha; el servidor calcula las cifras y conserva sus fechas y fuentes.')
         return Response(result,headers={'Cache-Control':'private, no-store'})
 
 

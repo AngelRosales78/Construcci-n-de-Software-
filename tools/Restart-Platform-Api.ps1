@@ -16,11 +16,13 @@ $apiEnvironment=@{
 }
 $apiPrevious=@{}
 $apiNames=@($apiEnvironment.Keys)+@('PAYMENT_PROVIDER','MERCADOPAGO_ACCESS_TOKEN','MERCADOPAGO_WEBHOOK_SECRET','MERCADOPAGO_TEST_SELLER_ID','MERCADOPAGO_TEST_BUYER_EMAIL','MERCADOPAGO_RETURN_URL','MERCADOPAGO_WEBHOOK_URL',
-    'EMAIL_BACKEND','EMAIL_HOST','EMAIL_PORT','EMAIL_USE_TLS','EMAIL_HOST_USER','EMAIL_HOST_PASSWORD','DEFAULT_FROM_EMAIL','NOTIFICATION_EMAIL_ENABLED','NOTIFICATION_ALLOWED_RECIPIENTS')
+    'EMAIL_BACKEND','EMAIL_HOST','EMAIL_PORT','EMAIL_USE_TLS','EMAIL_HOST_USER','EMAIL_HOST_PASSWORD','DEFAULT_FROM_EMAIL','NOTIFICATION_EMAIL_ENABLED','NOTIFICATION_ALLOWED_RECIPIENTS',
+    'ASSISTANT_API_BASE_URL','ASSISTANT_API_KEY','ASSISTANT_MODEL')
 foreach($apiName in $apiNames) {$apiPrevious[$apiName]=[Environment]::GetEnvironmentVariable($apiName,'Process')}
 try {
     foreach($apiName in $apiEnvironment.Keys) {[Environment]::SetEnvironmentVariable($apiName,$apiEnvironment[$apiName],'Process')}
     . (Join-Path $PSScriptRoot 'Load-MercadoPago-Test.ps1')
+    . (Join-Path $PSScriptRoot 'Load-Assistant-Provider.ps1')
     $apiMail=Join-Path $apiState 'gmail.credential.xml'
     if (Test-Path -LiteralPath $apiMail) {
         $apiGmail=Import-Clixml -LiteralPath $apiMail

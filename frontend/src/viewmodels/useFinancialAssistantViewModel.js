@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { assistantRepository } from '../models/assistantRepository'
 
-export function useFinancialAssistantViewModel({ a, b, year, deferred=false,initialMode='summary',initialQuestion='' }) {
+export function useFinancialAssistantViewModel({ a, b, year, deferred=false,initialMode='question',initialQuestion='' }) {
   const context={a,b,year}
   const key=`${a}:${b || ''}:${year || ''}`
   const sequence=useRef(0), controller=useRef(null), last=useRef(null)
@@ -19,7 +19,7 @@ export function useFinancialAssistantViewModel({ a, b, year, deferred=false,init
     controller.current?.abort()
     controller.current=new AbortController()
     last.current=payload
-    patch({key,busy:payload?.action || 'read',error:''})
+    patch({key,busy:payload?.action || 'read',error:'',notice:''})
     try {
       const result=checked(await (payload ? assistantRepository.send(context,payload,controller.current.signal) : assistantRepository.read(context,controller.current.signal)))
       if(id!==sequence.current)return
@@ -55,13 +55,14 @@ export function useFinancialAssistantViewModel({ a, b, year, deferred=false,init
     patch({mode:'question',draft:question})
     return request({action:'question',question:question.trim(),history:current.turns.slice(-4).map(turn=>({question:turn.question,topics:turn.response.answer.topics}))})
   }
-  const reset=()=>{sequence.current++;controller.current?.abort();last.current=null;patch({turns:[],draft:'',error:'',busy:''})}
+  const reset=()=>{sequence.current++;controller.current?.abort();last.current=null;patch({turns:[],draft:'',error:'',busy:'',notice:''})}
+  const stop=()=>{sequence.current++;controller.current?.abort();patch({busy:'',error:'',notice:'Espera detenida. Tu pregunta sigue en el cuadro para editarla o volver a enviarla.'})}
   useEffect(()=>{
     const launchKey=`${key}:${initialQuestion}`
     if(initialQuestion && current.meta && !current.busy && launched.current!==launchKey){launched.current=launchKey;ask(initialQuestion)}
   },[key,current.meta,current.busy,initialQuestion])
   return {...current,load:()=>request(null),retry:()=>request(last.current),setMode:mode=>patch({mode,error:''}),
-    setDraft:draft=>patch({draft}),ask,reset, summarize:()=>request({action:'summary'}),
+    setDraft:draft=>patch({draft}),ask,reset,stop, summarize:()=>request({action:'summary'}),
     setFromYear:fromYear=>patch({fromYear,changes:null}),compareYears:()=>request({action:'changes',from_year:Number(current.fromYear),to_year:Number(year || current.meta?.fiscal_year)}),
     learn:topic=>{patch({lesson:null,answer:''});return request({action:'learn',topic})},
     setAnswer:answer=>patch({answer}),checkAnswer:()=>request({action:'learn',topic:current.lesson.id,answer:Number(current.answer)})}

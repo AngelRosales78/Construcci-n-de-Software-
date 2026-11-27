@@ -2,11 +2,11 @@
 
 ## Cómo demostrar las seis funciones
 
-1. Abre Microsoft, entra en **Explicación de IA** y selecciona **2024**. «Lectura rápida» muestra qué destaca, qué merece atención y qué falta conocer. Cada tarjeta conserva cifra, significado, límite y fuente.
+1. Abre Microsoft, entra en **Explicación de IA** y selecciona **2024**. Se abre el chat. Escribe «Hola»: responde con un saludo y no muestra indicadores. En **Otras herramientas → Lectura rápida** siguen disponibles las tarjetas de qué destaca, qué merece atención y qué falta conocer.
 2. En **Preguntar**, pulsa «¿Cómo están sus deudas?». La respuesta utiliza los indicadores de solvencia de Microsoft y ese ejercicio.
 3. Escribe «¿Podrías explicarlo más?». Mantiene el tema anterior y añade un ejemplo identificado como ficticio. Puedes reiniciar la conversación sin cambiar la empresa.
-4. En **Cambios entre años**, selecciona 2023 y compara con 2024. Los cambios se calculan en el servidor; los porcentajes se expresan en puntos porcentuales. Con referencias anuales normalizadas, como AAPL 2025 frente a 2024, se explica por qué no se declara una comparación contable válida.
-5. En **Aprender**, abre una lección y responde su pregunta. El servidor comprueba la opción elegida y muestra una explicación. Los ejemplos no son datos de la empresa abierta.
+4. En **Otras herramientas → Cambios entre años**, selecciona 2023 y compara con 2024. Los cambios se calculan en el servidor; los porcentajes se expresan en puntos porcentuales. Con referencias anuales normalizadas, como AAPL 2025 frente a 2024, se explica por qué no se declara una comparación contable válida.
+5. En **Otras herramientas → Aprender**, abre una lección y responde su pregunta. El servidor comprueba la opción elegida y muestra una explicación. Los ejemplos no son datos de la empresa abierta.
 6. En el comparador Pro, selecciona GOOGL y META, ejercicio 2024. Abre **Entiende la comparación** y pide la lectura o escribe una pregunta. Las fechas y versiones del comparador original determinan qué notas se pueden explicar como comparables.
 
 Las preguntas sugeridas y las preguntas libres comparten las mismas comprobaciones. Para mostrar límites, pregunta por causas, predicciones o por una empresa diferente de la abierta: no se inventan noticias ni se usan cifras de una empresa para describir otra.
@@ -17,11 +17,23 @@ Implementar un asistente comprensible para principiantes, con resumen específic
 
 ## Qué hace la IA y qué comprueba el servidor
 
-El motor local existente, Qwen3 mediante llama.cpp, identifica los temas de la pregunta y recupera el tema de los turnos anteriores. Solo puede devolver identificadores de temas de un catálogo cerrado y una indicación de contexto. No puede insertar texto libre, cifras, enlaces ni campos adicionales en la respuesta financiera.
+El chat web usa la conexión de Open WebUI que Diego ya tenía configurada en OpenCode: **Qwen/Qwen3.6-35B-A3B-FP8**, consultado desde la API de FINDSCORE. No se descarga ese modelo a la laptop. Los endpoints anteriores de análisis conservan Qwen3 1.7B y llama.cpp para no alterar los contratos de Android y reportes.
+
+Primero se identifican los temas dentro del catálogo permitido. Después, el modelo recibe solamente las evidencias de esos temas y redacta uno o dos párrafos breves. Se comprueban estructura, identificadores de evidencia y cifras; se rechazan números nuevos, imágenes, HTML y determinados patrones de recomendaciones. Estas comprobaciones no equivalen a verificar automáticamente todos los matices semánticos del texto generado. Las fuentes y fechas que muestra la web las añade el servidor, no el modelo.
+
+Los saludos, agradecimientos y despedidas habituales tienen respuesta inmediata sin llamar al modelo. Los seguimientos comunes, como «¿y eso qué significa?», recuperan el tema financiero anterior aunque haya un agradecimiento intermedio. Un mensaje ambiguo pide aclaración en lugar de mostrar una tarjeta arbitraria.
 
 El servidor construye las tarjetas desde los cálculos de pilares y el Altman-Z existentes. Sus explicaciones relacionan las cifras reales con interpretaciones acotadas y límites explícitos. Las fechas de Altman-Z se conservan separadas del ejercicio seleccionado. La comprobación de nombres y símbolos conocidos impide responder sobre otra empresa con las cifras del contexto abierto, independientemente de la clasificación del modelo.
 
 La lectura inicial, los cambios y las lecciones funcionan sin llamar a la IA y se identifican como tales. Las consultas a la IA fallidas no se sustituyen por una respuesta que finja haber sido generada por el modelo. La conversación conserva su último resultado y el texto de la pregunta para reintentar.
+
+En el chat, las respuestas se presentan como mensajes. Las cifras detalladas quedan en «Ver cifras y fechas usadas»; las referencias de fecha y los enlaces a fuentes permanecen visibles junto al mensaje. Altman-Z conserva su cierre propio aunque sea distinto del ejercicio seleccionado. Enter envía y Mayús+Enter añade otra línea. «Detener espera» cancela la espera del navegador, conserva el borrador y descarta una respuesta tardía; no promete interrumpir la inferencia que ya se esté ejecutando en el servidor.
+
+## Conexión y credenciales
+
+`tools/Configure-Assistant-From-OpenCode.ps1` reutiliza el proveedor Open WebUI seleccionado en la configuración del usuario. Guarda la conexión y la clave cifrada con la cuenta de Windows en `../presentation_runtime_sprint3/assistant-provider.xml`, fuera de Git. No modifica OpenCode ni publica la dirección privada. `Load-Assistant-Provider.ps1` carga las variables del servidor al iniciar o reiniciar la API.
+
+En otro entorno se pueden proporcionar `ASSISTANT_API_BASE_URL`, `ASSISTANT_MODEL` y `ASSISTANT_API_KEY` directamente al proceso de la API. Ninguna de estas claves se envía al navegador. El cliente HTTP no sigue redirecciones con la credencial. Si no se configura la nueva conexión, se conserva la ruta local anterior; si una conexión configurada falla, el chat informa el fallo sin simular una respuesta del modelo. La laptop debe poder acceder al servidor de Open WebUI de la red.
 
 ## Contratos y módulos
 
@@ -35,18 +47,20 @@ Contrato: `evidence-assistant-v1`. Los endpoints anteriores de análisis se mant
 
 - `assistant_facts.py`: cifras, interpretaciones, fuentes y diferencias calculadas con Decimal.
 - `assistant_context.py`: comprobación independiente de empresas mencionadas.
-- `assistant_provider.py`: consulta local y validación estricta de temas; caché por usuario, pregunta, contexto y referencias.
+- `assistant_provider.py`: selección de temas mediante el proveedor configurado; conserva la conexión local anterior cuando no hay otra configurada.
+- `assistant_connection.py`: conexión del servidor con Open WebUI, límites de respuesta, tiempo de espera y registro del modelo y tokens observados.
+- `assistant_chat.py`: saludos, seguimiento y redacción con evidencias; validación del resultado y caché por usuario, modelo, pregunta, contexto y referencias.
 - `assistant_lessons.py`: ejemplos y ejercicios revisados, separados de los datos financieros.
 - `assistant_views.py`: autenticación, acceso Pro, validación de entradas y límites de consultas.
 - En la web se conserva la separación entre componente, ViewModel y repositorio.
 
-El historial permanece en memoria del navegador y se reinicia al cambiar empresa o ejercicio. El servidor recibe como máximo los cuatro turnos anteriores para interpretar el seguimiento; no almacena el texto de las conversaciones. No se incorporan proveedores externos ni credenciales nuevas. Los límites de consulta y el registro interno de uso se mantienen activos.
+El historial permanece en memoria del navegador y se reinicia al cambiar empresa o ejercicio. El servidor recibe como máximo las preguntas y temas de cuatro turnos anteriores; no recibe respuestas redactadas por el cliente como si fueran evidencias. No se crea un historial persistente en la base de datos; las respuestas pueden mantenerse cinco minutos en la caché del servidor. Los límites y el registro interno de uso se mantienen activos. El registro distingue el modelo real de cada llamada y no aplica al nuevo modelo una tarifa asignada al anterior.
 
 ## Verificación
 
-La suite general del servidor aprobó 801 pruebas y omitió una comprobación opcional de servicios externos. Después de los últimos ajustes se aprobaron las 35 pruebas específicas del asistente. La suite completa de la web aprobó 156 pruebas; se verificaron de nuevo los componentes afectados y la compilación final.
+La suite general del servidor aprobó 820 pruebas y omitió una comprobación opcional de servicios externos; la comprobación final de los módulos afectados aprobó 63 pruebas. La suite completa de la web aprobó 165 pruebas, incluidas las del saludo sin tarjetas, detener y descartar una respuesta tardía, y el cierre propio de Altman-Z visible fuera del desplegable de cifras. La compilación final también pasó.
 
-`tools/verify_financial_assistant.cjs` prueba el modelo local real con deudas, liquidez, seguimiento, Altman-Z, datos faltantes, causas y límites de contexto. También recorre el tutor, las diferencias entre ejercicios y la comparación; comprueba pantallas de 360, 390, 768 y 1440 px. Capturas y resultados se guardan fuera de Git en `../output/financial-assistant/`.
+`tools/verify_assistant_chat.cjs` comprueba la conexión real con Qwen3.6, saludos, seguimiento, mensajes ambiguos, fuentes, detener, errores, reinicio y chat lateral. Guarda capturas en `../output/assistant-chat/`. `tools/verify_financial_assistant.cjs` recorre deudas, liquidez, Altman-Z, datos faltantes, causas, tutor, diferencias entre ejercicios y comparación, en 360–1440 px; sus evidencias quedan en `../output/financial-assistant/`. No se versionan credenciales ni conversaciones de prueba.
 
 ## Límites que permanecen
 
@@ -54,4 +68,4 @@ La suite general del servidor aprobó 801 pruebas y omitió una comprobación op
 - Una interpretación académica no acredita solvencia ni permite recomendar una inversión.
 - Los cambios numéricos no demuestran sus causas; los periodos incompatibles no producen diferencias.
 - Un ejemplo educativo no sustituye datos faltantes. La disponibilidad financiera del catálogo permanece intacta.
-- Un modelo pequeño puede interpretar mal una pregunta ambigua. El contexto, los identificadores permitidos y las cifras compiladas por el servidor acotan lo que puede responder; se puede reformular la pregunta.
+- El modelo puede interpretar mal una pregunta o redactar un matiz impreciso. Los identificadores permitidos, la comprobación de cifras y la consulta de fuentes reducen ese riesgo; se puede reformular la pregunta y contrastar la evidencia.

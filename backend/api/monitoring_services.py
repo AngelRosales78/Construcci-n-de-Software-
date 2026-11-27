@@ -64,13 +64,13 @@ def reserve_call(provider):
         row.save(update_fields=['calls', 'warned_at'])
 
 
-def record_ai(started, duration, outcome, provider_data=None):
+def record_ai(started, duration, outcome, provider_data=None, model='sp500-local-qwen3'):
     data = provider_data or {}
     def token_count(key):
         value = data.get(key)
         return value if type(value) is int and 0 <= value <= 2_000_000_000 else None
     incoming, outgoing = token_count('tokens_evaluated'), token_count('tokens_predicted')
-    rate = AITariff.objects.filter(provider='local_ai', model='sp500-local-qwen3', effective_at__lte=started).first()
+    rate = AITariff.objects.filter(provider='local_ai', model=model, effective_at__lte=started).first()
     tariff, cost = {}, None
     if rate:
         tariff = {'version': rate.version, 'currency': rate.currency, 'input_per_million': str(rate.input_per_million),
@@ -78,7 +78,7 @@ def record_ai(started, duration, outcome, provider_data=None):
         if incoming is not None and outgoing is not None:
             cost = ((Decimal(incoming)*rate.input_per_million + Decimal(outgoing)*rate.output_per_million)
                     / Decimal(1_000_000)).quantize(Decimal('.00000001'))
-    AIUsage.objects.create(model='sp500-local-qwen3', user_id=usage_owner.get(), started_at=started,
+    AIUsage.objects.create(model=model, user_id=usage_owner.get(), started_at=started,
         duration_ms=max(0, int(duration*1000)), outcome=outcome, input_tokens=incoming, output_tokens=outgoing,
         tariff=tariff, estimated_cost=cost)
     if outcome != 'success':
