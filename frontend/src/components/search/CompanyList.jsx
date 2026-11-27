@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { hasIndicatorValue, sectorLabel, formatMarketValue, formatFinancialNumber } from '../../utils/financialPresentation'
 import FavoriteButton from '../favorites/FavoriteButton'
 import CompanyMark from '../shared/CompanyMark'
+import LoadingState from '../shared/LoadingState'
 
 export default function CompanyList({ companies, loading, favorites }) {
   const navigate = useNavigate()
@@ -12,7 +13,7 @@ export default function CompanyList({ companies, loading, favorites }) {
   }
 
   if (loading) {
-    return <div className="company-list-loading" role="status">Cargando empresas...</div>
+    return <LoadingState variant="catalog" />
   }
 
   if (companies.length === 0) {
@@ -21,10 +22,10 @@ export default function CompanyList({ companies, loading, favorites }) {
 
   return (
     <div className="company-list">
-      {companies.map((company) => {
+      {companies.map((company, index) => {
         const visibleCount = ['market_cap', 'per', 'roe'].filter(key => hasIndicatorValue(company[key])).length
         return (
-        <div className="company-card-wrapper" key={company.ticker}>
+        <div className="company-card-wrapper" key={company.ticker} style={{'--item-delay':`${Math.min(index,4) * 25}ms`}}>
         <button
           type="button"
           key={company.ticker}

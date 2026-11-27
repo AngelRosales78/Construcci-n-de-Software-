@@ -7,6 +7,7 @@ import SectorExplorer from './SectorExplorer'
 import WorkspaceLayout from '../layout/WorkspaceLayout'
 import { Link } from 'react-router-dom'
 import { useFavoritesViewModel } from '../../viewmodels/useFavoritesViewModel'
+import ActionNotice from '../shared/ActionNotice'
 
 
 export default function CompanySearch() {
@@ -30,7 +31,7 @@ export default function CompanySearch() {
           <label className="coverage-filter"><input type="checkbox" checked={params.withData} onChange={event => setWithData(event.target.checked)} /> Solo con indicadores o balances cargados</label>
           <p className="catalog-reading-note">Cifras históricas. Abre una ficha para consultar qué significan, sus fechas y fuentes.</p>
           {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
-          {favorites.message && <p role="status">{favorites.message} <Link to="/favorites">Ver favoritos</Link></p>}
+          <ActionNotice message={favorites.message}><Link to="/favorites">Ver favoritos →</Link></ActionNotice>
           {error ? <div className="search-error" role="alert"><p>{error}</p><button type="button" onClick={retry}>Reintentar</button></div> : <CompanyList companies={companies} loading={loading} favorites={favorites} />}
           {!error && <nav aria-label="Páginas de empresas">
             <button disabled={loading || params.page === 1}

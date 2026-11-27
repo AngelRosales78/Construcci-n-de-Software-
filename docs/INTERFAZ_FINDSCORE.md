@@ -21,6 +21,16 @@ Transiciones de interacción de 140 ms; entrada de página de 180 ms, cambio de 
 
 Se conserva el uso por teclado, el enlace para saltar al contenido, el cierre con Escape y el retorno del foco en menú y asistente. Los resultados usan etiquetas y símbolos además del color. Las tablas conservan desplazamiento interno en pantallas estrechas.
 
+### Respuesta a las acciones
+
+- Tarjetas: entrada de 200 ms con escalonado máximo de 100 ms; elevación de 3 px únicamente con ratón, sin desplazar el resto de la cuadrícula.
+- Pestañas: el subrayado se despliega en 180 ms, conservando la navegación y el contenido existentes.
+- Favoritos: la estrella responde durante 320 ms únicamente tras confirmar un guardado solicitado en esta pantalla. Cargar un favorito anterior o recibir un error no activa la confirmación. Los mensajes conservan texto legible y no desaparecen automáticamente.
+- Carga: estructuras neutras, sin cifras ficticias y ocultas a los lectores de pantalla; el estado de carga sí se anuncia. El brillo hace dos pasadas y después queda estático.
+- Los botones principales responden a la pulsación con un desplazamiento de 1 px. No se animan los valores financieros ni se agregan efectos a los gráficos.
+
+Todos estos efectos respetan movimiento reducido y no añaden solicitudes ni retrasos a las operaciones.
+
 ## Navegación financiera
 
 Los tres accesos del resumen abren el pilar correspondiente, conservando ejercicio fiscal, rango de precios y dirección de retorno. El enlace «Ver cálculo y fuentes» abre Salud financiera y lleva al bloque Altman-Z. Cambiar de sección no vuelve a consultar la ficha ni registra otra visita.

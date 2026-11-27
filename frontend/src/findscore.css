@@ -289,6 +289,68 @@ button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
   .workspace-content .favorites-list li { flex-wrap:wrap; gap:14px; }
   .auth-container .auth-wordmark > span { font-size:25px; }
 }
+/* Motion follows real actions; figures and classifications never animate as counters. */
+.workspace-content .action-notice { display:flex; align-items:center; gap:12px; background:var(--sage); border:1px solid #cbd5c0; border-radius:9px; padding:14px 18px; margin:16px 0; color:var(--ink); }
+.workspace-content .action-notice p { margin:0; color:var(--ink); font-size:15px; line-height:1.5; }
+.action-notice-symbol { display:grid; place-items:center; width:28px; height:28px; flex-shrink:0; background:#d8e4cc; color:#315e40; border-radius:50%; }
+.action-notice a { margin-left:8px; font-weight:600; }
+.workspace-content .favorite-button .favorite-glyph { display:inline-block; transform-origin:50% 65%; }
+.workspace-content .favorite-button[aria-pressed=true] .favorite-glyph { color:#8a6125; }
+.workspace-content .workspace-page .company-dashboard .company-sections button { position:relative; }
+.workspace-content .workspace-page .company-dashboard .company-sections button[aria-pressed=true] { border-bottom-color:transparent; }
+.workspace-content .workspace-page .company-dashboard .company-sections button::after { content:''; position:absolute; bottom:-3px; left:0; right:0; height:3px; background:var(--primary); transform:scaleX(0); transform-origin:left center; }
+.workspace-content .workspace-page .company-dashboard .company-sections button[aria-pressed=true]::after { transform:scaleX(1); }
+.workspace-content .loading-state { margin:8px 0 28px; min-width:0; }
+.workspace-content .loading-state > p { color:var(--ink-soft); font-size:15px; margin:0 0 20px; }
+.loading-card-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.skeleton-surface { position:relative; overflow:hidden; background:var(--paper-white); border:1px solid var(--rule); border-radius:12px; padding:24px; }
+.skeleton-line { display:block; height:14px; width:100%; background:#e5e8dc; border-radius:4px; margin-bottom:14px; }
+.skeleton-line.skeleton-short { width:35%; }
+.skeleton-line.skeleton-medium { width:70%; }
+.skeleton-line.skeleton-title { width:60%; height:32px; margin:28px 0 24px; }
+.skeleton-logo { display:block; width:42px; height:42px; border-radius:9px; background:#e5e8dc; flex-shrink:0; }
+.skeleton-company { display:flex; align-items:center; gap:16px; margin-bottom:26px; }
+.skeleton-company .skeleton-line { margin:0; }
+.skeleton-values { margin-top:28px; padding-top:18px; border-top:1px solid #e8e9e0; }
+.skeleton-company-header { display:flex; align-items:center; gap:18px; padding:10px 0 30px; }
+.skeleton-company-header > div { width:45%; }
+.skeleton-company-header .skeleton-line:first-child { height:24px; }
+.skeleton-company-header .skeleton-line:last-child { margin-bottom:0; }
+.skeleton-tabs { display:flex; gap:30px; padding-bottom:20px; border-bottom:1px solid var(--rule); margin-bottom:28px; }
+.skeleton-tabs > span { width:100px; height:12px; border-radius:4px; background:#e5e8dc; }
+.skeleton-reading { padding:32px; min-height:230px; }
+.skeleton-scale { display:block; height:9px; background:#dce2d3; border-radius:5px; width:100%; margin-top:40px; }
+@keyframes findscore-saved { 0% {transform:scale(.8) rotate(-14deg)} 55% {transform:scale(1.28) rotate(8deg)} 100% {transform:scale(1) rotate(0)} }
+@keyframes findscore-confirmation { from {opacity:0;transform:translateY(-4px)} to {opacity:1;transform:none} }
+@keyframes findscore-card-enter { from {opacity:.4;transform:translateY(6px)} to {opacity:1;transform:none} }
+@keyframes findscore-loading { 0% {transform:translateX(-110%);opacity:0} 20% {opacity:.7} 80% {opacity:.7} 100% {transform:translateX(220%);opacity:0} }
+@keyframes findscore-backdrop { from {opacity:0} to {opacity:1} }
+@media (prefers-reduced-motion:no-preference) {
+  .workspace-content .favorite-confirmed .favorite-glyph { animation:findscore-saved 320ms ease-out; }
+  .workspace-content .action-notice { animation:findscore-confirmation 180ms ease-out both; }
+  .workspace-content .company-card-wrapper { animation:findscore-card-enter 200ms ease-out both; animation-delay:var(--item-delay,0ms); }
+  .workspace-content .company-card { transition:transform 160ms ease-out,border-color 140ms ease,box-shadow 160ms ease; }
+  .workspace-content :is(.primary-action,.ask-ai) { transition:transform 120ms ease,background-color 140ms ease,border-color 140ms ease; }
+  .workspace-content :is(.primary-action,.ask-ai):active:not(:disabled) { transform:translateY(1px); }
+  .workspace-content .company-sections button::after { transition:transform 180ms ease-out; }
+  .skeleton-surface::after { content:''; position:absolute; pointer-events:none; top:0; bottom:0; left:0; width:60%; background:linear-gradient(110deg,transparent 20%,#ffffff70 50%,transparent 80%); animation:findscore-loading 1400ms ease-in-out 2 both; }
+  .workspace-shell :is(.assistant-drawer[open],.account-dialog[open])::backdrop { animation:findscore-backdrop 140ms ease-out both; }
+}
+@media (prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine) {
+  .workspace-content .company-card:hover { transform:translateY(-3px); }
+  .workspace-content .company-card-action > span { display:inline-block; transition:transform 160ms ease-out; }
+  .workspace-content .company-card:hover .company-card-action > span { transform:translate(2px,-2px); }
+}
+@media(max-width:1100px) { .loading-card-grid {grid-template-columns:repeat(2,minmax(0,1fr));} }
+@media(max-width:600px) {
+  .loading-card-grid { grid-template-columns:minmax(0,1fr); gap:14px; }
+  .loading-card-grid > .skeleton-surface:nth-child(n+4) { display:none; }
+  .skeleton-reading { padding:24px 18px; }
+  .skeleton-company-header > div { width:70%; }
+  .skeleton-tabs { gap:18px; }
+  .skeleton-tabs > span { min-width:0; flex:1; }
+  .workspace-content .action-notice { padding:12px 14px; gap:10px; }
+}
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
 }

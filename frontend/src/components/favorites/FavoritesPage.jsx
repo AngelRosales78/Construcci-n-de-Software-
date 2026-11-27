@@ -4,6 +4,7 @@ import WorkspaceLayout from '../layout/WorkspaceLayout'
 import FavoriteRemovalDialog from './FavoriteRemovalDialog'
 import TagsPanel from './TagsPanel'
 import { useState } from 'react'
+import ActionNotice from '../shared/ActionNotice'
 
 export default function FavoritesPage() {
   const favorites = useFavoritesViewModel()
@@ -14,7 +15,7 @@ export default function FavoritesPage() {
     <p aria-live="polite">{favorites.ready || favorites.items.length > 0 ? `${favorites.items.length} ${favorites.items.length === 1 ? 'empresa guardada' : 'empresas guardadas'}` : favorites.loading ? 'Consultando tu lista…' : 'Lista pendiente de consultar'}</p>
     {favorites.lastSynced && <p className="pillar-muted">{favorites.ready ? 'Sincronizado' : 'Copia anterior, pendiente de conexión'}: {new Date(favorites.lastSynced).toLocaleTimeString('es-PE')}</p>}
     <button type="button" onClick={favorites.reload} disabled={favorites.loading}>Actualizar favoritos</button>
-    {favorites.message && <p role="status">{favorites.message}</p>}
+    <ActionNotice message={favorites.message}/>
     <FavoriteRemovalDialog favorites={favorites} />
     <TagsPanel items={favorites.items} onFilter={setFilter} />
     {favorites.loading && <p role="status">Consultando favoritos…</p>}

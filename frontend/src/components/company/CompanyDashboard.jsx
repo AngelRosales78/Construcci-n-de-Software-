@@ -16,6 +16,8 @@ import BeginnerGuide from './BeginnerGuide'
 import CompanyMark from '../shared/CompanyMark'
 import Icon from '../shared/Icon'
 import AskAI from '../shared/AskAI'
+import LoadingState from '../shared/LoadingState'
+import ActionNotice from '../shared/ActionNotice'
 import './company-reading.css'
 
 const sections = [
@@ -28,7 +30,7 @@ const sections = [
 export default function CompanyDashboard() {
   const favorites = useFavoritesViewModel()
   const { company, loading, error, navigate, returnTo, section, setSection, visitError, retryVisit, retryCompany } = useCompanyDashboardViewModel()
-  if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
+  if (loading) return <WorkspaceLayout><LoadingState /></WorkspaceLayout>
   if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert"><h1>No se pudo abrir la ficha</h1><p>{error}</p><button onClick={retryCompany}>Reintentar ficha</button><button onClick={() => navigate(returnTo, { replace: true })}>Volver al explorador</button></div></WorkspaceLayout>
   if (!company) return null
   const openFinancialDetails = (pillar) => {
@@ -62,7 +64,7 @@ export default function CompanyDashboard() {
       <div className="dashboard-content">
         {visitError && <p role="status">{visitError} <button onClick={retryVisit}>Reintentar registro de visita</button></p>}
         {favorites.error && <div role="alert"><p>{favorites.error}</p><button onClick={favorites.reload}>Reintentar favoritos</button></div>}
-        {favorites.message && <p role="status">{favorites.message}</p>}
+        <ActionNotice message={favorites.message}/>
         <nav className="company-sections" aria-label="Secciones de la empresa">
           {sections.map(({ id, label }) =>
             <button key={id} type="button" aria-pressed={section === id} aria-controls={id === 'analysis' || id === 'pillars' ? 'company-financial' : `company-${id}`} onClick={() => setSection(id)}><Icon name={id} /> {label}</button>)}
