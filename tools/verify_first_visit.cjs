@@ -40,23 +40,23 @@ const web='http://127.0.0.1:55193'
    assert.equal(await reading.getAttribute('data-zone'),company.altman_z.zone==='unknown' ? 'unknown' : company.altman_z.zone)
    if(company.altman_z.score!=null)assert.equal(Number(await reading.locator('.altman-score').innerText()),company.altman_z.score)
    else assert.equal(await reading.locator('.altman-score').count(),0)
-   const color=await reading.locator(':scope > strong').evaluate(el=>getComputedStyle(el).color)
+   const color=await reading.locator('.altman-outcome-symbol').evaluate(el=>getComputedStyle(el).color)
    zones.push({ticker,zone:company.altman_z.zone,color,score:company.altman_z.score})
    for(const width of [1440,390,360]){
     await page.setViewportSize({width,height:844});await page.evaluate(()=>scrollTo(0,0));await noOverflow(ticker+' '+width)
-    const result=await reading.locator(':scope > strong').boundingBox()
+    const result=await reading.locator('.altman-verdict h3').boundingBox()
     assert.ok(result.y+result.height<=844,'Zona visible sin buscar el puntaje: '+ticker+' '+width)
     await capture(ticker+'-'+width)
    }
    if(company.altman_z.score!=null){
     assert.equal(await reading.locator('.altman-zone[aria-current]').count(),1)
-    assert.ok((await reading.locator(':scope > strong').boundingBox()).y<(await reading.locator('.altman-score').boundingBox()).y)
+    assert.ok((await reading.locator('.altman-verdict h3').boundingBox()).y<(await reading.locator('.altman-score').boundingBox()).y)
    }
   }
   assert.equal(new Set(zones.map(row=>row.color)).size,4,JSON.stringify(zones))
   checks.push('Tres zonas y un estado sin datos: nombre, símbolo y colores distintos; clasificación antes que puntaje, visible en celular.')
   await page.setViewportSize({width:1440,height:1000});await page.goto(web+'/company/AAPL')
-  const explain=page.getByRole('button',{name:'Explícame este resultado',exact:false})
+  const explain=page.getByRole('button',{name:'Preguntar a la IA →',exact:false})
   await explain.waitFor();await explain.focus()
   let calls=0
   page.on('request',request=>{if(request.method()==='POST' && request.url().includes('/companies/AAPL/assistant/'))calls++})

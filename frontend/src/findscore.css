@@ -1,0 +1,294 @@
+/* FINDSCORE: shared visual language for every web route. */
+:root {
+  --paper:#f4f1e8; --paper-white:#fffdf8; --ink:#203b2f; --ink-soft:#59665d;
+  --desk:#203b2f; --rule:#d6d7cc; --sage:#e9ede1;
+  --primary:#99472f; --primary-hover:#7e3724; --oxide:var(--primary);
+  --fs-radius:12px; --fs-space:28px;
+}
+body { background:var(--paper); color:var(--ink); }
+button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
+.workspace-shell { grid-template-columns:224px minmax(0,1fr); }
+.workspace-shell .workspace-sidebar { width:224px; padding:28px 14px; }
+.workspace-shell .workspace-brand { gap:9px; padding:0 6px 32px; }
+.workspace-shell .workspace-brand .brand-mark { width:28px; height:28px; }
+.workspace-shell .workspace-brand strong { font:700 22px/1.2 var(--display-font); letter-spacing:-.04em; }
+.workspace-shell .workspace-brand small { font-size:7px; letter-spacing:.065em; }
+.workspace-shell .workspace-sidebar nav > :is(a,button) { border-radius:5px; font-size:15px; min-height:46px; }
+.workspace-shell .workspace-sidebar nav > .sidebar-assistant { margin-top:16px; padding-top:18px; border-top:1px solid #48604e; background:transparent; color:#e0e7d8; border-radius:0; font-weight:500; }
+.workspace-shell .workspace-sidebar nav > .sidebar-assistant:hover { background:#304c3d; }
+.workspace-shell .sidebar-note { padding:18px 6px 0; }
+.workspace-shell .sidebar-note p { font-size:13px; }
+.workspace-shell .workspace-header { padding:0 36px; height:72px; background:#faf8f2; backdrop-filter:none; }
+.workspace-shell .workspace-heading { gap:5px; }
+.workspace-shell .workspace-heading > span { font-size:11px; letter-spacing:.07em; color:var(--ink-soft); }
+.workspace-shell .workspace-heading > small { font-size:14px; color:var(--ink); }
+.workspace-shell .workspace-content { min-width:0; padding:32px 36px 44px; }
+.workspace-page { max-width:1440px; margin-inline:auto; min-width:0; }
+.workspace-shell .workspace-footer { margin:0 36px; padding:22px 0; color:var(--ink-soft); font-size:10px; }
+.workspace-shell .workspace-account { gap:16px; }
+.workspace-header .mobile-ai-trigger { display:inline-flex; align-items:center; justify-content:center; gap:7px; color:var(--ink); background:transparent; border:1px solid var(--rule); border-radius:7px; min-height:40px; padding:8px 12px; cursor:pointer; }
+.workspace-header .mobile-ai-trigger span { font:600 13px var(--body-font); }
+.workspace-content :is(h1,h2,h3,h4) { color:var(--ink); }
+.workspace-content h1 { font-size:clamp(30px,3vw,42px); margin:0 0 14px; }
+.workspace-content :is(h2,h3,h4) { font-family:var(--body-font); font-weight:650; letter-spacing:-.02em; }
+.workspace-content :is(.section-eyebrow,.section-description,.pillar-muted,.catalog-reading-note) { color:var(--ink-soft); }
+.workspace-content .section-eyebrow { letter-spacing:.09em; font-size:11px; }
+.workspace-content p { overflow-wrap:break-word; }
+.workspace-content .text-action { padding:8px 0; border:0; background:transparent; color:var(--primary); font:600 15px/1.4 var(--body-font); cursor:pointer; min-height:40px; text-align:left; }
+.workspace-content .text-action:hover { color:var(--primary-hover); text-decoration:underline; text-underline-offset:4px; }
+.workspace-content :is(.sprint3-panel,.financial-pillars,.comparison-result,.notification-preferences,.terminal-fundamentals) { background:var(--paper-white); border:1px solid var(--rule); border-radius:var(--fs-radius); box-shadow:none; color:var(--ink); }
+.workspace-content :is(.financial-pillars,.comparison-result,.altmanz-gauge,.simulation-panel,.ai-panel) { --primary:#99472f; --primary-hover:#7e3724; --terminal-bg:var(--paper); --terminal-panel:var(--paper-white); --terminal-raised:var(--sage); --terminal-text:var(--ink); --terminal-muted:var(--ink-soft); --terminal-line:var(--rule); }
+.workspace-content :is(.simulation-panel,.ai-panel) { background:var(--paper-white); color:var(--ink); border:1px solid var(--rule); border-radius:var(--fs-radius); }
+.workspace-content .simulation-panel .primary-action { background:var(--ink); color:var(--paper-white); border:1px solid var(--ink); border-radius:7px; }
+.workspace-content .simulation-panel .primary-action:hover { background:#304e3d; }
+.workspace-content .simulation-panel :is(input,select) { color:var(--ink); background:var(--paper); border:1px solid #afb7a9; min-height:42px; font-size:16px; }
+.workspace-content .simulation-panel :is(.simulation-settings,.simulation-settings-fields,.scenario-reading) { background:var(--sage); border-color:var(--rule); color:var(--ink-soft); }
+.workspace-content :is(.financial-pillars,.simulation-panel,.altmanz-gauge) .financial-help summary { color:var(--primary); }
+.workspace-content .pillar-year select { color:var(--ink); background:var(--paper-white); border:1px solid #afb7a9; padding:10px 12px; font:400 16px var(--body-font); }
+.workspace-content .account-page label { display:grid; gap:6px; margin:16px 0; }
+.workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) > p { max-width:75ch; font-size:16px; color:var(--ink-soft); line-height:1.6; }
+.workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) h2 { font-size:23px; }
+.workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) button { min-height:42px; border-radius:7px; padding:10px 15px; font:600 14px/1.4 var(--body-font); }
+.workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) :is(input,select,textarea) { background:var(--paper-white); color:var(--ink); border:1px solid #afb7a9; padding:11px 12px; font:400 16px/1.4 var(--body-font); max-width:100%; }
+.workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) button:not(.ask-ai) { background:var(--sage); border:1px solid #bac5b5; color:var(--ink); }
+.workspace-content :is(.account-page,.subscription-page) button[type=submit],.workspace-content .subscription-pro button:not(:disabled) { background:var(--ink); border-color:var(--ink); color:#fffdf8; }
+.workspace-content .account-danger { background:#fffaf6; border-color:#ddc7bb; }
+.workspace-content .account-danger button { color:#9c3135!important; background:#fff7f4!important; border-color:#d8aeab!important; }
+.workspace-content button:disabled { opacity:.55; cursor:not-allowed; }
+.workspace-content :is([role=alert],.dashboard-error,.search-error) { background:#fff4ef; border-left:3px solid #af4544; border-radius:7px; padding:16px 20px; color:#713c38; }
+.workspace-content :is(.dashboard-loading,.search-loading,.product-empty,.favorites-empty) { padding:32px; border:1px solid var(--rule); border-radius:var(--fs-radius); background:var(--paper-white); color:var(--ink-soft); }
+.workspace-content :is(.coverage-badge,.comparison-access,.pillar-note) { color:var(--ink-soft); background:var(--sage); border-color:var(--rule); }
+.workspace-content :is(.catalog-notice,.provider-period-note,.data-provenance) { background:#efeee5; color:var(--ink-soft); border-color:var(--rule); }
+.workspace-content :is(.pillar-metric,.comparison-picker,.scenario-saved,.simulation-results) { background:var(--paper-white); color:var(--ink); border-color:var(--rule); box-shadow:none; }
+.workspace-content :is(.pillar-metric h4,.pillar-value,.comparison-picker h2) { color:var(--ink); }
+.workspace-content :is(.pillar-concept,.pillar-meaning,.pillar-metric > p:not(.pillar-value):not(.pillar-band)) { color:var(--ink-soft); }
+.workspace-content .pillar-section { border-color:var(--rule); background:transparent; }
+.workspace-content .pillar-toggle { color:var(--ink); background:var(--sage); border-color:var(--rule); min-height:58px; }
+.workspace-content .pillar-toggle small { color:var(--ink-soft); }
+.workspace-content .financial-assistant :is(.assistant-subtitle,.assistant-description,.assistant-period,.assistant-source-note) { color:var(--ink-soft); }
+.workspace-content :is(.scenario-table,.subscription-table,.account-table,.pillar-history) { border-radius:8px; }
+.workspace-content :is(.scenario-table,.subscription-table,.account-table,.pillar-history) :is(td,th) { border-color:var(--rule); font-size:14px; }
+.workspace-content :is(.scenario-table,.subscription-table,.account-table,.pillar-history) th { color:var(--ink); }
+.workspace-content .catalog-note { color:var(--ink-soft); }
+.workspace-content .comparison-table-hint { color:var(--ink-soft); }
+.workspace-content .monitoring-page :is(input,select) { color:var(--ink); background:var(--paper-white); border:1px solid #afb7a9; min-height:42px; padding:10px; }
+.workspace-content .monitoring-page .company-sections { background:transparent; border:0; border-bottom:1px solid var(--rule); border-radius:0; display:flex; flex-wrap:wrap; gap:8px; padding:0; box-shadow:none; }
+.workspace-content .monitoring-page .company-sections button { border:0; border-bottom:3px solid transparent; background:transparent; color:var(--ink-soft); border-radius:0; padding:12px; min-height:44px; }
+.workspace-content .monitoring-page .company-sections button[aria-pressed=true] { color:var(--primary); border-color:var(--primary); font-weight:700; }
+.workspace-content .monitoring-page :is(.monitoring-stats article,.budget-card) { background:var(--paper-white); color:var(--ink); border-color:var(--rule); }
+.workspace-content .monitoring-page :is(.monitoring-note,.monitoring-stats small,.budget-card p) { color:var(--ink-soft); }
+.workspace-content .admin-cover { background:var(--paper-white); color:var(--ink); border:1px solid var(--rule); border-radius:var(--fs-radius); padding:28px; }
+.workspace-content .admin-cover .admin-destinations a { color:var(--ink); border-color:var(--rule); background:var(--sage); }
+.workspace-content .search-header { margin-bottom:24px; }
+.workspace-content .search-header .section-description { margin-bottom:24px; }
+.workspace-content .company-card { background:var(--paper-white); border:1px solid var(--rule); border-radius:10px; box-shadow:none; }
+.workspace-content .company-card :is(.company-name,.company-sector,.company-description) { color:var(--ink-soft); }
+.workspace-content .favorites-list li { background:var(--paper-white); border-color:var(--rule); border-radius:9px; padding:20px; }
+.workspace-content .favorites-list li > div > span { color:var(--ink-soft); }
+.workspace-content .alerts-explainer { background:var(--sage); border-color:var(--rule); border-radius:var(--fs-radius); }
+.workspace-content :is(.alerts-explainer p,.alerts-explainer strong,.alerts-steps li p,.notification-preferences p,.notification-items small,.notification-page > .section-description) { color:var(--ink-soft); }
+.workspace-content .alerts-illustration { transform:none; background:transparent; }
+.workspace-content .alerts-steps li { background:var(--paper-white); }
+.workspace-content .clarity-hero { gap:36px; padding:10px 0 30px; }
+.workspace-content .clarity-hero h1 { font-weight:650; font-size:clamp(34px,3.6vw,52px); }
+.workspace-content .clarity-hero-copy > p:not(.section-eyebrow) { color:var(--ink-soft); }
+.workspace-content .hero-company-image { border-radius:12px; height:420px; }
+.workspace-content .hero-image-tag { display:none; }
+.workspace-content .home-purpose-strip :is(h2,p) { font-family:var(--body-font); }
+.workspace-content .home-purpose-strip p,.workspace-content .sector-tile > p { color:var(--ink-soft); }
+.workspace-content .home-alert-invitation { background:var(--sage); border-color:var(--rule); }
+.workspace-content .home-alert-icon { background:#dae2cd; color:var(--ink); }
+
+/* The approved company composition: one result, three entries, one AI invitation. */
+.workspace-content .workspace-page .company-dashboard > .dashboard-header { grid-template-columns:auto 54px minmax(0,1fr) auto auto; gap:14px; margin:0; padding:0 0 20px; background:transparent; border:0; border-radius:0; box-shadow:none; align-items:center; }
+.workspace-content .workspace-page .company-dashboard .dashboard-content { padding-top:0; }
+.workspace-content .workspace-page .company-dashboard .dashboard-title h1 { font:650 clamp(28px,3vw,42px)/1.15 var(--display-font); margin:6px 0 10px; }
+.workspace-content .workspace-page .company-dashboard .dashboard-title .section-eyebrow { font:500 12px/1.4 var(--body-font); letter-spacing:.02em; color:var(--ink-soft); }
+.workspace-content .workspace-page .company-dashboard .dashboard-header .company-mark { width:54px; height:54px; background:transparent; border-color:var(--rule); }
+.workspace-content .workspace-page .company-dashboard .back-button { padding:9px; margin:0; min-height:40px; font-size:12px; background:transparent; color:var(--ink-soft); border:1px solid var(--rule); border-radius:7px; }
+.workspace-content .workspace-page .company-dashboard .dashboard-header .favorite-button { min-height:36px; font-size:13px; padding:6px 10px; }
+.workspace-content .workspace-page .company-dashboard .terminal-quote { border:0; border-left:1px solid var(--rule); padding-left:24px; }
+.workspace-content .workspace-page .company-dashboard .terminal-quote strong { color:var(--ink); font:650 30px/1.3 var(--body-font); }
+.workspace-content .workspace-page .company-dashboard .terminal-quote small { font-size:11px; color:var(--ink-soft); }
+.workspace-content .workspace-page .company-dashboard .company-sections { gap:20px; padding:0; margin:8px 0 26px; border:0; border-bottom:1px solid var(--rule); flex-wrap:wrap; background:transparent; }
+.workspace-content .workspace-page .company-dashboard .company-sections button { flex:0 1 auto; min-height:48px; padding:12px 6px; color:var(--ink-soft); border:0; border-bottom:3px solid transparent; border-radius:0; background:transparent; font:500 16px/1.4 var(--body-font); }
+.workspace-content .workspace-page .company-dashboard .company-sections button svg { display:none; }
+.workspace-content .workspace-page .company-dashboard .company-sections button[aria-pressed=true] { color:var(--primary); background:transparent; border-color:var(--primary); font-weight:700; }
+.workspace-content .workspace-page .company-dashboard .company-section-guide { margin:-8px 0 24px; color:var(--ink-soft); font-size:15px; }
+.workspace-content .workspace-page .company-dashboard .company-overview-feature { display:block; margin:0 0 28px; }
+.workspace-content .workspace-page .company-dashboard .financial-health.altman-reading { display:grid; grid-template-columns:minmax(0,1fr) 210px; gap:22px 30px; background:var(--paper-white); border:1px solid #e3e1d6; border-radius:var(--fs-radius); padding:28px; box-shadow:none; color:var(--ink); }
+.workspace-content .workspace-page .company-dashboard .altman-reading .altman-summary { min-width:0; grid-column:1; }
+.workspace-content .workspace-page .company-dashboard .altman-reading-heading .section-eyebrow { color:var(--ink-soft); font-size:11px; }
+.workspace-content .workspace-page .company-dashboard .altman-verdict { display:flex; gap:14px; align-items:center; margin:18px 0 14px; }
+.workspace-content .workspace-page .company-dashboard .altman-outcome-symbol { float:none; width:46px; height:46px; min-width:46px; margin:0; background:var(--outcome-tint); color:var(--outcome); font-size:28px; }
+.workspace-content .workspace-page .company-dashboard .altman-reading h3 { font:650 clamp(28px,3vw,42px)/1.2 var(--display-font); color:var(--ink); margin:0 0 5px; letter-spacing:-.035em; }
+.workspace-content .workspace-page .company-dashboard .altman-verdict strong { font:500 15px/1.4 var(--body-font); color:var(--ink-soft); }
+.workspace-content .workspace-page .company-dashboard .altman-reading .health-explanation { font:400 16px/1.6 var(--body-font); color:var(--ink-soft); margin:0; padding:0; border:0; opacity:1; max-width:65ch; }
+.workspace-content .workspace-page .company-dashboard .altman-result { display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:6px; margin:0; padding:0 0 0 28px; border:0; border-left:1px solid var(--rule); }
+.workspace-content .workspace-page .company-dashboard .altman-result .altman-score { color:var(--ink); font:650 48px/1.1 var(--body-font); letter-spacing:-.04em; font-variant-numeric:tabular-nums; }
+.workspace-content .workspace-page .company-dashboard .altman-result p { color:var(--ink-soft); margin:0; font-size:13px; }
+.workspace-content .workspace-page .company-dashboard .altman-reading > .altman-result { grid-column:2; }
+.workspace-content .workspace-page .company-dashboard .altman-zones { grid-column:1/-1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; margin:4px 0 0; padding:0; }
+.workspace-content .workspace-page .company-dashboard .altman-zone { position:relative; display:flex; flex-direction:column; gap:10px; padding:0; min-width:0; background:transparent; border:0; border-radius:0; color:var(--ink); text-align:center; font-size:12px; }
+.workspace-content .workspace-page .company-dashboard .altman-zone:after { content:''; position:absolute; top:30px; left:0; right:0; height:9px; background:#d99c98; border-right:1px solid var(--paper-white); }
+.workspace-content .workspace-page .company-dashboard .altman-zone.zone-grey:after { background:#e6c88c; }
+.workspace-content .workspace-page .company-dashboard .altman-zone.zone-safe:after { background:#b2c9a3; }
+.workspace-content .workspace-page .company-dashboard .altman-zone:first-child:after { border-radius:5px 0 0 5px; }
+.workspace-content .workspace-page .company-dashboard .altman-zone:last-child:after { border-radius:0 5px 5px 0; }
+.workspace-content .workspace-page .company-dashboard .altman-zone .zone-name { font:600 14px/1.4 var(--body-font); margin:0; min-height:30px; display:flex; flex-wrap:wrap; gap:4px 7px; justify-content:center; align-items:baseline; }
+.workspace-content .workspace-page .company-dashboard .altman-zone .zone-name b { display:inline; font-size:11px; color:var(--outcome); margin:0; }
+.workspace-content .workspace-page .company-dashboard .altman-zone .zone-range { padding-top:3px; font-size:12px; color:var(--ink-soft); }
+.workspace-content .workspace-page .company-dashboard .altman-zone[aria-current] { outline:0; background:transparent; border:0; color:var(--ink); }
+.workspace-content .workspace-page .company-dashboard .altman-zone[aria-current]:after { box-shadow:0 0 0 2px var(--outcome); z-index:1; }
+.workspace-content .workspace-page .company-dashboard .altman-reading-footer { grid-column:1/-1; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid var(--rule); padding-top:14px; }
+.workspace-content .workspace-page .company-dashboard .altman-reading .altman-limits { margin:0; padding:0; border:0; color:var(--ink-soft); font-size:12px; }
+.workspace-content .workspace-page .company-dashboard .altman-reading-footer .text-action { flex-shrink:0; font-size:13px; }
+.workspace-content .workspace-page .company-dashboard .altman-reading .altman-date { margin:6px 0 0; padding:0; border:0; font-size:11px; color:var(--ink-soft); }
+.workspace-content .workspace-page .company-dashboard .has-no-altman-result { grid-template-columns:minmax(0,1fr); }
+.workspace-content .workspace-page .company-dashboard .has-no-altman-result .altman-verdict { align-items:flex-start; }
+.workspace-content .workspace-page .company-dashboard .has-no-altman-result h3 { font-size:30px; }
+.workspace-content .workspace-page .company-dashboard .company-explore { margin:0 0 28px; }
+.workspace-content .workspace-page .company-dashboard .company-explore > h2 { font:650 23px/1.3 var(--body-font); margin:0 0 20px; }
+.company-explore-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+.company-explore-grid article { display:flex; gap:12px; padding-right:16px; border-right:1px solid var(--rule); }
+.company-explore-grid article:last-child { border-right:0; }
+.company-explore-grid article > svg { flex-shrink:0; color:#58754d; margin-top:3px; }
+.workspace-content .company-explore-grid h3 { font:650 19px/1.3 var(--body-font); margin:0 0 5px; }
+.workspace-content .company-explore-grid p { color:var(--ink-soft); font-size:14px; line-height:1.5; margin:0 0 4px; }
+.workspace-content .company-explore-grid .text-action { font-size:13px; }
+.company-assistant-strip { display:flex; align-items:center; gap:20px; background:var(--sage); border:1px solid #e1e4d7; border-radius:10px; padding:20px 24px; margin:0 0 28px; }
+.company-assistant-strip > svg { flex-shrink:0; color:#58754d; }
+.company-assistant-strip > div { flex:1; }
+.workspace-content .company-assistant-strip h2 { font:650 20px/1.35 var(--body-font); margin:0 0 5px; }
+.workspace-content .company-assistant-strip p { color:var(--ink-soft); font-size:14px; margin:0; }
+.workspace-content .company-assistant-strip .ask-ai { background:var(--ink); border-color:var(--ink); color:#fffdf8; min-height:44px; flex-shrink:0; font-size:14px; padding:12px 16px; }
+.company-assistant-strip .ask-ai > :is(svg,.ai-label) { display:none; }
+.workspace-content .company-business,.workspace-content .company-tools { margin:0 0 28px; padding:16px 20px; border:1px solid var(--rule); border-radius:9px; background:transparent; }
+.company-business summary,.company-tools > summary { font:600 15px/1.5 var(--body-font); color:var(--ink); cursor:pointer; }
+.company-business .beginner-intro { margin-top:20px; }
+.workspace-content .workspace-page .company-dashboard .price-chart .chart-caption { color:#d7e0d1; }
+.workspace-content .workspace-page .company-dashboard .price-chart .chart-caption a { color:#f0c3a5; }
+.workspace-content .workspace-page .company-dashboard .altmanz-gauge { padding:24px; border-color:var(--rule); }
+.workspace-content .workspace-page .company-dashboard .altmanz-gauge > .financial-health { margin:22px 0; }
+.workspace-content .workspace-page .company-dashboard .altmanz-gauge .financial-help { color:var(--ink-soft); background:var(--paper-white); border-color:var(--rule); }
+.workspace-content .workspace-page .company-dashboard .metric-card :is(.metric-label,.metric-meaning,.metric-source-date) { color:var(--ink-soft); }
+.workspace-content .workspace-page .company-dashboard .terminal-fundamentals .section-title h2 { font:650 24px/1.3 var(--body-font); }
+.workspace-content .workspace-page .company-dashboard .data-provenance { margin-bottom:26px; }
+.workspace-content .workspace-page .company-dashboard .data-provenance p { color:var(--ink-soft); }
+.workspace-content .financial-pillars { padding:24px; }
+.workspace-content .financial-pillars > .section-title h2 { font:650 26px/1.3 var(--body-font); }
+
+/* Sign-in, account dialogs and loading share the same palette. */
+.auth-container .auth-editorial { background:var(--ink); }
+.auth-container .auth-editorial:after { display:none; }
+.auth-container .auth-wordmark > span { font:700 30px/1.2 var(--display-font); }
+.auth-container .auth-wordmark > span small { font:500 8px/1.6 var(--body-font); letter-spacing:.09em; display:block; margin-top:7px; }
+.auth-container :is(.auth-header p,.auth-footnote,.auth-footer,.auth-edition) { color:var(--ink-soft); }
+.auth-container .auth-editorial-story h2 { font-family:var(--display-font); }
+.auth-container .auth-header h1 { font-size:34px; }
+.auth-container .auth-edition { letter-spacing:.07em; }
+.auth-container :is(.form-input,input) { color:var(--ink); }
+.workspace-shell .account-dialog { background:var(--paper-white); color:var(--ink); border-color:var(--rule); border-radius:var(--fs-radius); }
+.workspace-shell .account-dialog :is(input,select,textarea) { background:var(--paper); color:var(--ink); border-color:#aeb7a7; font:400 16px var(--body-font); }
+.workspace-shell .account-dialog button { background:var(--sage); color:var(--ink); border-color:var(--rule); }
+.workspace-shell :is(.account-dialog,.assistant-drawer)::backdrop { background:#1b302970; backdrop-filter:blur(2px); }
+.workspace-shell .assistant-drawer { background:var(--paper); }
+.workspace-shell .assistant-drawer-header { background:var(--paper-white); }
+.workspace-shell .assistant-drawer-header p,.workspace-shell .assistant-welcome > p { color:var(--ink-soft); }
+.product-loading { background:var(--paper); color:var(--ink-soft); font:500 16px var(--body-font); }
+
+/* Short feedback, no looping decorations and no animation delays. */
+@keyframes findscore-enter { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
+@keyframes findscore-drawer { from { opacity:.5; transform:translateX(16px); } to { opacity:1; transform:none; } }
+@keyframes findscore-menu { from { opacity:.5; transform:translateX(-12px); } to { opacity:1; transform:none; } }
+@media (prefers-reduced-motion:no-preference) {
+  .workspace-page { animation:findscore-enter 180ms ease-out both; }
+  .company-dashboard :is(#company-overview,#company-financial,#company-simulation):not([hidden]) { animation:findscore-enter 160ms ease-out both; }
+  .workspace-shell :is(button,a,input,select,textarea),.auth-container :is(button,a,input) { transition:background-color 140ms ease,border-color 140ms ease,color 140ms ease,box-shadow 140ms ease; }
+  .workspace-shell .assistant-drawer[open] { animation:findscore-drawer 200ms ease-out both; }
+  .workspace-shell :is(.account-dialog[open],details[open] > :not(summary),.assistant-turn) { animation:findscore-enter 160ms ease-out both; }
+  .workspace-shell .workspace-sidebar.is-open { animation:findscore-menu 180ms ease-out both; }
+  .workspace-content .company-card:hover { border-color:#8b9e86; box-shadow:0 4px 14px #203b2f08; }
+}
+@media (min-width:1700px) { .workspace-shell .workspace-content { padding-inline:52px; } }
+@media (max-width:1100px) {
+  .workspace-shell { grid-template-columns:200px minmax(0,1fr); }
+  .workspace-shell .workspace-sidebar { width:200px; }
+  .workspace-shell .workspace-brand .brand-mark { display:none; }
+  .workspace-shell .workspace-header { padding-inline:24px; }
+  .workspace-shell .workspace-content { padding:28px 24px 40px; }
+  .workspace-content .workspace-page .company-dashboard > .dashboard-header { grid-template-columns:auto 46px minmax(0,1fr) auto; }
+  .workspace-content .workspace-page .company-dashboard .company-save { grid-column:4; grid-row:1; }
+  .workspace-content .workspace-page .company-dashboard .terminal-quote { grid-column:2/-1; display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; text-align:left; padding:8px 0 0; border-left:0; }
+  .workspace-content .workspace-page .company-dashboard .terminal-quote strong { font-size:24px; }
+  .workspace-content .workspace-page .company-dashboard .company-sections { gap:12px; }
+  .workspace-content .workspace-page .company-dashboard .company-sections button { font-size:14px; }
+  .workspace-content .workspace-page .company-dashboard .financial-health.altman-reading { padding:24px; gap:22px; grid-template-columns:minmax(0,1fr) 170px; }
+  .workspace-content .workspace-page .company-dashboard .altman-result { padding-left:20px; }
+  .company-explore-grid { gap:14px; }
+  .company-explore-grid article { padding-right:10px; gap:8px; }
+  .company-explore-grid article > svg { width:22px; height:22px; }
+  .company-assistant-strip { flex-wrap:wrap; }
+  .company-assistant-strip > .ask-ai { margin-left:50px; }
+}
+@media (max-width:760px) {
+  .workspace-shell { display:flex; }
+  .workspace-shell .workspace-sidebar { width:270px; }
+  .workspace-shell .workspace-brand .brand-mark { display:block; }
+  .workspace-shell .workspace-header { height:66px; padding:0 14px; }
+  .workspace-shell .workspace-heading { gap:0 8px; }
+  .workspace-shell .workspace-heading > span { font:700 12px/1.5 var(--body-font); letter-spacing:0; }
+  .workspace-shell .workspace-heading > small { font-size:11px; }
+  .workspace-shell .workspace-account { gap:8px; }
+  .workspace-header .mobile-ai-trigger { padding:7px; min-width:36px; min-height:36px; }
+  .workspace-shell .workspace-content { padding:24px 16px 30px; }
+  .workspace-shell .workspace-footer { margin:0 16px; gap:8px; font-size:9px; }
+  .workspace-content h1 { font-size:30px; }
+  .workspace-content .workspace-page .company-dashboard > .dashboard-header { gap:10px; grid-template-columns:38px minmax(0,1fr); padding-bottom:14px; }
+  .workspace-content .workspace-page .company-dashboard .company-save { grid-column:2; grid-row:auto; }
+  .workspace-content .workspace-page .company-dashboard .back-button { grid-column:1/-1; justify-self:start; min-height:34px; padding:6px 10px; }
+  .workspace-content .workspace-page .company-dashboard .dashboard-header .company-mark { width:38px; height:38px; }
+  .workspace-content .workspace-page .company-dashboard .dashboard-title h1 { font-size:27px; margin:4px 0 8px; }
+  .workspace-content .workspace-page .company-dashboard .dashboard-title .section-eyebrow { font-size:11px; }
+  .workspace-content .workspace-page .company-dashboard .terminal-quote { grid-column:1/-1; padding:10px 0 0; gap:4px 12px; }
+  .workspace-content .workspace-page .company-dashboard .terminal-quote strong { font-size:23px; }
+  .workspace-content .workspace-page .company-dashboard .terminal-quote small { font-size:10px; }
+  .workspace-content .workspace-page .company-dashboard .company-sections { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 12px; margin:6px 0 20px; }
+  .workspace-content .workspace-page .company-dashboard .company-sections button { justify-content:flex-start; text-align:left; font-size:14px; min-height:44px; padding:10px 0; }
+  .workspace-content .workspace-page .company-dashboard .financial-health.altman-reading { padding:20px 16px; grid-template-columns:minmax(0,1fr); gap:18px; }
+  .workspace-content .workspace-page .company-dashboard .altman-verdict { gap:10px; margin:14px 0 12px; }
+  .workspace-content .workspace-page .company-dashboard .altman-reading h3 { font-size:30px; }
+  .workspace-content .workspace-page .company-dashboard .altman-outcome-symbol { width:36px; height:36px; min-width:36px; font-size:24px; }
+  .workspace-content .workspace-page .company-dashboard .altman-verdict strong { font-size:13px; }
+  .workspace-content .workspace-page .company-dashboard .altman-reading .health-explanation { font-size:15px; }
+  .workspace-content .workspace-page .company-dashboard .altman-result { flex-direction:row; align-items:center; flex-wrap:wrap; gap:4px 14px; border:0; padding:0; }
+  .workspace-content .workspace-page .company-dashboard .altman-reading > .altman-result { grid-column:1; }
+  .workspace-content .workspace-page .company-dashboard .altman-result .altman-score { font-size:32px; }
+  .workspace-content .workspace-page .company-dashboard .altman-result p:last-child { flex-basis:100%; font-size:12px; }
+  .workspace-content .workspace-page .company-dashboard .altman-zone .zone-name { font-size:12px; gap:2px; }
+  .workspace-content .workspace-page .company-dashboard .altman-zone .zone-name b { font-size:9px; }
+  .workspace-content .workspace-page .company-dashboard .altman-zone .zone-range { font-size:10px; }
+  .workspace-content .workspace-page .company-dashboard .altman-reading-footer { flex-wrap:wrap; gap:4px; }
+  .workspace-content .workspace-page .company-dashboard .altman-reading .altman-limits { font-size:12px; }
+  .workspace-content .workspace-page .company-dashboard .altman-reading .altman-date { font-size:11px; }
+  .company-explore-grid { grid-template-columns:minmax(0,1fr); gap:16px; }
+  .company-explore-grid article { border-right:0; border-bottom:1px solid var(--rule); padding:0 0 14px; gap:16px; }
+  .company-explore-grid article:last-child { border-bottom:0; padding-bottom:0; }
+  .company-explore-grid article > svg { width:26px; height:26px; }
+  .workspace-content .company-explore-grid h3 { font-size:18px; }
+  .company-assistant-strip { padding:20px 16px; gap:12px; }
+  .company-assistant-strip > div { min-width:180px; }
+  .workspace-content .company-assistant-strip h2 { font-size:19px; }
+  .company-assistant-strip > .ask-ai { margin-left:0; width:100%; justify-content:center; }
+  .workspace-content .company-business,.workspace-content .company-tools { padding:14px; }
+  .workspace-content .financial-pillars { padding:20px 14px; }
+  .workspace-content .workspace-page .company-dashboard .altmanz-gauge { padding:20px 12px; }
+  .workspace-content .workspace-page .company-dashboard .altmanz-gauge > .financial-health { padding-inline:12px; }
+  .workspace-content .hero-company-image { height:250px; }
+  .workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) > p { font-size:15px; }
+  .workspace-content .favorites-list li { flex-wrap:wrap; gap:14px; }
+  .auth-container .auth-wordmark > span { font-size:25px; }
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+}

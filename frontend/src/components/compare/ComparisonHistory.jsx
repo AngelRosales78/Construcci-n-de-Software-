@@ -17,7 +17,7 @@ export default function ComparisonHistory({ a, b, year }) {
     yAxis: { title: { text: 'Rendimiento (%)', style:{color:'#bacbb9'} }, labels:{style:{color:'#bacbb9'}}, gridLineColor:'#445e4b' },
     legend: { itemStyle:{color:'#e6ebdd'}, itemHoverStyle:{color:'#fffef9'}, itemHiddenStyle:{color:'#91a28b'} },
     tooltip: { shared: true, valueSuffix: ' %', valueDecimals: 2, backgroundColor:'#203d32', borderColor:'#91a28b', style:{color:'#fffef9'} },
-    series: [['a', a], ['b', b]].map(([side, name], i) => ({ name, color:i ? '#f1bf6b' : '#8dbdff', dashStyle: i ? 'ShortDash' : 'Solid',
+    series: [['a', a], ['b', b]].map(([side, name], i) => ({ name, color:i ? '#f1bf6b' : '#dc9a76', dashStyle: i ? 'ShortDash' : 'Solid',
       data: (data?.points || []).map(p => [Date.parse(p.date + 'T00:00:00Z'), p[side]]), animation: false })),
     credits: { enabled: false }, accessibility: { enabled: false },
   }), [data, a, b])

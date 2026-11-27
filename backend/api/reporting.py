@@ -96,7 +96,7 @@ def render_report(snapshot, request):
         return t
     companies = snapshot['companies']
     width = page_size[0] - 72
-    story = [p('S&P 500 Finance - Informe histórico', 'Title'), Spacer(1, 8)]
+    story = [p('FINDSCORE - Informe histórico', 'Title'), Spacer(1, 8)]
     story += [p(' / '.join(f"{row['ticker']} - {row['name']}" for row in companies), 'Heading2'),
               p(f"Ejercicio solicitado: {request['fiscal_year']} | Generado: {snapshot['generated_at']}"),
               p('Datos históricos importados. Notas académicas; no constituyen una recomendación de inversión.', 'Small')]
@@ -182,11 +182,11 @@ def render_report(snapshot, request):
         story.append(Paragraph(f'<link href="{escape(url, quote=True)}" color="#158569">{escape(url)}</link>', styles['Small']))
     def footer(canvas, document):
         canvas.saveState(); canvas.setFont('Helvetica', 8)
-        canvas.drawString(36, 19, 'S&P 500 Finance | Datos históricos y cobertura declarada')
+        canvas.drawString(36, 19, 'FINDSCORE | Datos históricos y cobertura declarada')
         canvas.drawRightString(page_size[0] - 36, 19, f'Página {document.page}')
         canvas.restoreState()
     doc = SimpleDocTemplate(output, pagesize=page_size, rightMargin=36, leftMargin=36, topMargin=30, bottomMargin=35,
-                            title='Informe financiero ' + request['a'], author='S&P 500 Finance', pageCompression=1)
+                            title='Informe financiero ' + request['a'], author='FINDSCORE', pageCompression=1)
     doc.build(story, onFirstPage=footer, onLaterPages=footer)
     content = output.getvalue()
     pages = len(PdfReader(BytesIO(content)).pages)

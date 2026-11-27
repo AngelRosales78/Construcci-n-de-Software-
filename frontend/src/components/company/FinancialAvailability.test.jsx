@@ -13,7 +13,7 @@ it('identifica el componente pendiente sin asignar una zona favorable', () => {
   render(<FinancialHealthIndicator altmanZ={{score:null,zone:'unknown',availability:{label:'Valoración del cierre pendiente',explanation:'Falta verificar el valor bursátil del cierre.'}}} />)
   expect(screen.getByText('Valoración del cierre pendiente')).toBeTruthy()
   expect(screen.getByText('Falta verificar el valor bursátil del cierre.')).toBeTruthy()
-  expect(screen.queryByText('Zona favorable según Altman-Z')).toBeNull()
+  expect(screen.queryByRole('heading',{name:'Zona favorable'})).toBeNull()
   expect(screen.queryByLabelText('Resultado de esta empresa')).toBeNull()
   expect(screen.getByLabelText('Perfil financiero').className).toContain('health-grey')
 })

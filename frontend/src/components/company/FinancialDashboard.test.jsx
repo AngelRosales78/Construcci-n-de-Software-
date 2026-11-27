@@ -34,7 +34,8 @@ it('muestra cinco métricas, conserva cero y describe los indicadores',()=>{
 })
 it('muestra una clasificación explícita en color semántico',()=>{
  render(<FinancialHealthIndicator altmanZ={{zone:'grey',score:1.81}}/> )
- expect(screen.getByText('Zona intermedia según Altman-Z')).toBeTruthy()
+ expect(screen.getByRole('heading',{name:'Zona intermedia'})).toBeTruthy()
+ expect(screen.getByText('Según el modelo Altman-Z')).toBeTruthy()
  expect(screen.getByLabelText('Perfil financiero').className).toContain('orange')
 })
 it('distingue un cero real de indicadores vacíos, booleanos o no numéricos',()=>{

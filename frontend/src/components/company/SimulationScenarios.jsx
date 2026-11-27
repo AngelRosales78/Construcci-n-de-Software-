@@ -1,18 +1,24 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Highcharts from 'highcharts/highstock'
 import HighchartsReact from 'highcharts-react-official'
 import { useSimulationViewModel } from '../../viewmodels/useSimulationViewModel'
 
-const SCENARIOS = [['base', 'Base · percentil 50', '#75ff9e'], ['optimistic', 'Optimista · percentil 90', '#64b8ff'], ['pessimistic', 'Pesimista · percentil 10', '#ffb95f']]
-export default function SimulationScenarios() {
+const SCENARIOS = [['base', 'Base · percentil 50', '#315e4b'], ['optimistic', 'Optimista · percentil 90', '#9a6e26'], ['pessimistic', 'Pesimista · percentil 10', '#a34b32']]
+export default function SimulationScenarios({ active = true }) {
   const { data, loading, error, simulate, draft, update } = useSimulationViewModel()
   const [hidden, setHidden] = useState({})
+  const chart = useRef(null)
+  useEffect(() => {
+    if (!active) return
+    const frame = requestAnimationFrame(() => chart.current?.reflow())
+    return () => cancelAnimationFrame(frame)
+  }, [active, data])
   const options = useMemo(() => ({
     chart: { backgroundColor: 'transparent', height: 340, animation: false, style:{fontFamily:'Source Sans 3, sans-serif'} },
     title: { text: null }, credits: { enabled: false }, legend: { enabled: false },
-    xAxis: { type: 'datetime', labels: { style: { color: '#bacbb9' } } },
-    yAxis: { title: { text: data?.currency || 'Precio', style: { color: '#bacbb9' } }, labels: { style: { color: '#bacbb9' } }, gridLineColor: '#343e39' },
-    tooltip: { shared: true, valueDecimals: 2, backgroundColor: '#262a31', style: { color: '#dfe2eb' } },
+    xAxis: { type: 'datetime', labels: { style: { color: '#59665d' } } },
+    yAxis: { title: { text: data?.currency || 'Precio', style: { color: '#59665d' } }, labels: { style: { color: '#59665d' } }, gridLineColor: '#d6d7cc' },
+    tooltip: { shared: true, valueDecimals: 2, backgroundColor: '#fffdf8', borderColor:'#d6d7cc', style: { color: '#203b2f' } },
     series: SCENARIOS.filter(([key]) => data?.scenarios?.[key]).map(([key, name, color]) => ({
       name, color, visible: !hidden[key], data: data.scenarios[key].map(point => [Date.parse(`${point.date}T00:00:00Z`), point.price]), animation: false,
     })),
@@ -35,7 +41,7 @@ export default function SimulationScenarios() {
       <p>{data.horizon_months} meses desde el cierre del {data.as_of} · {data.currency}</p>
       <fieldset className="scenario-legend"><legend>Curvas visibles (ocultarlas no recalcula)</legend>{SCENARIOS.map(([key, label, color]) => <label key={key}><input type="checkbox" checked={!hidden[key]} onChange={() => setHidden(previous => ({ ...previous, [key]: !previous[key] }))} /><span className="scenario-swatch" style={{ backgroundColor: color }} aria-hidden="true" /> {label}</label>)}</fieldset>
       <p className="scenario-reading"><strong>Cómo leer el gráfico:</strong> la curva base es el valor central (P50). La baja (P10) y la alta (P90) son referencias de la simulación; el precio puede quedar fuera de ellas. No son límites de pérdida o ganancia.</p>
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <HighchartsReact highcharts={Highcharts} options={options} callback={instance => { chart.current = instance }} />
       <div className="scenario-table"><table><caption>Precios finales simulados · {data.currency} · misma ejecución</caption><thead><tr><th>Escenario</th><th>Fecha</th><th>Precio</th></tr></thead><tbody>{SCENARIOS.map(([key, label]) => <tr key={key}><th scope="row">{label}</th><td>{data.final_prices[key].date}</td><td>{data.final_prices[key].price.toLocaleString('es-PE', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</td></tr>)}</tbody></table></div>
       <details className="financial-help"><summary>Ver supuestos y procedencia de esta ejecución</summary><div className="help-content">
         <p>Monte Carlo genera muchas trayectorias posibles. P10, P50 y P90 resumen su distribución por mes; no son pérdidas mínimas ni ganancias máximas.</p>

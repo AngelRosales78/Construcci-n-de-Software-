@@ -1,4 +1,5 @@
 const paths = {
+  liquidity: 'M4 6c0-2 16-2 16 0s-16 2-16 0zm0 0v12c0 3 16 3 16 0V6M4 12c0 3 16 3 16 0',
   overview: 'M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z',
   pillars: 'M3 12h4l3-7 4 14 3-7h4',
   simulation: 'M4 19V5m0 14h16M7 15l4-5 4 2 5-7',

@@ -44,18 +44,18 @@ export function PillarMetric({ metric }) {
 }
 
 export default function FinancialPillars({ view = 'pillars' }) {
-  const { data, year, setYear, loading, error, retry } = useFinancialPillarsViewModel()
+  const { data, year, setYear, loading, error, retry, hash = '' } = useFinancialPillarsViewModel()
   const years = data?.available_years || []
   const [activePillar, setActivePillar] = useState('liquidity')
   useEffect(() => {
     const selectHash = () => {
-      const id = window.location.hash.replace('#pillar-', '')
+      const id = (hash || window.location.hash).replace('#pillar-', '')
       if (VISIBLE_PILLARS.includes(id)) setActivePillar(id)
     }
     selectHash()
     window.addEventListener('hashchange', selectHash)
     return () => window.removeEventListener('hashchange', selectHash)
-  }, [])
+  }, [hash])
   const openLinkedPillar = event => {
     const target = event.target.closest?.('a')?.getAttribute('href')?.replace('#pillar-', '')
     if (VISIBLE_PILLARS.includes(target)) setActivePillar(target)

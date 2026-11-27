@@ -5,7 +5,7 @@ import Icon from '../shared/Icon'
 const FinancialAssistant=lazy(()=>import('./FinancialAssistant'))
 const CompanyPicker=lazy(()=>import('../compare/CompanyPicker'))
 
-export default function AssistantLauncher() {
+export default function AssistantLauncher({floating = true}) {
   const location=useLocation(),id=useId(),dialog=useRef(null),opener=useRef(null),serial=useRef(0)
   const [open,setOpen]=useState(false),[session,setSession]=useState(null),[selected,setSelected]=useState('')
   const context=()=>{
@@ -41,7 +41,7 @@ export default function AssistantLauncher() {
   },[open])
   const close=()=>setOpen(false)
   return <>
-    <button type="button" className="assistant-launcher" aria-haspopup="dialog" aria-expanded={open} aria-controls={id} onClick={()=>launch()}><Icon name="chat" size={22}/><span>Asistente IA<small>Te ayudo a entender</small></span></button>
+    {floating && <button type="button" className="assistant-launcher" aria-haspopup="dialog" aria-expanded={open} aria-controls={id} onClick={()=>launch()}><Icon name="chat" size={22}/><span>Asistente IA<small>Te ayudo a entender</small></span></button>}
     <dialog ref={dialog} id={id} className="assistant-drawer" aria-labelledby={`${id}-title`} onCancel={event=>{event.preventDefault();close()}} onClose={()=>setOpen(false)}>
       <header className="assistant-drawer-header"><div><span className="assistant-drawer-symbol"><Icon name="chat" size={21}/></span><div><h2 id={`${id}-title`}>Entiende las cifras con IA</h2><p>{session?.a ? `${session.a}${session.b ? ` y ${session.b}` : ''} · ${session.year || 'Último ejercicio disponible'}` : 'Primero elige una empresa'}</p></div></div><button type="button" onClick={close} aria-label="Cerrar asistente">✕</button></header>
       <div className="workspace-content assistant-drawer-content"><Suspense fallback={<p role="status">Abriendo el asistente…</p>}>

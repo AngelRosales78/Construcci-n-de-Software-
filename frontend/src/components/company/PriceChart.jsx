@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { usePriceChartViewModel } from '../../viewmodels/usePriceChartViewModel'
 import Highcharts from 'highcharts/highstock'
 import HighchartsReact from 'highcharts-react-official'
@@ -14,9 +14,15 @@ function PriceSource({ source }) {
   return source
 }
 
-export default function PriceChart() {
+export default function PriceChart({ active = true }) {
   const { ticker, period, setPeriod, data, loading, error } = usePriceChartViewModel()
   const [inspection, setInspection] = useState(null)
+  const chart = useRef(null)
+  useEffect(() => {
+    if (!active) return
+    const frame = requestAnimationFrame(() => chart.current?.reflow())
+    return () => cancelAnimationFrame(frame)
+  }, [active, data])
   const history = data?.history || []
   const historyKey = `${ticker}:${period}:${history[0]?.date}:${history.at(-1)?.date}`
   const selectedIndex = inspection?.key === historyKey ? Math.min(inspection.index, history.length - 1) : history.length - 1
@@ -29,7 +35,7 @@ export default function PriceChart() {
     xAxis: { labels: { style: { color: '#bacbb9' } }, crosshair: true, lineColor: '#343e39', tickColor: '#343e39', plotLines: inspected ? [{ value: Date.parse(`${inspected.date}T00:00:00Z`), color: '#dc9a76', width: 1, dashStyle: 'ShortDash', zIndex: 4 }] : [] }, yAxis: { labels: { style: { color: '#bacbb9' } }, title: { style: { color: '#bacbb9' }, text: data?.currencies?.[0] || 'Precio' }, gridLineColor: '#262a31' },
     tooltip: { backgroundColor: '#262a31', borderColor: '#536158', style: { color: '#dfe2eb' }, split: false, valueDecimals: 2, xDateFormat: '%d/%m/%Y' },
     plotOptions: { series: { animation: false, dataGrouping: { enabled: false } } },
-    series: [{ name: 'Cierre ajustado', type: 'area', threshold: null, color: '#8dbdff', lineWidth: 2, fillColor: { linearGradient: [0, 0, 0, 350], stops: [[0, 'rgba(141,189,255,0.23)'], [1, 'rgba(141,189,255,0.01)']] }, turboThreshold: 10000,
+    series: [{ name: 'Cierre ajustado', type: 'area', threshold: null, color: '#dc9a76', lineWidth: 2, fillColor: { linearGradient: [0, 0, 0, 350], stops: [[0, 'rgba(220,154,118,0.23)'], [1, 'rgba(220,154,118,0.01)']] }, turboThreshold: 10000,
       data: (data?.history || []).map(point => [Date.parse(`${point.date}T00:00:00Z`), point.price]) }],
     accessibility: { enabled: false },
   }), [ticker, data, inspected?.date])
@@ -42,7 +48,7 @@ export default function PriceChart() {
       : <>
         <div className="chart-inspection" aria-live="polite"><div><small>Sesión consultada</small><strong>{Number(inspected.price).toLocaleString('es-PE', {minimumFractionDigits:2,maximumFractionDigits:2})} <span>{data.currencies?.[0]}</span></strong></div><time dateTime={inspected.date}>{inspected.date}</time></div>
         <p className="chart-date-range">Periodo disponible: {data.history[0].date} → {data.history[data.history.length - 1].date} · {data.history.length} sesiones</p>
-        <HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={options} />
+        <HighchartsReact highcharts={Highcharts} constructorType="stockChart" options={options} callback={instance => { chart.current = instance }} />
         <label className="chart-session-control">Consultar un precio histórico<input type="range" aria-label="Consultar un precio histórico" min="0" max={history.length - 1} value={selectedIndex} aria-valuetext={`${inspected.date}: ${inspected.price} ${data.currencies?.[0] || ''}`} onChange={event => setInspection({key:historyKey,index:Number(event.target.value)})} /><span>La línea vertical marca la sesión. Usa el control o las flechas del teclado.</span></label>
         <div className="chart-caption"><p>Arrastra para ampliar; usa el navegador inferior para cambiar el intervalo.</p><p>Fuente: {data.sources.map((source,index) => <span key={`${source}-${index}`}>{index > 0 && ', '}<PriceSource source={source} /></span>)} · {data.is_demo ? 'Datos pendientes de verificar' : 'Datos importados'}</p></div>
       </>}

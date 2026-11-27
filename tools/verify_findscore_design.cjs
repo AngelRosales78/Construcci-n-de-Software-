@@ -1,0 +1,158 @@
+const fs = require('node:fs'), path = require('node:path'), assert = require('node:assert/strict')
+const repo = path.resolve(__dirname, '..')
+const { chromium } = require(require.resolve('playwright', { paths:[path.join(repo,'frontend')] }))
+const web = 'http://127.0.0.1:55193'
+
+;(async () => {
+  const out = path.resolve(repo,'../output/findscore-design')
+  fs.mkdirSync(out,{recursive:true})
+  const credentials = JSON.parse(fs.readFileSync(path.resolve(repo,'../presentation_runtime_sprint3/demo_credentials.json'),'utf8').replace(/^\uFEFF/, '')).pro
+  const browser = await chromium.launch({channel:'msedge',headless:true})
+  const checks=[], errors=[], screens=[]
+  try {
+    const page = await browser.newPage({viewport:{width:1440,height:1000}})
+    page.on('pageerror', error => errors.push(error.message))
+    const capture = async (name,width=1440) => {
+      await page.setViewportSize({width,height:1000})
+      await page.evaluate(() => document.fonts.ready)
+      await page.waitForFunction(() => [...document.querySelectorAll('.highcharts-container')].filter(el=>el.getClientRects().length).every(el=>Math.abs(el.getBoundingClientRect().width-el.parentElement.getBoundingClientRect().width)<4))
+      await page.evaluate(() => window.scrollTo(0,0))
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth),false,`${name} ${width}: desbordamiento`)
+      await page.screenshot({path:path.join(out,`${name}-${width}.png`),animations:'disabled'})
+      screens.push({name,width})
+    }
+    await page.goto(web+'/login')
+    assert.match(await page.title(),/FINDSCORE/)
+    assert.equal(await page.getByLabel('FINDSCORE',{exact:true}).count(),1)
+    for (const width of [1440,390]) await capture('acceso',width)
+    for (const [url,name] of [['/register','registro'],['/forgot-password','recuperacion']]) {
+      await page.goto(web+url)
+      for (const width of [1440,390]) await capture(name,width)
+    }
+    await page.goto(web+'/login')
+    await page.locator('#username').fill(credentials.username)
+    await page.locator('#password').fill(credentials.password)
+    await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click()
+    await page.waitForURL('**/dashboard')
+    await page.locator('.hero-company-image img').evaluate(img=>img.decode())
+    await capture('inicio')
+    assert.match(await page.locator('h1').evaluate(el=>getComputedStyle(el).fontFamily),/Bitter/)
+    assert.match(await page.locator('.workspace-brand').innerText(),/FINDSCORE/)
+    assert.equal(await page.locator('.assistant-launcher').count(),0)
+    for (const width of [768,390,360]) await capture('inicio',width)
+    checks.push('Marca FINDSCORE y tipografía local Bitter; inicio y acceso adaptables.')
+    const pages = [
+      ['/search','explorar','.company-card'],
+      ['/favorites','favoritos','.favorites-page h1'],
+      ['/notifications','alertas','.alerts-explainer'],
+      ['/profile/notifications','preferencias','.notification-preferences'],
+      ['/profile','perfil','.account-page form'],
+      ['/profile/subscription','suscripcion','.subscription-table'],
+      ['/compare?a=GOOGL&b=META&fiscal_year=2024','comparar','.comparison-result'],
+    ]
+    for (const [url,name,ready] of pages) {
+      await page.goto(web+url)
+      await page.locator(ready).first().waitFor()
+      assert.match(await page.title(),/FINDSCORE/)
+      for (const width of [1440,390,360]) await capture(name,width)
+    }
+    checks.push('Explorador, favoritos, alertas, preferencias, perfil, suscripción y comparador sin desbordamiento.')
+    await page.setViewportSize({width:1440,height:1000})
+    await page.goto(web+'/company/AAPL?fiscal_year=2024&range=5Y')
+    const reading = page.locator('#company-overview .financial-health')
+    await reading.waitFor()
+    const score = await reading.locator('.altman-score').innerText()
+    assert.equal(await reading.locator('.altman-zone[aria-current]').count(),1)
+    assert.equal(await reading.locator('.ask-ai').count(),0)
+    for (const width of [1440,768,390,360]) {
+      await capture('empresa',width)
+      const box = await reading.locator('h3').boundingBox()
+      assert.ok(box.y + box.height < 1000,'Resultado visible '+width)
+    }
+    await page.setViewportSize({width:1440,height:1000})
+    for (const [name,id] of [['liquidez','liquidity'],['deudas','solvency'],['rentabilidad','profitability']]) {
+      await page.getByRole('button',{name:`Ver cifras de ${name} →`,exact:true}).click()
+      await page.waitForURL(url=>url.searchParams.get('section')==='pillars' && url.hash===`#pillar-${id}`)
+      assert.equal(new URL(page.url()).searchParams.get('fiscal_year'),'2024')
+      assert.equal(new URL(page.url()).searchParams.get('range'),'5Y')
+      const pillar=page.locator(`#pillar-${id} .pillar-toggle`)
+      await pillar.waitFor()
+      assert.equal(await pillar.getAttribute('aria-expanded'),'true')
+      await page.getByRole('button',{name:'Resumen',exact:true}).click()
+    }
+    await page.getByRole('button',{name:'Ver cálculo y fuentes →',exact:true}).click()
+    await page.locator('#altman-calculation').waitFor({state:'visible'})
+    for (const width of [1440,390]) await capture('salud-financiera',width)
+    await page.getByRole('button',{name:'Simulaciones',exact:true}).click()
+    await page.locator('#company-simulation').waitFor({state:'visible'})
+    assert.equal(await page.locator('.simulation-panel').evaluate(el=>getComputedStyle(el).backgroundColor),'rgb(255, 253, 248)')
+    await page.getByRole('button',{name:'Generar escenarios',exact:true}).click()
+    await page.locator('.scenario-legend').waitFor({timeout:60000})
+    await page.waitForFunction(() => {
+      const chart=document.querySelector('.simulation-panel .highcharts-container')
+      return chart && chart.getBoundingClientRect().width > document.querySelector('.simulation-panel').clientWidth * .8
+    })
+    for (const width of [1440,390]) await capture('simulaciones',width)
+    await page.getByRole('button',{name:'Explicación de IA',exact:true}).click()
+    await page.locator('#company-financial .financial-assistant').waitFor()
+    for (const width of [1440,390]) await capture('explicacion-ia',width)
+    await page.getByRole('button',{name:'Resumen',exact:true}).click()
+    assert.equal(await reading.locator('.altman-score').innerText(),score)
+    checks.push('Cuatro pestañas conservan datos; accesos directos a los pilares preservan ejercicio y rango.')
+    await page.setViewportSize({width:1440,height:1000})
+    const opener=page.locator('.company-assistant-strip .ask-ai')
+    await opener.focus()
+    await page.keyboard.press('Enter')
+    const drawer=page.getByRole('dialog',{name:'Entiende las cifras con IA',exact:true})
+    await drawer.waitFor()
+    await page.keyboard.press('Escape')
+    await drawer.waitFor({state:'hidden'})
+    assert.equal(await opener.evaluate(el=>el===document.activeElement),true)
+    await page.setViewportSize({width:390,height:1000})
+    await page.getByRole('button',{name:'Abrir navegación',exact:true}).click()
+    assert.equal(await page.locator('#primary-sidebar').isVisible(),true)
+    await page.keyboard.press('Escape')
+    assert.equal(await page.locator('#primary-sidebar').isVisible(),false)
+    await page.getByRole('button',{name:'Abrir asistente IA',exact:true}).click()
+    await drawer.waitFor()
+    await page.keyboard.press('Escape')
+    checks.push('Asistente y menú móvil funcionan con teclado, Escape y retorno del foco.')
+    await page.emulateMedia({reducedMotion:'reduce'})
+    const motion=await page.locator('.workspace-page').evaluate(el=>({animation:getComputedStyle(el).animationName,transition:getComputedStyle(el.querySelector('button')).transitionDuration}))
+    assert.equal(motion.animation,'none')
+    assert.equal(motion.transition,'0s')
+    await page.emulateMedia({reducedMotion:'no-preference'})
+    assert.equal(await page.locator('.workspace-page').evaluate(el=>getComputedStyle(el).animationName),'findscore-enter')
+    checks.push('Animaciones cortas activas; movimiento reducido elimina animaciones y transiciones.')
+    await page.goto(web+'/company/JPM')
+    const pending=page.locator('#company-overview .financial-health')
+    await pending.waitFor()
+    assert.equal(await pending.locator('.altman-score').count(),0)
+    assert.equal(await pending.getAttribute('data-zone'),'unknown')
+    await capture('clasificacion-pendiente',390)
+    await page.route('**/companies/AAPL/summary/',route=>route.abort())
+    await page.goto(web+'/company/AAPL')
+    await page.locator('.dashboard-error').waitFor()
+    await capture('error-ficha',390)
+    await page.unroute('**/companies/AAPL/summary/')
+    await page.getByRole('button',{name:'Reintentar ficha',exact:true}).click()
+    await reading.waitFor()
+    checks.push('Ausencia de clasificación permanece neutral y sin puntaje; error de red permite reintentar.')
+    await page.getByRole('button',{name:'Cerrar Sesión',exact:true}).click()
+    await page.waitForURL('**/login')
+    const admin=JSON.parse(fs.readFileSync(path.resolve(repo,'../presentation_runtime_sprint3/sprint4_admin_credentials.json'),'utf8').replace(/^\uFEFF/,''))
+    await page.locator('#username').fill(admin.username)
+    await page.locator('#password').fill(admin.password)
+    await page.getByRole('button',{name:'Iniciar sesión',exact:true}).click()
+    await page.waitForURL('**/admin-panel')
+    for (const [url,name,ready] of [['/admin-panel','administracion','.admin-destinations'],['/admin-panel/users','usuarios','.account-table'],['/admin-panel/companies','catalogo-admin','.account-table'],['/admin-panel/monitoring','monitoreo','.monitoring-stats']]) {
+      await page.goto(web+url)
+      await page.locator(ready).first().waitFor()
+      for (const width of [1440,390]) await capture(name,width)
+    }
+    checks.push('Registro, recuperación y cuatro pantallas de administración conservan la identidad común.')
+    assert.deepEqual(errors,[])
+    fs.writeFileSync(path.join(out,'resultado.json'),JSON.stringify({verified_at:new Date().toISOString(),checks,screens,page_errors:errors},null,2))
+    checks.forEach(check=>process.stdout.write(check+'\n'))
+  } finally { await browser.close() }
+})().catch(error=>{process.stderr.write(String(error)+'\n');process.exitCode=1})

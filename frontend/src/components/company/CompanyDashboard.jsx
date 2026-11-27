@@ -31,9 +31,17 @@ export default function CompanyDashboard() {
   if (loading) return <WorkspaceLayout><div className="dashboard-loading" role="status">Cargando ficha financiera...</div></WorkspaceLayout>
   if (error) return <WorkspaceLayout><div className="dashboard-error" role="alert"><h1>No se pudo abrir la ficha</h1><p>{error}</p><button onClick={retryCompany}>Reintentar ficha</button><button onClick={() => navigate(returnTo, { replace: true })}>Volver al explorador</button></div></WorkspaceLayout>
   if (!company) return null
-  const openFinancialDetails = () => {
-    setSection('pillars')
+  const openFinancialDetails = (pillar) => {
+    setSection('pillars', typeof pillar === 'string' ? pillar : undefined)
     requestAnimationFrame(() => document.getElementById('financial-pillars-title')?.focus())
+  }
+  const openCalculation = () => {
+    setSection('pillars')
+    requestAnimationFrame(() => {
+      const calculation = document.getElementById('altman-calculation')
+      calculation?.focus()
+      calculation?.scrollIntoView({block:'start'})
+    })
   }
 
   return (
@@ -44,11 +52,10 @@ export default function CompanyDashboard() {
         </button>
         <CompanyMark company={company} large />
         <div className="dashboard-title">
-          <p className="section-eyebrow">FICHA FINANCIERA · {company.ticker}</p>
           <h1>{company.name}</h1>
-          <FavoriteButton ticker={company.ticker} favorites={favorites} />
-          <span className="dashboard-sector">{sectorLabel(company.sector, company.sector_display)}</span>
+          <p className="section-eyebrow">{company.ticker} · {sectorLabel(company.sector, company.sector_display)}</p>
         </div>
+        <div className="company-save"><FavoriteButton ticker={company.ticker} favorites={favorites} /></div>
         {company.quote && <div className="terminal-quote"><small>Último cierre ajustado importado</small><strong>{Number(company.quote.adjusted_close).toLocaleString('es-PE', { maximumFractionDigits: 2, minimumFractionDigits: 2 })} <span>{company.quote.currency}</span></strong><small>{company.quote.date}</small></div>}
       </div>
 
@@ -63,21 +70,23 @@ export default function CompanyDashboard() {
         {section !== 'overview' && <p className="company-section-guide">{sections.find(item => item.id === section).description}</p>}
         {company.is_active === false && <p role="status">Empresa inactiva: ficha histórica, fuera de los buscadores.</p>}
         {company.is_index_member === false && <p role="note">Pertenencia al índice S&amp;P 500 sin verificar.</p>}
-        <details className="company-tools" hidden={section === 'overview'}><summary>Información y fuentes</summary><div className="company-utilities">
-          <details className="company-context"><summary>Acerca de {company.name}</summary><CompanyAbout company={company} /></details>
-          <DataSources company={company} />
-        </div></details>
 
         {!hasIndicators(company) && section === 'overview' && <section className="empty-financial-notice"><h2>Indicadores del resumen pendientes</h2><p>{company.quote ? 'Ya puedes consultar su histórico de precios. ' : ''}Los cinco indicadores del resumen todavía no están cargados. La disponibilidad de balances se muestra en Salud financiera.</p><button onClick={() => setSection('pillars')}>Ver salud financiera</button></section>}
         {company.is_demo && hasIndicators(company) && <p role="status" className="data-notice">Resumen financiero pendiente de verificar. Consulta la procedencia de los precios y de los balances anuales.</p>}
         <div id="company-financial" hidden={!['pillars', 'analysis'].includes(section)}><FinancialPillars key={company.ticker} view={section === 'analysis' ? 'analysis' : 'pillars'} /></div>
-        <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios /></div>
+        <div id="company-simulation" hidden={section !== 'simulation'}><SimulationScenarios active={section === 'simulation'} /></div>
         <div id="company-overview" hidden={section !== 'overview'}>
         <div className="company-overview-feature">
-          <FinancialHealthIndicator ticker={company.ticker} altmanZ={company.altman_z} asOf={company.as_of} onReviewIndicators={hasIndicators(company) ? () => document.getElementById('company-metrics-title')?.focus() : undefined} />
-          <div className="company-first-step"><BeginnerGuide key={company.ticker} company={company} onExplore={openFinancialDetails} /><aside className="company-ai-invitation"><span className="ai-label">IA</span><h3>Una cifra no tiene por qué dejarte con dudas.</h3><p>Pregunta sobre esta empresa y sigue la conversación con ejemplos sencillos.</p><AskAI ticker={company.ticker}>Preguntar sobre {company.ticker}</AskAI></aside></div>
+          <FinancialHealthIndicator altmanZ={company.altman_z} asOf={company.as_of} onReviewIndicators={hasIndicators(company) ? () => document.getElementById('company-metrics-title')?.focus() : undefined} onReviewCalculation={openCalculation} />
         </div>
-        <PriceChart />
+        <section className="company-explore" aria-labelledby="company-explore-title"><h2 id="company-explore-title">Explora sus cifras</h2><div className="company-explore-grid">{[
+          {id:'liquidity',label:'Liquidez',meaning:'Dinero para afrontar pagos.',icon:'liquidity'},
+          {id:'solvency',label:'Deudas',meaning:'Cómo se financia la empresa.',icon:'financials'},
+          {id:'profitability',label:'Rentabilidad',meaning:'Capacidad de generar beneficios.',icon:'simulation'},
+        ].map(item=><article key={item.id}><Icon name={item.icon} size={29}/><div><h3>{item.label}</h3><p>{item.meaning}</p><button type="button" className="text-action" onClick={()=>openFinancialDetails(item.id)}>Ver cifras de {item.label.toLowerCase()} →</button></div></article>)}</div></section>
+        <aside className="company-assistant-strip"><Icon name="chat" size={30}/><div><h2>¿Quieres entender este resultado?</h2><p>La IA te explica las cifras de {company.name} en palabras sencillas.</p></div><AskAI ticker={company.ticker} question="¿Qué significa su Altman-Z?">Preguntar a la IA →</AskAI></aside>
+        <details className="company-business"><summary>Conoce el negocio de {company.name}</summary><BeginnerGuide key={company.ticker} company={company} onExplore={()=>openFinancialDetails()} /><CompanyAbout company={company} /></details>
+        <PriceChart active={section === 'overview'} />
         <div className="data-provenance" aria-label="Disponibilidad y fechas de los datos" hidden={section !== 'overview'}>
           <span><small>{company.reference_basis === 'provider_normalized' ? 'Referencia anual del proveedor' : 'Balance de referencia'}</small><strong>{company.as_of || 'Sin balance cargado'}</strong></span>
           <p>Datos históricos · Cada indicador conserva su fecha.</p>
@@ -89,9 +98,10 @@ export default function CompanyDashboard() {
         </div>
         </>}
         </div>
-        <div className="altman-detail" hidden={section !== 'pillars'}><AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} availability={company.altman_z.availability} />
+        <div className="altman-detail" id="altman-calculation" tabIndex={-1} hidden={section !== 'pillars'}><AltmanZGauge score={company.altman_z.score} zone={company.altman_z.zone} reference={company.altman_z.reference} availability={company.altman_z.availability} />
           {company.reference_basis === 'provider_normalized' && company.altman_z.score == null && <p className="altman-reference-note">Altman-Z requiere un valor bursátil correspondiente al cierre contable. Las referencias normalizadas y la capitalización actual no verifican esa coincidencia; por eso este puntaje puede permanecer sin calcular.</p>}
         </div>
+        <details className="company-tools"><summary>Información y fuentes</summary><div className="company-utilities"><DataSources company={company} /></div></details>
         <div className="overview-report"><ReportPanel a={company.ticker} /></div>
       </div>
     </div></WorkspaceLayout>

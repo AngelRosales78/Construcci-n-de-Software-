@@ -55,7 +55,7 @@ const web = 'http://127.0.0.1:55193'
     for (const width of [1440, 768, 390, 360]) {
       await page.setViewportSize({ width, height: 844 })
       await page.evaluate(() => window.scrollTo(0, 0))
-      const outcome = await overview.locator('.financial-health > strong').boundingBox()
+      const outcome = await overview.locator('.financial-health .altman-verdict h3').boundingBox()
       assert.ok(outcome.y > 65 && outcome.y + outcome.height <= 844, 'La clasificación debe verse completa: ' + width)
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth), false)
       assert.equal(await page.locator('.provider-reference-inline').isVisible(), true)
@@ -91,7 +91,7 @@ const web = 'http://127.0.0.1:55193'
     const pending = page.locator('.altman-pending')
     await pending.scrollIntoViewIfNeeded()
     const reading = pending.locator('.financial-health')
-    const label = await reading.locator(':scope > strong').boundingBox()
+    const label = await reading.locator('.altman-verdict h3').boundingBox()
     const explanation = await reading.locator('.health-explanation').boundingBox()
     assert.ok(explanation.y - label.y - label.height <= 24, 'El motivo debe seguir al estado sin un hueco grande')
     const detailWidth = (await page.locator('.altman-detail').boundingBox()).width

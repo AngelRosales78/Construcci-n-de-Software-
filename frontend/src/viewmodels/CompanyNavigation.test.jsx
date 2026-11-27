@@ -55,6 +55,19 @@ test('atrás y adelante recuperan la sección anterior de la ficha', async () =>
   await waitFor(() => expect(result.current.company.section).toBe('analysis'))
 })
 
+test('los accesos a una cifra conservan ejercicio, rango y retorno sin recargar la ficha', async () => {
+  const { result } = open('?fiscal_year=2024&range=5Y')
+  await waitFor(() => expect(result.current.company.loading).toBe(false))
+  act(() => result.current.company.setSection('pillars', 'solvency'))
+  expect(result.current.location.hash).toBe('#pillar-solvency')
+  expect(result.current.pillars.hash).toBe('#pillar-solvency')
+  expect(Object.fromEntries(new URLSearchParams(result.current.location.search))).toEqual({ fiscal_year:'2024', range:'5Y', section:'pillars' })
+  expect(result.current.location.state.searchReturn).toBe('/search?q=MSFT&sector=technology&page=2')
+  act(() => result.current.company.setSection('pillars', 'profitability'))
+  expect(result.current.location.hash).toBe('#pillar-profitability')
+  expect(companyRepository.summary).toHaveBeenCalledTimes(1)
+})
+
 test('un enlace con una sección desconocida muestra el resumen y no permite retornos externos', () => {
   const { result } = open('?section=unknown', { searchReturn: 'https://example.test/' })
   expect(result.current.company.section).toBe('overview')

@@ -7,16 +7,14 @@ export function useCompanyDashboardViewModel() {
   const { ticker } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
-  const [params, setParams] = useSearchParams()
+  const [params] = useSearchParams()
   const sections = ['overview', 'pillars', 'simulation', 'analysis']
   const section = sections.includes(params.get('section')) ? params.get('section') : 'overview'
-  const setSection = value => {
-    if (!sections.includes(value) || value === section) return
-    setParams(previous => {
-      const next = new URLSearchParams(previous)
-      value === 'overview' ? next.delete('section') : next.set('section', value)
-      return next
-    }, { state: location.state })
+  const setSection = (value, pillar) => {
+    if (!sections.includes(value) || (value === section && !pillar)) return
+    const next = new URLSearchParams(params)
+    value === 'overview' ? next.delete('section') : next.set('section', value)
+    navigate({ pathname: location.pathname, search: next.toString(), hash: pillar ? `#pillar-${pillar}` : '' }, { state: location.state })
   }
   const previousSearch = location.state?.searchReturn
   const returnTo = typeof previousSearch === 'string' && (previousSearch === '/favorites' || previousSearch === '/search' || previousSearch.startsWith('/search?')) ? previousSearch : '/search'
@@ -82,5 +80,5 @@ export function useFinancialPillarsViewModel() {
     return () => { active = false }
   }, [ticker, year, attempt])
 
-  return { data, year, setYear, loading, error, retry: () => setAttempt(value => value + 1) }
+  return { data, year, setYear, loading, error, hash: location.hash, retry: () => setAttempt(value => value + 1) }
 }

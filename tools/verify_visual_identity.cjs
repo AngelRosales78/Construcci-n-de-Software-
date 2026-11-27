@@ -23,7 +23,7 @@ const web = 'http://127.0.0.1:55193'
     await page.evaluate(() => document.fonts.ready)
     const fonts = await page.evaluate(() => ({body:getComputedStyle(document.body).fontFamily, heading:getComputedStyle(document.querySelector('h1')).fontFamily, sans:document.fonts.check('16px "Source Sans 3"')}))
     assert.match(fonts.body,/Source Sans 3/)
-    assert.match(fonts.heading,/Source Sans 3/)
+    assert.match(fonts.heading,/Bitter/)
     assert.ok(fonts.sans)
     assert.equal(await page.locator('.sector-tile').count(),6)
     for (const width of [1440,768,390,360]) {
@@ -74,7 +74,7 @@ const web = 'http://127.0.0.1:55193'
       await page.setViewportSize({width,height:844})
       await page.evaluate(()=>scrollTo(0,0))
       await noOverflow('Ficha '+width)
-      const outcome=await page.locator('#company-overview .financial-health > strong').boundingBox()
+      const outcome=await page.locator('#company-overview .financial-health .altman-verdict h3').boundingBox()
       assert.ok(outcome.y+outcome.height<=844,'Clasificación inicial '+width)
       await page.screenshot({path:path.join(out,`ficha-${width}.png`)})
       await page.locator('.price-chart').scrollIntoViewIfNeeded()

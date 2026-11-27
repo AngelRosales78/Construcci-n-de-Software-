@@ -9,10 +9,12 @@ import {openAssistant} from '../../utils/assistantEvents'
 
 export default function WorkspaceLayout({ children }) {
   const { pathname } = useLocation()
+  const pageLabel = pathname.startsWith('/admin-panel') ? 'Administración' : pathname.startsWith('/company/') ? 'Ficha de empresa' : ({'/dashboard':'Inicio','/search':'Explorar empresas','/favorites':'Favoritos','/compare':'Comparar','/notifications':'Alertas de empresas','/profile':'Mi perfil','/profile/subscription':'Mi suscripción','/profile/notifications':'Preferencias de alertas'}[pathname] || 'Tu espacio')
   const { name, role, avatarUrl, leaving, logout } = useSessionViewModel()
   const [menuOpen, setMenuOpen] = useState(false)
   const sidebar = useRef(null)
   useEffect(() => { setMenuOpen(false) }, [pathname])
+  useEffect(() => { document.title = `${pageLabel} · FINDSCORE` }, [pageLabel])
   useEffect(() => {
     if (!menuOpen) return
     const previousFocus = document.activeElement
@@ -42,9 +44,9 @@ export default function WorkspaceLayout({ children }) {
     <a className="skip-link" href="#workspace-content">Ir al contenido</a>
     {menuOpen && <button className="navigation-backdrop" aria-label="Cerrar navegación" onClick={() => setMenuOpen(false)} />}
     <aside ref={sidebar} className={`workspace-sidebar ${menuOpen ? 'is-open' : ''}`} id="primary-sidebar">
-      <Link to="/search" className="workspace-brand" aria-label="S&P 500 · Explorar empresas">
+      <Link to="/search" className="workspace-brand" aria-label="FINDSCORE · Explorar empresas">
         <BrandMark />
-        <span><strong>S&amp;P 500</strong><small>EMPRESAS EN PALABRAS CLARAS</small></span>
+        <span><strong>FINDSCORE</strong><small>EMPRESAS EN PALABRAS CLARAS</small></span>
       </Link>
       <nav aria-label="Navegación principal">
         <Link to="/dashboard" aria-label="Inicio" aria-current={pathname === '/dashboard' ? 'page' : undefined}><Icon name="overview"/>Inicio</Link>
@@ -52,7 +54,7 @@ export default function WorkspaceLayout({ children }) {
         <Link to="/favorites" aria-label="Favoritos" aria-current={pathname === '/favorites' ? 'page' : undefined}><Icon name="bookmark"/>Favoritos</Link>
         <Link to="/compare" aria-label="Comparar" aria-current={pathname === '/compare' ? 'page' : undefined}><Icon name="simulation"/>Comparar</Link>
         <Link to="/notifications" aria-label="Alertas de tus empresas" aria-current={pathname === '/notifications' ? 'page' : undefined}><Icon name="bell"/>Alertas de empresas</Link>
-        <button type="button" className="sidebar-assistant" aria-haspopup="dialog" onClick={()=>{setMenuOpen(false);openAssistant()}}><Icon name="chat"/>Consultar a la IA<span>IA</span></button>
+        <button type="button" className="sidebar-assistant" aria-haspopup="dialog" onClick={()=>{setMenuOpen(false);openAssistant()}}><Icon name="chat"/>Asistente IA</button>
         <span className="navigation-caption">TU CUENTA</span>
         <Link to="/profile/subscription" aria-label="Mi suscripción" aria-current={pathname === '/profile/subscription' ? 'page' : undefined}>Mi suscripción</Link>
         <Link to="/profile" aria-label="Mi perfil" aria-current={pathname === '/profile' ? 'page' : undefined}>Mi perfil</Link>
@@ -61,7 +63,7 @@ export default function WorkspaceLayout({ children }) {
       <div className="sidebar-note"><Icon name="pillars"/><p>Entender viene primero.<small>Cada resultado conserva su fecha y su fuente.</small></p></div>
     </aside>
     <header className="workspace-header">
-      <div className="workspace-heading"><button className="navigation-toggle" aria-label="Abrir navegación" aria-expanded={menuOpen} aria-controls="primary-sidebar" onClick={() => setMenuOpen(!menuOpen)}>☰</button><span>S&amp;P 500 <b>/</b> Finance</span><small>{pathname.startsWith('/admin-panel') ? 'Administración' : pathname.startsWith('/company/') ? 'Ficha de empresa' : 'Exploración y análisis'}</small></div>
+      <div className="workspace-heading"><button className="navigation-toggle" aria-label="Abrir navegación" aria-expanded={menuOpen} aria-controls="primary-sidebar" onClick={() => setMenuOpen(!menuOpen)}>☰</button><span>FINDSCORE</span><small>{pageLabel}</small></div>
       <div className="workspace-account"><button type="button" className="mobile-ai-trigger" aria-label="Abrir asistente IA" aria-haspopup="dialog" onClick={()=>openAssistant()}><Icon name="chat" size={17}/><span>IA</span></button><Link className="account-identity" to="/profile"><span className="account-avatar" aria-hidden="true">{avatarUrl ? <img src={avatarUrl} alt="" style={{width:36,height:36,borderRadius:'50%',objectFit:'cover'}} /> : name.slice(0, 1).toUpperCase()}</span><span className="account-name">{name}</span></Link>
         <NotificationBell />
         <button className="logout-button" aria-label={leaving ? 'Cerrando…' : 'Cerrar Sesión'} onClick={logout} disabled={leaving}>
@@ -70,8 +72,8 @@ export default function WorkspaceLayout({ children }) {
         </button>
       </div>
     </header>
-    <main id="workspace-content" className="workspace-content">{children}</main>
-    <AssistantLauncher />
-    <footer className="workspace-footer"><span>S&amp;P 500 FINANCE <b> / </b> CUADERNO DE ANÁLISIS</span><span>La información empieza en sus fuentes.</span></footer>
+    <main id="workspace-content" className="workspace-content" tabIndex={-1}><div className="workspace-page" key={pathname}>{children}</div></main>
+    <AssistantLauncher floating={false} />
+    <footer className="workspace-footer"><span>FINDSCORE <b> / </b> EMPRESAS EN PALABRAS CLARAS</span><span>Cada resultado conserva su fecha y su fuente.</span></footer>
   </div>
 }
