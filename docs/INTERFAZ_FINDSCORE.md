@@ -17,19 +17,27 @@ Este trabajo no modifica Android/Kotlin, las reglas financieras, los datos, los 
 
 ## Movimiento y accesibilidad
 
-Transiciones de interacción de 140 ms; entrada de página de 180 ms, cambio de panel de 160 ms y apertura del asistente de 200 ms. No hay decoraciones animadas en bucle ni retrasos deliberados. `prefers-reduced-motion: reduce` elimina animaciones y transiciones.
+Las transiciones de interacción duran 220–300 ms; la entrada de página y la apertura del asistente, 360 ms. El inicio presenta título, buscador e imagen en una secuencia de hasta 620 ms. No se bloquean los controles durante la entrada. `prefers-reduced-motion: reduce` elimina animaciones y transiciones.
 
 Se conserva el uso por teclado, el enlace para saltar al contenido, el cierre con Escape y el retorno del foco en menú y asistente. Los resultados usan etiquetas y símbolos además del color. Las tablas conservan desplazamiento interno en pantallas estrechas.
 
 ### Respuesta a las acciones
 
-- Tarjetas: entrada de 200 ms con escalonado máximo de 100 ms; elevación de 3 px únicamente con ratón, sin desplazar el resto de la cuadrícula.
+- Tarjetas: entrada de 360 ms con escalonado máximo de 100 ms; elevación de 4 px del contenedor completo únicamente con ratón, sin desplazar las demás tarjetas. La entrada libera la transformación al terminar para no bloquear el efecto de cursor.
 - Pestañas: el subrayado se despliega en 180 ms, conservando la navegación y el contenido existentes.
 - Favoritos: la estrella responde durante 320 ms únicamente tras confirmar un guardado solicitado en esta pantalla. Cargar un favorito anterior o recibir un error no activa la confirmación. Los mensajes conservan texto legible y no desaparecen automáticamente.
 - Carga: estructuras neutras, sin cifras ficticias y ocultas a los lectores de pantalla; el estado de carga sí se anuncia. El brillo hace dos pasadas y después queda estático.
 - Los botones principales responden a la pulsación con un desplazamiento de 1 px. No se animan los valores financieros ni se agregan efectos a los gráficos.
 
 Todos estos efectos respetan movimiento reducido y no añaden solicitudes ni retrasos a las operaciones.
+
+### Movimiento perceptible al pasar el cursor
+
+`motion.css` reúne el ajuste final de movimiento después de los estilos compartidos y de acceso. Los botones principales ganan profundidad y se elevan 2 px; los accesos a empresas conocidas, 3 px; sectores y tarjetas, 4 px. La fotografía principal se acerca un 3,5 % dentro de su contenedor. Los iconos de navegación se desplazan 3 px y la estrella de favoritos responde al cursor sin simular un guardado.
+
+Los efectos de cursor requieren `hover: hover` y `pointer: fine`. Los teléfonos conservan pulsación y navegación normales. Con movimiento reducido se eliminan también las transformaciones de cursor. No se animan cifras, puntuaciones ni resultados financieros.
+
+`node tools/verify_findscore_motion.cjs` comprueba el desplazamiento real de botones y tarjetas, la imagen, la estabilidad de la distribución, Escape y el retorno del foco, movimiento reducido y pantallas táctiles. La grabación se inicia después del acceso; no muestra credenciales ni envía preguntas a la IA. Evidencias y vídeo: `../output/findscore-motion/after/`.
 
 ### Movimiento en el recorrido completo
 

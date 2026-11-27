@@ -1,0 +1,81 @@
+/* FINDSCORE motion: make the active surface clear without changing the layout. */
+:root { --motion-ease:cubic-bezier(.22,1,.36,1); }
+
+@keyframes findscore-enter {
+  from { opacity:.45; transform:translateY(12px); }
+  to { opacity:1; transform:none; }
+}
+@keyframes findscore-introduction {
+  from { opacity:.3; transform:translateY(18px); }
+  to { opacity:1; transform:none; }
+}
+@keyframes findscore-drawer {
+  from { opacity:.5; transform:translateX(48px); }
+  to { opacity:1; transform:none; }
+}
+
+@media(prefers-reduced-motion:no-preference) {
+  .workspace-content > .workspace-page { animation-duration:360ms; animation-timing-function:var(--motion-ease); }
+  .auth-container.auth-layout .auth-card { animation-duration:380ms; animation-timing-function:var(--motion-ease); }
+  .workspace-content .clarity-hero-copy > h1 { animation:findscore-introduction 480ms var(--motion-ease) both; }
+  .workspace-content .clarity-hero-copy > .hero-search { animation:findscore-introduction 440ms 70ms var(--motion-ease) both; }
+  .workspace-content .clarity-hero > .hero-company-image { animation:findscore-introduction 520ms 100ms var(--motion-ease) both; }
+  .workspace-content .company-card-wrapper { animation-duration:360ms; animation-timing-function:var(--motion-ease); animation-fill-mode:backwards; }
+  .workspace-content .financial-health .altman-verdict { animation:findscore-enter 400ms var(--motion-ease) both; }
+  .workspace-shell .assistant-drawer[open] { animation-duration:360ms; animation-timing-function:var(--motion-ease); }
+  .workspace-shell :is(.primary-action,.ask-ai,.mobile-ai-trigger,.search-button),
+  .auth-container.auth-layout .btn-primary {
+    transition:transform 260ms var(--motion-ease),box-shadow 260ms ease,background-color 220ms ease,border-color 220ms ease;
+  }
+  .workspace-shell :is(.hero-starters a,.sector-tile,.sector-shortcuts button,.assistant-suggestions button,.assistant-lessons button),
+  .auth-container.auth-layout .auth-tabs a {
+    transition:transform 280ms var(--motion-ease),box-shadow 280ms ease,background-color 220ms ease,border-color 220ms ease,color 220ms ease;
+  }
+  .workspace-shell .workspace-sidebar nav > :is(a,button) { transition:background-color 240ms ease,color 240ms ease; }
+  .workspace-sidebar nav .ui-icon { transition:transform 300ms var(--motion-ease); }
+  .workspace-content .company-search .company-list .company-card-wrapper { transition:transform 300ms var(--motion-ease),box-shadow 300ms ease,border-color 220ms ease; }
+  .workspace-content .company-search .company-list .company-card { transition:background-color 220ms ease; }
+  .workspace-content .company-search .company-list .company-card-action > span { transition:transform 300ms var(--motion-ease); }
+  .workspace-content .favorite-button .favorite-glyph { transition:transform 300ms var(--motion-ease),color 220ms ease; }
+  .workspace-content .hero-company-image > img { transition:transform 700ms var(--motion-ease); }
+  .workspace-content .text-action { transition:color 220ms ease,text-underline-offset 240ms ease; }
+  .workspace-shell :is(input,textarea,select),.auth-container.auth-layout :is(input,select) { transition:border-color 200ms ease,box-shadow 240ms ease; }
+  .workspace-shell :is(input,textarea,select):focus-visible { box-shadow:0 0 0 3px #597a6126; }
+  .workspace-content :is(.primary-action,.ask-ai):active:not(:disabled),.auth-container.auth-layout .btn-primary:active:not(:disabled) { transform:translateY(1px); box-shadow:none; }
+
+  @supports (transition-behavior:allow-discrete) and (overlay:auto) {
+    .workspace-shell .assistant-drawer {
+      transform:translateX(48px);
+      transition:opacity 300ms ease,transform 360ms var(--motion-ease),display 360ms allow-discrete,overlay 360ms allow-discrete;
+    }
+    .workspace-shell .assistant-drawer[open] { animation:none; transform:none; }
+    @starting-style { .workspace-shell .assistant-drawer[open] { opacity:0; transform:translateX(48px); } }
+  }
+}
+
+/* Hover is for devices with a real pointer; touch never gets a sticky lift. */
+@media(prefers-reduced-motion:no-preference) and (hover:hover) and (pointer:fine) {
+  .workspace-shell :is(.primary-action,.ask-ai,.mobile-ai-trigger,.search-button):hover:not(:disabled),
+  .auth-container.auth-layout .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 7px 15px #203b2f22; }
+  .workspace-shell :is(.primary-action,.ask-ai,.mobile-ai-trigger,.search-button):active:not(:disabled),
+  .auth-container.auth-layout .btn-primary:active:not(:disabled) { transform:translateY(1px); box-shadow:none; }
+  .workspace-sidebar nav > :is(a,button):hover .ui-icon { transform:translateX(3px) scale(1.08); }
+  .workspace-content .hero-starters a:hover { transform:translateY(-3px); box-shadow:0 5px 12px #203b2f14; border-color:#8c9c80; }
+  .workspace-content .hero-company-image:hover > img { transform:scale(1.035); }
+  .workspace-content .sector-tile:hover { transform:translateY(-4px); box-shadow:0 10px 22px #203b2f18; border-color:#8c9c80; }
+  .workspace-content :is(.sector-shortcuts,.assistant-suggestions,.assistant-lessons) button:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 4px 9px #203b2f14; }
+  .workspace-content .company-search .company-list .company-card-wrapper:hover { transform:translateY(-4px); border-color:#8c9c80; box-shadow:0 10px 24px #203b2f18; }
+  .workspace-content .company-search .company-list .company-card:hover { transform:none; box-shadow:none; }
+  .workspace-content .company-search .company-list .company-card-wrapper:hover .company-card-action > span { transform:translate(3px,-3px); }
+  .workspace-content .favorite-button:hover:not(:disabled) .favorite-glyph { transform:scale(1.2) rotate(-10deg); }
+  .workspace-content .text-action:hover { text-underline-offset:6px; }
+  .auth-container.auth-layout .auth-tabs a:hover { transform:translateY(-1px); background:#fffdf8; box-shadow:0 3px 7px #203b2f10; }
+}
+
+/* Focus remains explicit; motion preferences also apply to hover and pseudo-elements. */
+.workspace-content .company-search .company-list .company-card-wrapper:focus-within { border-color:#8c9c80; }
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; }
+  .workspace-content :is(.company-card-wrapper,.company-card,.sector-tile,.hero-company-image > img,.primary-action,.ask-ai),
+  .workspace-header .mobile-ai-trigger,.auth-container.auth-layout :is(.btn-primary,.auth-tabs a) { transform:none!important; }
+}
