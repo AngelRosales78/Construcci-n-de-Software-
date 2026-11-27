@@ -42,6 +42,14 @@ Todos estos efectos respetan movimiento reducido y no añaden solicitudes ni ret
 - Diálogos: apertura y cierre mediante transiciones nativas de 160–180 ms en navegadores compatibles. Se conserva la apertura existente como alternativa; no hay temporizadores de cierre que retrasen la acción o el foco.
 - Las esperas reales pueden mantener un indicador indeterminado. Los efectos decorativos son breves o tienen repeticiones limitadas. Con movimiento reducido desaparecen todas las animaciones, incluidos pseudo-elementos y fondos.
 
+## Acceso y registro
+
+El acceso usa un panel editorial del 42 % y una región de formulario del 58 %. La tarjeta tiene espacio interior real y un máximo de 520–560 px en acceso y 660–720 px en registro. Se eliminó la cabecera repetida de la región derecha. Las etiquetas son de 15 px, las entradas de 16 px y los controles de 50 px.
+
+El registro mantiene todos sus campos y validaciones: «Sobre ti» agrupa nombre y apellido opcionales; «Acceso a tu cuenta» agrupa usuario, correo, perfil y contraseñas. Los campos se distribuyen en dos columnas donde hay espacio y en una columna en teléfonos. En pantallas de menos de 900 px, el panel editorial se reduce a la marca para dar prioridad al formulario. No se modifica el zoom del navegador ni se usa escala artificial.
+
+`node tools/verify_auth_design.cjs` comprueba las tres pantallas de acceso, registro y recuperación entre 320 y 1920 px, validación de campos, mostrar/ocultar contraseña y movimiento reducido. No envía credenciales ni crea cuentas. Capturas: `../output/findscore-auth/`.
+
 ## Navegación financiera
 
 Los tres accesos del resumen abren el pilar correspondiente, conservando ejercicio fiscal, rango de precios y dirección de retorno. El enlace «Ver cálculo y fuentes» abre Salud financiera y lleva al bloque Altman-Z. Cambiar de sección no vuelve a consultar la ficha ni registra otra visita.

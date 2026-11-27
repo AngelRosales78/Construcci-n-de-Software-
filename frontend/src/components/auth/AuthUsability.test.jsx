@@ -33,5 +33,5 @@ test('el registro distingue campos opcionales y explica las reglas fuera del pla
   expect(screen.getByLabelText('Nombre (opcional)')).toBeTruthy()
   expect(screen.getByLabelText('Apellido (opcional)')).toBeTruthy()
   expect(screen.getByText(/Al menos 8 caracteres/)).toBeTruthy()
-  expect(screen.getByText(/no otorga permisos de administrador/)).toBeTruthy()
+  expect(screen.getByText('Selecciona el perfil que mejor te describa.')).toBeTruthy()
 })

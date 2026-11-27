@@ -13,13 +13,15 @@ export default function Register() {
 
         {error && <div className="auth-error" role="alert">{error}</div>}
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="form-row">
+        <form className="registration-form" onSubmit={handleSubmit(onSubmit)}>
+          <fieldset className="registration-section"><legend>Sobre ti</legend>
+          <div className="registration-grid">
             <div className="form-group">
               <label htmlFor="firstName">Nombre (opcional)</label>
               <input
                 id="firstName"
                 type="text"
+                autoComplete="given-name"
                 {...register('firstName')}
                 aria-invalid={Boolean(errors.firstName)}
                 aria-describedby={errors.firstName ? 'firstName-error' : undefined}
@@ -35,6 +37,7 @@ export default function Register() {
               <input
                 id="lastName"
                 type="text"
+                autoComplete="family-name"
                 {...register('lastName')}
                 aria-invalid={Boolean(errors.lastName)}
                 aria-describedby={errors.lastName ? 'lastName-error' : undefined}
@@ -45,7 +48,9 @@ export default function Register() {
               )}
             </div>
           </div>
-
+          </fieldset>
+          <fieldset className="registration-section"><legend>Acceso a tu cuenta</legend>
+          <div className="registration-grid">
           <div className="form-group">
             <label htmlFor="username">Usuario</label>
             <input
@@ -78,13 +83,13 @@ export default function Register() {
             )}
           </div>
 
-          <div className="form-group">
+          <div className="form-group registration-full">
             <label htmlFor="userType">Tipo de cuenta</label>
             <select id="userType" {...register('userType')}>
               <option value="retail">Inversor individual</option>
               <option value="institutional">Inversor institucional</option>
             </select>
-            <small className="auth-hint">Describe tu perfil; no otorga permisos de administrador.</small>
+            <small className="auth-hint">Selecciona el perfil que mejor te describa.</small>
           </div>
 
           <div className="form-group">
@@ -120,6 +125,7 @@ export default function Register() {
             )}
           </div>
 
+          </div></fieldset>
           <button type="submit" className="btn-primary" disabled={isSubmitting || loading} aria-busy={isSubmitting || loading}>
             {loading ? 'Creando cuenta...' : 'Crear cuenta'}
           </button>
