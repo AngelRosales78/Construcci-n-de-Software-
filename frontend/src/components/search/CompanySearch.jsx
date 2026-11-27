@@ -12,7 +12,7 @@ import ActionNotice from '../shared/ActionNotice'
 
 export default function CompanySearch() {
   const favorites = useFavoritesViewModel()
-  const { companies, loading, error, count, hasNext, historyVersion, params, handleSearch, saveHistory, handleFilterChange, previousPage, nextPage, retry, setWithData, searchPath } = useCompanySearchViewModel()
+  const { companies, loading, error, count, hasNext, historyVersion, params, handleSearch, saveHistory, handleFilterChange, previousPage, nextPage, retry, setWithData } = useCompanySearchViewModel()
   return (
     <WorkspaceLayout><div className="company-search">
       <div className="search-header">
@@ -21,7 +21,7 @@ export default function CompanySearch() {
         <p className="section-description">Busca por nombre o símbolo y filtra por sector.</p>
         <SearchBar onSearch={handleSearch} onSubmitSearch={saveHistory} initialValue={params.q} />
       </div>
-      <div className="catalog-notice"><p><strong>Catálogo S&amp;P 500 y altas manuales.</strong> Cada ficha indica sus datos disponibles y si su pertenencia al índice está verificada.</p><Link to="/company/MSFT" state={{ searchReturn: searchPath }}>Abrir Microsoft →</Link></div>
+      <div className="catalog-notice"><p><strong>Catálogo S&amp;P 500 y altas manuales.</strong> Cada ficha indica sus datos disponibles y si su pertenencia al índice está verificada.</p></div>
       <div className="search-content">
         <section className="search-main" aria-label="Resultados de búsqueda">
           <div className="results-heading"><h2>{params.q ? `Resultados para “${params.q}”` : 'Empresas del catálogo'}</h2><span>{loading ? 'Consultando…' : `${count} resultados`}</span></div>

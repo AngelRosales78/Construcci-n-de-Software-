@@ -1,5 +1,6 @@
 /* FINDSCORE: shared visual language for every web route. */
 :root {
+  color-scheme:light;
   --paper:#f4f1e8; --paper-white:#fffdf8; --ink:#203b2f; --ink-soft:#59665d;
   --desk:#203b2f; --rule:#d6d7cc; --sage:#e9ede1;
   --primary:#99472f; --primary-hover:#7e3724; --oxide:var(--primary);
@@ -288,6 +289,97 @@ button,a,input,select,textarea { -webkit-tap-highlight-color:transparent; }
   .workspace-content :is(.account-page,.subscription-page,.comparison-page,.notification-page,.favorites-page) > p { font-size:15px; }
   .workspace-content .favorites-list li { flex-wrap:wrap; gap:14px; }
   .auth-container .auth-wordmark > span { font-size:25px; }
+}
+/* Keep controls close to the content they affect, including on narrow screens. */
+.workspace-content .company-search .filter-order-announcement { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+.workspace-content .company-search .catalog-notice { padding:10px 14px; margin:14px 0 22px; }
+.workspace-content .company-search .catalog-notice p { margin:0; font-size:13px; line-height:1.5; }
+.workspace-content .company-search .company-filters { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 18px; padding:0; }
+.workspace-content .company-search .filter-group { display:grid; gap:6px; min-width:0; font-size:14px; }
+.workspace-content .company-search .filter-group select { width:100%; min-width:0; max-width:none; min-height:44px; padding:9px 10px; font-size:16px; }
+.workspace-content .company-search .active-filter { grid-column:1/-1; margin:0; justify-self:start; }
+.workspace-content .company-search .active-filter button { min-height:44px; }
+.workspace-content .company-search .coverage-filter { margin:14px 0 8px; font-size:14px; line-height:1.5; }
+.workspace-content .company-search .catalog-reading-note { margin:0 0 18px; font-size:13px; line-height:1.5; }
+.workspace-content .company-search .company-list { gap:12px; border-top:0; }
+.workspace-content .company-search .company-list .company-card-wrapper { grid-template-columns:minmax(0,1fr) 145px; background:var(--paper-white); border:1px solid var(--rule); border-radius:12px; }
+.workspace-content .company-search .company-list .company-card { padding:22px 18px; border:0; border-radius:11px; }
+.workspace-content .company-search .company-list .company-name { color:var(--ink); }
+.workspace-content .company-search .company-list .metric-label { font-size:12px; line-height:1.4; white-space:normal; }
+.workspace-content .company-search .company-list .metric-value { font-size:15px; }
+.workspace-content .company-search .company-list .company-card-wrapper > .favorite-button { justify-self:end; width:auto; min-height:44px; margin:0 14px 0 0; padding:9px 12px; font-size:13px; border-radius:7px; background:var(--sage); color:var(--ink); }
+.workspace-content .company-search .company-list .company-card-wrapper > .favorite-button[aria-pressed=true] { background:#f4eadc; color:#75491c; border-color:#cfb795; }
+.workspace-content .comparison-page .comparison-picker { padding:18px 20px; }
+.workspace-content .comparison-page .comparison-picker h2 { font-size:16px; margin:0 0 10px; }
+.workspace-content .comparison-page .comparison-selection { gap:10px; margin:0 0 10px; }
+.workspace-content .comparison-page .comparison-selection .company-mark { width:44px; height:44px; }
+.workspace-content .comparison-page .comparison-selection strong { font-size:20px; }
+.workspace-content .comparison-page .comparison-selection button { min-height:44px; padding:8px 12px; }
+.workspace-content .comparison-page .comparison-picker label { display:block; font-size:14px; margin:0 0 6px; }
+.workspace-content .comparison-page .comparison-picker input { min-height:44px; padding:10px 12px; }
+.workspace-content .comparison-page .comparison-picker small { font-size:13px; margin-top:8px; }
+.workspace-content .comparison-page .comparison-controls { margin-top:16px; gap:12px; align-items:end; }
+.workspace-content .comparison-page .comparison-controls label { margin:0; gap:6px; font-size:14px; }
+.workspace-content :is(.profile-page,.favorites-page,.notification-page) { max-width:1100px; margin:0; }
+.workspace-content .profile-page .profile-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px 18px; max-width:800px; padding:24px; }
+.workspace-content .profile-page .profile-form > :is(h2,p,.profile-upload-field,.profile-preview,button) { grid-column:1/-1; }
+.workspace-content .profile-page .profile-form > :is(h2,p,label) { margin:0; }
+.workspace-content .profile-page .profile-form > label { font-size:15px; min-width:0; }
+.workspace-content .profile-page .profile-form > p { font-size:14px; color:var(--ink-soft); }
+.workspace-content .profile-page .profile-form input { min-width:0; width:100%; min-height:46px; border-radius:7px; }
+.workspace-content .profile-page .profile-form input[type=file] { padding:6px; font-size:14px; }
+.workspace-content .profile-page .profile-form input::file-selector-button { border:0; border-radius:5px; padding:9px 12px; margin-right:10px; background:var(--sage); color:var(--ink); font:600 14px var(--body-font); cursor:pointer; }
+.workspace-content .profile-page .profile-form > button { justify-self:start; min-height:44px; margin:0; }
+.workspace-content .profile-page .account-danger { max-width:800px; margin-top:28px; padding:24px; }
+.workspace-content .profile-page .account-danger p { font-size:14px; line-height:1.6; }
+.workspace-content .favorites-toolbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px 24px; margin:24px 0 18px; }
+.workspace-content .favorites-toolbar p { margin:0; font-size:16px; }
+.workspace-content .favorites-toolbar .pillar-muted { font-size:13px; margin-top:4px; }
+.workspace-content .favorites-toolbar button { min-height:44px; }
+.workspace-content .favorites-page > details.sprint3-panel { padding:14px 18px; margin:18px 0; }
+.workspace-content .favorites-empty { display:flex; gap:20px; align-items:flex-start; margin-top:24px; padding:28px; }
+.workspace-content .empty-state-symbol { display:grid; place-items:center; flex-shrink:0; width:56px; height:56px; border-radius:12px; background:var(--sage); color:var(--ink); }
+.workspace-content .favorites-empty h2 { font:650 27px/1.3 var(--display-font); }
+.workspace-content .favorites-empty p { margin:8px 0 14px; }
+.workspace-content .notification-page .notification-links { gap:10px 16px; }
+.workspace-content .notification-page .notification-links :is(button,a) { min-height:44px; display:inline-flex; align-items:center; }
+.workspace-content .notification-page .alerts-guide { border-top:1px solid var(--rule); margin-top:28px; padding-top:24px; }
+.workspace-content .notification-page .alerts-explainer { align-items:flex-start; padding:20px; gap:16px; margin:0; }
+.workspace-content .notification-page .alerts-illustration { width:40px; height:40px; flex-shrink:0; }
+.workspace-content .notification-page .alerts-explainer h2 { font-size:22px; margin:0 0 8px; }
+.workspace-content .notification-page .alerts-explainer p { font-size:15px; line-height:1.5; margin:0 0 10px; }
+.workspace-content .notification-page .alerts-steps { gap:16px; margin:20px 0 0; }
+.workspace-content .notification-page .alerts-steps li { padding:0; border:0; background:transparent; }
+.workspace-content .notification-page .alerts-steps li strong { font-size:16px; }
+.workspace-content .notification-page .alerts-steps li p { font-size:14px; line-height:1.5; }
+.workspace-content .notification-page .alerts-empty-actions { border-color:var(--rule); }
+.workspace-content .notification-page .alerts-empty-actions p { color:var(--ink-soft); }
+@media(max-width:1100px) {
+  .workspace-content .company-search .search-header { display:block; margin-bottom:0; padding-bottom:16px; }
+  .workspace-content .company-search .search-header .section-eyebrow { margin:0 0 10px; }
+  .workspace-content .company-search .search-header h1 { margin:0 0 10px; }
+  .workspace-content .company-search .search-header .section-description { font-size:15px; line-height:1.5; margin:0 0 14px; }
+  .workspace-content .company-search .search-header .search-bar { margin:0; }
+  .workspace-content .company-search .search-header .search-bar input { min-height:48px; font-size:16px; }
+  .workspace-content .company-search .catalog-notice { margin:12px 0 20px; padding:10px 12px; }
+  .workspace-content .company-search .results-heading { margin:0 0 16px; padding:0; gap:6px; }
+  .workspace-content .company-search .results-heading h2 { font-size:23px; margin:0; }
+  .workspace-content .company-search .results-heading > span { font:400 13px var(--body-font); }
+  .workspace-content .company-search .sector-shortcuts { display:none; }
+  .workspace-content .company-search .company-filters { gap:10px; }
+  .workspace-content .company-search .company-list .company-card-wrapper { grid-template-columns:minmax(0,1fr); }
+  .workspace-content .company-search .company-list .company-card { grid-template-columns:45px minmax(0,1fr) 22px; gap:6px 12px; padding:20px 18px; }
+  .workspace-content .company-search .company-list .company-card-action { grid-column:3; }
+  .workspace-content .company-search .company-list .company-metrics { grid-column:1/-1; grid-row:4; margin-top:10px; padding-top:16px; border-top:1px solid var(--rule); }
+  .workspace-content .company-search .company-list .company-card-wrapper > .favorite-button { justify-self:start; margin:0 18px 16px; }
+  .workspace-content .profile-page .profile-form { grid-template-columns:minmax(0,1fr); padding:20px; }
+  .workspace-content .profile-page .account-danger { padding:20px; }
+  .workspace-content .favorites-empty { gap:14px; padding:22px 18px; }
+  .workspace-content .empty-state-symbol { width:42px; height:42px; }
+  .workspace-content .favorites-empty h2 { font-size:23px; }
+  .workspace-content .comparison-page .comparison-picker { padding:16px; }
+  .workspace-content .comparison-page .comparison-controls { align-items:stretch; }
+  .workspace-content .comparison-page .comparison-controls label { flex:1 1 100%; }
 }
 /* Motion follows real actions; figures and classifications never animate as counters. */
 .workspace-content .action-notice { display:flex; align-items:center; gap:12px; background:var(--sage); border:1px solid #cbd5c0; border-radius:9px; padding:14px 18px; margin:16px 0; color:var(--ink); }

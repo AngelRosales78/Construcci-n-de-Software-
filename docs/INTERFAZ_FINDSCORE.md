@@ -56,6 +56,14 @@ Los tres accesos del resumen abren el pilar correspondiente, conservando ejercic
 
 ## Verificación
 
+### Revisión de proporciones y controles
+
+El explorador muestra los filtros de sector y orden juntos. En pantallas de hasta 1100 px se omiten los accesos de sector duplicados; todos los sectores siguen disponibles en el selector. El aviso del catálogo conserva su contenido y el anuncio de orden sigue disponible para lectores de pantalla. Las tarjetas integran el botón de favoritos dentro de un único contenedor.
+
+El comparador reduce el tamaño de los selectores sin esconder los campos de búsqueda. Perfil agrupa nombre y apellido donde hay espacio y mantiene el formulario en un ancho de lectura cómodo. Favoritos reúne el contador, sincronización y actualización. Alertas muestra primero la lista y sus acciones; la explicación completa queda después. Los controles nativos usan el esquema claro de FINDSCORE.
+
+`node tools/verify_interface_polish.cjs` comprueba siete pantallas en 1440, 768, 390 y 360 px, ausencia de desbordamiento, esquema claro y conservación de consulta, disponibilidad y orden al filtrar. Guarda capturas en `../output/interface-polish/after/`. En la revisión a 390 px, la primera empresa pasó de 1053 a 620 px desde el inicio, y cada selector del comparador pasó de 277 a 223 px de altura.
+
 Desde `frontend`: `node node_modules/vitest/vitest.mjs run` y `node node_modules/vite/bin/vite.js build`.
 
 Desde la raíz del repositorio, con los servicios locales disponibles: `node tools/verify_findscore_design.cjs`.

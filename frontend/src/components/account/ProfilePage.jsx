@@ -7,17 +7,17 @@ import ActionNotice from '../shared/ActionNotice'
 
 export default function ProfilePage() {
   const vm = useProfileViewModel()
-  return <WorkspaceLayout><div className="account-page">
+  return <WorkspaceLayout><div className="account-page profile-page">
     <h1>Mi perfil</h1><Link to="/profile/subscription">Suscripción y comprobantes</Link>
     {vm.profile.loading && <p role="status">Consultando perfil…</p>}
     {(vm.error || vm.profile.error) && <p role="alert">{vm.error || vm.profile.error}</p>}
     <ActionNotice message={vm.message}/>
     {vm.profile.data && <>
-      <form className="sprint3-panel" onSubmit={event => { event.preventDefault(); vm.save() }}>
+      <form className="sprint3-panel profile-form" onSubmit={event => { event.preventDefault(); vm.save() }}>
         <h2>Información personal</h2><p>{vm.profile.data.email}</p>
         <label>Nombre<input maxLength={150} value={vm.firstName} onChange={event => vm.setFirstName(event.target.value)} /></label>
         <label>Apellido<input maxLength={150} value={vm.lastName} onChange={event => vm.setLastName(event.target.value)} /></label>
-        <label>Foto de perfil<input type="file" accept="image/jpeg,image/png,image/webp" onChange={event => vm.selectAvatar(event.target.files[0])} /></label>
+        <label className="profile-upload-field">Foto de perfil<input type="file" accept="image/jpeg,image/png,image/webp" onChange={event => vm.selectAvatar(event.target.files[0])} /></label>
         <p>JPEG, PNG o WebP, menos de 2 MB. La foto se recorta en círculo.</p>
         {vm.preview && <img className="profile-preview" src={vm.preview} alt="Vista previa de la foto de perfil" />}
         <button disabled={vm.busy || vm.profile.loading} aria-busy={vm.busy} type="submit">{vm.busy ? 'Guardando…' : 'Guardar perfil'}</button>
